@@ -463,15 +463,21 @@ body:hover .cursor-glow { opacity: 1; }
 
 /* HUD progress bar */
 .hud-bar {
-  width: 52px;
-  height: 5px;
-  background: rgba(168, 255, 0, 0.12);
+  display: block;
+  width: 48px;
+  height: 4px;
+  background: rgba(168, 255, 0, 0.15);
   border-radius: 2px;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
   align-self: center;
 }
 .hud-bar-fill {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   background: var(--accent-1);
   border-radius: 2px;
@@ -790,7 +796,7 @@ body:hover .cursor-glow { opacity: 1; }
   white-space: nowrap;
   color: var(--grey-light);
 }
-.marquee-dot {
+.marquee-track span.marquee-dot {
   color: var(--accent-1);
   font-size: 0.65rem;
   flex-shrink: 0;

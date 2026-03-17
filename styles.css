@@ -1221,6 +1221,30 @@ body:hover .cursor-glow { opacity: 1; }
 .coord-value { color: var(--white-dim); }
 .coord-value--active { color: var(--accent-1); }
 
+.games-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.games-link:hover {
+  color: var(--accent-1);
+}
+.games-link .bracket {
+  color: rgba(168, 255, 0, 0.3);
+  transition: color 0.3s;
+}
+.games-link:hover .bracket {
+  color: var(--accent-1);
+}
+
 .contact-form { display: flex; flex-direction: column; gap: 20px; }
 .form-group { position: relative; }
 .form-group input,

@@ -513,6 +513,23 @@ body:hover .cursor-glow { opacity: 1; }
 .hud-signal span:nth-child(5) { height: 12px; }
 .hud-signal span.inactive { opacity: 0.15; }
 
+/* HUD progress bar */
+.hud-bar {
+  width: 40px;
+  height: 4px;
+  background: rgba(168, 255, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.hud-bar-fill {
+  height: 100%;
+  background: var(--accent-1);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1s ease;
+}
+
 /* Hero horizontal lines */
 .hero-hline {
   position: absolute;

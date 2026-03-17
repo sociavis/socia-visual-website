@@ -591,19 +591,46 @@ window.addEventListener('scroll', () => {
   if (hudScroll) hudScroll.textContent = pct + '%';
 });
 
-// Signal strength — fluctuates randomly
+// Signal strength bars (top-left) — fluctuates randomly
 const hudSignal = document.getElementById('hudSignal');
 if (hudSignal) {
   const bars = hudSignal.querySelectorAll('span');
   setInterval(() => {
-    const strength = 3 + Math.floor(Math.random() * 3); // 3-5 bars
+    const strength = 3 + Math.floor(Math.random() * 3);
     bars.forEach((bar, i) => {
       bar.classList.toggle('inactive', i >= strength);
     });
   }, 2000);
 }
 
-// Uptime counter
+// Viewport resolution (top-right)
+const hudRes = document.getElementById('hudRes');
+function updateRes() {
+  if (hudRes) hudRes.textContent = window.innerWidth + 'x' + window.innerHeight;
+}
+updateRes();
+window.addEventListener('resize', updateRes);
+
+// Live clock (top-right)
+const hudClock = document.getElementById('hudClock');
+setInterval(() => {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  if (hudClock) hudClock.textContent = h + ':' + m + ':' + s;
+}, 1000);
+
+// Memory usage bar (bottom-right) — simulated fluctuation
+const hudMem = document.getElementById('hudMem');
+const hudMemBar = document.getElementById('hudMemBar');
+setInterval(() => {
+  const usage = 30 + Math.floor(Math.random() * 40);
+  if (hudMem) hudMem.textContent = usage + '%';
+  if (hudMemBar) hudMemBar.style.width = usage + '%';
+}, 3000);
+
+// Uptime counter (bottom-right)
 const hudUptime = document.getElementById('hudUptime');
 const sessionStart = performance.now();
 setInterval(() => {

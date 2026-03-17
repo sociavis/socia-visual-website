@@ -326,23 +326,18 @@ const revealObserver = new IntersectionObserver((entries) => {
 reveals.forEach(el => revealObserver.observe(el));
 
 // ---- Logo 3D Interactive ----
-const logoWrap = document.querySelector('.logo-reveal-wrap');
+const logoWrap = document.querySelector('.hero-logo') || document.querySelector('.logo-reveal-wrap');
 if (logoWrap) {
   const scene = logoWrap.querySelector('.logo-3d-scene');
   const layers = logoWrap.querySelectorAll('.logo-layer');
-  const depthFactors = [40, 15, -10]; // matches CSS translateZ
+  const depthFactors = [50, 20, -15]; // matches CSS translateZ
   let idleTimeout;
   let isHovering = false;
   let currentRx = 0, currentRy = 0;
   let targetRx = 0, targetRy = 0;
 
-  // Scroll reveal
-  const logoObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      logoWrap.classList.toggle('visible', entry.isIntersecting);
-    });
-  }, { threshold: 0.3 });
-  logoObserver.observe(logoWrap);
+  // Logo is in the hero — always visible after boot
+  logoWrap.classList.add('visible');
 
   // Start idle animation
   const startIdle = () => { scene.classList.add('idle'); };

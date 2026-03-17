@@ -475,10 +475,10 @@ body:hover .cursor-glow { opacity: 1; }
   flex-direction: column;
   gap: 6px;
 }
-.hud-data--top-left  { top: 52px; left: 36px; }
-.hud-data--top-right { top: 52px; right: 36px; text-align: right; }
-.hud-data--left  { bottom: 52px; left: 36px; }
-.hud-data--right { bottom: 52px; right: 36px; text-align: right; }
+.hud-data--top-left  { top: 52px; left: 56px; }
+.hud-data--top-right { top: 52px; right: 56px; text-align: right; }
+.hud-data--left  { bottom: 52px; left: 56px; }
+.hud-data--right { bottom: 52px; right: 56px; text-align: right; }
 .hud-data-item {
   font-family: var(--font-mono);
   font-size: 0.6rem;

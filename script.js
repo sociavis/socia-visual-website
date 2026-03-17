@@ -38,7 +38,7 @@ function runBoot() {
         setTimeout(() => {
           heroLogo.classList.remove('intro-ready');
           heroLogo.classList.add('intro-done');
-        }, 2200);
+        }, 3600);
       }
       // Trigger hero reveals after boot
       document.querySelectorAll('.hero .reveal').forEach((el, i) => {
@@ -352,7 +352,7 @@ if (logoWrap) {
   // Start idle animation (delay until intro finishes)
   const startIdle = () => { scene.classList.add('idle'); };
   const stopIdle = () => { scene.classList.remove('idle'); };
-  setTimeout(startIdle, 2500);
+  setTimeout(startIdle, 4000);
 
   // Smooth animation loop
   function animateScene() {

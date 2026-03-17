@@ -705,9 +705,13 @@ img { max-width: 100%; display: block; }
   padding-top: 36px;
   border-top: 1px solid var(--grey);
 }
+.stat {
+  text-align: center;
+}
 .stat-hud {
-  display: flex;
+  display: inline-flex;
   align-items: baseline;
+  justify-content: center;
   gap: 2px;
 }
 .stat-bracket {

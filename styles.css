@@ -1043,20 +1043,22 @@ body:hover .cursor-glow { opacity: 1; }
 @keyframes ringExpand {
   0%   { opacity: 0; transform: scale(0.2) translateZ(-25px); border-color: rgba(168, 255, 0, 0.4); }
   50%  { opacity: 0.8; border-color: rgba(168, 255, 0, 0.2); }
-  100% { opacity: 1; transform: scale(1) translateZ(-25px); border-color: rgba(168, 255, 0, 0.06); }
+  100% { opacity: 1; transform: scale(1) translateZ(-25px); border-color: rgba(168, 255, 0, 0.12); }
 }
 
-.hero-logo.intro-done .logo-layer--1 { opacity: 0.2; transform: translateZ(50px); }
-.hero-logo.intro-done .logo-layer--2 { opacity: 0.15; transform: translateZ(20px); }
-.hero-logo.intro-done .logo-layer--3 { opacity: 0.08; transform: translateZ(-15px); }
+.hero-logo.intro-done .logo-layer--1 { opacity: 0.45; transform: translateZ(50px); }
+.hero-logo.intro-done .logo-layer--2 { opacity: 0.3; transform: translateZ(20px); }
+.hero-logo.intro-done .logo-layer--3 { opacity: 0.2; transform: translateZ(-15px); }
 
 .logo-layer--1 { color: var(--accent-1); }
 .logo-layer--2 { color: var(--white); }
 .logo-layer--3 { color: var(--white); }
 
-.hero-logo:hover .logo-layer--1 { opacity: 0.45; filter: drop-shadow(0 0 30px rgba(168, 255, 0, 0.35)); }
-.hero-logo:hover .logo-layer--2 { opacity: 0.3; filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.12)); }
-.hero-logo:hover .logo-layer--3 { opacity: 0.2; filter: drop-shadow(0 0 22px rgba(168, 255, 0, 0.18)); }
+.hero-logo:hover .logo-layer--1 { opacity: 0.85; filter: drop-shadow(0 0 50px rgba(168, 255, 0, 0.6)) drop-shadow(0 0 100px rgba(168, 255, 0, 0.25)); }
+.hero-logo:hover .logo-layer--2 { opacity: 0.6; filter: drop-shadow(0 0 35px rgba(255, 255, 255, 0.25)) drop-shadow(0 0 70px rgba(168, 255, 0, 0.15)); }
+.hero-logo:hover .logo-layer--3 { opacity: 0.5; filter: drop-shadow(0 0 40px rgba(168, 255, 0, 0.35)) drop-shadow(0 0 80px rgba(168, 255, 0, 0.2)); }
+.hero-logo:hover .logo-reveal-ring { border-color: rgba(168, 255, 0, 0.3) !important; box-shadow: 0 0 25px rgba(168, 255, 0, 0.12), inset 0 0 25px rgba(168, 255, 0, 0.06) !important; }
+.hero-logo:hover .logo-reveal-ring--2 { border-color: rgba(168, 255, 0, 0.2) !important; box-shadow: 0 0 20px rgba(168, 255, 0, 0.08), inset 0 0 20px rgba(168, 255, 0, 0.04) !important; }
 
 .logo-glow {
   position: absolute;
@@ -1066,7 +1068,7 @@ body:hover .cursor-glow { opacity: 1; }
   left: 50%;
   transform: translateZ(-40px) translate(-50%, -50%) scale(0);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 255, 0, 0.08) 0%, rgba(168, 255, 0, 0.02) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(168, 255, 0, 0.15) 0%, rgba(168, 255, 0, 0.05) 40%, transparent 70%);
   opacity: 0;
   pointer-events: none;
 }
@@ -1087,15 +1089,31 @@ body:hover .cursor-glow { opacity: 1; }
   opacity: 0;
   transform-style: preserve-3d;
   pointer-events: none;
+  transition: border-color 0.4s, box-shadow 0.4s;
 }
 .logo-reveal-ring--2 {
   width: 135%;
   height: 135%;
   border-color: rgba(168, 255, 0, 0.03);
 }
+/* Keep rings visible after intro with trace animation */
+.hero-logo.intro-done .logo-reveal-ring {
+  opacity: 1;
+  border-color: rgba(168, 255, 0, 0.1);
+  animation: ringRotate 20s linear infinite, ringTrace 4s ease-in-out infinite;
+}
+.hero-logo.intro-done .logo-reveal-ring--2 {
+  opacity: 1;
+  border-color: rgba(168, 255, 0, 0.07);
+  animation: ringRotate 30s linear infinite reverse, ringTrace 5s ease-in-out 1.5s infinite;
+}
 @keyframes ringRotate {
   from { transform: rotateZ(0deg) translateZ(-25px); }
   to   { transform: rotateZ(360deg) translateZ(-25px); }
+}
+@keyframes ringTrace {
+  0%, 100% { border-color: rgba(168, 255, 0, 0.07); box-shadow: none; }
+  50%      { border-color: rgba(168, 255, 0, 0.18); box-shadow: 0 0 12px rgba(168, 255, 0, 0.06), inset 0 0 12px rgba(168, 255, 0, 0.03); }
 }
 
 .logo-3d-scene.idle {

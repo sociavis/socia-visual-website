@@ -383,6 +383,13 @@ body:hover .cursor-glow { opacity: 1; }
 
 .panel--services { background: var(--dark); }
 .panel--contact { overflow-y: auto; }
+.panel--contact .panel-content {
+  justify-content: space-between;
+}
+.panel--contact .section-grid {
+  flex: 1;
+  align-content: center;
+}
 
 /* Panel content container – fits inside HUD corners */
 .panel-content {
@@ -390,6 +397,11 @@ body:hover .cursor-glow { opacity: 1; }
   max-width: 1200px;
   margin: 0 auto;
   padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 160px);
+  min-height: calc(100dvh - 160px);
 }
 
 /* ============================================
@@ -769,7 +781,7 @@ body:hover .cursor-glow { opacity: 1; }
   padding: 20px 0;
   overflow: hidden;
   position: relative;
-  margin-top: 40px;
+  margin-top: auto;
   border-top: 1px solid var(--grey);
 }
 .marquee-track {

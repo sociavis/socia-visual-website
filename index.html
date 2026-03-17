@@ -45,7 +45,12 @@
   <div class="cursor-glow" id="cursorGlow"></div>
 
   <!-- Scroll progress -->
-  <div class="scroll-progress"><div class="scroll-progress-bar" id="scrollProgress"></div></div>
+  <div class="scroll-progress-frame">
+    <div class="scroll-progress-edge scroll-progress-edge--top" id="scrollProgressTop"></div>
+    <div class="scroll-progress-edge scroll-progress-edge--right" id="scrollProgressRight"></div>
+    <div class="scroll-progress-edge scroll-progress-edge--bottom" id="scrollProgressBottom"></div>
+    <div class="scroll-progress-edge scroll-progress-edge--left" id="scrollProgressLeft"></div>
+  </div>
 
   <!-- Persistent HUD overlay -->
   <div class="hud-overlay" id="hudOverlay">
@@ -172,10 +177,13 @@
             <h2 class="section-title reveal" data-scramble>Designed to <br><span class="text-accent">stand out</span></h2>
           </div>
           <div class="section-right">
-            <p class="section-text reveal">Socia Visual is a design and development studio rooted in the powersports industry. We build websites, create graphics, and shape visual identities for brands that want to make an impact — not just exist online.</p>
+            <p class="section-text reveal"><span class="brand-highlight">Socia Visual</span> is a design and development studio rooted in the powersports industry. We build websites, create graphics, and shape visual identities for brands that want to make an impact — not just exist online.</p>
             <p class="section-text reveal">Whether you're launching a new brand or leveling up an existing one, we bring the same energy: sharp design, clean code, and visuals that hit different.</p>
             <div class="stats reveal">
               <div class="stat">
+                <div class="stat-badge">
+                  <svg class="stat-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 3l4 4-9 9-4-4 9-9z"/><path d="M9 21h12"/></svg>
+                </div>
                 <div class="stat-hud">
                   <span class="stat-bracket">[</span>
                   <span class="stat-number stat-number--text">FULL SEND</span>
@@ -184,6 +192,9 @@
                 <span class="stat-label">Commitment Level</span>
               </div>
               <div class="stat">
+                <div class="stat-badge">
+                  <svg class="stat-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
+                </div>
                 <div class="stat-hud">
                   <span class="stat-bracket">[</span>
                   <span class="stat-number stat-number--text">HOLESHOT</span>
@@ -192,6 +203,9 @@
                 <span class="stat-label">First Impressions That Win</span>
               </div>
               <div class="stat">
+                <div class="stat-badge">
+                  <svg class="stat-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                </div>
                 <div class="stat-hud">
                   <span class="stat-bracket">[</span>
                   <span class="stat-number stat-number--text">NO BRAKES</span>

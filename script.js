@@ -624,11 +624,13 @@ setInterval(() => {
 // Memory usage bar (bottom-right) — simulated fluctuation
 const hudMem = document.getElementById('hudMem');
 const hudMemBar = document.getElementById('hudMemBar');
-setInterval(() => {
+function updateMem() {
   const usage = 30 + Math.floor(Math.random() * 40);
   if (hudMem) hudMem.textContent = usage + '%';
   if (hudMemBar) hudMemBar.style.width = usage + '%';
-}, 3000);
+}
+updateMem();
+setInterval(updateMem, 3000);
 
 // Uptime counter (bottom-right)
 const hudUptime = document.getElementById('hudUptime');

@@ -1070,6 +1070,19 @@ img { max-width: 100%; display: block; }
   50%      { transform: rotateX(-3deg) rotateY(-1deg); }
   75%      { transform: rotateX(1.5deg) rotateY(-4deg); }
 }
+@keyframes layerPulse1 {
+  0%   { opacity: 0.4; transform: translateZ(50px) scale(1); }
+  50%  { opacity: 0.55; transform: translateZ(55px) scale(1.02); }
+  100% { opacity: 0.4; transform: translateZ(50px) scale(1); }
+}
+@keyframes layerPulse2 {
+  0%   { opacity: 0.25; transform: translateZ(20px); }
+  100% { opacity: 0.35; transform: translateZ(25px); }
+}
+@keyframes layerPulse3 {
+  0%   { opacity: 0.12; transform: translateZ(-15px); }
+  100% { opacity: 0.22; transform: translateZ(-10px); }
+}
 
 /* ============================================
    CONTACT
@@ -1254,18 +1267,23 @@ img { max-width: 100%; display: block; }
   .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .stats { grid-template-columns: repeat(3, 1fr); gap: 12px; }
 
-  /* Logo brighter on mobile */
-  .hero-logo.intro-done .logo-layer--1 { opacity: 0.45; filter: drop-shadow(0 0 20px rgba(168, 255, 0, 0.3)); }
-  .hero-logo.intro-done .logo-layer--2 { opacity: 0.3; }
-  .hero-logo.intro-done .logo-layer--3 { opacity: 0.15; }
+  /* Hero — move content up, clear scroll indicator */
+  .hero-split { padding-top: 30px; padding-bottom: 80px; }
+
+  /* Logo brighter + ambient motion on mobile */
+  .hero-logo.intro-done .logo-layer--1 { opacity: 0.5; filter: drop-shadow(0 0 24px rgba(168, 255, 0, 0.35)); animation: layerPulse1 4s ease-in-out infinite alternate; }
+  .hero-logo.intro-done .logo-layer--2 { opacity: 0.3; animation: layerPulse2 5s ease-in-out infinite alternate; }
+  .hero-logo.intro-done .logo-layer--3 { opacity: 0.2; animation: layerPulse3 6s ease-in-out infinite alternate; }
   .hero-logo.intro-done .logo-glow { animation: glowPulse 3s ease-in-out infinite alternate; }
   .logo-3d-scene.idle { animation: logoFloat 4s ease-in-out infinite; }
+  .hero-logo.intro-done .logo-reveal-ring { opacity: 0.6; }
 
   /* About spacing */
   .section-title { margin-bottom: 16px; }
   .section-label { margin-bottom: 12px; }
   .section-text { margin-bottom: 12px; }
   .stats { margin-top: 20px; padding-top: 20px; }
+  .marquee { margin-top: 24px; }
 
   /* Services — compact cards */
   .service-card { padding: 16px; }

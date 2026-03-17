@@ -269,9 +269,10 @@ const SectionManager = {
       if (this.isTransitioning) return;
       const deltaY = this.touchStartY - e.changedTouches[0].clientY;
 
-      // Check internal scroll
+      // Check internal scroll — only for panels that allow scrolling
       const activePanel = this.panels[this.currentIndex];
-      if (activePanel.scrollHeight > activePanel.clientHeight + 5) {
+      const canScroll = getComputedStyle(activePanel).overflowY === 'auto' || getComputedStyle(activePanel).overflowY === 'scroll';
+      if (canScroll && activePanel.scrollHeight > activePanel.clientHeight + 5) {
         if (deltaY > 0 && activePanel.scrollTop + activePanel.clientHeight < activePanel.scrollHeight - 5) return;
         if (deltaY < 0 && activePanel.scrollTop > 5) return;
       }

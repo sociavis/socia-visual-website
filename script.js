@@ -228,12 +228,12 @@ const SectionManager = {
   updateProgress() {
     if (this.progressEdges.top) {
       const e = this.progressEdges;
-      const idx = this.currentIndex; // 0-3
-      // Section 0 = top edge, 1 = right, 2 = bottom, 3 = left
-      e.top.style.width = idx >= 1 ? '100%' : '0%';
-      e.right.style.height = idx >= 2 ? '100%' : '0%';
-      e.bottom.style.width = idx >= 3 ? '100%' : '0%';
-      e.left.style.height = '0%'; // only fills when past 4th, so stays 0
+      const idx = this.currentIndex; // 0=home, 1=about, 2=services, 3=contact
+      // Section 1: top, Section 2: +right, Section 3: +bottom, Section 4: +left
+      e.top.style.width = idx >= 0 ? '100%' : '0%';
+      e.right.style.height = idx >= 1 ? '100%' : '0%';
+      e.bottom.style.width = idx >= 2 ? '100%' : '0%';
+      e.left.style.height = idx >= 3 ? '100%' : '0%';
     }
     if (this.hudScroll) {
       this.hudScroll.textContent = (this.currentIndex + 1) + '/' + this.totalPanels;

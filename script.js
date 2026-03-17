@@ -386,12 +386,11 @@ function initParticles() {
   }
 }
 
-canvas.addEventListener('mousemove', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  canvasMouseX = e.clientX - rect.left;
-  canvasMouseY = e.clientY - rect.top;
+document.addEventListener('mousemove', (e) => {
+  canvasMouseX = e.clientX;
+  canvasMouseY = e.clientY;
 });
-canvas.addEventListener('mouseleave', () => {
+document.addEventListener('mouseleave', () => {
   canvasMouseX = -1000;
   canvasMouseY = -1000;
 });

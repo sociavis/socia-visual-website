@@ -970,32 +970,110 @@ body:hover .cursor-glow { opacity: 1; }
 }
 
 /* ============================================
-   LOGO REVEAL
+   LOGO REVEAL – 3D INTERACTIVE
    ============================================ */
 .section--logo-reveal {
-  padding: clamp(60px, 10vw, 120px) 0;
+  padding: clamp(80px, 12vw, 160px) 0;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  perspective: 800px;
 }
 .logo-reveal-wrap {
   position: relative;
-  width: clamp(200px, 35vw, 350px);
+  width: clamp(220px, 38vw, 400px);
+  aspect-ratio: 1;
   color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: grab;
 }
-.logo-reveal-svg {
+
+/* 3D scene container */
+.logo-3d-scene {
+  position: relative;
   width: 100%;
-  height: auto;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+
+/* Individual logo polygon layers */
+.logo-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.15s ease-out, opacity 0.8s var(--ease), filter 0.4s ease;
+  will-change: transform;
+  opacity: 0.06;
+}
+.logo-reveal-wrap.visible .logo-layer {
+  opacity: 0.15;
+}
+
+/* Layer depth offsets – front to back */
+.logo-layer--1 {
+  transform: translateZ(40px);
+  color: var(--accent-1);
+  filter: drop-shadow(0 0 8px rgba(168, 255, 0, 0));
+}
+.logo-layer--2 {
+  transform: translateZ(15px);
+  color: var(--white);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0));
+}
+.logo-layer--3 {
+  transform: translateZ(-10px);
+  color: var(--white);
   opacity: 0.04;
-  transition: opacity 0.8s var(--ease);
+  filter: drop-shadow(0 0 4px rgba(168, 255, 0, 0));
 }
-.logo-reveal-wrap.visible .logo-reveal-svg {
-  opacity: 0.1;
+.logo-reveal-wrap.visible .logo-layer--3 {
+  opacity: 0.08;
 }
+
+/* Hover glow boost */
+.logo-reveal-wrap:hover .logo-layer--1 {
+  opacity: 0.35;
+  filter: drop-shadow(0 0 20px rgba(168, 255, 0, 0.3));
+}
+.logo-reveal-wrap:hover .logo-layer--2 {
+  opacity: 0.25;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.1));
+}
+.logo-reveal-wrap:hover .logo-layer--3 {
+  opacity: 0.15;
+  filter: drop-shadow(0 0 16px rgba(168, 255, 0, 0.15));
+}
+
+/* Ambient glow disc */
+.logo-glow {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  top: 50%;
+  left: 50%;
+  transform: translateZ(-30px) translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 255, 0, 0.06) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 1s var(--ease);
+  pointer-events: none;
+}
+.logo-reveal-wrap.visible .logo-glow {
+  opacity: 1;
+  animation: glowPulse 4s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  from { transform: translateZ(-30px) translate(-50%, -50%) scale(1); opacity: 0.6; }
+  to   { transform: translateZ(-30px) translate(-50%, -50%) scale(1.3); opacity: 1; }
+}
+
+/* Ring */
 .logo-reveal-ring {
   position: absolute;
   width: 120%;
@@ -1003,14 +1081,26 @@ body:hover .cursor-glow { opacity: 1; }
   border: 1px solid rgba(168, 255, 0, 0);
   border-radius: 50%;
   transition: all 1s var(--ease);
+  transform-style: preserve-3d;
 }
 .logo-reveal-wrap.visible .logo-reveal-ring {
   border-color: rgba(168, 255, 0, 0.06);
   animation: ringRotate 20s linear infinite;
 }
 @keyframes ringRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from { transform: rotateZ(0deg) translateZ(-20px); }
+  to   { transform: rotateZ(360deg) translateZ(-20px); }
+}
+
+/* Ambient float when idle */
+.logo-3d-scene.idle {
+  animation: logoFloat 6s ease-in-out infinite;
+}
+@keyframes logoFloat {
+  0%, 100% { transform: rotateX(2deg) rotateY(-2deg); }
+  25%      { transform: rotateX(-1deg) rotateY(3deg); }
+  50%      { transform: rotateX(-3deg) rotateY(-1deg); }
+  75%      { transform: rotateX(1deg) rotateY(-3deg); }
 }
 
 /* ============================================

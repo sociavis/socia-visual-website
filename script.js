@@ -325,15 +325,122 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 reveals.forEach(el => revealObserver.observe(el));
 
-// ---- Logo Reveal on Scroll ----
+// ---- Logo 3D Interactive ----
 const logoWrap = document.querySelector('.logo-reveal-wrap');
 if (logoWrap) {
+  const scene = logoWrap.querySelector('.logo-3d-scene');
+  const layers = logoWrap.querySelectorAll('.logo-layer');
+  const depthFactors = [40, 15, -10]; // matches CSS translateZ
+  let idleTimeout;
+  let isHovering = false;
+  let currentRx = 0, currentRy = 0;
+  let targetRx = 0, targetRy = 0;
+
+  // Scroll reveal
   const logoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       logoWrap.classList.toggle('visible', entry.isIntersecting);
     });
   }, { threshold: 0.3 });
   logoObserver.observe(logoWrap);
+
+  // Start idle animation
+  const startIdle = () => { scene.classList.add('idle'); };
+  const stopIdle = () => { scene.classList.remove('idle'); };
+  startIdle();
+
+  // Smooth animation loop
+  function animateScene() {
+    if (isHovering) {
+      currentRx += (targetRx - currentRx) * 0.08;
+      currentRy += (targetRy - currentRy) * 0.08;
+      scene.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
+
+      // Parallax shift per layer
+      layers.forEach((layer, i) => {
+        const depth = depthFactors[i];
+        const shiftX = currentRy * depth * 0.04;
+        const shiftY = -currentRx * depth * 0.04;
+        layer.style.transform = `translateZ(${depth}px) translate(${shiftX}px, ${shiftY}px)`;
+      });
+    }
+    requestAnimationFrame(animateScene);
+  }
+  animateScene();
+
+  // Mouse move handler
+  logoWrap.addEventListener('mousemove', (e) => {
+    const rect = logoWrap.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const mx = e.clientX - cx;
+    const my = e.clientY - cy;
+    const maxTilt = 25;
+
+    targetRx = -(my / (rect.height / 2)) * maxTilt;
+    targetRy = (mx / (rect.width / 2)) * maxTilt;
+  });
+
+  logoWrap.addEventListener('mouseenter', () => {
+    isHovering = true;
+    stopIdle();
+    clearTimeout(idleTimeout);
+  });
+
+  logoWrap.addEventListener('mouseleave', () => {
+    isHovering = false;
+    targetRx = 0;
+    targetRy = 0;
+
+    // Smooth return to center
+    const returnToCenter = () => {
+      currentRx += (0 - currentRx) * 0.06;
+      currentRy += (0 - currentRy) * 0.06;
+      scene.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
+      layers.forEach((layer, i) => {
+        const depth = depthFactors[i];
+        const shiftX = currentRy * depth * 0.04;
+        const shiftY = -currentRx * depth * 0.04;
+        layer.style.transform = `translateZ(${depth}px) translate(${shiftX}px, ${shiftY}px)`;
+      });
+      if (Math.abs(currentRx) > 0.1 || Math.abs(currentRy) > 0.1) {
+        requestAnimationFrame(returnToCenter);
+      } else {
+        currentRx = 0;
+        currentRy = 0;
+        scene.style.transform = '';
+        layers.forEach((layer, i) => {
+          layer.style.transform = `translateZ(${depthFactors[i]}px)`;
+        });
+        idleTimeout = setTimeout(startIdle, 500);
+      }
+    };
+    returnToCenter();
+  });
+
+  // Touch support for mobile
+  logoWrap.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = logoWrap.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const mx = touch.clientX - cx;
+    const my = touch.clientY - cy;
+    const maxTilt = 20;
+
+    isHovering = true;
+    stopIdle();
+    targetRx = -(my / (rect.height / 2)) * maxTilt;
+    targetRy = (mx / (rect.width / 2)) * maxTilt;
+  }, { passive: false });
+
+  logoWrap.addEventListener('touchend', () => {
+    isHovering = false;
+    targetRx = 0;
+    targetRy = 0;
+    idleTimeout = setTimeout(startIdle, 1500);
+  });
 }
 
 // ---- Count-Up Animation ----

@@ -513,13 +513,16 @@ body:hover .cursor-glow { opacity: 1; }
 /* Glitch effect */
 .glitch {
   position: relative;
+  overflow: hidden;
 }
 .glitch::before,
 .glitch::after {
   content: attr(data-text);
   position: absolute;
+  top: 0;
   left: 0;
   right: 0;
+  height: 100%;
   overflow: hidden;
   background: var(--gradient-text);
   -webkit-background-clip: text;
@@ -528,11 +531,11 @@ body:hover .cursor-glow { opacity: 1; }
 }
 .glitch::before {
   animation: glitch-1 4s infinite linear alternate-reverse;
-  clip-path: inset(0 0 80% 0);
+  clip-path: inset(0 0 60% 0);
 }
 .glitch::after {
   animation: glitch-2 4s infinite linear alternate-reverse;
-  clip-path: inset(80% 0 0 0);
+  clip-path: inset(60% 0 0 0);
 }
 @keyframes glitch-1 {
   0%, 92% { transform: translateX(0); }
@@ -1042,14 +1045,8 @@ body:hover .cursor-glow { opacity: 1; }
 .form-group input:focus ~ .form-corner,
 .form-group textarea:focus ~ .form-corner { border-color: var(--accent-1); }
 
-/* reCAPTCHA */
-.recaptcha-wrap {
-  transform: scale(0.9);
-  transform-origin: left top;
-}
-.recaptcha-wrap.reveal.visible {
-  opacity: 1;
-}
+/* reCAPTCHA v3 badge — hidden per Google's policy (attribution in form) */
+.grecaptcha-badge { visibility: hidden !important; }
 .form-status {
   font-family: var(--font-mono);
   font-size: 0.75rem;

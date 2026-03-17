@@ -372,26 +372,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA) ----
+// ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA v3) ----
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
+const RECAPTCHA_SITE_KEY = '6Leau4ksAAAAAPDsayHMnlB8wLZk7yK88EIPnBuS';
 
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Check reCAPTCHA
-  const recaptchaResponse = document.querySelector('.g-recaptcha-response');
-  if (recaptchaResponse && recaptchaResponse.value === '') {
-    formStatus.textContent = '[ ERROR ] — Please complete the reCAPTCHA';
-    formStatus.className = 'form-status error';
-    return;
-  }
-
   const btn = contactForm.querySelector('.cta-text');
   const originalText = btn.textContent;
-  btn.textContent = 'TRANSMITTING...';
+  btn.textContent = 'VERIFYING...';
 
   try {
+    // Get reCAPTCHA v3 token
+    const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
+    document.getElementById('recaptchaResponse').value = token;
+
+    btn.textContent = 'TRANSMITTING...';
+
     const formData = new FormData(contactForm);
     const response = await fetch(contactForm.action, {
       method: 'POST',
@@ -404,7 +403,6 @@ contactForm.addEventListener('submit', async (e) => {
       formStatus.textContent = '[ SUCCESS ] — Message delivered. We\'ll be in touch.';
       formStatus.className = 'form-status success';
       contactForm.reset();
-      if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
       setTimeout(() => { btn.textContent = originalText; }, 3000);
     } else {
       throw new Error('Transmission failed');

@@ -373,11 +373,11 @@ body:hover .cursor-glow { opacity: 1; }
 }
 .section-nav-dot span {
   position: absolute;
-  /* In the 45deg-rotated parent, bottom-left corner = visual left of diamond */
-  left: -12px;
-  bottom: 0;
-  transform: rotate(-45deg) translateX(calc(-100% - 8px));
-  transform-origin: right center;
+  right: calc(100% + 12px);
+  top: 50%;
+  left: auto;
+  transform: rotate(-45deg);
+  transform-origin: center center;
   font-family: var(--font-mono);
   font-size: 0.55rem;
   letter-spacing: 0.15em;
@@ -386,7 +386,7 @@ body:hover .cursor-glow { opacity: 1; }
   opacity: 0;
   white-space: nowrap;
   pointer-events: none;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, transform 0.3s var(--ease);
 }
 .section-nav-dot:hover span {
   opacity: 1;

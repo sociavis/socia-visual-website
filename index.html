@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socia Visual — Web Design & Graphics</title>
+  <meta name="description" content="Socia Visual designs and develops websites and graphics for the powersports industry and beyond.">
+  <link rel="icon" type="image/svg+xml" href="Socia LogoMark.svg">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Cursor glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <a href="#hero" class="nav-logo">
+      <svg class="nav-logomark" viewBox="0 0 1920 1920" fill="currentColor">
+        <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+        <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+        <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+      </svg>
+    </a>
+    <div class="nav-links">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#contact" class="nav-link nav-link--cta">Get in Touch</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#services" class="mobile-link">Services</a>
+    <a href="#contact" class="mobile-link">Get in Touch</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge reveal">Web Design & Graphics Studio</div>
+      <h1 class="hero-title">
+        <span class="reveal">We build</span>
+        <span class="hero-title--accent reveal">digital experiences</span>
+        <span class="reveal">that move.</span>
+      </h1>
+      <p class="hero-sub reveal">Websites, graphics, and visual identity — crafted for brands that refuse to blend in.</p>
+      <a href="#services" class="hero-cta reveal">
+        <span>See What We Do</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+      </a>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section section--about" id="about">
+    <div class="container">
+      <div class="section-grid">
+        <div class="section-left">
+          <span class="section-label reveal">01 / About</span>
+          <h2 class="section-title reveal">Designed to <br><span class="text-accent">stand out.</span></h2>
+        </div>
+        <div class="section-right">
+          <p class="section-text reveal">Socia Visual is a design and development studio rooted in the powersports industry. We build websites, create graphics, and shape visual identities for brands that want to make an impact — not just exist online.</p>
+          <p class="section-text reveal">Whether you're launching a new brand or leveling up an existing one, we bring the same energy: sharp design, clean code, and visuals that hit different.</p>
+          <div class="stats reveal">
+            <div class="stat">
+              <span class="stat-number" data-count="100">0</span><span class="stat-suffix">%</span>
+              <span class="stat-label">Custom Built</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number" data-count="0" data-symbol="∞">∞</span>
+              <span class="stat-label">Revisions Until Perfect</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number" data-count="24">0</span><span class="stat-suffix">/7</span>
+              <span class="stat-label">Passion for Design</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Web Design</span><span class="marquee-dot"></span>
+      <span>Branding</span><span class="marquee-dot"></span>
+      <span>Graphics</span><span class="marquee-dot"></span>
+      <span>UI/UX</span><span class="marquee-dot"></span>
+      <span>Powersports</span><span class="marquee-dot"></span>
+      <span>Visual Identity</span><span class="marquee-dot"></span>
+      <span>Web Development</span><span class="marquee-dot"></span>
+      <span>Motion</span><span class="marquee-dot"></span>
+      <span>Web Design</span><span class="marquee-dot"></span>
+      <span>Branding</span><span class="marquee-dot"></span>
+      <span>Graphics</span><span class="marquee-dot"></span>
+      <span>UI/UX</span><span class="marquee-dot"></span>
+      <span>Powersports</span><span class="marquee-dot"></span>
+      <span>Visual Identity</span><span class="marquee-dot"></span>
+      <span>Web Development</span><span class="marquee-dot"></span>
+      <span>Motion</span><span class="marquee-dot"></span>
+    </div>
+  </div>
+
+  <!-- Services Section -->
+  <section class="section section--services" id="services">
+    <div class="container">
+      <span class="section-label reveal">02 / Services</span>
+      <h2 class="section-title reveal">What we <span class="text-accent">bring to the table.</span></h2>
+      <div class="services-grid">
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="4" y="8" width="40" height="28" rx="2"/><path d="M14 42h20"/><path d="M24 36v6"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Web Design & Development</h3>
+          <p class="service-desc">Custom websites built from scratch — no templates, no shortcuts. Fast, responsive, and designed to convert.</p>
+          <div class="service-tags">
+            <span>Responsive</span><span>Custom Code</span><span>SEO</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M24 4l6 12 13 2-9.5 9 2.5 13L24 34l-12 6 2.5-13L5 18l13-2z"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Graphic Design</h3>
+          <p class="service-desc">Logos, social media assets, print materials, wraps — whatever you need to look the part, we've got you.</p>
+          <div class="service-tags">
+            <span>Logos</span><span>Print</span><span>Social</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="24" cy="24" r="20"/><path d="M24 4a28 28 0 0 1 0 40"/><path d="M24 4a28 28 0 0 0 0 40"/><path d="M4 24h40"/><path d="M6 14h36"/><path d="M6 34h36"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Brand Identity</h3>
+          <p class="service-desc">From color palettes to full brand guidelines — we help you define who you are visually and own it everywhere.</p>
+          <div class="service-tags">
+            <span>Strategy</span><span>Guidelines</span><span>Identity</span>
+          </div>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="18,6 42,24 18,42"/><rect x="4" y="6" width="8" height="36" rx="1"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Motion & Video</h3>
+          <p class="service-desc">Animated logos, promo videos, and motion graphics that bring your brand to life and stop the scroll.</p>
+          <div class="service-tags">
+            <span>Animation</span><span>Video</span><span>Motion</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Large logo reveal -->
+  <section class="section section--logo-reveal">
+    <div class="logo-reveal-wrap">
+      <svg class="logo-reveal-svg" viewBox="0 0 1920 1920" fill="currentColor">
+        <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+        <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+        <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section section--contact" id="contact">
+    <div class="container">
+      <div class="section-grid">
+        <div class="section-left">
+          <span class="section-label reveal">03 / Contact</span>
+          <h2 class="section-title reveal">Let's build <br><span class="text-accent">something sick.</span></h2>
+          <p class="section-text reveal">Got a project in mind? Drop us a line. We're always down to talk shop and see how we can help.</p>
+        </div>
+        <div class="section-right">
+          <form class="contact-form" id="contactForm">
+            <div class="form-group reveal">
+              <input type="text" id="name" name="name" required placeholder=" ">
+              <label for="name">Your Name</label>
+              <div class="form-line"></div>
+            </div>
+            <div class="form-group reveal">
+              <input type="email" id="email" name="email" required placeholder=" ">
+              <label for="email">Email Address</label>
+              <div class="form-line"></div>
+            </div>
+            <div class="form-group reveal">
+              <textarea id="message" name="message" rows="4" required placeholder=" "></textarea>
+              <label for="message">Tell us about your project</label>
+              <div class="form-line"></div>
+            </div>
+            <button type="submit" class="form-submit reveal">
+              <span>Send Message</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <svg class="footer-logo" viewBox="0 0 1920 1920" fill="currentColor">
+            <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+            <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+            <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+          </svg>
+          <p class="footer-tagline">Designed & developed by Socia Visual.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#hero">Home</a>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Socia Visual. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

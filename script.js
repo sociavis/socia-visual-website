@@ -123,6 +123,7 @@ const SectionManager = {
   init() {
     this.panels = Array.from(document.querySelectorAll('.panel'));
     this.dots = Array.from(document.querySelectorAll('.section-nav-dot'));
+    this.mobileBtns = Array.from(document.querySelectorAll('.mobile-nav-btn'));
     this.totalPanels = this.panels.length;
     this.scanLine = document.getElementById('scanLine');
     this.progressBar = document.getElementById('scrollProgress');
@@ -218,6 +219,9 @@ const SectionManager = {
     this.dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === this.currentIndex);
     });
+    this.mobileBtns.forEach((btn, i) => {
+      btn.classList.toggle('active', i === this.currentIndex);
+    });
   },
 
   updateProgress() {
@@ -312,6 +316,12 @@ const SectionManager = {
     this.dots.forEach(dot => {
       dot.addEventListener('click', () => {
         const target = parseInt(dot.dataset.target);
+        this.goTo(target);
+      });
+    });
+    this.mobileBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = parseInt(btn.dataset.target);
         this.goTo(target);
       });
     });

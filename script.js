@@ -30,6 +30,16 @@ function runBoot() {
     setTimeout(() => {
       bootOverlay.classList.add('done');
       document.body.classList.add('loaded');
+      // Trigger logo intro animation
+      const heroLogo = document.querySelector('.hero-logo');
+      if (heroLogo) {
+        heroLogo.classList.add('intro-ready');
+        // After intro animations finish, switch to interactive state
+        setTimeout(() => {
+          heroLogo.classList.remove('intro-ready');
+          heroLogo.classList.add('intro-done');
+        }, 2200);
+      }
       // Trigger hero reveals after boot
       document.querySelectorAll('.hero .reveal').forEach((el, i) => {
         setTimeout(() => el.classList.add('visible'), i * 120);
@@ -339,10 +349,10 @@ if (logoWrap) {
   // Logo is in the hero — always visible after boot
   logoWrap.classList.add('visible');
 
-  // Start idle animation
+  // Start idle animation (delay until intro finishes)
   const startIdle = () => { scene.classList.add('idle'); };
   const stopIdle = () => { scene.classList.remove('idle'); };
-  startIdle();
+  setTimeout(startIdle, 2500);
 
   // Smooth animation loop
   function animateScene() {

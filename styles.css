@@ -1258,10 +1258,10 @@ img { max-width: 100%; display: block; }
 
   /* HUD data — scaled down for mobile */
   .hud-data { gap: 4px; }
-  .hud-data--top-left  { top: 36px; left: 16px; }
-  .hud-data--top-right { top: 36px; right: 16px; }
-  .hud-data--left  { bottom: 64px; left: 16px; }
-  .hud-data--right { bottom: 64px; right: 16px; }
+  .hud-data--top-left  { top: 23px; left: 24px; }
+  .hud-data--top-right { top: 23px; right: 24px; }
+  .hud-data--left  { bottom: 69px; left: 24px; }
+  .hud-data--right { bottom: 69px; right: 24px; }
   .hud-data-item { font-size: 0.45rem; gap: 5px; }
   .hud-signal { height: 8px; }
   .hud-signal span { width: 2px; }

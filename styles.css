@@ -320,14 +320,14 @@ body:hover .cursor-glow { opacity: 1; }
 .nav-corner--bl { bottom: 0; left: 36px; border-width: 0 0 1px 1px; }
 .nav-corner--br { bottom: 0; right: 36px; border-width: 0 1px 1px 0; }
 
-.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-link {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   position: relative;
-  padding: 6px 0;
+  padding: 8px 4px;
   transition: color 0.3s;
   display: flex;
   align-items: center;
@@ -476,10 +476,10 @@ body:hover .cursor-glow { opacity: 1; }
   border-color: rgba(168, 255, 0, 0.2);
   border-style: solid;
 }
-.hud-corner--tl { top: 20px; left: 20px; border-width: 1px 0 0 1px; }
-.hud-corner--tr { top: 20px; right: 20px; border-width: 1px 1px 0 0; }
-.hud-corner--bl { bottom: 20px; left: 20px; border-width: 0 0 1px 1px; }
-.hud-corner--br { bottom: 20px; right: 20px; border-width: 0 1px 1px 0; }
+.hud-corner--tl { top: 32px; left: 32px; border-width: 1px 0 0 1px; }
+.hud-corner--tr { top: 32px; right: 32px; border-width: 1px 1px 0 0; }
+.hud-corner--bl { bottom: 32px; left: 32px; border-width: 0 0 1px 1px; }
+.hud-corner--br { bottom: 32px; right: 32px; border-width: 0 1px 1px 0; }
 
 /* HUD Data */
 .hud-data {

@@ -580,9 +580,10 @@ const sectionObserver = new IntersectionObserver((entries) => {
 sections.forEach(s => sectionObserver.observe(s));
 
 // ---- Scramble nav links on hover ----
-document.querySelectorAll('[data-text]').forEach(el => {
+document.querySelectorAll('.nav-link[data-text]').forEach(el => {
+  const textEl = el.querySelector('.nav-link-text');
+  if (!textEl) return; // skip CTA button — no scramble target
   el.addEventListener('mouseenter', () => {
-    const textEl = el.querySelector('.nav-link-text') || el;
     const original = el.dataset.text;
     let iteration = 0;
     const interval = setInterval(() => {

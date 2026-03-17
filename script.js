@@ -529,6 +529,8 @@ window.addEventListener('scroll', () => {
 });
 
 // ---- HUD Data Updates ----
+
+// FPS counter
 const hudFps = document.getElementById('hudFps');
 let lastTime = performance.now();
 let frameCount = 0;
@@ -537,7 +539,7 @@ function updateFPS() {
   frameCount++;
   const now = performance.now();
   if (now - lastTime >= 1000) {
-    hudFps.textContent = frameCount;
+    if (hudFps) hudFps.textContent = frameCount;
     frameCount = 0;
     lastTime = now;
   }
@@ -545,13 +547,71 @@ function updateFPS() {
 }
 updateFPS();
 
-// Simulate coordinate updates based on mouse
+// Cursor velocity + coordinate tracking
+const hudVel = document.getElementById('hudVel');
+const hudLat = document.getElementById('hudLat');
+const hudLng = document.getElementById('hudLng');
+let prevMouseX = 0, prevMouseY = 0, prevMouseTime = performance.now();
+let velocity = 0;
+
 document.addEventListener('mousemove', (e) => {
+  const now = performance.now();
+  const dt = now - prevMouseTime;
+  if (dt > 0) {
+    const dx = e.clientX - prevMouseX;
+    const dy = e.clientY - prevMouseY;
+    const speed = Math.sqrt(dx * dx + dy * dy) / dt;
+    velocity += (speed - velocity) * 0.3; // smooth
+    if (hudVel) hudVel.textContent = velocity.toFixed(2);
+  }
+  prevMouseX = e.clientX;
+  prevMouseY = e.clientY;
+  prevMouseTime = now;
+
+  // Coordinates
   const lat = (45.5 + (e.clientY / window.innerHeight) * 0.05).toFixed(4);
   const lng = (-122.6 + (e.clientX / window.innerWidth) * 0.1).toFixed(4);
-  document.getElementById('hudLat').textContent = lat;
-  document.getElementById('hudLng').textContent = lng;
+  if (hudLat) hudLat.textContent = lat;
+  if (hudLng) hudLng.textContent = lng;
 });
+
+// Decay velocity when mouse stops
+setInterval(() => {
+  velocity *= 0.9;
+  if (velocity < 0.01) velocity = 0;
+  if (hudVel) hudVel.textContent = velocity.toFixed(2);
+}, 100);
+
+// Scroll percentage
+const hudScroll = document.getElementById('hudScroll');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+  if (hudScroll) hudScroll.textContent = pct + '%';
+});
+
+// Signal strength — fluctuates randomly
+const hudSignal = document.getElementById('hudSignal');
+if (hudSignal) {
+  const bars = hudSignal.querySelectorAll('span');
+  setInterval(() => {
+    const strength = 3 + Math.floor(Math.random() * 3); // 3-5 bars
+    bars.forEach((bar, i) => {
+      bar.classList.toggle('inactive', i >= strength);
+    });
+  }, 2000);
+}
+
+// Uptime counter
+const hudUptime = document.getElementById('hudUptime');
+const sessionStart = performance.now();
+setInterval(() => {
+  const elapsed = Math.floor((performance.now() - sessionStart) / 1000);
+  const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const secs = String(elapsed % 60).padStart(2, '0');
+  if (hudUptime) hudUptime.textContent = mins + ':' + secs;
+}, 1000);
 
 // ---- Section Scroll-triggered border animation ----
 const sections = document.querySelectorAll('.section');

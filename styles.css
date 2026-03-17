@@ -308,7 +308,7 @@ body:hover .cursor-glow { opacity: 1; }
    ============================================ */
 .section-nav {
   position: fixed;
-  right: 32px;
+  right: 72px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 101;
@@ -372,24 +372,7 @@ body:hover .cursor-glow { opacity: 1; }
   filter: drop-shadow(0 0 3px rgba(168, 255, 0, 0.3));
 }
 .section-nav-dot span {
-  position: absolute;
-  right: calc(100% + 12px);
-  top: 50%;
-  left: auto;
-  transform: rotate(-45deg);
-  transform-origin: center center;
-  font-family: var(--font-mono);
-  font-size: 0.55rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent-1);
-  opacity: 0;
-  white-space: nowrap;
-  pointer-events: none;
-  transition: opacity 0.3s, transform 0.3s var(--ease);
-}
-.section-nav-dot:hover span {
-  opacity: 1;
+  display: none;
 }
 
 /* ============================================

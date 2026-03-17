@@ -213,52 +213,6 @@ body:hover .cursor-glow { opacity: 1; }
 /* ============================================
    CHECKERED FLAG PATTERN
    ============================================ */
-/* Checkered flag stripe – crisp single-row racing finish line */
-.checkered {
-  position: absolute;
-  pointer-events: none;
-  z-index: 1;
-  background-image: repeating-conic-gradient(
-    rgba(255, 255, 255, 0.06) 0% 25%,
-    transparent 0% 50%
-  );
-  background-size: 12px 12px;
-}
-.checkered--top {
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 12px;
-  opacity: 0.8;
-}
-.checkered--bottom {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 12px;
-  opacity: 0.8;
-}
-.checkered--left {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 12px;
-  opacity: 0.6;
-}
-.checkered--right {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 12px;
-  opacity: 0.6;
-}
-.checkered--strip {
-  left: 0;
-  right: 0;
-  height: 6px;
-  background-size: 6px 6px;
-  opacity: 0.5;
-}
 
 /* Container */
 .container {

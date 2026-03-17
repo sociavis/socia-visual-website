@@ -213,57 +213,51 @@ body:hover .cursor-glow { opacity: 1; }
 /* ============================================
    CHECKERED FLAG PATTERN
    ============================================ */
+/* Checkered flag stripe – crisp single-row racing finish line */
 .checkered {
   position: absolute;
   pointer-events: none;
-  background-image:
-    linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.03) 75%),
-    linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.03) 75%);
-  background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
-  z-index: 0;
+  z-index: 1;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.06) 0% 25%,
+    transparent 0% 50%
+  );
+  background-size: 12px 12px;
 }
 .checkered--top {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+  height: 12px;
+  opacity: 0.8;
 }
 .checkered--bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  mask-image: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  height: 12px;
+  opacity: 0.8;
 }
 .checkered--left {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 40px;
-  mask-image: linear-gradient(to right, rgba(0,0,0,0.5), transparent);
-  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.5), transparent);
+  width: 12px;
+  opacity: 0.6;
 }
 .checkered--right {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 40px;
-  mask-image: linear-gradient(to left, rgba(0,0,0,0.5), transparent);
-  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.5), transparent);
+  width: 12px;
+  opacity: 0.6;
 }
 .checkered--strip {
   left: 0;
   right: 0;
-  height: 8px;
-  background-size: 8px 8px;
-  background-position: 0 0, 0 4px, 4px -4px, -4px 0;
-  opacity: 0.4;
+  height: 6px;
+  background-size: 6px 6px;
+  opacity: 0.5;
 }
 
 /* Container */

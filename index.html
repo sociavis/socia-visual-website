@@ -146,6 +146,11 @@
     <!-- Horizontal accent lines -->
     <div class="hero-hline hero-hline--top"></div>
     <div class="hero-hline hero-hline--bottom"></div>
+
+    <!-- Checkered flag edges -->
+    <div class="checkered checkered--left"></div>
+    <div class="checkered checkered--right"></div>
+    <div class="checkered checkered--bottom"></div>
   </section>
 
   <!-- About Section -->
@@ -163,26 +168,26 @@
             <div class="stat">
               <div class="stat-hud">
                 <span class="stat-bracket">[</span>
-                <span class="stat-number" data-count="100">0</span><span class="stat-suffix">%</span>
+                <span class="stat-number stat-number--text">FULL SEND</span>
                 <span class="stat-bracket">]</span>
               </div>
-              <span class="stat-label">Custom Built</span>
+              <span class="stat-label">Commitment Level</span>
             </div>
             <div class="stat">
               <div class="stat-hud">
                 <span class="stat-bracket">[</span>
-                <span class="stat-number" data-count="0" data-symbol="∞">∞</span>
+                <span class="stat-number stat-number--text">HOLESHOT</span>
                 <span class="stat-bracket">]</span>
               </div>
-              <span class="stat-label">Revisions Until Perfect</span>
+              <span class="stat-label">First Impressions That Win</span>
             </div>
             <div class="stat">
               <div class="stat-hud">
                 <span class="stat-bracket">[</span>
-                <span class="stat-number" data-count="24">0</span><span class="stat-suffix">/7</span>
+                <span class="stat-number stat-number--text">NO BRAKES</span>
                 <span class="stat-bracket">]</span>
               </div>
-              <span class="stat-label">Passion for Design</span>
+              <span class="stat-label">On Creativity</span>
             </div>
           </div>
         </div>
@@ -192,6 +197,8 @@
 
   <!-- Marquee -->
   <div class="marquee">
+    <div class="checkered checkered--strip" style="top:0"></div>
+    <div class="checkered checkered--strip" style="bottom:0"></div>
     <div class="marquee-track">
       <span>Web Design</span><span class="marquee-dot">◆</span>
       <span>Branding</span><span class="marquee-dot">◆</span>
@@ -214,6 +221,8 @@
 
   <!-- Services Section -->
   <section class="section section--services" id="services">
+    <div class="checkered checkered--top"></div>
+    <div class="checkered checkered--bottom"></div>
     <div class="container">
       <span class="section-label reveal"><span class="label-line"></span>02 // Services</span>
       <h2 class="section-title reveal" data-scramble>What we <span class="text-accent">bring to the table.</span></h2>
@@ -377,7 +386,8 @@
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" style="position:relative;overflow:hidden">
+    <div class="checkered checkered--top"></div>
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">

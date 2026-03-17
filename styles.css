@@ -14,8 +14,8 @@
   --accent-2: #d4ff00;
   --gradient: linear-gradient(135deg, #a8ff00, #d4ff00);
   --gradient-text: linear-gradient(135deg, #a8ff00 0%, #d4ff00 50%, #c8ff30 100%);
-  --font-body: 'Inter', -apple-system, sans-serif;
-  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Exo 2', -apple-system, sans-serif;
+  --font-heading: 'Rajdhani', sans-serif;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -89,8 +89,15 @@ body:hover .cursor-glow { opacity: 1; }
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; z-index: 1001; }
-.nav-logomark { width: 36px; height: 36px; color: var(--white); transition: color 0.3s; }
-.nav-logo:hover .nav-logomark { color: var(--accent-1); }
+.nav-wordmark {
+  height: 24px;
+  width: auto;
+  filter: invert(1);
+  transition: filter 0.3s;
+}
+.nav-logo:hover .nav-wordmark {
+  filter: invert(0.6) sepia(1) saturate(10) hue-rotate(40deg) brightness(1.2);
+}
 .nav-links { display: flex; align-items: center; gap: 36px; }
 .nav-link {
   font-size: 0.85rem;

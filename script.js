@@ -103,30 +103,6 @@ document.querySelectorAll('.magnetic').forEach(el => {
   });
 });
 
-// ---- Navigation ----
-const nav = document.getElementById('nav');
-const navToggle = document.getElementById('navToggle');
-const mobileMenu = document.getElementById('mobileMenu');
-const mobileLinks = document.querySelectorAll('.mobile-link');
-
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-navToggle.addEventListener('click', () => {
-  navToggle.classList.toggle('active');
-  mobileMenu.classList.toggle('active');
-  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-});
-
-mobileLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    navToggle.classList.remove('active');
-    mobileMenu.classList.remove('active');
-    document.body.style.overflow = '';
-  });
-});
-
 // ---- Scroll Progress Bar ----
 const scrollProgressBar = document.getElementById('scrollProgress');
 window.addEventListener('scroll', () => {
@@ -588,30 +564,6 @@ const sectionObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 
 sections.forEach(s => sectionObserver.observe(s));
-
-// ---- Scramble nav links on hover ----
-document.querySelectorAll('.nav-link[data-text]').forEach(el => {
-  const textEl = el.querySelector('.nav-link-text');
-  if (!textEl) return; // skip CTA button — no scramble target
-  el.addEventListener('mouseenter', () => {
-    const original = el.dataset.text;
-    let iteration = 0;
-    const interval = setInterval(() => {
-      textEl.textContent = original
-        .split('')
-        .map((char, i) => {
-          if (i < iteration) return original[i];
-          return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-        })
-        .join('');
-      iteration += 1;
-      if (iteration > original.length) {
-        textEl.textContent = original;
-        clearInterval(interval);
-      }
-    }, 40);
-  });
-});
 
 // ---- Keyboard easter egg ----
 const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];

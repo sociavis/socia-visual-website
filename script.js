@@ -114,7 +114,7 @@ const SectionManager = {
   wheelCooldown: 1000,
   touchStartY: 0,
   scanLine: null,
-  progressBar: null,
+  progressEdges: {},
   hudScroll: null,
 
   // Panel name map for anchor links
@@ -126,7 +126,12 @@ const SectionManager = {
     this.mobileBtns = Array.from(document.querySelectorAll('.mobile-nav-btn'));
     this.totalPanels = this.panels.length;
     this.scanLine = document.getElementById('scanLine');
-    this.progressBar = document.getElementById('scrollProgress');
+    this.progressEdges = {
+      top: document.getElementById('scrollProgressTop'),
+      right: document.getElementById('scrollProgressRight'),
+      bottom: document.getElementById('scrollProgressBottom'),
+      left: document.getElementById('scrollProgressLeft'),
+    };
     this.hudScroll = document.getElementById('hudScroll');
 
     // Ensure first panel is active
@@ -225,11 +230,14 @@ const SectionManager = {
   },
 
   updateProgress() {
-    if (this.progressBar) {
-      const pct = this.totalPanels > 1
-        ? (this.currentIndex / (this.totalPanels - 1)) * 100
-        : 0;
-      this.progressBar.style.width = pct + '%';
+    if (this.progressEdges.top) {
+      const e = this.progressEdges;
+      const idx = this.currentIndex; // 0=home, 1=about, 2=services, 3=contact
+      // Section 1: top, Section 2: +right, Section 3: +bottom, Section 4: +left
+      e.top.style.width = idx >= 0 ? '100%' : '0%';
+      e.right.style.height = idx >= 1 ? '100%' : '0%';
+      e.bottom.style.width = idx >= 2 ? '100%' : '0%';
+      e.left.style.height = idx >= 3 ? '100%' : '0%';
     }
     if (this.hudScroll) {
       this.hudScroll.textContent = (this.currentIndex + 1) + '/' + this.totalPanels;
@@ -397,12 +405,11 @@ function initParticles() {
   }
 }
 
-canvas.addEventListener('mousemove', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  canvasMouseX = e.clientX - rect.left;
-  canvasMouseY = e.clientY - rect.top;
+document.addEventListener('mousemove', (e) => {
+  canvasMouseX = e.clientX;
+  canvasMouseY = e.clientY;
 });
-canvas.addEventListener('mouseleave', () => {
+document.addEventListener('mouseleave', () => {
   canvasMouseX = -1000;
   canvasMouseY = -1000;
 });

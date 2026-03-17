@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>OG Image</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Subtle grid lines */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(168, 255, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 255, 0, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* HUD corners */
+    .corner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-color: rgba(168, 255, 0, 0.25);
+      border-style: solid;
+    }
+    .corner--tl { top: 32px; left: 32px; border-width: 1px 0 0 1px; }
+    .corner--tr { top: 32px; right: 32px; border-width: 1px 1px 0 0; }
+    .corner--bl { bottom: 32px; left: 32px; border-width: 0 0 1px 1px; }
+    .corner--br { bottom: 32px; right: 32px; border-width: 0 1px 1px 0; }
+
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      color: #a8ff00;
+      opacity: 0.9;
+    }
+
+    .wordmark {
+      height: 36px;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+
+    .tagline {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: -16px;
+    }
+
+    .url {
+      position: absolute;
+      bottom: 44px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: rgba(168, 255, 0, 0.35);
+    }
+
+    /* Accent line */
+    .line {
+      width: 60px;
+      height: 1px;
+      background: rgba(168, 255, 0, 0.3);
+      margin-top: -20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="corner corner--tl"></div>
+  <div class="corner corner--tr"></div>
+  <div class="corner corner--bl"></div>
+  <div class="corner corner--br"></div>
+
+  <div class="content">
+    <svg class="logo" viewBox="0 0 1920 1920" fill="currentColor">
+      <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+      <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+      <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+    </svg>
+    <div class="line"></div>
+    <img class="wordmark" src="Socia Wordmark.svg" alt="Socia Visual">
+    <span class="tagline">Web Design & Graphics Studio</span>
+  </div>
+
+  <span class="url">sociavisual.com</span>
+</body>
+</html>

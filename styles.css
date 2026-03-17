@@ -240,45 +240,6 @@ body:hover .cursor-glow { opacity: 1; }
   flex-direction: column;
   gap: 6px;
 }
-/* HUD Wordmark */
-.hud-wordmark {
-  position: absolute;
-  top: 36px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  opacity: 0;
-  animation: wordmarkIn 1s var(--ease) 0.6s forwards;
-  cursor: none;
-}
-.hud-wordmark-img {
-  height: 22px;
-  width: auto;
-  display: block;
-  filter: brightness(0) invert(1);
-  opacity: 0.6;
-  transition: opacity 0.3s var(--ease);
-}
-.hud-wordmark:hover .hud-wordmark-img {
-  opacity: 1;
-  animation: wordmarkGlitch 0.4s steps(2) forwards;
-}
-@keyframes wordmarkIn {
-  0%   { opacity: 0; clip-path: inset(0 100% 0 0); }
-  60%  { opacity: 1; clip-path: inset(0 0 0 0); }
-  70%  { opacity: 0.4; }
-  80%  { opacity: 1; }
-  90%  { opacity: 0.6; }
-  100% { opacity: 1; clip-path: inset(0 0 0 0); }
-}
-@keyframes wordmarkGlitch {
-  0%   { transform: translate(0); filter: brightness(0) invert(1); }
-  20%  { transform: translate(-2px, 1px); filter: brightness(0) invert(0.7) sepia(1) saturate(8) hue-rotate(35deg); }
-  40%  { transform: translate(2px, -1px); filter: brightness(0) invert(1); }
-  60%  { transform: translate(-1px, 0); filter: brightness(0) invert(0.7) sepia(1) saturate(8) hue-rotate(35deg); }
-  80%  { transform: translate(1px, 1px); filter: brightness(0) invert(1); }
-  100% { transform: translate(0); filter: brightness(0) invert(0.7) sepia(1) saturate(8) hue-rotate(35deg); }
-}
 
 .hud-data--top-left  { top: 52px; left: 52px; }
 .hud-data--top-right { top: 52px; right: 52px; text-align: right; }
@@ -1286,7 +1247,6 @@ body:hover .cursor-glow { opacity: 1; }
   .hud-corner--bl { bottom: 20px; left: 20px; }
   .hud-corner--br { bottom: 20px; right: 20px; }
   .hud-data { display: none; }
-  .hud-wordmark { display: none; }
   .section-nav { right: 20px; }
   .section-nav-dot span { display: none; }
   .hero-split { width: calc(100% - 56px); padding: 50px 16px; gap: 20px; }

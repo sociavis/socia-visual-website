@@ -372,17 +372,48 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ---- Contact form ----
+// ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA) ----
 const contactForm = document.getElementById('contactForm');
-contactForm.addEventListener('submit', (e) => {
+const formStatus = document.getElementById('formStatus');
+
+contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  // Check reCAPTCHA
+  const recaptchaResponse = document.querySelector('.g-recaptcha-response');
+  if (recaptchaResponse && recaptchaResponse.value === '') {
+    formStatus.textContent = '[ ERROR ] — Please complete the reCAPTCHA';
+    formStatus.className = 'form-status error';
+    return;
+  }
+
   const btn = contactForm.querySelector('.cta-text');
   const originalText = btn.textContent;
-  btn.textContent = 'TRANSMITTED ✓';
-  contactForm.reset();
-  setTimeout(() => {
+  btn.textContent = 'TRANSMITTING...';
+
+  try {
+    const formData = new FormData(contactForm);
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      btn.textContent = 'TRANSMITTED ✓';
+      formStatus.textContent = '[ SUCCESS ] — Message delivered. We\'ll be in touch.';
+      formStatus.className = 'form-status success';
+      contactForm.reset();
+      if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+      setTimeout(() => { btn.textContent = originalText; }, 3000);
+    } else {
+      throw new Error('Transmission failed');
+    }
+  } catch (err) {
     btn.textContent = originalText;
-  }, 3000);
+    formStatus.textContent = '[ ERROR ] — Transmission failed. Try again or email directly.';
+    formStatus.className = 'form-status error';
+  }
 });
 
 // ---- 3D Tilt on service cards ----

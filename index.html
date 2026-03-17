@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -327,7 +328,14 @@
           </div>
         </div>
         <div class="section-right">
-          <form class="contact-form" id="contactForm">
+          <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/scott@sociavisual.com" method="POST">
+            <!-- Honeypot spam trap -->
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+            <!-- Disable default captcha page (we use our own reCAPTCHA) -->
+            <input type="hidden" name="_captcha" value="false">
+            <!-- Subject line for emails -->
+            <input type="hidden" name="_subject" value="New inquiry from sociavisual.com">
+
             <div class="form-group reveal">
               <input type="text" id="name" name="name" required placeholder=" " autocomplete="off">
               <label for="name">Your Name</label>
@@ -349,6 +357,14 @@
               <div class="form-corner form-corner--tl"></div>
               <div class="form-corner form-corner--br"></div>
             </div>
+
+            <!-- reCAPTCHA v2 — REPLACE the sitekey below with your own from https://www.google.com/recaptcha/admin -->
+            <div class="recaptcha-wrap reveal">
+              <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY_HERE" data-theme="dark"></div>
+            </div>
+
+            <div class="form-status" id="formStatus"></div>
+
             <button type="submit" class="form-submit magnetic reveal">
               <span class="cta-text">Transmit Message</span>
               <span class="cta-arrow">

@@ -30,6 +30,8 @@ html {
   overflow: hidden;
   height: 100vh;
   height: 100dvh;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 body {
   font-family: var(--font-body);
@@ -346,6 +348,7 @@ img { max-width: 100%; display: block; }
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  touch-action: none;
 }
 
 .panel {
@@ -371,7 +374,7 @@ img { max-width: 100%; display: block; }
 }
 
 .panel--services { background: var(--dark); }
-.panel--contact { overflow-y: auto; }
+.panel--contact { overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 /* Panel content container – fits inside HUD corners */
 .panel-content {
@@ -1097,7 +1100,7 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--grey);
   padding: 16px 14px 10px;
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 16px;
   color: var(--white);
   outline: none;
   transition: border-color 0.3s, background 0.3s;
@@ -1227,7 +1230,7 @@ img { max-width: 100%; display: block; }
   .panel-content { width: calc(100% - 80px); padding: 60px 20px; }
 }
 @media (max-width: 900px) {
-  body, a, button { cursor: auto; }
+  body, a, button, input, textarea { cursor: auto; }
   .cursor, .cursor-dot { display: none; }
   .hud-corner { width: 28px; height: 28px; }
   .hud-corner--tl { top: 20px; left: 20px; }
@@ -1236,6 +1239,9 @@ img { max-width: 100%; display: block; }
   .hud-corner--br { bottom: 20px; right: 20px; }
   .hud-data { display: none; }
   .section-nav { right: 20px; }
+  .section-nav-dot { width: 20px; height: 20px; border: none; background: transparent; position: relative; }
+  .section-nav-dot::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border: 1px solid rgba(168, 255, 0, 0.3); background: transparent; transition: all 0.3s; }
+  .section-nav-dot.active::after { background: var(--accent-1); border-color: var(--accent-1); box-shadow: 0 0 8px rgba(168, 255, 0, 0.4); }
   .section-nav-dot span { display: none; }
   .hero-split { width: calc(100% - 56px); padding: 50px 16px; gap: 20px; }
   .hero-scroll { bottom: 28px; }
@@ -1243,6 +1249,7 @@ img { max-width: 100%; display: block; }
   .hero-hline--bottom { bottom: 10%; }
   .panel-content { width: calc(100% - 56px); padding: 50px 16px; }
   .section-grid { grid-template-columns: 1fr; gap: 36px; }
+  .section-right { padding-top: 0; }
   .services-grid { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(3, 1fr); gap: 12px; }
 }

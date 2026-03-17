@@ -228,6 +228,7 @@ img { max-width: 100%; display: block; }
   flex-direction: column;
   gap: 6px;
 }
+
 .hud-data--top-left  { top: 52px; left: 52px; }
 .hud-data--top-right { top: 52px; right: 52px; text-align: right; }
 .hud-data--left  { bottom: 52px; left: 52px; }
@@ -378,6 +379,11 @@ img { max-width: 100%; display: block; }
   max-width: 1200px;
   margin: 0 auto;
   padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 160px);
+  min-height: calc(100dvh - 160px);
 }
 
 /* ============================================
@@ -693,6 +699,9 @@ img { max-width: 100%; display: block; }
   gap: clamp(40px, 6vw, 80px);
   align-items: start;
 }
+.section-right {
+  padding-top: calc(0.7rem + 24px);
+}
 
 /* ============================================
    ABOUT — Stats
@@ -761,7 +770,7 @@ img { max-width: 100%; display: block; }
   padding: 20px 0;
   overflow: hidden;
   position: relative;
-  margin-top: 40px;
+  margin-top: auto;
   border-top: 1px solid var(--grey);
 }
 .marquee-track {
@@ -1182,54 +1191,6 @@ img { max-width: 100%; display: block; }
 .form-submit .cta-arrow { position: relative; z-index: 1; }
 .form-submit:hover .cta-arrow { transform: translateX(4px); }
 
-/* ============================================
-   PANEL FOOTER (inside contact panel)
-   ============================================ */
-.panel-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 48px;
-  padding-top: 20px;
-  border-top: 1px solid var(--grey);
-}
-.panel-footer-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.panel-footer-left p {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--grey-light);
-  letter-spacing: 0.1em;
-}
-.panel-footer-right {
-  display: flex;
-  align-items: center;
-}
-.footer-logo {
-  width: 24px;
-  height: 24px;
-  color: var(--white);
-  opacity: 0.5;
-}
-.footer-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--grey-light);
-  letter-spacing: 0.1em;
-}
-.status-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent-1);
-  animation: pulse 2s ease-in-out infinite;
-}
 
 /* ============================================
    REVEAL ANIMATIONS
@@ -1284,7 +1245,6 @@ img { max-width: 100%; display: block; }
   .section-grid { grid-template-columns: 1fr; gap: 36px; }
   .services-grid { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .panel-footer { flex-direction: column; gap: 12px; }
 }
 @media (max-width: 480px) {
   .hud-corner { width: 20px; height: 20px; }

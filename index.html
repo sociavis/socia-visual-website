@@ -47,346 +47,340 @@
   <!-- Scroll progress -->
   <div class="scroll-progress"><div class="scroll-progress-bar" id="scrollProgress"></div></div>
 
-  <!-- Hero Section -->
-  <section class="hero" id="hero">
-    <canvas id="heroCanvas"></canvas>
-
-    <!-- HUD corners -->
+  <!-- Persistent HUD overlay -->
+  <div class="hud-overlay" id="hudOverlay">
     <div class="hud-corner hud-corner--tl"></div>
     <div class="hud-corner hud-corner--tr"></div>
     <div class="hud-corner hud-corner--bl"></div>
     <div class="hud-corner hud-corner--br"></div>
 
-    <!-- Floating HUD data – top left -->
     <div class="hud-data hud-data--top-left">
       <div class="hud-data-item"><span class="hud-label">PROJECT</span><span class="hud-value hud-value--active">SOCIA VISUAL</span></div>
       <div class="hud-data-item"><span class="hud-label">VER</span><span class="hud-value">2.0.26</span></div>
       <div class="hud-data-item"><span class="hud-label">RES</span><span class="hud-value" id="hudRes">1920x1080</span></div>
     </div>
 
-    <!-- Floating HUD data – top right -->
     <div class="hud-data hud-data--top-right">
       <div class="hud-data-item"><span class="hud-label">SIG</span><span class="hud-signal" id="hudSignal"><span></span><span></span><span></span><span></span><span></span></span></div>
       <div class="hud-data-item"><span class="hud-label">FPS</span><span class="hud-value" id="hudFps">60</span></div>
       <div class="hud-data-item"><span class="hud-label">CLK</span><span class="hud-value" id="hudClock">00:00:00</span></div>
     </div>
 
-    <!-- Floating HUD data – bottom left -->
     <div class="hud-data hud-data--left">
       <div class="hud-data-item"><span class="hud-label">LAT</span><span class="hud-value" id="hudLat">45.5231</span></div>
       <div class="hud-data-item"><span class="hud-label">LNG</span><span class="hud-value" id="hudLng">-122.6765</span></div>
       <div class="hud-data-item"><span class="hud-label">VEL</span><span class="hud-value hud-value--active" id="hudVel">0.00</span></div>
     </div>
 
-    <!-- Floating HUD data – bottom right -->
     <div class="hud-data hud-data--right">
-      <div class="hud-data-item"><span class="hud-label">SCR</span><span class="hud-value" id="hudScroll">0%</span></div>
+      <div class="hud-data-item"><span class="hud-label">SCR</span><span class="hud-value" id="hudScroll">1/4</span></div>
       <div class="hud-data-item"><span class="hud-label">UPT</span><span class="hud-value" id="hudUptime">00:00</span></div>
       <div class="hud-data-item"><span class="hud-label">MEM</span><span class="hud-bar"><span class="hud-bar-fill" id="hudMemBar"></span></span><span class="hud-value hud-value--active" id="hudMem">45%</span></div>
     </div>
-
-    <div class="hero-split">
-      <!-- Left – text content -->
-      <div class="hero-content">
-        <div class="hero-badge reveal">
-          <span class="badge-pulse"></span>
-          <span class="badge-text">SYS:ACTIVE — Web Design & Graphics Studio</span>
-        </div>
-        <h1 class="hero-title">
-          <span class="reveal hero-line" data-scramble>We build</span>
-          <span class="hero-title--accent reveal hero-line" data-scramble>digital experiences</span>
-          <span class="reveal hero-line" data-scramble>that move.</span>
-        </h1>
-        <p class="hero-sub reveal">Websites, graphics, and visual identity — crafted for brands that refuse to blend in.</p>
-        <div class="hero-actions reveal">
-          <a href="#services" class="hero-cta magnetic">
-            <span class="cta-text">See What We Do</span>
-            <span class="cta-arrow">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
-            </span>
-            <span class="cta-bg"></span>
-          </a>
-          <a href="#about" class="hero-cta-ghost magnetic">
-            <span class="bracket bracket--left">[</span>
-            <span>Learn More</span>
-            <span class="bracket bracket--right">]</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Right – 3D interactive logomark -->
-      <div class="hero-logo" id="logo3d">
-        <div class="logo-3d-scene">
-          <svg class="logo-layer logo-layer--1" viewBox="0 0 1920 1920" fill="currentColor">
-            <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
-          </svg>
-          <svg class="logo-layer logo-layer--2" viewBox="0 0 1920 1920" fill="currentColor">
-            <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
-          </svg>
-          <svg class="logo-layer logo-layer--3" viewBox="0 0 1920 1920" fill="currentColor">
-            <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
-          </svg>
-          <div class="logo-glow"></div>
-        </div>
-        <div class="logo-reveal-ring"></div>
-        <div class="logo-reveal-ring logo-reveal-ring--2"></div>
-      </div>
-    </div>
-
-    <div class="hero-scroll">
-      <div class="hero-scroll-line"></div>
-      <span data-scramble>Scroll</span>
-    </div>
-
-    <!-- Horizontal accent lines -->
-    <div class="hero-hline hero-hline--top"></div>
-    <div class="hero-hline hero-hline--bottom"></div>
-
-  </section>
-
-  <!-- About Section -->
-  <section class="section section--about" id="about">
-    <div class="container">
-      <div class="section-grid">
-        <div class="section-left">
-          <span class="section-label reveal"><span class="label-line"></span>01 // About</span>
-          <h2 class="section-title reveal" data-scramble>Designed to <br><span class="text-accent">stand out.</span></h2>
-        </div>
-        <div class="section-right">
-          <p class="section-text reveal">Socia Visual is a design and development studio rooted in the powersports industry. We build websites, create graphics, and shape visual identities for brands that want to make an impact — not just exist online.</p>
-          <p class="section-text reveal">Whether you're launching a new brand or leveling up an existing one, we bring the same energy: sharp design, clean code, and visuals that hit different.</p>
-          <div class="stats reveal">
-            <div class="stat">
-              <div class="stat-hud">
-                <span class="stat-bracket">[</span>
-                <span class="stat-number stat-number--text">FULL SEND</span>
-                <span class="stat-bracket">]</span>
-              </div>
-              <span class="stat-label">Commitment Level</span>
-            </div>
-            <div class="stat">
-              <div class="stat-hud">
-                <span class="stat-bracket">[</span>
-                <span class="stat-number stat-number--text">HOLESHOT</span>
-                <span class="stat-bracket">]</span>
-              </div>
-              <span class="stat-label">First Impressions That Win</span>
-            </div>
-            <div class="stat">
-              <div class="stat-hud">
-                <span class="stat-bracket">[</span>
-                <span class="stat-number stat-number--text">NO BRAKES</span>
-                <span class="stat-bracket">]</span>
-              </div>
-              <span class="stat-label">On Creativity</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Marquee -->
-  <div class="marquee">
-    <div class="marquee-track">
-      <span>Web Design</span><span class="marquee-dot">◆</span>
-      <span>Branding</span><span class="marquee-dot">◆</span>
-      <span>Graphics</span><span class="marquee-dot">◆</span>
-      <span>UI/UX</span><span class="marquee-dot">◆</span>
-      <span>Interactive</span><span class="marquee-dot">◆</span>
-      <span>Visual Identity</span><span class="marquee-dot">◆</span>
-      <span>Web Development</span><span class="marquee-dot">◆</span>
-      <span>Motion</span><span class="marquee-dot">◆</span>
-      <span>Web Design</span><span class="marquee-dot">◆</span>
-      <span>Branding</span><span class="marquee-dot">◆</span>
-      <span>Graphics</span><span class="marquee-dot">◆</span>
-      <span>UI/UX</span><span class="marquee-dot">◆</span>
-      <span>Interactive</span><span class="marquee-dot">◆</span>
-      <span>Visual Identity</span><span class="marquee-dot">◆</span>
-      <span>Web Development</span><span class="marquee-dot">◆</span>
-      <span>Motion</span><span class="marquee-dot">◆</span>
-    </div>
   </div>
 
-  <!-- Services Section -->
-  <section class="section section--services" id="services">
-    <div class="container">
-      <span class="section-label reveal"><span class="label-line"></span>02 // Services</span>
-      <h2 class="section-title reveal" data-scramble>What we <span class="text-accent">bring to the table.</span></h2>
-      <div class="services-grid">
+  <!-- Section navigation dots -->
+  <div class="section-nav" id="sectionNav">
+    <button class="section-nav-dot active" data-target="0"><span>Home</span></button>
+    <button class="section-nav-dot" data-target="1"><span>About</span></button>
+    <button class="section-nav-dot" data-target="2"><span>Services</span></button>
+    <button class="section-nav-dot" data-target="3"><span>Contact</span></button>
+  </div>
 
-        <div class="service-card reveal" data-tilt>
-          <div class="card-corner card-corner--tl"></div>
-          <div class="card-corner card-corner--tr"></div>
-          <div class="card-corner card-corner--bl"></div>
-          <div class="card-corner card-corner--br"></div>
-          <div class="card-scan"></div>
-          <div class="service-index">01</div>
-          <div class="service-icon">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="4" y="8" width="40" height="28" rx="2"/><path d="M14 42h20"/><path d="M24 36v6"/>
-            </svg>
+  <!-- Viewport container -->
+  <div class="viewport" id="viewport">
+
+    <!-- Panel 0: Hero -->
+    <section class="panel panel--hero active" id="hero" data-panel="0">
+      <canvas id="heroCanvas"></canvas>
+
+      <div class="hero-split">
+        <div class="hero-content">
+          <div class="hero-badge reveal">
+            <span class="badge-pulse"></span>
+            <span class="badge-text">SYS:ACTIVE — Web Design & Graphics Studio</span>
           </div>
-          <h3 class="service-title">Web Design & Development</h3>
-          <p class="service-desc">Fully interactive, responsive websites engineered to feel alive — smooth animations, bold layouts, and experiences that keep people clicking.</p>
-          <div class="service-tags">
-            <span>Responsive</span><span>Custom Code</span><span>SEO</span>
-          </div>
-        </div>
-
-        <div class="service-card reveal" data-tilt>
-          <div class="card-corner card-corner--tl"></div>
-          <div class="card-corner card-corner--tr"></div>
-          <div class="card-corner card-corner--bl"></div>
-          <div class="card-corner card-corner--br"></div>
-          <div class="card-scan"></div>
-          <div class="service-index">02</div>
-          <div class="service-icon">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M30 6l12 12-24 24H6V30L30 6z"/><path d="M24 12l12 12"/><circle cx="40" cy="40" r="3" fill="currentColor" stroke="none" opacity="0.3"/>
-            </svg>
-          </div>
-          <h3 class="service-title">Graphic Design</h3>
-          <p class="service-desc">Logos, social media assets, print materials, wraps — whatever you need to look the part, we've got you.</p>
-          <div class="service-tags">
-            <span>Logos</span><span>Print</span><span>Social</span>
-          </div>
-        </div>
-
-        <div class="service-card reveal" data-tilt>
-          <div class="card-corner card-corner--tl"></div>
-          <div class="card-corner card-corner--tr"></div>
-          <div class="card-corner card-corner--bl"></div>
-          <div class="card-corner card-corner--br"></div>
-          <div class="card-scan"></div>
-          <div class="service-index">03</div>
-          <div class="service-icon">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="24" cy="24" r="20"/><path d="M24 4a28 28 0 0 1 0 40"/><path d="M24 4a28 28 0 0 0 0 40"/><path d="M4 24h40"/><path d="M6 14h36"/><path d="M6 34h36"/>
-            </svg>
-          </div>
-          <h3 class="service-title">Brand Identity</h3>
-          <p class="service-desc">From color palettes to full brand guidelines — we help you define who you are visually and own it everywhere.</p>
-          <div class="service-tags">
-            <span>Strategy</span><span>Guidelines</span><span>Identity</span>
-          </div>
-        </div>
-
-        <div class="service-card reveal" data-tilt>
-          <div class="card-corner card-corner--tl"></div>
-          <div class="card-corner card-corner--tr"></div>
-          <div class="card-corner card-corner--bl"></div>
-          <div class="card-corner card-corner--br"></div>
-          <div class="card-scan"></div>
-          <div class="service-index">04</div>
-          <div class="service-icon">
-            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-              <polygon points="18,6 42,24 18,42"/><rect x="4" y="6" width="8" height="36" rx="1"/>
-            </svg>
-          </div>
-          <h3 class="service-title">Motion & Video</h3>
-          <p class="service-desc">Animated logos, promo videos, and motion graphics that bring your brand to life and stop the scroll.</p>
-          <div class="service-tags">
-            <span>Animation</span><span>Video</span><span>Motion</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section class="section section--contact" id="contact">
-    <div class="container">
-      <div class="section-grid">
-        <div class="section-left">
-          <span class="section-label reveal"><span class="label-line"></span>03 // Contact</span>
-          <h2 class="section-title reveal" data-scramble>Let's build <br><span class="text-accent">something sick.</span></h2>
-          <p class="section-text reveal">Got a project in mind? Drop us a line. We're always down to talk shop and see how we can help.</p>
-
-          <div class="contact-coords reveal">
-            <div class="coord-item">
-              <span class="coord-label">STATUS</span>
-              <span class="coord-value coord-value--active">● ACCEPTING PROJECTS</span>
-            </div>
-          </div>
-        </div>
-        <div class="section-right">
-          <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/scott@sociavisual.com" method="POST">
-            <!-- Honeypot spam trap -->
-            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-            <!-- Disable default captcha page (we use our own reCAPTCHA) -->
-            <input type="hidden" name="_captcha" value="false">
-            <!-- Subject line for emails -->
-            <input type="hidden" name="_subject" value="New inquiry from sociavisual.com">
-
-            <div class="form-group reveal">
-              <input type="text" id="name" name="name" required placeholder=" " autocomplete="off">
-              <label for="name">Your Name</label>
-              <div class="form-line"></div>
-              <div class="form-corner form-corner--tl"></div>
-              <div class="form-corner form-corner--br"></div>
-            </div>
-            <div class="form-group reveal">
-              <input type="email" id="email" name="email" required placeholder=" " autocomplete="off">
-              <label for="email">Email Address</label>
-              <div class="form-line"></div>
-              <div class="form-corner form-corner--tl"></div>
-              <div class="form-corner form-corner--br"></div>
-            </div>
-            <div class="form-group reveal">
-              <textarea id="message" name="message" rows="4" required placeholder=" "></textarea>
-              <label for="message">Tell us about your project</label>
-              <div class="form-line"></div>
-              <div class="form-corner form-corner--tl"></div>
-              <div class="form-corner form-corner--br"></div>
-            </div>
-
-            <!-- reCAPTCHA v3 (invisible) -->
-            <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
-
-            <div class="form-status" id="formStatus"></div>
-
-            <button type="submit" class="form-submit magnetic reveal">
-              <span class="cta-text">Transmit Message</span>
+          <h1 class="hero-title">
+            <span class="reveal hero-line" data-scramble>We build</span>
+            <span class="hero-title--accent reveal hero-line" data-scramble>digital experiences</span>
+            <span class="reveal hero-line" data-scramble>that move.</span>
+          </h1>
+          <p class="hero-sub reveal">Websites, graphics, and visual identity — crafted for brands that refuse to blend in.</p>
+          <div class="hero-actions reveal">
+            <a href="#services" class="hero-cta magnetic">
+              <span class="cta-text">See What We Do</span>
               <span class="cta-arrow">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
               </span>
               <span class="cta-bg"></span>
-            </button>
-          </form>
+            </a>
+            <a href="#about" class="hero-cta-ghost magnetic">
+              <span class="bracket bracket--left">[</span>
+              <span>Learn More</span>
+              <span class="bracket bracket--right">]</span>
+            </a>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <svg class="footer-logo" viewBox="0 0 1920 1920" fill="currentColor">
-            <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
-            <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
-            <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
-          </svg>
-        </div>
-        <div class="footer-links">
-          <a href="#hero" data-text="Home">Home</a>
-          <a href="#about" data-text="About">About</a>
-          <a href="#services" data-text="Services">Services</a>
-          <a href="#contact" data-text="Contact">Contact</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Socia Visual. All rights reserved.</p>
-        <div class="footer-status">
-          <span class="status-dot"></span>
-          <span>All systems operational</span>
+        <div class="hero-logo" id="logo3d">
+          <div class="logo-3d-scene">
+            <svg class="logo-layer logo-layer--1" viewBox="0 0 1920 1920" fill="currentColor">
+              <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+            </svg>
+            <svg class="logo-layer logo-layer--2" viewBox="0 0 1920 1920" fill="currentColor">
+              <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+            </svg>
+            <svg class="logo-layer logo-layer--3" viewBox="0 0 1920 1920" fill="currentColor">
+              <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+            </svg>
+            <div class="logo-glow"></div>
+          </div>
+          <div class="logo-reveal-ring"></div>
+          <div class="logo-reveal-ring logo-reveal-ring--2"></div>
         </div>
       </div>
-    </div>
-  </footer>
+
+      <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+        <span data-scramble>Scroll</span>
+      </div>
+
+      <div class="hero-hline hero-hline--top"></div>
+      <div class="hero-hline hero-hline--bottom"></div>
+    </section>
+
+    <!-- Panel 1: About -->
+    <section class="panel panel--about" id="about" data-panel="1">
+      <div class="panel-content">
+        <div class="section-grid">
+          <div class="section-left">
+            <span class="section-label reveal"><span class="label-line"></span>01 // About</span>
+            <h2 class="section-title reveal" data-scramble>Designed to <br><span class="text-accent">stand out.</span></h2>
+          </div>
+          <div class="section-right">
+            <p class="section-text reveal">Socia Visual is a design and development studio rooted in the powersports industry. We build websites, create graphics, and shape visual identities for brands that want to make an impact — not just exist online.</p>
+            <p class="section-text reveal">Whether you're launching a new brand or leveling up an existing one, we bring the same energy: sharp design, clean code, and visuals that hit different.</p>
+            <div class="stats reveal">
+              <div class="stat">
+                <div class="stat-hud">
+                  <span class="stat-bracket">[</span>
+                  <span class="stat-number stat-number--text">FULL SEND</span>
+                  <span class="stat-bracket">]</span>
+                </div>
+                <span class="stat-label">Commitment Level</span>
+              </div>
+              <div class="stat">
+                <div class="stat-hud">
+                  <span class="stat-bracket">[</span>
+                  <span class="stat-number stat-number--text">HOLESHOT</span>
+                  <span class="stat-bracket">]</span>
+                </div>
+                <span class="stat-label">First Impressions That Win</span>
+              </div>
+              <div class="stat">
+                <div class="stat-hud">
+                  <span class="stat-bracket">[</span>
+                  <span class="stat-number stat-number--text">NO BRAKES</span>
+                  <span class="stat-bracket">]</span>
+                </div>
+                <span class="stat-label">On Creativity</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Marquee -->
+        <div class="marquee">
+          <div class="marquee-track">
+            <span>Web Design</span><span class="marquee-dot">◆</span>
+            <span>Branding</span><span class="marquee-dot">◆</span>
+            <span>Graphics</span><span class="marquee-dot">◆</span>
+            <span>UI/UX</span><span class="marquee-dot">◆</span>
+            <span>Interactive</span><span class="marquee-dot">◆</span>
+            <span>Visual Identity</span><span class="marquee-dot">◆</span>
+            <span>Web Development</span><span class="marquee-dot">◆</span>
+            <span>Motion</span><span class="marquee-dot">◆</span>
+            <span>Web Design</span><span class="marquee-dot">◆</span>
+            <span>Branding</span><span class="marquee-dot">◆</span>
+            <span>Graphics</span><span class="marquee-dot">◆</span>
+            <span>UI/UX</span><span class="marquee-dot">◆</span>
+            <span>Interactive</span><span class="marquee-dot">◆</span>
+            <span>Visual Identity</span><span class="marquee-dot">◆</span>
+            <span>Web Development</span><span class="marquee-dot">◆</span>
+            <span>Motion</span><span class="marquee-dot">◆</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 2: Services -->
+    <section class="panel panel--services" id="services" data-panel="2">
+      <div class="panel-content">
+        <span class="section-label reveal"><span class="label-line"></span>02 // Services</span>
+        <h2 class="section-title reveal" data-scramble>What we <span class="text-accent">bring to the table.</span></h2>
+        <div class="services-grid">
+
+          <div class="service-card reveal" data-tilt>
+            <div class="card-corner card-corner--tl"></div>
+            <div class="card-corner card-corner--tr"></div>
+            <div class="card-corner card-corner--bl"></div>
+            <div class="card-corner card-corner--br"></div>
+            <div class="card-scan"></div>
+            <div class="service-index">01</div>
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="4" y="8" width="40" height="28" rx="2"/><path d="M14 42h20"/><path d="M24 36v6"/>
+              </svg>
+            </div>
+            <h3 class="service-title">Web Design & Development</h3>
+            <p class="service-desc">Fully interactive, responsive websites engineered to feel alive — smooth animations, bold layouts, and experiences that keep people clicking.</p>
+            <div class="service-tags">
+              <span>Responsive</span><span>Custom Code</span><span>SEO</span>
+            </div>
+          </div>
+
+          <div class="service-card reveal" data-tilt>
+            <div class="card-corner card-corner--tl"></div>
+            <div class="card-corner card-corner--tr"></div>
+            <div class="card-corner card-corner--bl"></div>
+            <div class="card-corner card-corner--br"></div>
+            <div class="card-scan"></div>
+            <div class="service-index">02</div>
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M30 6l12 12-24 24H6V30L30 6z"/><path d="M24 12l12 12"/><circle cx="40" cy="40" r="3" fill="currentColor" stroke="none" opacity="0.3"/>
+              </svg>
+            </div>
+            <h3 class="service-title">Graphic Design</h3>
+            <p class="service-desc">Logos, social media assets, print materials, wraps — whatever you need to look the part, we've got you.</p>
+            <div class="service-tags">
+              <span>Logos</span><span>Print</span><span>Social</span>
+            </div>
+          </div>
+
+          <div class="service-card reveal" data-tilt>
+            <div class="card-corner card-corner--tl"></div>
+            <div class="card-corner card-corner--tr"></div>
+            <div class="card-corner card-corner--bl"></div>
+            <div class="card-corner card-corner--br"></div>
+            <div class="card-scan"></div>
+            <div class="service-index">03</div>
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="24" cy="24" r="20"/><path d="M24 4a28 28 0 0 1 0 40"/><path d="M24 4a28 28 0 0 0 0 40"/><path d="M4 24h40"/><path d="M6 14h36"/><path d="M6 34h36"/>
+              </svg>
+            </div>
+            <h3 class="service-title">Brand Identity</h3>
+            <p class="service-desc">From color palettes to full brand guidelines — we help you define who you are visually and own it everywhere.</p>
+            <div class="service-tags">
+              <span>Strategy</span><span>Guidelines</span><span>Identity</span>
+            </div>
+          </div>
+
+          <div class="service-card reveal" data-tilt>
+            <div class="card-corner card-corner--tl"></div>
+            <div class="card-corner card-corner--tr"></div>
+            <div class="card-corner card-corner--bl"></div>
+            <div class="card-corner card-corner--br"></div>
+            <div class="card-scan"></div>
+            <div class="service-index">04</div>
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="18,6 42,24 18,42"/><rect x="4" y="6" width="8" height="36" rx="1"/>
+              </svg>
+            </div>
+            <h3 class="service-title">Motion & Video</h3>
+            <p class="service-desc">Animated logos, promo videos, and motion graphics that bring your brand to life and stop the scroll.</p>
+            <div class="service-tags">
+              <span>Animation</span><span>Video</span><span>Motion</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 3: Contact + Footer -->
+    <section class="panel panel--contact" id="contact" data-panel="3">
+      <div class="panel-content">
+        <div class="section-grid">
+          <div class="section-left">
+            <span class="section-label reveal"><span class="label-line"></span>03 // Contact</span>
+            <h2 class="section-title reveal" data-scramble>Let's build <br><span class="text-accent">something sick.</span></h2>
+            <p class="section-text reveal">Got a project in mind? Drop us a line. We're always down to talk shop and see how we can help.</p>
+
+            <div class="contact-coords reveal">
+              <div class="coord-item">
+                <span class="coord-label">STATUS</span>
+                <span class="coord-value coord-value--active">● ACCEPTING PROJECTS</span>
+              </div>
+            </div>
+          </div>
+          <div class="section-right">
+            <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/scott@sociavisual.com" method="POST">
+              <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+              <input type="hidden" name="_captcha" value="false">
+              <input type="hidden" name="_subject" value="New inquiry from sociavisual.com">
+
+              <div class="form-group reveal">
+                <input type="text" id="name" name="name" required placeholder=" " autocomplete="off">
+                <label for="name">Your Name</label>
+                <div class="form-line"></div>
+                <div class="form-corner form-corner--tl"></div>
+                <div class="form-corner form-corner--br"></div>
+              </div>
+              <div class="form-group reveal">
+                <input type="email" id="email" name="email" required placeholder=" " autocomplete="off">
+                <label for="email">Email Address</label>
+                <div class="form-line"></div>
+                <div class="form-corner form-corner--tl"></div>
+                <div class="form-corner form-corner--br"></div>
+              </div>
+              <div class="form-group reveal">
+                <textarea id="message" name="message" rows="3" required placeholder=" "></textarea>
+                <label for="message">Tell us about your project</label>
+                <div class="form-line"></div>
+                <div class="form-corner form-corner--tl"></div>
+                <div class="form-corner form-corner--br"></div>
+              </div>
+
+              <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
+              <div class="form-status" id="formStatus"></div>
+
+              <button type="submit" class="form-submit magnetic reveal">
+                <span class="cta-text">Transmit Message</span>
+                <span class="cta-arrow">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+                <span class="cta-bg"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Footer (merged into contact panel) -->
+        <div class="panel-footer">
+          <div class="panel-footer-left">
+            <svg class="footer-logo" viewBox="0 0 1920 1920" fill="currentColor">
+              <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+              <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+              <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+            </svg>
+            <p>&copy; 2026 Socia Visual</p>
+          </div>
+          <div class="panel-footer-right">
+            <div class="footer-status">
+              <span class="status-dot"></span>
+              <span>All systems operational</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scan line transition effect -->
+    <div class="scan-line" id="scanLine"></div>
+  </div>
 
   <script src="script.js"></script>
 </body>

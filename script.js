@@ -1,5 +1,6 @@
 /* ============================================
    SOCIA VISUAL — Tactical Interactive Engine
+   Full-viewport panel system
    ============================================ */
 
 // ---- Boot Sequence ----
@@ -34,14 +35,13 @@ function runBoot() {
       const heroLogo = document.querySelector('.hero-logo');
       if (heroLogo) {
         heroLogo.classList.add('intro-ready');
-        // After intro animations finish, switch to interactive state
         setTimeout(() => {
           heroLogo.classList.remove('intro-ready');
           heroLogo.classList.add('intro-done');
         }, 3600);
       }
       // Trigger hero reveals after boot
-      document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+      document.querySelectorAll('.panel--hero .reveal').forEach((el, i) => {
         setTimeout(() => el.classList.add('visible'), i * 120);
       });
     }, 400);
@@ -53,29 +53,26 @@ runBoot();
 const cursor = document.getElementById('cursor');
 const cursorDot = document.getElementById('cursorDot');
 const cursorGlow = document.getElementById('cursorGlow');
-let mx = 0, my = 0, cx = 0, cy = 0, dx = 0, dy = 0, gx = 0, gy = 0;
+let mouseX = 0, mouseY = 0, cx = 0, cy = 0, dx = 0, dy = 0, gx = 0, gy = 0;
 
 document.addEventListener('mousemove', (e) => {
-  mx = e.clientX;
-  my = e.clientY;
+  mouseX = e.clientX;
+  mouseY = e.clientY;
 });
 
 function animateCursor() {
-  // Dot follows instantly
-  dx += (mx - dx) * 0.6;
-  dy += (my - dy) * 0.6;
+  dx += (mouseX - dx) * 0.6;
+  dy += (mouseY - dy) * 0.6;
   cursorDot.style.left = dx + 'px';
   cursorDot.style.top = dy + 'px';
 
-  // Cross follows with lag
-  cx += (mx - cx) * 0.15;
-  cy += (my - cy) * 0.15;
+  cx += (mouseX - cx) * 0.15;
+  cy += (mouseY - cy) * 0.15;
   cursor.style.left = cx + 'px';
   cursor.style.top = cy + 'px';
 
-  // Glow follows slowly
-  gx += (mx - gx) * 0.06;
-  gy += (my - gy) * 0.06;
+  gx += (mouseX - gx) * 0.06;
+  gy += (mouseY - gy) * 0.06;
   cursorGlow.style.left = gx + 'px';
   cursorGlow.style.top = gy + 'px';
 
@@ -103,14 +100,255 @@ document.querySelectorAll('.magnetic').forEach(el => {
   });
 });
 
-// ---- Scroll Progress Bar ----
-const scrollProgressBar = document.getElementById('scrollProgress');
-window.addEventListener('scroll', () => {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = (scrollTop / docHeight) * 100;
-  scrollProgressBar.style.width = progress + '%';
-});
+// ============================================
+// SECTION MANAGER — Full-viewport panel system
+// ============================================
+const SectionManager = {
+  panels: [],
+  dots: [],
+  currentIndex: 0,
+  totalPanels: 0,
+  isTransitioning: false,
+  transitionDuration: 850,
+  lastWheelTime: 0,
+  wheelCooldown: 1000,
+  touchStartY: 0,
+  scanLine: null,
+  progressBar: null,
+  hudScroll: null,
+
+  // Panel name map for anchor links
+  panelMap: { hero: 0, about: 1, services: 2, contact: 3 },
+
+  init() {
+    this.panels = Array.from(document.querySelectorAll('.panel'));
+    this.dots = Array.from(document.querySelectorAll('.section-nav-dot'));
+    this.totalPanels = this.panels.length;
+    this.scanLine = document.getElementById('scanLine');
+    this.progressBar = document.getElementById('scrollProgress');
+    this.hudScroll = document.getElementById('hudScroll');
+
+    // Ensure first panel is active
+    this.panels[0].classList.add('active');
+    this.updateNav();
+    this.updateProgress();
+
+    // Bind inputs
+    this.bindWheel();
+    this.bindTouch();
+    this.bindKeyboard();
+    this.bindDots();
+    this.bindAnchors();
+  },
+
+  goTo(targetIndex, direction) {
+    if (this.isTransitioning) return;
+    if (targetIndex === this.currentIndex) return;
+    if (targetIndex < 0 || targetIndex >= this.totalPanels) return;
+
+    this.isTransitioning = true;
+    direction = direction || (targetIndex > this.currentIndex ? 'down' : 'up');
+
+    const outPanel = this.panels[this.currentIndex];
+    const inPanel = this.panels[targetIndex];
+
+    // Reset reveals on incoming panel
+    inPanel.querySelectorAll('.reveal').forEach(el => el.classList.remove('visible'));
+
+    // Scan line sweep
+    if (this.scanLine) {
+      this.scanLine.classList.remove('sweeping-down', 'sweeping-up');
+      void this.scanLine.offsetWidth; // force reflow
+      this.scanLine.classList.add(direction === 'down' ? 'sweeping-down' : 'sweeping-up');
+    }
+
+    // Start exit animation
+    outPanel.classList.add(direction === 'down' ? 'exit-up' : 'exit-down');
+
+    // Start enter animation (slightly overlapped)
+    setTimeout(() => {
+      inPanel.classList.add('active');
+      inPanel.classList.add(direction === 'down' ? 'enter-from-below' : 'enter-from-above');
+    }, 100);
+
+    // Trigger reveals on incoming panel
+    setTimeout(() => {
+      const reveals = inPanel.querySelectorAll('.reveal');
+      reveals.forEach((el, i) => {
+        setTimeout(() => {
+          el.classList.add('visible');
+          if (el.hasAttribute('data-scramble')) {
+            scrambleText(el);
+          }
+        }, i * 80);
+      });
+    }, 300);
+
+    // Cleanup after transition
+    setTimeout(() => {
+      outPanel.classList.remove('active', 'exit-up', 'exit-down');
+      inPanel.classList.remove('enter-from-below', 'enter-from-above');
+      this.scanLine.classList.remove('sweeping-down', 'sweeping-up');
+      this.currentIndex = targetIndex;
+      this.isTransitioning = false;
+      this.updateNav();
+      this.updateProgress();
+
+      // Update URL hash
+      const panelId = inPanel.id;
+      if (panelId) {
+        history.replaceState(null, null, '#' + panelId);
+      }
+    }, this.transitionDuration);
+  },
+
+  next() {
+    if (this.currentIndex < this.totalPanels - 1) {
+      this.goTo(this.currentIndex + 1, 'down');
+    }
+  },
+
+  prev() {
+    if (this.currentIndex > 0) {
+      this.goTo(this.currentIndex - 1, 'up');
+    }
+  },
+
+  updateNav() {
+    this.dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === this.currentIndex);
+    });
+  },
+
+  updateProgress() {
+    if (this.progressBar) {
+      const pct = this.totalPanels > 1
+        ? (this.currentIndex / (this.totalPanels - 1)) * 100
+        : 0;
+      this.progressBar.style.width = pct + '%';
+    }
+    if (this.hudScroll) {
+      this.hudScroll.textContent = (this.currentIndex + 1) + '/' + this.totalPanels;
+    }
+  },
+
+  // --- Input Bindings ---
+
+  bindWheel() {
+    document.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const now = Date.now();
+      if (now - this.lastWheelTime < this.wheelCooldown) return;
+      if (this.isTransitioning) return;
+
+      // Check if active panel has internal scroll
+      const activePanel = this.panels[this.currentIndex];
+      if (activePanel.scrollHeight > activePanel.clientHeight + 5) {
+        if (e.deltaY > 0 && activePanel.scrollTop + activePanel.clientHeight < activePanel.scrollHeight - 5) return;
+        if (e.deltaY < 0 && activePanel.scrollTop > 5) return;
+      }
+
+      if (Math.abs(e.deltaY) > 20) {
+        this.lastWheelTime = now;
+        if (e.deltaY > 0) this.next();
+        else this.prev();
+      }
+    }, { passive: false });
+  },
+
+  bindTouch() {
+    document.addEventListener('touchstart', (e) => {
+      this.touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      if (this.isTransitioning) return;
+      const deltaY = this.touchStartY - e.changedTouches[0].clientY;
+
+      // Check internal scroll
+      const activePanel = this.panels[this.currentIndex];
+      if (activePanel.scrollHeight > activePanel.clientHeight + 5) {
+        if (deltaY > 0 && activePanel.scrollTop + activePanel.clientHeight < activePanel.scrollHeight - 5) return;
+        if (deltaY < 0 && activePanel.scrollTop > 5) return;
+      }
+
+      if (Math.abs(deltaY) > 50) {
+        if (deltaY > 0) this.next();
+        else this.prev();
+      }
+    }, { passive: true });
+  },
+
+  bindKeyboard() {
+    document.addEventListener('keydown', (e) => {
+      // Don't hijack when typing in form fields
+      const tag = document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'PageDown':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          this.prev();
+          break;
+        case 'Home':
+          e.preventDefault();
+          this.goTo(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          this.goTo(this.totalPanels - 1);
+          break;
+      }
+    });
+  },
+
+  bindDots() {
+    this.dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const target = parseInt(dot.dataset.target);
+        this.goTo(target);
+      });
+    });
+  },
+
+  bindAnchors() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const hash = anchor.getAttribute('href').replace('#', '');
+        const targetIndex = this.panelMap[hash];
+        if (targetIndex !== undefined) {
+          this.goTo(targetIndex);
+        }
+      });
+    });
+  }
+};
+
+// Initialize after DOM is ready
+SectionManager.init();
+
+// Handle initial hash
+if (window.location.hash) {
+  const hash = window.location.hash.replace('#', '');
+  const idx = SectionManager.panelMap[hash];
+  if (idx !== undefined && idx !== 0) {
+    // Jump directly without animation
+    SectionManager.panels[0].classList.remove('active');
+    SectionManager.panels[idx].classList.add('active');
+    SectionManager.currentIndex = idx;
+    SectionManager.updateNav();
+    SectionManager.updateProgress();
+    // Trigger reveals
+    SectionManager.panels[idx].querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+}
 
 // ---- Hero Canvas — Advanced Particle Grid ----
 const canvas = document.getElementById('heroCanvas');
@@ -169,18 +407,17 @@ function drawParticles() {
   const maxDisplacement = 35;
 
   for (const p of particles) {
-    const dx = canvasMouseX - p.originX;
-    const dy = canvasMouseY - p.originY;
-    const dist = Math.sqrt(dx * dx + dy * dy);
+    const pdx = canvasMouseX - p.originX;
+    const pdy = canvasMouseY - p.originY;
+    const dist = Math.sqrt(pdx * pdx + pdy * pdy);
 
-    // Ambient pulse
     p.pulse += 0.02;
     const ambientAlpha = 0.08 + Math.sin(p.pulse) * 0.03;
 
     if (dist < interactionRadius) {
       const force = (1 - dist / interactionRadius);
-      const angle = Math.atan2(dy, dx);
-      const easeForce = force * force; // quadratic falloff
+      const angle = Math.atan2(pdy, pdx);
+      const easeForce = force * force;
 
       p.x = p.originX - Math.cos(angle) * maxDisplacement * easeForce;
       p.y = p.originY - Math.sin(angle) * maxDisplacement * easeForce;
@@ -228,7 +465,6 @@ function drawParticles() {
       }
     }
 
-    // Draw targeting ring at cursor
     const ringRadius = 60 + Math.sin(time * 3) * 5;
     ctx.beginPath();
     ctx.arc(canvasMouseX, canvasMouseY, ringRadius, 0, Math.PI * 2);
@@ -236,7 +472,6 @@ function drawParticles() {
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Small inner ring
     ctx.beginPath();
     ctx.arc(canvasMouseX, canvasMouseY, 20, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(168, 255, 0, 0.08)';
@@ -244,7 +479,7 @@ function drawParticles() {
     ctx.stroke();
   }
 
-  // Grid overlay lines (very subtle)
+  // Grid overlay lines
   ctx.strokeStyle = 'rgba(168, 255, 0, 0.015)';
   ctx.lineWidth = 0.5;
   const gridSize = 200;
@@ -294,50 +529,29 @@ function scrambleText(element) {
   }, 30);
 }
 
-// ---- Scroll Reveal ----
-const reveals = document.querySelectorAll('.reveal:not(.hero .reveal)');
-
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      // Trigger scramble on headings
-      if (entry.target.hasAttribute('data-scramble')) {
-        scrambleText(entry.target);
-      }
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
-
-reveals.forEach(el => revealObserver.observe(el));
-
 // ---- Logo 3D Interactive ----
-const logoWrap = document.querySelector('.hero-logo') || document.querySelector('.logo-reveal-wrap');
+const logoWrap = document.querySelector('.hero-logo');
 if (logoWrap) {
   const scene = logoWrap.querySelector('.logo-3d-scene');
   const layers = logoWrap.querySelectorAll('.logo-layer');
-  const depthFactors = [50, 20, -15]; // matches CSS translateZ
+  const depthFactors = [50, 20, -15];
   let idleTimeout;
   let isHovering = false;
   let currentRx = 0, currentRy = 0;
   let targetRx = 0, targetRy = 0;
 
-  // Logo is in the hero — always visible after boot
   logoWrap.classList.add('visible');
 
-  // Start idle animation (delay until intro finishes)
   const startIdle = () => { scene.classList.add('idle'); };
   const stopIdle = () => { scene.classList.remove('idle'); };
   setTimeout(startIdle, 4000);
 
-  // Smooth animation loop
   function animateScene() {
     if (isHovering) {
       currentRx += (targetRx - currentRx) * 0.08;
       currentRy += (targetRy - currentRy) * 0.08;
       scene.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
 
-      // Parallax shift per layer
       layers.forEach((layer, i) => {
         const depth = depthFactors[i];
         const shiftX = currentRy * depth * 0.04;
@@ -349,17 +563,15 @@ if (logoWrap) {
   }
   animateScene();
 
-  // Mouse move handler
   logoWrap.addEventListener('mousemove', (e) => {
     const rect = logoWrap.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const mx = e.clientX - cx;
-    const my = e.clientY - cy;
+    const lcx = rect.left + rect.width / 2;
+    const lcy = rect.top + rect.height / 2;
+    const lmx = e.clientX - lcx;
+    const lmy = e.clientY - lcy;
     const maxTilt = 25;
-
-    targetRx = -(my / (rect.height / 2)) * maxTilt;
-    targetRy = (mx / (rect.width / 2)) * maxTilt;
+    targetRx = -(lmy / (rect.height / 2)) * maxTilt;
+    targetRy = (lmx / (rect.width / 2)) * maxTilt;
   });
 
   logoWrap.addEventListener('mouseenter', () => {
@@ -373,7 +585,6 @@ if (logoWrap) {
     targetRx = 0;
     targetRy = 0;
 
-    // Smooth return to center
     const returnToCenter = () => {
       currentRx += (0 - currentRx) * 0.06;
       currentRy += (0 - currentRy) * 0.06;
@@ -399,21 +610,19 @@ if (logoWrap) {
     returnToCenter();
   });
 
-  // Touch support for mobile
   logoWrap.addEventListener('touchmove', (e) => {
     e.preventDefault();
     const touch = e.touches[0];
     const rect = logoWrap.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const mx = touch.clientX - cx;
-    const my = touch.clientY - cy;
+    const lcx = rect.left + rect.width / 2;
+    const lcy = rect.top + rect.height / 2;
+    const lmx = touch.clientX - lcx;
+    const lmy = touch.clientY - lcy;
     const maxTilt = 20;
-
     isHovering = true;
     stopIdle();
-    targetRx = -(my / (rect.height / 2)) * maxTilt;
-    targetRy = (mx / (rect.width / 2)) * maxTilt;
+    targetRx = -(lmy / (rect.height / 2)) * maxTilt;
+    targetRy = (lmx / (rect.width / 2)) * maxTilt;
   }, { passive: false });
 
   logoWrap.addEventListener('touchend', () => {
@@ -423,42 +632,6 @@ if (logoWrap) {
     idleTimeout = setTimeout(startIdle, 1500);
   });
 }
-
-// ---- Count-Up Animation ----
-const statNumbers = document.querySelectorAll('.stat-number[data-count]');
-const countObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const el = entry.target;
-      const target = parseInt(el.dataset.count);
-      if (el.dataset.symbol) return;
-      let current = 0;
-      const step = Math.max(1, Math.floor(target / 40));
-      const timer = setInterval(() => {
-        current += step;
-        if (current >= target) {
-          current = target;
-          clearInterval(timer);
-        }
-        el.textContent = current;
-      }, 30);
-      countObserver.unobserve(el);
-    }
-  });
-}, { threshold: 0.5 });
-
-statNumbers.forEach(el => countObserver.observe(el));
-
-// ---- Smooth scroll for anchor links ----
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', (e) => {
-    e.preventDefault();
-    const target = document.querySelector(anchor.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
-});
 
 // ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA v3) ----
 const contactForm = document.getElementById('contactForm');
@@ -473,7 +646,6 @@ contactForm.addEventListener('submit', async (e) => {
   btn.textContent = 'VERIFYING...';
 
   try {
-    // Get reCAPTCHA v3 token
     const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
     document.getElementById('recaptchaResponse').value = token;
 
@@ -518,16 +690,6 @@ document.querySelectorAll('[data-tilt]').forEach(card => {
   });
 });
 
-// ---- Parallax on hero content ----
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const hero = document.querySelector('.hero-content');
-  if (scrollY < window.innerHeight) {
-    hero.style.transform = `translateY(${scrollY * 0.25}px)`;
-    hero.style.opacity = 1 - scrollY / (window.innerHeight * 0.7);
-  }
-});
-
 // ---- HUD Data Updates ----
 
 // FPS counter
@@ -558,17 +720,16 @@ document.addEventListener('mousemove', (e) => {
   const now = performance.now();
   const dt = now - prevMouseTime;
   if (dt > 0) {
-    const dx = e.clientX - prevMouseX;
-    const dy = e.clientY - prevMouseY;
-    const speed = Math.sqrt(dx * dx + dy * dy) / dt;
-    velocity += (speed - velocity) * 0.3; // smooth
+    const ddx = e.clientX - prevMouseX;
+    const ddy = e.clientY - prevMouseY;
+    const speed = Math.sqrt(ddx * ddx + ddy * ddy) / dt;
+    velocity += (speed - velocity) * 0.3;
     if (hudVel) hudVel.textContent = velocity.toFixed(2);
   }
   prevMouseX = e.clientX;
   prevMouseY = e.clientY;
   prevMouseTime = now;
 
-  // Coordinates
   const lat = (45.5 + (e.clientY / window.innerHeight) * 0.05).toFixed(4);
   const lng = (-122.6 + (e.clientX / window.innerWidth) * 0.1).toFixed(4);
   if (hudLat) hudLat.textContent = lat;
@@ -582,16 +743,7 @@ setInterval(() => {
   if (hudVel) hudVel.textContent = velocity.toFixed(2);
 }, 100);
 
-// Scroll percentage
-const hudScroll = document.getElementById('hudScroll');
-window.addEventListener('scroll', () => {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
-  if (hudScroll) hudScroll.textContent = pct + '%';
-});
-
-// Signal strength bars (top-left) — fluctuates randomly
+// Signal strength bars
 const hudSignal = document.getElementById('hudSignal');
 if (hudSignal) {
   const bars = hudSignal.querySelectorAll('span');
@@ -603,7 +755,7 @@ if (hudSignal) {
   }, 2000);
 }
 
-// Viewport resolution (top-right)
+// Viewport resolution
 const hudRes = document.getElementById('hudRes');
 function updateRes() {
   if (hudRes) hudRes.textContent = window.innerWidth + 'x' + window.innerHeight;
@@ -611,7 +763,7 @@ function updateRes() {
 updateRes();
 window.addEventListener('resize', updateRes);
 
-// Live clock (top-right)
+// Live clock
 const hudClock = document.getElementById('hudClock');
 setInterval(() => {
   const now = new Date();
@@ -621,7 +773,7 @@ setInterval(() => {
   if (hudClock) hudClock.textContent = h + ':' + m + ':' + s;
 }, 1000);
 
-// Memory usage bar (bottom-right) — simulated fluctuation
+// Memory usage bar
 const hudMem = document.getElementById('hudMem');
 const hudMemBar = document.getElementById('hudMemBar');
 function updateMem() {
@@ -632,7 +784,7 @@ function updateMem() {
 updateMem();
 setInterval(updateMem, 3000);
 
-// Uptime counter (bottom-right)
+// Uptime counter
 const hudUptime = document.getElementById('hudUptime');
 const sessionStart = performance.now();
 setInterval(() => {
@@ -641,18 +793,6 @@ setInterval(() => {
   const secs = String(elapsed % 60).padStart(2, '0');
   if (hudUptime) hudUptime.textContent = mins + ':' + secs;
 }, 1000);
-
-// ---- Section Scroll-triggered border animation ----
-const sections = document.querySelectorAll('.section');
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('in-view');
-    }
-  });
-}, { threshold: 0.1 });
-
-sections.forEach(s => sectionObserver.observe(s));
 
 // ---- Keyboard easter egg ----
 const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];

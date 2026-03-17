@@ -1278,7 +1278,7 @@ img { max-width: 100%; display: block; }
   .hero-split { width: calc(100% - 40px); padding: 30px 12px 80px; gap: 16px; }
   .hero-scroll { bottom: 64px; }
   .hero-hline--top { top: 10%; }
-  .hero-hline--bottom { bottom: 10%; }
+  .hero-hline--bottom { display: none; }
 
   /* Panel content — clear HUD data and bottom nav */
   .panel-content { width: calc(100% - 40px); padding: 80px 12px 70px; min-height: calc(100vh - 52px); min-height: calc(100dvh - 52px); }

@@ -1,0 +1,23 @@
+{
+  "name": "socia-visual-website",
+  "version": "1.0.0",
+  "description": "Socia Visual - Web Design, Graphics & Brand Identity Studio",
+  "main": "grid-scene.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sociavis/socia-visual-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sociavis/socia-visual-website/issues"
+  },
+  "homepage": "https://github.com/sociavis/socia-visual-website#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}

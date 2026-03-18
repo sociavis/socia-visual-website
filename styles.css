@@ -438,9 +438,14 @@ body:hover .cursor-glow { opacity: 1; }
 }
 
 /* About + Services: content at top, badges below */
-.panel--about .panel-content {
+.panel--about .panel-content,
+.panel--services .panel-content {
   justify-content: flex-start;
   padding-top: 60px;
+}
+.panel--about .section-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
 }
 
 /* ============================================
@@ -850,10 +855,10 @@ body:hover .cursor-glow { opacity: 1; }
    MARQUEE (inside About panel)
    ============================================ */
 .marquee {
-  padding: 32px 0;
+  padding: 24px 0;
   overflow: hidden;
   position: absolute;
-  bottom: 8%;
+  bottom: 18%;
   left: 0;
   right: 0;
   width: 100vw;
@@ -873,19 +878,26 @@ body:hover .cursor-glow { opacity: 1; }
 }
 .marquee-track span {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   white-space: nowrap;
-  color: var(--grey-light);
-  text-shadow: 0 0 30px rgba(168, 255, 0, 0.08);
+  color: rgba(255, 255, 255, 0.12);
+  transition: color 0.4s, text-shadow 0.4s;
+}
+.marquee:hover .marquee-track span {
+  color: var(--accent-1);
+  text-shadow: 0 0 40px rgba(168, 255, 0, 0.4), 0 0 80px rgba(168, 255, 0, 0.15);
 }
 .marquee-track span.marquee-dot {
-  color: var(--accent-1);
-  font-size: 1.4rem;
+  color: rgba(168, 255, 0, 0.15);
+  font-size: 1.6rem;
   flex-shrink: 0;
-  opacity: 0.6;
+  transition: color 0.4s;
+}
+.marquee:hover .marquee-track span.marquee-dot {
+  color: var(--accent-1);
 }
 @keyframes marquee {
   0% { transform: translateX(0); }

@@ -130,12 +130,19 @@ const GridScene = (function() {
   function makeTextSprite(text, fontSize, opacity) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = 1024; canvas.height = 128;
-    ctx.font = `${fontSize || 24}px 'Share Tech Mono', monospace`;
-    ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
+    canvas.width = 2048; canvas.height = 256;
+    const fs = fontSize || 24;
+    ctx.font = `bold ${fs}px 'Share Tech Mono', monospace`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, 512, 64);
+    ctx.letterSpacing = '0.15em';
+    // Stroke for extra boldness
+    ctx.strokeStyle = `rgba(168, 255, 0, ${(opacity || 0.8) * 0.3})`;
+    ctx.lineWidth = fs > 40 ? 2 : 1;
+    ctx.strokeText(text, 1024, 128);
+    // Fill
+    ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
+    ctx.fillText(text, 1024, 128);
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
     const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });

@@ -518,15 +518,14 @@ const GridScene = (function() {
     // Slight X tilt
     badge.rotation.x = Math.sin(glTime * 0.4 + i * 1.8) * 0.06;
 
-    // Scan line sweep — glow fill follows it
+    // Scan line sweep — glow fill tracks height
     if (ud.scanLine) {
       var scanPhase = Math.sin(glTime * 1.5 + i * 2);
       var scanY = scanPhase * 14;
       ud.scanLine.position.y = scanY;
       ud.scanMat.opacity = 0.3 + Math.abs(scanPhase) * 0.4;
-      // Glow fill peaks when scan line crosses center, fades at edges
-      var glowIntensity = 0.02 + (1 - Math.abs(scanPhase)) * 0.1;
-      ud.glowMat.opacity += (glowIntensity - ud.glowMat.opacity) * 0.15;
+      // Glow: 0.12 at top (scanPhase=1), 0.02 at bottom (scanPhase=-1)
+      ud.glowMat.opacity = 0.02 + (scanPhase + 1) * 0.05;
     }
 
     // Steady opacity — no glitch

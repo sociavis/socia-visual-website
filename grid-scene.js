@@ -410,7 +410,7 @@ const GridScene = (function() {
     return createHoloBadge({
       pos: new THREE.Vector3(Math.cos(angle) * r, 20, Math.sin(angle) * r),
       iconFn: s.icon, title: s.label.toUpperCase(), size: 18,
-      desc: s.desc, tags: s.tags, textScale: 1.5
+      desc: s.desc, tags: s.tags, textScale: 1
     });
   });
   let serviceRingAngle = 0;

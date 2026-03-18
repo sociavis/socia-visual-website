@@ -1273,12 +1273,14 @@ body.contact-active .section-nav-dot { border-color: var(--accent-1); }
 body.contact-active .scroll-progress-edge { background: var(--accent-1); box-shadow: 0 0 8px var(--accent-1); }
 body.contact-active .panel--contact .section-title { color: var(--white); }
 body.contact-active .panel--contact .form-group input,
-body.contact-active .panel--contact .form-group textarea {
+body.contact-active .panel--contact .form-group textarea,
+body.contact-active .panel--contact .form-group select {
   border-color: rgba(168, 255, 0, 0.25);
-  background: rgba(168, 255, 0, 0.04);
+  background-color: rgba(168, 255, 0, 0.04);
 }
 body.contact-active .panel--contact .form-group input:focus,
-body.contact-active .panel--contact .form-group textarea:focus {
+body.contact-active .panel--contact .form-group textarea:focus,
+body.contact-active .panel--contact .form-group select:focus {
   border-color: var(--accent-1);
   background: rgba(168, 255, 0, 0.08);
   box-shadow: 0 0 20px rgba(168, 255, 0, 0.1);
@@ -1312,7 +1314,8 @@ body.contact-active .panel--contact .coord-value--active { text-shadow: 0 0 10px
 .contact-form { display: flex; flex-direction: column; gap: 20px; }
 .form-group { position: relative; }
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width: 100%;
   background: rgba(15, 15, 15, 0.5);
   border: 1px solid var(--grey);
@@ -1324,10 +1327,29 @@ body.contact-active .panel--contact .coord-value--active { text-shadow: 0 0 10px
   transition: border-color 0.3s, background 0.3s;
   resize: none;
 }
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a8ff00' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.form-group select option {
+  background: #0a0a0a;
+  color: var(--white);
+}
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   border-color: var(--accent-1);
-  background: rgba(168, 255, 0, 0.02);
+  background-color: rgba(168, 255, 0, 0.02);
+}
+.form-group select:valid {
+  color: var(--white);
+}
+.form-group select:invalid {
+  color: transparent;
 }
 .form-group label {
   position: absolute;
@@ -1344,7 +1366,9 @@ body.contact-active .panel--contact .coord-value--active { text-shadow: 0 0 10px
 .form-group input:focus ~ label,
 .form-group input:not(:placeholder-shown) ~ label,
 .form-group textarea:focus ~ label,
-.form-group textarea:not(:placeholder-shown) ~ label {
+.form-group textarea:not(:placeholder-shown) ~ label,
+.form-group select:focus ~ label,
+.form-group select:valid ~ label {
   top: -8px;
   left: 12px;
   font-size: 0.55rem;

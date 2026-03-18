@@ -908,20 +908,8 @@ body:hover .cursor-glow { opacity: 1; }
    SERVICES
    ============================================ */
 .services-3d-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 10;
-  pointer-events: none;
-  width: calc(100% - 120px);
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 200px 24px;
-}
-.services-3d-content .section-label,
-.services-3d-content .section-title {
-  pointer-events: auto;
 }
 .services-hint {
   display: none;

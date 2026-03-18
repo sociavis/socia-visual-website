@@ -127,28 +127,38 @@ const GridScene = (function() {
   document.addEventListener('mouseleave', () => { mouseNDC.set(-10, -10); mouseOnPlane = false; mousePixelX = -1; mousePixelY = -1; });
 
   // ---- Canvas text texture helper ----
+  var _pendingRedraws = [];
   function makeTextSprite(text, fontSize, opacity) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
     canvas.width = 2048; canvas.height = 256;
-    const fs = fontSize || 24;
-    ctx.font = `${fs}px 'Share Tech Mono', 'Courier New', monospace`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    // Glow shadow
-    ctx.shadowColor = 'rgba(168, 255, 0, 0.5)';
-    ctx.shadowBlur = fs > 50 ? 10 : 5;
-    // Fill
-    ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
-    ctx.fillText(text, 1024, 128);
-    ctx.shadowBlur = 0;
-    const tex = new THREE.CanvasTexture(canvas);
+    var fs = fontSize || 24;
+    var op = opacity || 0.8;
+
+    function draw() {
+      ctx.clearRect(0, 0, 2048, 256);
+      ctx.font = fs + "px 'Share Tech Mono', 'Courier New', monospace";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(168, 255, 0, 0.5)';
+      ctx.shadowBlur = fs > 50 ? 10 : 5;
+      ctx.fillStyle = 'rgba(168, 255, 0, ' + op + ')';
+      ctx.fillText(text, 1024, 128);
+      ctx.shadowBlur = 0;
+    }
+
+    draw();
+    var tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
-    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
-    const sprite = new THREE.Sprite(mat);
+    var mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    var sprite = new THREE.Sprite(mat);
     sprite.scale.set(30, 4, 1);
+
+    _pendingRedraws.push(function() { draw(); tex.needsUpdate = true; });
     return sprite;
   }
+  // Redraw text after fonts load for correct rendering
+  try { document.fonts.ready.then(function() { _pendingRedraws.forEach(function(fn) { fn(); }); }); } catch(e) {}
 
   // ---- Holographic Diamond Badge (multi-layer 3D) ----
   function createHoloBadge(config) {

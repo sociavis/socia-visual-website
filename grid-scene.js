@@ -113,33 +113,49 @@ const GridScene = (function() {
   });
   scene.add(new THREE.Points(starGeom, starMat));
 
-  // ---- Shooting Stars (slow, realistic, rare) ----
-  var shootingStars = [];
-  function spawnShootingStar() {
-    // Start along the horizon, streak slowly across the sky
-    var sx = (Math.random() - 0.5) * 500;
-    var sy = 20 + Math.random() * 40;
-    var sz = -200 - Math.random() * 300;
-    var tailLen = 35;
-    // Mostly horizontal direction with slight downward drift
-    var dx = (Math.random() > 0.5 ? 1 : -1) * (0.6 + Math.random() * 0.4);
-    var dy = -0.05 - Math.random() * 0.08;
-    var dz = (Math.random() - 0.5) * 0.2;
+  // ---- Comets (streak from sky to grid) ----
+  var maxComets = 4;
+  var comets = [];
+  function spawnComet() {
+    // Start high, streak diagonally downward toward the grid
+    var sx = (Math.random() - 0.5) * 300;
+    var sy = 120 + Math.random() * 80;
+    var sz = -200 - Math.random() * 200; // from the back/horizon
+    var speed = 2 + Math.random() * 1.5;
+    var tailLen = 25;
+    var dirX = (Math.random() - 0.5) * 0.15; // slight horizontal drift
+    var dirZ = 0.6 + Math.random() * 0.3; // streaks toward camera
+    // Build tail as a series of points from head to fading tail
     var pts = [];
-    var cols = new Float32Array(tailLen * 3);
     for (var t = 0; t < tailLen; t++) {
-      pts.push(new THREE.Vector3(sx + dx * t * 2, sy + dy * t * 2, sz + dz * t * 2));
-      var b = Math.pow(1 - t / tailLen, 2); // quadratic falloff for tapered tail
-      cols[t * 3] = 0.66 * b;
-      cols[t * 3 + 1] = 1.0 * b;
-      cols[t * 3 + 2] = 0;
+      var fade = t / tailLen;
+      pts.push(new THREE.Vector3(
+        sx - dirX * t * 5,
+        sy + t * 2, // tail goes up (head is lower, moving down)
+        sz - dirZ * t * 5
+      ));
     }
-    var geom = new THREE.BufferGeometry().setFromPoints(pts);
-    geom.setAttribute('color', new THREE.BufferAttribute(cols, 3));
-    var mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
-    var line = new THREE.Line(geom, mat);
-    scene.add(line);
-    shootingStars.push({ mesh: line, mat: mat, dx: dx, dy: dy, dz: dz, speed: 0.4 + Math.random() * 0.3, life: 0, maxLife: 120 + Math.random() * 80 });
+    var cGeom = new THREE.BufferGeometry().setFromPoints(pts);
+    // Vertex colors for head-to-tail gradient
+    var cColors = new Float32Array(tailLen * 3);
+    for (var t = 0; t < tailLen; t++) {
+      var bright = 1 - (t / tailLen);
+      cColors[t * 3] = 0.66 * bright;
+      cColors[t * 3 + 1] = 1.0 * bright;
+      cColors[t * 3 + 2] = 0;
+    }
+    cGeom.setAttribute('color', new THREE.BufferAttribute(cColors, 3));
+    var cMat = new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity: 0,
+      depthWrite: false, blending: THREE.AdditiveBlending
+    });
+    var cLine = new THREE.Line(cGeom, cMat);
+    scene.add(cLine);
+    comets.push({
+      mesh: cLine, mat: cMat, speed: speed,
+      dirX: dirX, dirZ: dirZ,
+      life: 0, maxLife: 80 + Math.random() * 50
+    });
   }
 
   // Connection lines
@@ -298,7 +314,7 @@ const GridScene = (function() {
     }
     if (config.subtitle) {
       const subSprite = makeTextSprite(config.subtitle, Math.round(44 * ts), 0.5);
-      subSprite.position.set(0, -size - 16 - 7 * ts, 0);
+      subSprite.position.set(0, -size - 16 - 10 * ts, 0);
       subSprite.scale.set(65 * ts, 7 * ts, 1);
       group.add(subSprite);
     }
@@ -699,38 +715,52 @@ const GridScene = (function() {
       tooltipEl.classList.remove('visible');
     }
 
-    // ---- Stars twinkle ----
+    // ---- Audio reactivity ----
+    var ar = window.audioReactivity || { bass: 0, mid: 0, high: 0, avg: 0 };
+    var audioBass = ar.bass || 0;
+    var audioMid = ar.mid || 0;
+    var audioHigh = ar.high || 0;
+    var audioAvg = ar.avg || 0;
+
+    // ---- Stars twinkle (brighter with high frequencies) ----
+    var starBoost = 1 + audioHigh * 3;
     for (var si = 0; si < starCount; si++) {
-      starPulses[si] += 0.008 + Math.random() * 0.003;
-      starSizes[si] = (1.5 + Math.random() * 0.3) + Math.sin(starPulses[si]) * 0.8;
+      starPulses[si] += 0.01 + Math.random() * 0.005;
+      starSizes[si] = ((0.5 + Math.random() * 0.3) + Math.sin(starPulses[si]) * 0.5) * starBoost;
     }
     starGeom.attributes.size.needsUpdate = true;
 
-    // ---- Shooting Stars (rare, slow across sky) ----
-    if (shootingStars.length < 2 && Math.random() < 0.0015) spawnShootingStar();
-    for (var ssi = shootingStars.length - 1; ssi >= 0; ssi--) {
-      var ss = shootingStars[ssi];
-      ss.life++;
-      var sPos = ss.mesh.geometry.attributes.position.array;
-      for (var sp = 0; sp < sPos.length; sp += 3) {
-        sPos[sp] += ss.dx * ss.speed;
-        sPos[sp + 1] += ss.dy * ss.speed;
-        sPos[sp + 2] += ss.dz * ss.speed;
+    // ---- Comets (streak from sky toward grid) ----
+    var cometChance = 0.006 + audioBass * 0.03;
+    if (comets.length < maxComets && Math.random() < cometChance) spawnComet();
+    for (var ci = comets.length - 1; ci >= 0; ci--) {
+      var c = comets[ci];
+      c.life++;
+      var cPos = c.mesh.geometry.attributes.position.array;
+      var spd = c.speed * (1 + audioBass * 0.5);
+      // Move all points: down on Y, forward on Z, slight X drift
+      for (var cp = 0; cp < cPos.length; cp += 3) {
+        cPos[cp] += c.dirX * spd;
+        cPos[cp + 1] -= spd;
+        cPos[cp + 2] += c.dirZ * spd;
       }
-      ss.mesh.geometry.attributes.position.needsUpdate = true;
-      var ssP = ss.life / ss.maxLife;
-      ss.mat.opacity = ssP < 0.1 ? ssP * 6 : Math.max(0, (1 - ssP) * 0.6);
-      if (ss.life >= ss.maxLife) {
-        scene.remove(ss.mesh);
-        ss.mesh.geometry.dispose();
-        ss.mat.dispose();
-        shootingStars.splice(ssi, 1);
+      c.mesh.geometry.attributes.position.needsUpdate = true;
+      var cProgress = c.life / c.maxLife;
+      c.mat.opacity = cProgress < 0.15 ? cProgress * 4 : Math.max(0, (1 - cProgress) * 0.7);
+      if (c.life >= c.maxLife) {
+        scene.remove(c.mesh);
+        c.mesh.geometry.dispose();
+        c.mat.dispose();
+        comets.splice(ci, 1);
       }
     }
 
+    // Grid line pulse with music
+    gridLineMat.opacity = 0.075 + audioBass * 0.06;
+
     // Green wash
     washMat.opacity += ((currentSection === 3 ? 0.1 : 0) - washMat.opacity) * 0.04;
-    const gridGreenBoost = currentSection === 3 ? 0.15 : 0;
+    const gridGreenBoost = (currentSection === 3 ? 0.15 : 0) + audioMid * 0.08;
 
     // Particle update
     raycaster.setFromCamera(mouseNDC, camera);
@@ -750,10 +780,13 @@ const GridScene = (function() {
     let lineIdx = 0;
     const nearbyIndices = [];
 
+    // Audio-reactive particle lift
+    var audioLift = audioBass * 2;
+
     for (let i = 0; i < totalPoints; i++) {
       pulses[i] += 0.02;
       const ox = origins[i * 3], oz = origins[i * 3 + 2];
-      const ab = 0.15 + Math.sin(pulses[i]) * 0.05;
+      const ab = 0.15 + Math.sin(pulses[i]) * 0.05 + audioAvg * 0.1;
       const gb = ab + gridGreenBoost;
 
       if (mouseOnPlane && mouseNDC.x > -5) {
@@ -772,9 +805,9 @@ const GridScene = (function() {
           nearbyIndices.push(i);
         } else {
           positions[i * 3] += (ox - positions[i * 3]) * 0.06;
-          positions[i * 3 + 1] *= 0.94;
+          positions[i * 3 + 1] += (audioLift * Math.sin(pulses[i]) - positions[i * 3 + 1]) * 0.06;
           positions[i * 3 + 2] += (oz - positions[i * 3 + 2]) * 0.06;
-          sizes[i] += (2.2 - sizes[i]) * 0.06;
+          sizes[i] += (2.2 + audioAvg * 2 - sizes[i]) * 0.06;
           colors[i * 3] += (gb - colors[i * 3]) * 0.05;
           colors[i * 3 + 1] += (gb - colors[i * 3 + 1]) * 0.05;
           colors[i * 3 + 2] += (ab - colors[i * 3 + 2]) * 0.05;

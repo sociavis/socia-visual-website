@@ -686,3 +686,82 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ---- Music Player (Web Audio API) ----
+window.audioReactivity = { bass: 0, mid: 0, high: 0, avg: 0 };
+(function() {
+  var player = document.getElementById('musicPlayer');
+  var toggle = document.getElementById('musicToggle');
+  var iconPlay = document.getElementById('musicIconPlay');
+  var iconPause = document.getElementById('musicIconPause');
+  var bars = document.querySelectorAll('#musicBars span');
+  var audioCtx = null;
+  var analyser = null;
+  var source = null;
+  var audio = null;
+  var freqData = null;
+  var isPlaying = false;
+
+  function initAudio() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    audio = new Audio('Aurora Between Us.mp3');
+    audio.loop = true;
+    audio.crossOrigin = 'anonymous';
+    source = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  }
+
+  function updateBars() {
+    if (!analyser || !isPlaying) return;
+    analyser.getByteFrequencyData(freqData);
+    var binCount = freqData.length;
+    // Bass (0-15%), Mid (15-50%), High (50-100%)
+    var bassSum = 0, midSum = 0, highSum = 0;
+    var bassEnd = Math.floor(binCount * 0.15);
+    var midEnd = Math.floor(binCount * 0.5);
+    for (var i = 0; i < binCount; i++) {
+      if (i < bassEnd) bassSum += freqData[i];
+      else if (i < midEnd) midSum += freqData[i];
+      else highSum += freqData[i];
+    }
+    var bass = bassSum / (bassEnd * 255);
+    var mid = midSum / ((midEnd - bassEnd) * 255);
+    var high = highSum / ((binCount - midEnd) * 255);
+    var avg = (bass + mid + high) / 3;
+
+    window.audioReactivity.bass = bass;
+    window.audioReactivity.mid = mid;
+    window.audioReactivity.high = high;
+    window.audioReactivity.avg = avg;
+
+    // Animate EQ bars
+    var barHeights = [bass * 16, mid * 14, high * 12, mid * 15, bass * 13];
+    for (var b = 0; b < bars.length; b++) {
+      bars[b].style.height = Math.max(2, barHeights[b]) + 'px';
+    }
+    requestAnimationFrame(updateBars);
+  }
+
+  toggle.addEventListener('click', function() {
+    if (!audioCtx) initAudio();
+    if (isPlaying) {
+      audio.pause();
+      isPlaying = false;
+      player.classList.remove('playing');
+      iconPlay.style.display = 'block';
+      iconPause.style.display = 'none';
+      window.audioReactivity = { bass: 0, mid: 0, high: 0, avg: 0 };
+    } else {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      audio.play();
+      isPlaying = true;
+      player.classList.add('playing');
+      iconPlay.style.display = 'none';
+      iconPause.style.display = 'block';
+      updateBars();
+    }
+  });
+})();

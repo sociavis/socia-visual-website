@@ -427,7 +427,7 @@ const GridScene = (function() {
   // Filled diamond plane
   var dShape = new THREE.Shape();
   dShape.moveTo(0, -dR); dShape.lineTo(dR, 0); dShape.lineTo(0, dR); dShape.lineTo(-dR, 0); dShape.closePath();
-  var dFillMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.04, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+  var dFillMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
   var dFillMesh = new THREE.Mesh(new THREE.ShapeGeometry(dShape), dFillMat);
   dFillMesh.rotation.x = -Math.PI / 2;
   orbitRing.add(dFillMesh);
@@ -587,7 +587,7 @@ const GridScene = (function() {
     }
     if (isServicesVisible) {
       orbitRingMat.opacity += (0.12 - orbitRingMat.opacity) * 0.04;
-      dFillMat.opacity += (0.04 - dFillMat.opacity) * 0.04;
+      dFillMat.opacity += (0.06 - dFillMat.opacity) * 0.04;
     }
 
     // Service hover detection via screen-space projection

@@ -917,7 +917,7 @@ body:hover .cursor-glow { opacity: 1; }
   width: calc(100% - 120px);
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 24px;
+  padding: 140px 24px;
 }
 .services-3d-content .section-label,
 .services-3d-content .section-title {

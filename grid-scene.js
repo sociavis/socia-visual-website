@@ -391,9 +391,9 @@ const GridScene = (function() {
 
   // ---- Create About Badges ----
   const badges = [
-    createHoloBadge({ pos: new THREE.Vector3(-55, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18, textScale: 1.5 }),
-    createHoloBadge({ pos: new THREE.Vector3(0, 20, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18, textScale: 1.5 }),
-    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconSpeed, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18, textScale: 1.5 }),
+    createHoloBadge({ pos: new THREE.Vector3(-55, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18, textScale: 1.2 }),
+    createHoloBadge({ pos: new THREE.Vector3(0, 20, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18, textScale: 1.2 }),
+    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconSpeed, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18, textScale: 1.2 }),
   ];
 
   // ---- Create Service Badges ----

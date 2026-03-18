@@ -80,7 +80,7 @@ const GridScene = (function() {
   scene.add(pointCloud);
 
   // Grid lines
-  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.055, depthWrite: false });
+  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.075, depthWrite: false });
   for (let i = -gridExtent; i <= gridExtent; i += 48) {
     const gx = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-gridExtent, 0.01, i), new THREE.Vector3(gridExtent, 0.01, i)]);
     scene.add(new THREE.Line(gx, gridLineMat));
@@ -455,10 +455,10 @@ const GridScene = (function() {
   let camTime = 0;
 
   const camTargets = [
-    { pos: new THREE.Vector3(0, 80, 140), look: new THREE.Vector3(0, 0, -60) },
-    { pos: new THREE.Vector3(0, 55, 95), look: new THREE.Vector3(0, 15, -10) },
-    { pos: new THREE.Vector3(0, 50, 100), look: new THREE.Vector3(0, 15, -5) },
-    { pos: new THREE.Vector3(0, 50, 85), look: new THREE.Vector3(0, 15, -10) },
+    { pos: new THREE.Vector3(0, 80, 140), look: new THREE.Vector3(0, 0, -60) },     // hero: high, looking down
+    { pos: new THREE.Vector3(-30, 45, 80), look: new THREE.Vector3(10, 15, -20) },   // about: shifted left, lower
+    { pos: new THREE.Vector3(20, 55, 110), look: new THREE.Vector3(-10, 10, -10) },  // services: shifted right, wider
+    { pos: new THREE.Vector3(0, 30, 60), look: new THREE.Vector3(0, 5, -30) },       // contact: close, low, intimate
   ];
 
   let currentCamPos = camTargets[0].pos.clone();

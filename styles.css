@@ -1461,6 +1461,22 @@ body.contact-active .form-toggle:hover {
   gap: 4px;
   flex: 1;
 }
+.mobile-stat-badge {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(168, 255, 0, 0.3);
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.mobile-stat-badge svg {
+  width: 18px;
+  height: 18px;
+  transform: rotate(-45deg);
+  color: var(--accent-1);
+}
 .mobile-stat-title {
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -1489,8 +1505,13 @@ body.contact-active .form-toggle:hover {
 }
 .mobile-service-icon {
   color: var(--accent-1);
-  font-size: 1.2rem;
-  margin-bottom: 6px;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 8px;
+}
+.mobile-service-icon svg {
+  width: 100%;
+  height: 100%;
 }
 .mobile-service-card h3 {
   font-family: var(--font-heading);
@@ -1545,6 +1566,7 @@ body.contact-active .form-toggle:hover {
   border: none;
   color: var(--grey-light);
   font-family: var(--font-mono);
+  position: relative;
   font-size: 0.45rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1552,6 +1574,17 @@ body.contact-active .form-toggle:hover {
   transition: color 0.3s;
 }
 .mobile-nav-btn.active { color: var(--accent-1); }
+.mobile-nav-btn.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: var(--accent-1);
+  box-shadow: 0 0 8px rgba(168, 255, 0, 0.4);
+}
 .mobile-nav-btn svg { stroke: currentColor; }
 
 @media (max-width: 1100px) {

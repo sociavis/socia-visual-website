@@ -1079,107 +1079,18 @@ body:hover .cursor-glow { opacity: 1; }
   will-change: transform;
 }
 
+/* Logo layers — all animation driven by JS */
 .logo-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  transition: opacity 0.8s var(--ease), filter 0.4s ease;
-  will-change: transform;
+  will-change: transform, opacity, filter;
   opacity: 0;
-  transform: scale(0.3) translateZ(0);
 }
-
-/* Intro animation */
-.hero-logo.intro-ready .logo-layer--1 {
-  animation: layerAssemble1 2s var(--ease) 0.2s forwards;
-}
-.hero-logo.intro-ready .logo-layer--2 {
-  animation: layerAssemble2 2s var(--ease) 0.6s forwards;
-}
-.hero-logo.intro-ready .logo-layer--3 {
-  animation: layerAssemble3 2s var(--ease) 1s forwards;
-}
-.hero-logo.intro-ready .logo-glow {
-  animation: glowBurst 2.4s var(--ease) 1.2s forwards;
-}
-.hero-logo.intro-ready .logo-reveal-ring {
-  animation: ringExpand 2s var(--ease) 0.8s forwards, ringRotate 20s linear 3s infinite;
-}
-.hero-logo.intro-ready .logo-reveal-ring--2 {
-  animation: ringExpand 2s var(--ease) 1.2s forwards, ringRotate 30s linear 3.4s infinite reverse;
-}
-
-@keyframes layerAssemble1 {
-  0%   { opacity: 0; transform: scale(0.3) translateZ(160px) translateX(80px) rotate(20deg); filter: drop-shadow(0 0 50px rgba(168, 255, 0, 0.7)); }
-  20%  { opacity: 0.1; }
-  40%  { opacity: 0.2; transform: scale(0.6) translateZ(110px) translateX(40px) rotate(10deg); }
-  60%  { opacity: 0.3; filter: drop-shadow(0 0 25px rgba(168, 255, 0, 0.3)); }
-  80%  { opacity: 0.38; transform: scale(0.9) translateZ(65px) translateX(8px) rotate(2deg); }
-  100% { opacity: 0.45; transform: scale(1) translateZ(50px) translateX(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.15)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.4)) drop-shadow(0 0 15px rgba(168, 255, 0, 0.12)); }
-}
-@keyframes layerAssemble2 {
-  0%   { opacity: 0; transform: scale(0.2) translateZ(100px) translateX(-70px) rotate(-15deg); filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4)); }
-  20%  { opacity: 0.06; }
-  40%  { opacity: 0.12; transform: scale(0.5) translateZ(65px) translateX(-35px) rotate(-8deg); }
-  60%  { opacity: 0.18; }
-  80%  { opacity: 0.25; transform: scale(0.85) translateZ(30px) translateX(-8px) rotate(-2deg); }
-  100% { opacity: 0.3; transform: scale(1) translateZ(20px) translateX(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(255, 255, 255, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.35)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.06)); }
-}
-@keyframes layerAssemble3 {
-  0%   { opacity: 0; transform: scale(0.4) translateZ(-80px) translateY(60px) rotate(12deg); filter: drop-shadow(0 0 40px rgba(168, 255, 0, 0.5)); }
-  20%  { opacity: 0.04; }
-  40%  { opacity: 0.08; transform: scale(0.6) translateZ(-50px) translateY(30px) rotate(6deg); }
-  60%  { opacity: 0.12; }
-  80%  { opacity: 0.17; transform: scale(0.9) translateZ(-22px) translateY(6px) rotate(1deg); }
-  100% { opacity: 0.2; transform: scale(1) translateZ(-15px) translateY(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.3)) drop-shadow(0 0 8px rgba(168, 255, 0, 0.06)); }
-}
-@keyframes glowBurst {
-  0%   { opacity: 0; transform: translateZ(-40px) translate(-50%, -50%) scale(0.1); }
-  30%  { opacity: 0.8; transform: translateZ(-40px) translate(-50%, -50%) scale(2); }
-  60%  { opacity: 1; transform: translateZ(-40px) translate(-50%, -50%) scale(1.5); }
-  100% { opacity: 1; transform: translateZ(-40px) translate(-50%, -50%) scale(1); }
-}
-@keyframes ringExpand {
-  0%   { opacity: 0; transform: scale(0.2) translateZ(-25px); border-color: rgba(168, 255, 0, 0.4); }
-  50%  { opacity: 0.8; border-color: rgba(168, 255, 0, 0.2); }
-  100% { opacity: 1; transform: scale(1) translateZ(-25px); border-color: rgba(168, 255, 0, 0.12); }
-}
-
-.hero-logo.intro-done .logo-layer--1 {
-  opacity: 0.45;
-  transform: translateZ(50px);
-  filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.15)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.4)) drop-shadow(0 0 15px rgba(168, 255, 0, 0.12));
-}
-.hero-logo.intro-done .logo-layer--2 {
-  opacity: 0.3;
-  transform: translateZ(20px);
-  filter: drop-shadow(1px 2px 0 rgba(255, 255, 255, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.35)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.06));
-}
-.hero-logo.intro-done .logo-layer--3 {
-  opacity: 0.2;
-  transform: translateZ(-15px);
-  filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.3)) drop-shadow(0 0 8px rgba(168, 255, 0, 0.06));
-}
-
 .logo-layer--1 { color: var(--accent-1); }
 .logo-layer--2 { color: var(--white); }
 .logo-layer--3 { color: var(--white); }
-
-.hero-logo:hover .logo-layer--1 {
-  opacity: 0.85;
-  filter: drop-shadow(2px 4px 0 rgba(168, 255, 0, 0.25)) drop-shadow(4px 8px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 50px rgba(168, 255, 0, 0.6)) drop-shadow(0 0 100px rgba(168, 255, 0, 0.25));
-}
-.hero-logo:hover .logo-layer--2 {
-  opacity: 0.6;
-  filter: drop-shadow(2px 3px 0 rgba(255, 255, 255, 0.15)) drop-shadow(3px 6px 2px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 35px rgba(255, 255, 255, 0.25));
-}
-.hero-logo:hover .logo-layer--3 {
-  opacity: 0.5;
-  filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.12)) drop-shadow(3px 6px 2px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 40px rgba(168, 255, 0, 0.35));
-}
-.hero-logo:hover .logo-reveal-ring { border-color: rgba(168, 255, 0, 0.3) !important; box-shadow: 0 0 25px rgba(168, 255, 0, 0.12), inset 0 0 25px rgba(168, 255, 0, 0.06) !important; }
-.hero-logo:hover .logo-reveal-ring--2 { border-color: rgba(168, 255, 0, 0.2) !important; box-shadow: 0 0 20px rgba(168, 255, 0, 0.08), inset 0 0 20px rgba(168, 255, 0, 0.04) !important; }
 
 .logo-glow {
   position: absolute;
@@ -1187,18 +1098,11 @@ body:hover .cursor-glow { opacity: 1; }
   height: 70%;
   top: 50%;
   left: 50%;
-  transform: translateZ(-40px) translate(-50%, -50%) scale(0);
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(168, 255, 0, 0.15) 0%, rgba(168, 255, 0, 0.05) 40%, transparent 70%);
   opacity: 0;
   pointer-events: none;
-}
-.hero-logo.intro-done .logo-glow {
-  animation: glowPulse 4s ease-in-out infinite alternate;
-}
-@keyframes glowPulse {
-  from { transform: translateZ(-40px) translate(-50%, -50%) scale(1); opacity: 0.6; }
-  to   { transform: translateZ(-40px) translate(-50%, -50%) scale(1.4); opacity: 1; }
 }
 
 .logo-reveal-ring {
@@ -1208,16 +1112,14 @@ body:hover .cursor-glow { opacity: 1; }
   border: 1px solid rgba(168, 255, 0, 0);
   border-radius: 50%;
   opacity: 0;
-  transform-style: preserve-3d;
   pointer-events: none;
   transition: border-color 0.4s, box-shadow 0.4s;
 }
 .logo-reveal-ring--2 {
   width: 135%;
   height: 135%;
-  border-color: rgba(168, 255, 0, 0.03);
 }
-/* Keep rings visible after intro with trace animation */
+/* Rings get CSS animation — no conflict with JS since JS doesn't touch them */
 .hero-logo.intro-done .logo-reveal-ring {
   opacity: 1;
   border-color: rgba(168, 255, 0, 0.1);
@@ -1228,6 +1130,8 @@ body:hover .cursor-glow { opacity: 1; }
   border-color: rgba(168, 255, 0, 0.07);
   animation: ringRotate 30s linear infinite reverse, ringTrace 5s ease-in-out 1.5s infinite;
 }
+.hero-logo:hover .logo-reveal-ring { border-color: rgba(168, 255, 0, 0.3); box-shadow: 0 0 25px rgba(168, 255, 0, 0.12); }
+.hero-logo:hover .logo-reveal-ring--2 { border-color: rgba(168, 255, 0, 0.2); box-shadow: 0 0 20px rgba(168, 255, 0, 0.08); }
 @keyframes ringRotate {
   from { transform: rotateZ(0deg) translateZ(-25px); }
   to   { transform: rotateZ(360deg) translateZ(-25px); }
@@ -1235,18 +1139,6 @@ body:hover .cursor-glow { opacity: 1; }
 @keyframes ringTrace {
   0%, 100% { border-color: rgba(168, 255, 0, 0.07); box-shadow: none; }
   50%      { border-color: rgba(168, 255, 0, 0.18); box-shadow: 0 0 12px rgba(168, 255, 0, 0.06), inset 0 0 12px rgba(168, 255, 0, 0.03); }
-}
-
-.logo-3d-scene.idle {
-  animation: logoSpin 14s linear infinite, logoBreath 5s ease-in-out infinite;
-}
-@keyframes logoSpin {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(360deg); }
-}
-@keyframes logoBreath {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(168, 255, 0, 0.08)); }
-  50%      { filter: drop-shadow(0 0 25px rgba(168, 255, 0, 0.2)) drop-shadow(0 0 50px rgba(168, 255, 0, 0.08)); }
 }
 
 /* ============================================

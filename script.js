@@ -31,15 +31,7 @@ function runBoot() {
     setTimeout(() => {
       bootOverlay.classList.add('done');
       document.body.classList.add('loaded');
-      // Trigger logo intro animation
-      const heroLogo = document.querySelector('.hero-logo');
-      if (heroLogo) {
-        heroLogo.classList.add('intro-ready');
-        setTimeout(() => {
-          heroLogo.classList.remove('intro-ready');
-          heroLogo.classList.add('intro-done');
-        }, 3600);
-      }
+      // Logo intro is now handled by the Logo 3D Holographic section
       // Trigger hero reveals after boot
       document.querySelectorAll('.panel--hero .reveal').forEach((el, i) => {
         setTimeout(() => el.classList.add('visible'), i * 120);
@@ -414,36 +406,100 @@ function scrambleText(element) {
   }, 30);
 }
 
-// ---- Logo 3D Holographic ----
+// ---- Logo 3D Holographic (fully JS-driven) ----
 const logoWrap = document.querySelector('.hero-logo');
 if (logoWrap) {
   const logoScene = logoWrap.querySelector('.logo-3d-scene');
   const layers = logoWrap.querySelectorAll('.logo-layer');
+  const logoGlow = logoWrap.querySelector('.logo-glow');
+
   const baseDepths = [50, 20, -15];
-  const hoverDepths = [90, 35, -35];
-  let currentDepths = [50, 20, -15];
+  const hoverDepths = [100, 40, -45];
+  const baseOpacities = [0.5, 0.3, 0.2];
+  const hoverOpacities = [0.85, 0.6, 0.45];
+  let currentDepths = [0, 0, 0];
+  let currentOpacities = [0, 0, 0];
+  let currentScale = 0.3;
+  let rotationAngle = 0;
   let isLogoHovering = false;
+  let introProgress = 0; // 0 to 1
+  let introStarted = false;
+  let introStartTime = 0;
+  const introDuration = 2500;
 
   logoWrap.classList.add('visible');
 
-  // Start continuous CSS rotation after intro — never stops
-  setTimeout(() => { logoScene.classList.add('idle'); }, 4000);
-
-  // Animate layer depths — rotation stays CSS-driven
-  function animateLogo() {
-    const targets = isLogoHovering ? hoverDepths : baseDepths;
-    for (let i = 0; i < layers.length; i++) {
-      currentDepths[i] += (targets[i] - currentDepths[i]) * 0.06;
-      layers[i].style.transform = 'translateZ(' + currentDepths[i] + 'px)';
+  function animateLogo(now) {
+    // Entrance animation
+    if (introStarted && introProgress < 1) {
+      introProgress = Math.min(1, (now - introStartTime) / introDuration);
+      // Ease out cubic
+      var ep = 1 - Math.pow(1 - introProgress, 3);
+      currentScale = 0.3 + ep * 0.7;
+      for (var i = 0; i < 3; i++) {
+        currentOpacities[i] = ep * baseOpacities[i];
+        currentDepths[i] = ep * baseDepths[i];
+      }
+      if (logoGlow) logoGlow.style.opacity = ep * 0.7;
     }
+
+    // After intro: continuous rotation + hover
+    if (introProgress >= 1) {
+      rotationAngle += 0.4; // degrees per frame (~24 deg/sec)
+      var targets = isLogoHovering ? hoverDepths : baseDepths;
+      var opTargets = isLogoHovering ? hoverOpacities : baseOpacities;
+      for (var i = 0; i < 3; i++) {
+        currentDepths[i] += (targets[i] - currentDepths[i]) * 0.05;
+        currentOpacities[i] += (opTargets[i] - currentOpacities[i]) * 0.08;
+      }
+      // Glow pulse
+      var glowTarget = isLogoHovering ? 1.0 : 0.5 + Math.sin(now * 0.002) * 0.2;
+      if (logoGlow) {
+        var cg = parseFloat(logoGlow.style.opacity) || 0.5;
+        logoGlow.style.opacity = cg + (glowTarget - cg) * 0.05;
+      }
+    }
+
+    // Apply transforms
+    logoScene.style.transform = 'rotateY(' + rotationAngle + 'deg)';
+    for (var i = 0; i < layers.length; i++) {
+      layers[i].style.transform = 'translateZ(' + currentDepths[i] + 'px)';
+      layers[i].style.opacity = currentOpacities[i];
+      // Holographic glow on hover
+      if (isLogoHovering) {
+        var glowAmt = i === 0 ? '0 0 40px rgba(168,255,0,0.4)' : '0 0 20px rgba(168,255,0,0.15)';
+        layers[i].style.filter = 'drop-shadow(' + glowAmt + ')';
+      } else {
+        layers[i].style.filter = 'drop-shadow(0 0 10px rgba(168,255,0,0.1))';
+      }
+    }
+
     requestAnimationFrame(animateLogo);
   }
-  animateLogo();
+  requestAnimationFrame(animateLogo);
 
-  logoWrap.addEventListener('mouseenter', () => { isLogoHovering = true; });
-  logoWrap.addEventListener('mouseleave', () => { isLogoHovering = false; });
-  logoWrap.addEventListener('touchstart', () => { isLogoHovering = true; }, { passive: true });
-  logoWrap.addEventListener('touchend', () => { isLogoHovering = false; });
+  // Trigger entrance after boot
+  function startLogoIntro() {
+    introStarted = true;
+    introStartTime = performance.now();
+    // Set intro-done for rings after entrance completes
+    setTimeout(function() {
+      logoWrap.classList.add('intro-done');
+    }, introDuration);
+  }
+
+  // Hook into boot sequence — start intro when body gets 'loaded' class
+  var bootCheck = setInterval(function() {
+    if (document.body.classList.contains('loaded')) {
+      clearInterval(bootCheck);
+      setTimeout(startLogoIntro, 600);
+    }
+  }, 100);
+
+  logoWrap.addEventListener('mouseenter', function() { isLogoHovering = true; });
+  logoWrap.addEventListener('mouseleave', function() { isLogoHovering = false; });
+  logoWrap.addEventListener('touchstart', function() { isLogoHovering = true; }, { passive: true });
+  logoWrap.addEventListener('touchend', function() { isLogoHovering = false; });
 }
 
 // ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA v3) ----

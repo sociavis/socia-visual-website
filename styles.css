@@ -524,11 +524,15 @@ body:hover .cursor-glow { opacity: 1; }
 }
 #heroCanvas {
   position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: -25%;
+  top: -25%;
+  width: 150%;
+  height: 150%;
   z-index: 1;
   pointer-events: none;
+  transform: perspective(600px) rotateX(45deg) translateZ(-50px);
+  transform-origin: center 60%;
+  transform-style: preserve-3d;
 }
 
 /* Hero horizontal lines */

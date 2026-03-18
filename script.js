@@ -400,108 +400,38 @@ function scrambleText(element) {
   }, 30);
 }
 
-// ---- Logo 3D Interactive ----
+// ---- Logo 3D Holographic ----
 const logoWrap = document.querySelector('.hero-logo');
 if (logoWrap) {
-  const scene = logoWrap.querySelector('.logo-3d-scene');
+  const logoScene = logoWrap.querySelector('.logo-3d-scene');
   const layers = logoWrap.querySelectorAll('.logo-layer');
-  const depthFactors = [50, 20, -15];
-  let idleTimeout;
-  let isHovering = false;
-  let currentRx = 0, currentRy = 0;
-  let targetRx = 0, targetRy = 0;
+  const baseDepths = [50, 20, -15];
+  const hoverDepths = [80, 30, -30]; // spread apart on hover
+  let isLogoHovering = false;
+  let currentDepths = [...baseDepths];
 
   logoWrap.classList.add('visible');
 
-  const startIdle = () => { scene.classList.add('idle'); };
-  const stopIdle = () => { scene.classList.remove('idle'); };
-  setTimeout(startIdle, 4000);
+  // Start continuous rotation after intro
+  setTimeout(() => { logoScene.classList.add('idle'); }, 4000);
 
-  function animateScene() {
-    if (isHovering) {
-      currentRx += (targetRx - currentRx) * 0.08;
-      currentRy += (targetRy - currentRy) * 0.08;
-      scene.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
+  // On hover: spread layers apart (holographic explode), keep spinning
+  logoWrap.addEventListener('mouseenter', () => { isLogoHovering = true; });
+  logoWrap.addEventListener('mouseleave', () => { isLogoHovering = false; });
 
-      layers.forEach((layer, i) => {
-        const depth = depthFactors[i];
-        const shiftX = currentRy * depth * 0.04;
-        const shiftY = -currentRx * depth * 0.04;
-        layer.style.transform = `translateZ(${depth}px) translate(${shiftX}px, ${shiftY}px)`;
-      });
-    }
-    requestAnimationFrame(animateScene);
+  function animateLogo() {
+    const targetDepths = isLogoHovering ? hoverDepths : baseDepths;
+    layers.forEach((layer, i) => {
+      currentDepths[i] += (targetDepths[i] - currentDepths[i]) * 0.06;
+      layer.style.transform = `translateZ(${currentDepths[i]}px)`;
+    });
+    requestAnimationFrame(animateLogo);
   }
-  animateScene();
+  animateLogo();
 
-  logoWrap.addEventListener('mousemove', (e) => {
-    const rect = logoWrap.getBoundingClientRect();
-    const lcx = rect.left + rect.width / 2;
-    const lcy = rect.top + rect.height / 2;
-    const lmx = e.clientX - lcx;
-    const lmy = e.clientY - lcy;
-    const maxTilt = 25;
-    targetRx = -(lmy / (rect.height / 2)) * maxTilt;
-    targetRy = (lmx / (rect.width / 2)) * maxTilt;
-  });
-
-  logoWrap.addEventListener('mouseenter', () => {
-    isHovering = true;
-    stopIdle();
-    clearTimeout(idleTimeout);
-  });
-
-  logoWrap.addEventListener('mouseleave', () => {
-    isHovering = false;
-    targetRx = 0;
-    targetRy = 0;
-
-    const returnToCenter = () => {
-      currentRx += (0 - currentRx) * 0.06;
-      currentRy += (0 - currentRy) * 0.06;
-      scene.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
-      layers.forEach((layer, i) => {
-        const depth = depthFactors[i];
-        const shiftX = currentRy * depth * 0.04;
-        const shiftY = -currentRx * depth * 0.04;
-        layer.style.transform = `translateZ(${depth}px) translate(${shiftX}px, ${shiftY}px)`;
-      });
-      if (Math.abs(currentRx) > 0.1 || Math.abs(currentRy) > 0.1) {
-        requestAnimationFrame(returnToCenter);
-      } else {
-        currentRx = 0;
-        currentRy = 0;
-        scene.style.transform = '';
-        layers.forEach((layer, i) => {
-          layer.style.transform = `translateZ(${depthFactors[i]}px)`;
-        });
-        idleTimeout = setTimeout(startIdle, 500);
-      }
-    };
-    returnToCenter();
-  });
-
-  logoWrap.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const rect = logoWrap.getBoundingClientRect();
-    const lcx = rect.left + rect.width / 2;
-    const lcy = rect.top + rect.height / 2;
-    const lmx = touch.clientX - lcx;
-    const lmy = touch.clientY - lcy;
-    const maxTilt = 20;
-    isHovering = true;
-    stopIdle();
-    targetRx = -(lmy / (rect.height / 2)) * maxTilt;
-    targetRy = (lmx / (rect.width / 2)) * maxTilt;
-  }, { passive: false });
-
-  logoWrap.addEventListener('touchend', () => {
-    isHovering = false;
-    targetRx = 0;
-    targetRy = 0;
-    idleTimeout = setTimeout(startIdle, 1500);
-  });
+  // Touch support
+  logoWrap.addEventListener('touchstart', () => { isLogoHovering = true; }, { passive: true });
+  logoWrap.addEventListener('touchend', () => { isLogoHovering = false; });
 }
 
 // ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA v3) ----

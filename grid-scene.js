@@ -38,9 +38,9 @@ const GridScene = (function() {
       origins[idx * 3] = x;
       origins[idx * 3 + 1] = 0;
       origins[idx * 3 + 2] = z;
-      colors[idx * 3] = 0.18;
-      colors[idx * 3 + 1] = 0.22;
-      colors[idx * 3 + 2] = 0.08;
+      colors[idx * 3] = 0.22;
+      colors[idx * 3 + 1] = 0.26;
+      colors[idx * 3 + 2] = 0.1;
       sizes[idx] = 2.2;
       pulses[idx] = Math.random() * Math.PI * 2;
       idx++;
@@ -80,7 +80,7 @@ const GridScene = (function() {
   scene.add(pointCloud);
 
   // Grid lines
-  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.035, depthWrite: false });
+  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.055, depthWrite: false });
   for (let i = -gridExtent; i <= gridExtent; i += 48) {
     const gx = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-gridExtent, 0.01, i), new THREE.Vector3(gridExtent, 0.01, i)]);
     scene.add(new THREE.Line(gx, gridLineMat));
@@ -127,28 +127,52 @@ const GridScene = (function() {
   document.addEventListener('mouseleave', () => { mouseNDC.set(-10, -10); mouseOnPlane = false; mousePixelX = -1; mousePixelY = -1; });
 
   // ---- Canvas text texture helper ----
-  function makeTextSprite(text, fontSize, opacity) {
+  // Returns a Mesh (not Sprite) so it respects depth/occlusion
+  const pendingTextRedraws = [];
+  function makeTextMesh(text, fontSize, opacity, scaleW, scaleH) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = 2048; canvas.height = 256;
     const fs = fontSize || 24;
-    ctx.font = `bold ${fs}px 'Share Tech Mono', monospace`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.letterSpacing = '0.15em';
-    // Stroke for extra boldness
-    ctx.strokeStyle = `rgba(168, 255, 0, ${(opacity || 0.8) * 0.3})`;
-    ctx.lineWidth = fs > 40 ? 2 : 1;
-    ctx.strokeText(text, 1024, 128);
-    // Fill
-    ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
-    ctx.fillText(text, 1024, 128);
+    const sw = scaleW || 30;
+    const sh = scaleH || 4;
+
+    function drawText() {
+      ctx.clearRect(0, 0, 2048, 256);
+      ctx.font = `${fs}px 'Share Tech Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      // Glow layer
+      ctx.shadowColor = 'rgba(168, 255, 0, 0.4)';
+      ctx.shadowBlur = fs > 40 ? 12 : 6;
+      // Fill
+      ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
+      ctx.fillText(text, 1024, 128);
+      ctx.shadowBlur = 0;
+      if (tex) tex.needsUpdate = true;
+    }
+
+    drawText();
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
-    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
-    const sprite = new THREE.Sprite(mat);
-    sprite.scale.set(30, 4, 1);
-    return sprite;
+    const mat = new THREE.MeshBasicMaterial({
+      map: tex, transparent: true, depthWrite: false,
+      side: THREE.DoubleSide, blending: THREE.AdditiveBlending
+    });
+    const geom = new THREE.PlaneGeometry(sw, sh);
+    const mesh = new THREE.Mesh(geom, mat);
+
+    // Redraw after fonts load to ensure correct font
+    pendingTextRedraws.push(drawText);
+
+    return mesh;
+  }
+
+  // Ensure fonts are loaded then redraw all text
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      pendingTextRedraws.forEach(fn => fn());
+    });
   }
 
   // ---- Holographic Diamond Badge (multi-layer 3D) ----
@@ -226,15 +250,13 @@ const GridScene = (function() {
 
     // Text labels below badge — large, balanced with badge
     if (config.title) {
-      const titleSprite = makeTextSprite(config.title, 72, 1.0);
-      titleSprite.position.set(0, -size - 12, 0);
-      titleSprite.scale.set(60, 8, 1);
-      group.add(titleSprite);
+      const titleMesh = makeTextMesh(config.title, 90, 1.0, 65, 9);
+      titleMesh.position.set(0, -size - 14, -0.5);
+      group.add(titleMesh);
     }
     if (config.subtitle) {
-      const subSprite = makeTextSprite(config.subtitle, 36, 0.45);
-      subSprite.position.set(0, -size - 19, 0);
-      subSprite.scale.set(56, 6, 1);
+      const subMesh = makeTextMesh(config.subtitle, 44, 0.4, 60, 7);
+      subMesh.position.set(0, -size - 22, -0.5);
       group.add(subSprite);
     }
 
@@ -413,18 +435,35 @@ const GridScene = (function() {
   });
   let serviceRingAngle = 0;
 
-  // ---- Orbit ring for services (visible ring on Y=40 plane) ----
-  const orbitRingSegments = 128;
-  const orbitRingPoints = [];
-  for (let i = 0; i <= orbitRingSegments; i++) {
-    const theta = (i / orbitRingSegments) * Math.PI * 2;
-    orbitRingPoints.push(new THREE.Vector3(Math.cos(theta) * 50, 20, Math.sin(theta) * 50));
-  }
-  const orbitRingGeom = new THREE.BufferGeometry().setFromPoints(orbitRingPoints);
-  const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.08, depthWrite: false });
+  // ---- Diamond border for services on the perspective grid ----
+  const diamondR = 60;
+  const diamondY = 0.5; // sits on the grid plane
+  const diamondPoints = [
+    new THREE.Vector3(0, diamondY, -diamondR),
+    new THREE.Vector3(diamondR, diamondY, 0),
+    new THREE.Vector3(0, diamondY, diamondR),
+    new THREE.Vector3(-diamondR, diamondY, 0),
+    new THREE.Vector3(0, diamondY, -diamondR),
+  ];
+  const orbitRingGeom = new THREE.BufferGeometry().setFromPoints(diamondPoints);
+  const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.12, depthWrite: false });
   const orbitRing = new THREE.Line(orbitRingGeom, orbitRingMat);
   orbitRing.visible = false;
   scene.add(orbitRing);
+  // Corner brackets on the diamond border
+  const dCornerMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.2, depthWrite: false });
+  const dbl = 8;
+  [
+    { x: 0, z: -diamondR, a1: [1, 0], a2: [-1, 0] },
+    { x: diamondR, z: 0, a1: [0, -1], a2: [0, 1] },
+    { x: 0, z: diamondR, a1: [1, 0], a2: [-1, 0] },
+    { x: -diamondR, z: 0, a1: [0, -1], a2: [0, 1] },
+  ].forEach(({ x, z, a1, a2 }) => {
+    const c1 = [new THREE.Vector3(x, diamondY, z), new THREE.Vector3(x + a1[0] * dbl, diamondY, z + a1[1] * dbl)];
+    const c2 = [new THREE.Vector3(x, diamondY, z), new THREE.Vector3(x + a2[0] * dbl, diamondY, z + a2[1] * dbl)];
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(c1), dCornerMat));
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(c2), dCornerMat));
+  });
 
   // ---- Service hover tooltip (HTML overlay) ----
   let tooltipEl = document.createElement('div');

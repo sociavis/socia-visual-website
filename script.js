@@ -31,15 +31,7 @@ function runBoot() {
     setTimeout(() => {
       bootOverlay.classList.add('done');
       document.body.classList.add('loaded');
-      // Trigger logo intro animation
-      const heroLogo = document.querySelector('.hero-logo');
-      if (heroLogo) {
-        heroLogo.classList.add('intro-ready');
-        setTimeout(() => {
-          heroLogo.classList.remove('intro-ready');
-          heroLogo.classList.add('intro-done');
-        }, 3600);
-      }
+      // Logo intro is now handled by the Logo 3D Holographic section
       // Trigger hero reveals after boot
       document.querySelectorAll('.panel--hero .reveal').forEach((el, i) => {
         setTimeout(() => el.classList.add('visible'), i * 120);
@@ -123,7 +115,6 @@ const SectionManager = {
   init() {
     this.panels = Array.from(document.querySelectorAll('.panel'));
     this.dots = Array.from(document.querySelectorAll('.section-nav-dot'));
-    this.mobileBtns = Array.from(document.querySelectorAll('.mobile-nav-btn'));
     this.totalPanels = this.panels.length;
     this.scanLine = document.getElementById('scanLine');
     this.progressEdges = {
@@ -190,6 +181,18 @@ const SectionManager = {
       });
     }, 300);
 
+    // Notify WebGL scene of section change
+    if (typeof GridScene !== 'undefined') {
+      GridScene.onSectionChange(this.currentIndex, targetIndex);
+    }
+
+    // Contact section green mode
+    if (targetIndex === 3) {
+      document.body.classList.add('contact-active');
+    } else {
+      document.body.classList.remove('contact-active');
+    }
+
     // Cleanup after transition
     setTimeout(() => {
       outPanel.classList.remove('active', 'exit-up', 'exit-down');
@@ -224,9 +227,7 @@ const SectionManager = {
     this.dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === this.currentIndex);
     });
-    this.mobileBtns.forEach((btn, i) => {
-      btn.classList.toggle('active', i === this.currentIndex);
-    });
+    this.updateMobileNav();
   },
 
   updateProgress() {
@@ -277,10 +278,9 @@ const SectionManager = {
       if (this.isTransitioning) return;
       const deltaY = this.touchStartY - e.changedTouches[0].clientY;
 
-      // Check internal scroll — only for panels that allow scrolling
+      // Check internal scroll
       const activePanel = this.panels[this.currentIndex];
-      const canScroll = getComputedStyle(activePanel).overflowY === 'auto' || getComputedStyle(activePanel).overflowY === 'scroll';
-      if (canScroll && activePanel.scrollHeight > activePanel.clientHeight + 5) {
+      if (activePanel.scrollHeight > activePanel.clientHeight + 5) {
         if (deltaY > 0 && activePanel.scrollTop + activePanel.clientHeight < activePanel.scrollHeight - 5) return;
         if (deltaY < 0 && activePanel.scrollTop > 5) return;
       }
@@ -328,12 +328,6 @@ const SectionManager = {
         this.goTo(target);
       });
     });
-    this.mobileBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = parseInt(btn.dataset.target);
-        this.goTo(target);
-      });
-    });
   },
 
   bindAnchors() {
@@ -346,6 +340,19 @@ const SectionManager = {
           this.goTo(targetIndex);
         }
       });
+    });
+    // Mobile nav
+    document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = parseInt(btn.dataset.target);
+        this.goTo(target);
+      });
+    });
+  },
+
+  updateMobileNav() {
+    document.querySelectorAll('.mobile-nav-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === this.currentIndex);
     });
   }
 };
@@ -369,157 +376,9 @@ if (window.location.hash) {
   }
 }
 
-// ---- Hero Canvas — Advanced Particle Grid ----
-const canvas = document.getElementById('heroCanvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-let canvasMouseX = -1000, canvasMouseY = -1000;
-
-function resizeCanvas() {
-  canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-  canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  initParticles();
-}
-
-function initParticles() {
-  particles = [];
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
-  const spacing = Math.max(35, Math.min(50, w / 35));
-  const cols = Math.ceil(w / spacing);
-  const rows = Math.ceil(h / spacing);
-
-  for (let i = 0; i <= cols; i++) {
-    for (let j = 0; j <= rows; j++) {
-      particles.push({
-        originX: i * spacing,
-        originY: j * spacing,
-        x: i * spacing,
-        y: j * spacing,
-        size: 1,
-        alpha: 0.1 + Math.random() * 0.05,
-        pulse: Math.random() * Math.PI * 2,
-      });
-    }
-  }
-}
-
-document.addEventListener('mousemove', (e) => {
-  canvasMouseX = e.clientX;
-  canvasMouseY = e.clientY;
-});
-document.addEventListener('mouseleave', () => {
-  canvasMouseX = -1000;
-  canvasMouseY = -1000;
-});
-
-let time = 0;
-function drawParticles() {
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
-  ctx.clearRect(0, 0, w, h);
-  time += 0.01;
-
-  const interactionRadius = 160;
-  const maxDisplacement = 35;
-
-  for (const p of particles) {
-    const pdx = canvasMouseX - p.originX;
-    const pdy = canvasMouseY - p.originY;
-    const dist = Math.sqrt(pdx * pdx + pdy * pdy);
-
-    p.pulse += 0.02;
-    const ambientAlpha = 0.08 + Math.sin(p.pulse) * 0.03;
-
-    if (dist < interactionRadius) {
-      const force = (1 - dist / interactionRadius);
-      const angle = Math.atan2(pdy, pdx);
-      const easeForce = force * force;
-
-      p.x = p.originX - Math.cos(angle) * maxDisplacement * easeForce;
-      p.y = p.originY - Math.sin(angle) * maxDisplacement * easeForce;
-      p.size = 1 + easeForce * 3;
-      p.alpha = ambientAlpha + easeForce * 0.9;
-    } else {
-      p.x += (p.originX - p.x) * 0.06;
-      p.y += (p.originY - p.y) * 0.06;
-      p.size += (1 - p.size) * 0.06;
-      p.alpha += (ambientAlpha - p.alpha) * 0.05;
-    }
-
-    const proximity = Math.max(0, 1 - dist / interactionRadius);
-    const r = Math.round(30 + proximity * 138);
-    const g = Math.round(30 + proximity * 225);
-    const b = Math.round(30 - proximity * 30);
-
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${p.alpha})`;
-    ctx.fill();
-  }
-
-  // Draw connections near cursor
-  if (canvasMouseX > 0) {
-    const nearby = [];
-    for (const p of particles) {
-      const d = Math.sqrt((canvasMouseX - p.x) ** 2 + (canvasMouseY - p.y) ** 2);
-      if (d < interactionRadius * 1.3) nearby.push(p);
-    }
-
-    for (let i = 0; i < nearby.length; i++) {
-      for (let j = i + 1; j < nearby.length; j++) {
-        const a = nearby[i], b = nearby[j];
-        const d = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-        if (d < 70) {
-          const lineAlpha = (1 - d / 70) * 0.2;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(168, 255, 0, ${lineAlpha})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-
-    const ringRadius = 60 + Math.sin(time * 3) * 5;
-    ctx.beginPath();
-    ctx.arc(canvasMouseX, canvasMouseY, ringRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(168, 255, 0, 0.06)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(canvasMouseX, canvasMouseY, 20, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(168, 255, 0, 0.08)';
-    ctx.lineWidth = 0.5;
-    ctx.stroke();
-  }
-
-  // Grid overlay lines
-  ctx.strokeStyle = 'rgba(168, 255, 0, 0.015)';
-  ctx.lineWidth = 0.5;
-  const gridSize = 200;
-  for (let x = 0; x < w; x += gridSize) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, h);
-    ctx.stroke();
-  }
-  for (let y = 0; y < h; y += gridSize) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(w, y);
-    ctx.stroke();
-  }
-
-  requestAnimationFrame(drawParticles);
-}
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-drawParticles();
+// ---- WebGL Scene loaded from grid-scene.js ----
+// GridScene is defined in grid-scene.js (loaded before script.js)
+// See grid-scene.js for the full Three.js implementation
 
 // ---- Text Scramble Effect ----
 const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*<>[]{}';
@@ -547,108 +406,99 @@ function scrambleText(element) {
   }, 30);
 }
 
-// ---- Logo 3D Interactive ----
+// ---- Logo 3D Holographic (fully JS-driven) ----
 const logoWrap = document.querySelector('.hero-logo');
 if (logoWrap) {
-  const scene = logoWrap.querySelector('.logo-3d-scene');
+  const logoScene = logoWrap.querySelector('.logo-3d-scene');
   const layers = logoWrap.querySelectorAll('.logo-layer');
-  const depthFactors = [50, 20, -15];
-  let idleTimeout;
-  let isHovering = false;
-  let currentRx = 0, currentRy = 0;
-  let targetRx = 0, targetRy = 0;
+  const logoGlow = logoWrap.querySelector('.logo-glow');
+
+  const baseDepths = [30, 12, -10];
+  const hoverDepths = [100, 40, -45];
+  const baseOpacities = [0.5, 0.3, 0.2];
+  const hoverOpacities = [0.85, 0.6, 0.45];
+  let currentDepths = [0, 0, 0];
+  let currentOpacities = [0, 0, 0];
+  let currentScale = 0.3;
+  let rotationAngle = 0;
+  let isLogoHovering = false;
+  let introProgress = 0; // 0 to 1
+  let introStarted = false;
+  let introStartTime = 0;
+  const introDuration = 2500;
 
   logoWrap.classList.add('visible');
 
-  const startIdle = () => { scene.classList.add('idle'); };
-  const stopIdle = () => { scene.classList.remove('idle'); };
-  setTimeout(startIdle, 4000);
+  function animateLogo() {
+    var now = performance.now();
 
-  function animateScene() {
-    if (isHovering) {
-      currentRx += (targetRx - currentRx) * 0.08;
-      currentRy += (targetRy - currentRy) * 0.08;
-      scene.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
-
-      layers.forEach((layer, i) => {
-        const depth = depthFactors[i];
-        const shiftX = currentRy * depth * 0.04;
-        const shiftY = -currentRx * depth * 0.04;
-        layer.style.transform = `translateZ(${depth}px) translate(${shiftX}px, ${shiftY}px)`;
-      });
-    }
-    requestAnimationFrame(animateScene);
-  }
-  animateScene();
-
-  logoWrap.addEventListener('mousemove', (e) => {
-    const rect = logoWrap.getBoundingClientRect();
-    const lcx = rect.left + rect.width / 2;
-    const lcy = rect.top + rect.height / 2;
-    const lmx = e.clientX - lcx;
-    const lmy = e.clientY - lcy;
-    const maxTilt = 25;
-    targetRx = -(lmy / (rect.height / 2)) * maxTilt;
-    targetRy = (lmx / (rect.width / 2)) * maxTilt;
-  });
-
-  logoWrap.addEventListener('mouseenter', () => {
-    isHovering = true;
-    stopIdle();
-    clearTimeout(idleTimeout);
-  });
-
-  logoWrap.addEventListener('mouseleave', () => {
-    isHovering = false;
-    targetRx = 0;
-    targetRy = 0;
-
-    const returnToCenter = () => {
-      currentRx += (0 - currentRx) * 0.06;
-      currentRy += (0 - currentRy) * 0.06;
-      scene.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
-      layers.forEach((layer, i) => {
-        const depth = depthFactors[i];
-        const shiftX = currentRy * depth * 0.04;
-        const shiftY = -currentRx * depth * 0.04;
-        layer.style.transform = `translateZ(${depth}px) translate(${shiftX}px, ${shiftY}px)`;
-      });
-      if (Math.abs(currentRx) > 0.1 || Math.abs(currentRy) > 0.1) {
-        requestAnimationFrame(returnToCenter);
-      } else {
-        currentRx = 0;
-        currentRy = 0;
-        scene.style.transform = '';
-        layers.forEach((layer, i) => {
-          layer.style.transform = `translateZ(${depthFactors[i]}px)`;
-        });
-        idleTimeout = setTimeout(startIdle, 500);
+    // Entrance animation
+    if (introStarted && introProgress < 1) {
+      introProgress = Math.min(1, (now - introStartTime) / introDuration);
+      var ep = 1 - Math.pow(1 - introProgress, 3); // ease out cubic
+      currentScale = 0.3 + ep * 0.7;
+      for (var i = 0; i < 3; i++) {
+        currentOpacities[i] = ep * baseOpacities[i];
+        currentDepths[i] = ep * baseDepths[i];
       }
-    };
-    returnToCenter();
-  });
+      if (logoGlow) logoGlow.style.opacity = ep * 0.7;
+      // Start slow rotation during entrance
+      rotationAngle += ep * 0.3;
+    }
 
-  logoWrap.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const rect = logoWrap.getBoundingClientRect();
-    const lcx = rect.left + rect.width / 2;
-    const lcy = rect.top + rect.height / 2;
-    const lmx = touch.clientX - lcx;
-    const lmy = touch.clientY - lcy;
-    const maxTilt = 20;
-    isHovering = true;
-    stopIdle();
-    targetRx = -(lmy / (rect.height / 2)) * maxTilt;
-    targetRy = (lmx / (rect.width / 2)) * maxTilt;
-  }, { passive: false });
+    // After intro: continuous rotation + hover depth/opacity
+    if (introProgress >= 1) {
+      rotationAngle += 0.35;
+      var targets = isLogoHovering ? hoverDepths : baseDepths;
+      var opTargets = isLogoHovering ? hoverOpacities : baseOpacities;
+      for (var i = 0; i < 3; i++) {
+        currentDepths[i] += (targets[i] - currentDepths[i]) * 0.05;
+        currentOpacities[i] += (opTargets[i] - currentOpacities[i]) * 0.08;
+      }
+      currentScale += (1 - currentScale) * 0.1;
+      // Glow
+      var glowTarget = isLogoHovering ? 1.0 : 0.5 + Math.sin(now * 0.002) * 0.2;
+      if (logoGlow) {
+        var cg = parseFloat(logoGlow.style.opacity) || 0.5;
+        logoGlow.style.opacity = cg + (glowTarget - cg) * 0.05;
+      }
+    }
 
-  logoWrap.addEventListener('touchend', () => {
-    isHovering = false;
-    targetRx = 0;
-    targetRy = 0;
-    idleTimeout = setTimeout(startIdle, 1500);
-  });
+    // Apply scene rotation + scale
+    logoScene.style.transform = 'rotateY(' + rotationAngle + 'deg) scale(' + currentScale + ')';
+
+    // Apply layer transforms
+    for (var i = 0; i < layers.length; i++) {
+      layers[i].style.transform = 'translateZ(' + currentDepths[i] + 'px)';
+      layers[i].style.opacity = currentOpacities[i];
+      if (isLogoHovering) {
+        var glow = i === 0 ? '0 0 40px rgba(168,255,0,0.4)' : '0 0 20px rgba(168,255,0,0.15)';
+        layers[i].style.filter = 'drop-shadow(' + glow + ')';
+      } else {
+        layers[i].style.filter = 'drop-shadow(0 0 10px rgba(168,255,0,0.1))';
+      }
+    }
+
+    requestAnimationFrame(animateLogo);
+  }
+  requestAnimationFrame(animateLogo);
+
+  // Start entrance after boot
+  var bootCheck = setInterval(function() {
+    if (document.body.classList.contains('loaded')) {
+      clearInterval(bootCheck);
+      setTimeout(function() {
+        introStarted = true;
+        introStartTime = performance.now();
+        setTimeout(function() { logoWrap.classList.add('intro-done'); }, introDuration);
+      }, 600);
+    }
+  }, 100);
+
+  logoWrap.addEventListener('mouseenter', function() { isLogoHovering = true; });
+  logoWrap.addEventListener('mouseleave', function() { isLogoHovering = false; });
+  logoWrap.addEventListener('touchstart', function() { isLogoHovering = true; }, { passive: true });
+  logoWrap.addEventListener('touchend', function() { isLogoHovering = false; });
 }
 
 // ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA v3) ----
@@ -835,3 +685,4 @@ document.addEventListener('keydown', (e) => {
     konamiIndex = 0;
   }
 });
+

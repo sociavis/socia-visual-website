@@ -1424,64 +1424,6 @@ body.contact-active .form-toggle:hover {
    RESPONSIVE
    ============================================ */
 /* ---- Mobile fallback content (hidden on desktop) ---- */
-/* ---- Music Player ---- */
-.music-player {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 300;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  background: rgba(5, 5, 5, 0.7);
-  border: 1px solid rgba(168, 255, 0, 0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.music-toggle {
-  width: 24px;
-  height: 24px;
-  border: 1px solid rgba(168, 255, 0, 0.2);
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: none;
-  transition: border-color 0.3s;
-  color: var(--accent-1);
-  flex-shrink: 0;
-}
-.music-toggle:hover {
-  border-color: var(--accent-1);
-}
-.music-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 12px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.music-player.playing .music-bars { opacity: 1; }
-.music-bars span {
-  width: 2px;
-  background: var(--accent-1);
-  height: 2px;
-  transition: height 0.08s;
-}
-.music-title {
-  font-family: var(--font-mono);
-  font-size: 0.5rem;
-  letter-spacing: 0.15em;
-  color: rgba(168, 255, 0, 0.3);
-  text-transform: uppercase;
-  transition: color 0.3s;
-}
-.music-player.playing .music-title {
-  color: rgba(168, 255, 0, 0.6);
-}
 
 .mobile-fallback { display: none; }
 .mobile-nav { display: none; }
@@ -1605,9 +1547,6 @@ body.contact-active .form-toggle:hover {
   body, a, button { cursor: auto; }
   .cursor, .cursor-dot, .cursor-glow { display: none; }
   #heroCanvas { display: none; }
-  .music-player { top: 12px; padding: 4px 10px; }
-  .music-toggle { cursor: auto; }
-  .music-title { font-size: 0.4rem; }
   .hud-corner { width: 28px; height: 28px; }
   .hud-corner--tl { top: 20px; left: 20px; }
   .hud-corner--tr { top: 20px; right: 20px; }

@@ -413,7 +413,7 @@ if (logoWrap) {
   const layers = logoWrap.querySelectorAll('.logo-layer');
   const logoGlow = logoWrap.querySelector('.logo-glow');
 
-  const baseDepths = [50, 20, -15];
+  const baseDepths = [30, 12, -10];
   const hoverDepths = [100, 40, -45];
   const baseOpacities = [0.5, 0.3, 0.2];
   const hoverOpacities = [0.85, 0.6, 0.45];

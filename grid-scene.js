@@ -118,21 +118,21 @@ const GridScene = (function() {
   var comets = [];
   function spawnComet() {
     // Start high, streak diagonally downward toward the grid
-    var sx = (Math.random() - 0.5) * 300;
-    var sy = 120 + Math.random() * 80;
-    var sz = -200 - Math.random() * 200; // from the back/horizon
-    var speed = 2 + Math.random() * 1.5;
-    var tailLen = 25;
-    var dirX = (Math.random() - 0.5) * 0.15; // slight horizontal drift
-    var dirZ = 0.6 + Math.random() * 0.3; // streaks toward camera
+    var sx = (Math.random() - 0.5) * 400;
+    var sy = 20 + Math.random() * 40;
+    var sz = -150 - Math.random() * 300;
+    var speed = 0.4 + Math.random() * 0.3;
+    var tailLen = 35;
+    var dirX = (Math.random() > 0.5 ? 1 : -1) * (0.7 + Math.random() * 0.3);
+    var dirZ = (Math.random() - 0.5) * 0.2;
     // Build tail as a series of points from head to fading tail
     var pts = [];
     for (var t = 0; t < tailLen; t++) {
       var fade = t / tailLen;
       pts.push(new THREE.Vector3(
-        sx - dirX * t * 5,
-        sy + t * 2, // tail goes up (head is lower, moving down)
-        sz - dirZ * t * 5
+        sx - dirX * t * 2,
+        sy - t * 0.1,
+        sz - dirZ * t * 2
       ));
     }
     var cGeom = new THREE.BufferGeometry().setFromPoints(pts);
@@ -154,7 +154,7 @@ const GridScene = (function() {
     comets.push({
       mesh: cLine, mat: cMat, speed: speed,
       dirX: dirX, dirZ: dirZ,
-      life: 0, maxLife: 80 + Math.random() * 50
+      life: 0, maxLife: 140 + Math.random() * 80
     });
   }
 
@@ -314,7 +314,7 @@ const GridScene = (function() {
     }
     if (config.subtitle) {
       const subSprite = makeTextSprite(config.subtitle, Math.round(44 * ts), 0.5);
-      subSprite.position.set(0, -size - 16 - 10 * ts, 0);
+      subSprite.position.set(0, -size - 16 - 7 * ts, 0);
       subSprite.scale.set(65 * ts, 7 * ts, 1);
       group.add(subSprite);
     }
@@ -715,15 +715,8 @@ const GridScene = (function() {
       tooltipEl.classList.remove('visible');
     }
 
-    // ---- Audio reactivity ----
-    var ar = window.audioReactivity || { bass: 0, mid: 0, high: 0, avg: 0 };
-    var audioBass = ar.bass || 0;
-    var audioMid = ar.mid || 0;
-    var audioHigh = ar.high || 0;
-    var audioAvg = ar.avg || 0;
-
-    // ---- Stars twinkle (brighter with high frequencies) ----
-    var starBoost = 1 + audioHigh * 3;
+    // ---- Stars twinkle ----
+    var starBoost = 1;
     for (var si = 0; si < starCount; si++) {
       starPulses[si] += 0.01 + Math.random() * 0.005;
       starSizes[si] = ((0.5 + Math.random() * 0.3) + Math.sin(starPulses[si]) * 0.5) * starBoost;
@@ -731,13 +724,13 @@ const GridScene = (function() {
     starGeom.attributes.size.needsUpdate = true;
 
     // ---- Comets (streak from sky toward grid) ----
-    var cometChance = 0.006 + audioBass * 0.03;
-    if (comets.length < maxComets && Math.random() < cometChance) spawnComet();
+    var cometChance = 0.0015;
+    if (comets.length < 2 && Math.random() < cometChance) spawnComet();
     for (var ci = comets.length - 1; ci >= 0; ci--) {
       var c = comets[ci];
       c.life++;
       var cPos = c.mesh.geometry.attributes.position.array;
-      var spd = c.speed * (1 + audioBass * 0.5);
+      var spd = c.speed;
       // Move all points: down on Y, forward on Z, slight X drift
       for (var cp = 0; cp < cPos.length; cp += 3) {
         cPos[cp] += c.dirX * spd;
@@ -755,12 +748,9 @@ const GridScene = (function() {
       }
     }
 
-    // Grid line pulse with music
-    gridLineMat.opacity = 0.075 + audioBass * 0.06;
-
     // Green wash
     washMat.opacity += ((currentSection === 3 ? 0.1 : 0) - washMat.opacity) * 0.04;
-    const gridGreenBoost = (currentSection === 3 ? 0.15 : 0) + audioMid * 0.08;
+    const gridGreenBoost = currentSection === 3 ? 0.15 : 0;
 
     // Particle update
     raycaster.setFromCamera(mouseNDC, camera);
@@ -780,13 +770,10 @@ const GridScene = (function() {
     let lineIdx = 0;
     const nearbyIndices = [];
 
-    // Audio-reactive particle lift
-    var audioLift = audioBass * 2;
-
     for (let i = 0; i < totalPoints; i++) {
       pulses[i] += 0.02;
       const ox = origins[i * 3], oz = origins[i * 3 + 2];
-      const ab = 0.15 + Math.sin(pulses[i]) * 0.05 + audioAvg * 0.1;
+      const ab = 0.15 + Math.sin(pulses[i]) * 0.05;
       const gb = ab + gridGreenBoost;
 
       if (mouseOnPlane && mouseNDC.x > -5) {
@@ -805,18 +792,18 @@ const GridScene = (function() {
           nearbyIndices.push(i);
         } else {
           positions[i * 3] += (ox - positions[i * 3]) * 0.06;
-          positions[i * 3 + 1] += (audioLift * Math.sin(pulses[i]) - positions[i * 3 + 1]) * 0.06;
+          positions[i * 3 + 1] *= 0.94;
           positions[i * 3 + 2] += (oz - positions[i * 3 + 2]) * 0.06;
-          sizes[i] += (2.2 + audioAvg * 2 - sizes[i]) * 0.06;
+          sizes[i] += (2.2 - sizes[i]) * 0.06;
           colors[i * 3] += (gb - colors[i * 3]) * 0.05;
           colors[i * 3 + 1] += (gb - colors[i * 3 + 1]) * 0.05;
           colors[i * 3 + 2] += (ab - colors[i * 3 + 2]) * 0.05;
         }
       } else {
         positions[i * 3] += (ox - positions[i * 3]) * 0.06;
-        positions[i * 3 + 1] += (audioLift * Math.sin(pulses[i]) - positions[i * 3 + 1]) * 0.06;
+        positions[i * 3 + 1] *= 0.94;
         positions[i * 3 + 2] += (oz - positions[i * 3 + 2]) * 0.06;
-        sizes[i] += (2.2 + audioAvg * 2 - sizes[i]) * 0.06;
+        sizes[i] += (2.2 - sizes[i]) * 0.06;
         colors[i * 3] += (gb - colors[i * 3]) * 0.05;
         colors[i * 3 + 1] += (gb - colors[i * 3 + 1]) * 0.05;
         colors[i * 3 + 2] += (ab - colors[i * 3 + 2]) * 0.05;

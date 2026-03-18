@@ -844,33 +844,37 @@ body:hover .cursor-glow { opacity: 1; }
    MARQUEE (inside About panel)
    ============================================ */
 .marquee {
-  padding: 20px 0;
+  padding: 28px 0;
   overflow: hidden;
   position: relative;
   margin-top: auto;
   border-top: 1px solid var(--grey);
+  perspective: 600px;
 }
 .marquee-track {
   display: flex;
-  gap: 32px;
-  animation: marquee 25s linear infinite;
+  gap: 48px;
+  animation: marquee 20s linear infinite;
   width: max-content;
   align-items: center;
+  transform: rotateX(8deg) translateZ(10px);
+  transform-style: preserve-3d;
 }
 .marquee-track span {
   font-family: var(--font-heading);
-  font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-  font-weight: 500;
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   white-space: nowrap;
   color: var(--grey-light);
+  text-shadow: 0 0 20px rgba(168, 255, 0, 0.06);
 }
 .marquee-track span.marquee-dot {
   color: var(--accent-1);
-  font-size: 0.55rem;
+  font-size: 0.9rem;
   flex-shrink: 0;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 @keyframes marquee {
   0% { transform: translateX(0); }
@@ -883,6 +887,13 @@ body:hover .cursor-glow { opacity: 1; }
 .services-3d-content {
   position: relative;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 40px;
+  padding-bottom: 0;
+  height: auto;
+  max-height: 30vh;
 }
 .services-hint {
   font-family: var(--font-mono);

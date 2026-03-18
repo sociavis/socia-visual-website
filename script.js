@@ -364,10 +364,10 @@ if (window.location.hash) {
   const container = document.getElementById('heroCanvas');
   const scene = new THREE.Scene();
 
-  // Camera: angled down to see the grid as a 3D plane
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
-  camera.position.set(0, 280, 420);
-  camera.lookAt(0, 0, 0);
+  // Camera: wide FOV, close and low for dramatic perspective
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+  camera.position.set(0, 120, 180);
+  camera.lookAt(0, 0, -40);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -375,9 +375,9 @@ if (window.location.hash) {
   renderer.setClearColor(0x000000, 0);
   container.appendChild(renderer.domElement);
 
-  // Grid dimensions
-  const gridSpacing = 12;
-  const gridExtent = 320;
+  // Grid dimensions — large for dramatic perspective
+  const gridSpacing = 14;
+  const gridExtent = 600;
   const cols = Math.ceil(gridExtent * 2 / gridSpacing);
   const rows = Math.ceil(gridExtent * 2 / gridSpacing);
   const totalPoints = (cols + 1) * (rows + 1);
@@ -400,10 +400,10 @@ if (window.location.hash) {
       origins[idx * 3] = x;
       origins[idx * 3 + 1] = 0;
       origins[idx * 3 + 2] = z;
-      colors[idx * 3] = 0.12;
-      colors[idx * 3 + 1] = 0.12;
-      colors[idx * 3 + 2] = 0.12;
-      sizes[idx] = 1.5;
+      colors[idx * 3] = 0.15;
+      colors[idx * 3 + 1] = 0.18;
+      colors[idx * 3 + 2] = 0.08;
+      sizes[idx] = 2.0;
       pulses[idx] = Math.random() * Math.PI * 2;
       idx++;
     }
@@ -448,7 +448,7 @@ if (window.location.hash) {
   const gridLineMat = new THREE.LineBasicMaterial({
     color: 0xa8ff00,
     transparent: true,
-    opacity: 0.018,
+    opacity: 0.03,
     depthWrite: false,
   });
   const gridLineSpacing = 48;
@@ -537,7 +537,7 @@ if (window.location.hash) {
     // Gentle camera breathing
     camera.position.x = baseCamPos.x + Math.sin(camTime * 0.7) * 8;
     camera.position.y = baseCamPos.y + Math.sin(camTime * 0.5) * 4;
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, 0, -40);
 
     // Raycast mouse onto ground plane
     raycaster.setFromCamera(mouseNDC, camera);
@@ -546,7 +546,7 @@ if (window.location.hash) {
 
     const hitX = intersectPoint.x;
     const hitZ = intersectPoint.z;
-    const interactionRadius = 50;
+    const interactionRadius = 65;
     const maxDisplacement = 8;
 
     // Update cursor rings
@@ -571,7 +571,7 @@ if (window.location.hash) {
       const ox = origins[i * 3];
       const oz = origins[i * 3 + 2];
 
-      const ambientBright = 0.08 + Math.sin(pulses[i]) * 0.025;
+      const ambientBright = 0.13 + Math.sin(pulses[i]) * 0.04;
 
       if (mouseOnPlane && mouseNDC.x > -5) {
         const dx = hitX - ox;
@@ -586,7 +586,7 @@ if (window.location.hash) {
           positions[i * 3] = ox - Math.cos(angle) * maxDisplacement * ef;
           positions[i * 3 + 1] = ef * 6; // lift up on Y
           positions[i * 3 + 2] = oz - Math.sin(angle) * maxDisplacement * ef;
-          sizes[i] = 1.5 + ef * 5;
+          sizes[i] = 2.0 + ef * 6;
 
           const bright = ambientBright + ef * 0.9;
           colors[i * 3] = 0.12 + ef * 0.54;
@@ -598,7 +598,7 @@ if (window.location.hash) {
           positions[i * 3] += (ox - positions[i * 3]) * 0.06;
           positions[i * 3 + 1] += (0 - positions[i * 3 + 1]) * 0.06;
           positions[i * 3 + 2] += (oz - positions[i * 3 + 2]) * 0.06;
-          sizes[i] += (1.5 - sizes[i]) * 0.06;
+          sizes[i] += (2.0 - sizes[i]) * 0.06;
           colors[i * 3] += (ambientBright - colors[i * 3]) * 0.05;
           colors[i * 3 + 1] += (ambientBright - colors[i * 3 + 1]) * 0.05;
           colors[i * 3 + 2] += (ambientBright - colors[i * 3 + 2]) * 0.05;

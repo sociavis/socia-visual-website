@@ -1009,7 +1009,7 @@ body:hover .cursor-glow { opacity: 1; }
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: grab;
+  cursor: none;
   perspective: 800px;
 }
 

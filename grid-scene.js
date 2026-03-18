@@ -88,19 +88,19 @@ const GridScene = (function() {
     scene.add(new THREE.Line(gz, gridLineMat));
   }
 
-  // ---- Stars (sky dome) ----
-  var starCount = 400;
+  // ---- Stars (horizon band) ----
+  var starCount = 500;
   var starPositions = new Float32Array(starCount * 3);
   var starSizes = new Float32Array(starCount);
   var starPulses = new Float32Array(starCount);
   for (var si = 0; si < starCount; si++) {
-    var theta = Math.random() * Math.PI * 2;
-    var phi = Math.random() * Math.PI * 0.35;
-    var r = 150 + Math.random() * 350;
-    starPositions[si * 3] = Math.sin(phi) * Math.cos(theta) * r;
-    starPositions[si * 3 + 1] = 100 + Math.cos(phi) * r * 0.4;
-    starPositions[si * 3 + 2] = Math.sin(phi) * Math.sin(theta) * r;
-    starSizes[si] = 1.0 + Math.random() * 2.5;
+    // Spread stars in a band along the horizon
+    var angle = Math.random() * Math.PI * 2;
+    var dist = 200 + Math.random() * 500;
+    starPositions[si * 3] = Math.cos(angle) * dist;
+    starPositions[si * 3 + 1] = 15 + Math.random() * 60; // low, just above grid
+    starPositions[si * 3 + 2] = Math.sin(angle) * dist - 200; // pushed back
+    starSizes[si] = 1.5 + Math.random() * 3;
     starPulses[si] = Math.random() * Math.PI * 2;
   }
   var starGeom = new THREE.BufferGeometry();
@@ -108,31 +108,54 @@ const GridScene = (function() {
   starGeom.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
   var starMat = new THREE.ShaderMaterial({
     vertexShader: 'attribute float size; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * (300.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
-    fragmentShader: 'void main() { float d = length(gl_PointCoord - vec2(0.5)); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * 0.7; gl_FragColor = vec4(0.75, 0.9, 0.65, a); }',
+    fragmentShader: 'void main() { float d = length(gl_PointCoord - vec2(0.5)); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * 0.6; gl_FragColor = vec4(0.7, 0.95, 0.5, a); }',
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
   });
   scene.add(new THREE.Points(starGeom, starMat));
 
-  // ---- Comets ----
-  var maxComets = 5;
+  // ---- Comets (streak from sky to grid) ----
+  var maxComets = 4;
   var comets = [];
   function spawnComet() {
-    var sx = (Math.random() - 0.5) * 600;
-    var sy = 180 + Math.random() * 120;
-    var sz = (Math.random() - 0.5) * 600;
-    var speed = 1.5 + Math.random() * 2;
-    var tailLen = Math.floor(10 + Math.random() * 15);
-    var dx = (Math.random() - 0.5) * 0.4;
-    var dz = (Math.random() - 0.5) * 0.4;
+    // Start high, streak diagonally downward toward the grid
+    var sx = (Math.random() - 0.5) * 300;
+    var sy = 120 + Math.random() * 80;
+    var sz = -200 - Math.random() * 200; // from the back/horizon
+    var speed = 2 + Math.random() * 1.5;
+    var tailLen = 25;
+    var dirX = (Math.random() - 0.5) * 0.15; // slight horizontal drift
+    var dirZ = 0.6 + Math.random() * 0.3; // streaks toward camera
+    // Build tail as a series of points from head to fading tail
     var pts = [];
     for (var t = 0; t < tailLen; t++) {
-      pts.push(new THREE.Vector3(sx + dx * t * 4, sy - t * 4, sz + dz * t * 4));
+      var fade = t / tailLen;
+      pts.push(new THREE.Vector3(
+        sx - dirX * t * 5,
+        sy + t * 2, // tail goes up (head is lower, moving down)
+        sz - dirZ * t * 5
+      ));
     }
     var cGeom = new THREE.BufferGeometry().setFromPoints(pts);
-    var cMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.0, depthWrite: false, blending: THREE.AdditiveBlending });
+    // Vertex colors for head-to-tail gradient
+    var cColors = new Float32Array(tailLen * 3);
+    for (var t = 0; t < tailLen; t++) {
+      var bright = 1 - (t / tailLen);
+      cColors[t * 3] = 0.66 * bright;
+      cColors[t * 3 + 1] = 1.0 * bright;
+      cColors[t * 3 + 2] = 0;
+    }
+    cGeom.setAttribute('color', new THREE.BufferAttribute(cColors, 3));
+    var cMat = new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity: 0,
+      depthWrite: false, blending: THREE.AdditiveBlending
+    });
     var cLine = new THREE.Line(cGeom, cMat);
     scene.add(cLine);
-    comets.push({ mesh: cLine, mat: cMat, speed: speed, life: 0, maxLife: 60 + Math.random() * 60 });
+    comets.push({
+      mesh: cLine, mat: cMat, speed: speed,
+      dirX: dirX, dirZ: dirZ,
+      life: 0, maxLife: 80 + Math.random() * 50
+    });
   }
 
   // Connection lines
@@ -707,19 +730,23 @@ const GridScene = (function() {
     }
     starGeom.attributes.size.needsUpdate = true;
 
-    // ---- Comets (more frequent with bass hits) ----
-    var cometChance = 0.008 + audioBass * 0.04;
+    // ---- Comets (streak from sky toward grid) ----
+    var cometChance = 0.006 + audioBass * 0.03;
     if (comets.length < maxComets && Math.random() < cometChance) spawnComet();
     for (var ci = comets.length - 1; ci >= 0; ci--) {
       var c = comets[ci];
       c.life++;
       var cPos = c.mesh.geometry.attributes.position.array;
+      var spd = c.speed * (1 + audioBass * 0.5);
+      // Move all points: down on Y, forward on Z, slight X drift
       for (var cp = 0; cp < cPos.length; cp += 3) {
-        cPos[cp + 1] -= c.speed * (1 + audioBass);
+        cPos[cp] += c.dirX * spd;
+        cPos[cp + 1] -= spd;
+        cPos[cp + 2] += c.dirZ * spd;
       }
       c.mesh.geometry.attributes.position.needsUpdate = true;
       var cProgress = c.life / c.maxLife;
-      c.mat.opacity = (cProgress < 0.2 ? cProgress * 2.5 : (1 - cProgress) * 0.6) * (1 + audioAvg);
+      c.mat.opacity = cProgress < 0.15 ? cProgress * 4 : Math.max(0, (1 - cProgress) * 0.7);
       if (c.life >= c.maxLife) {
         scene.remove(c.mesh);
         c.mesh.geometry.dispose();

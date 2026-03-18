@@ -437,6 +437,12 @@ body:hover .cursor-glow { opacity: 1; }
   min-height: calc(100dvh - 160px);
 }
 
+/* About + Services: content at top, badges below */
+.panel--about .panel-content {
+  justify-content: flex-start;
+  padding-top: 60px;
+}
+
 /* ============================================
    PANEL TRANSITIONS
    ============================================ */
@@ -600,7 +606,7 @@ body:hover .cursor-glow { opacity: 1; }
   font-family: var(--font-heading);
   font-size: clamp(2.2rem, 5vw, 4rem);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 0.95;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   margin-bottom: 24px;
@@ -844,14 +850,15 @@ body:hover .cursor-glow { opacity: 1; }
    MARQUEE (inside About panel)
    ============================================ */
 .marquee {
-  padding: 28px 0;
+  padding: 32px 0;
   overflow: hidden;
   position: absolute;
-  bottom: 0;
+  bottom: 8%;
   left: 0;
   right: 0;
   width: 100vw;
   border-top: 1px solid var(--grey);
+  border-bottom: 1px solid var(--grey);
   perspective: 600px;
   z-index: 5;
 }
@@ -866,19 +873,19 @@ body:hover .cursor-glow { opacity: 1; }
 }
 .marquee-track span {
   font-family: var(--font-heading);
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   white-space: nowrap;
   color: var(--grey-light);
-  text-shadow: 0 0 20px rgba(168, 255, 0, 0.06);
+  text-shadow: 0 0 30px rgba(168, 255, 0, 0.08);
 }
 .marquee-track span.marquee-dot {
   color: var(--accent-1);
-  font-size: 0.9rem;
+  font-size: 1.4rem;
   flex-shrink: 0;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 @keyframes marquee {
   0% { transform: translateX(0); }

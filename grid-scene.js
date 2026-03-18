@@ -217,17 +217,17 @@ const GridScene = (function() {
       group.add(icon);
     }
 
-    // Text labels below badge — large and visible
+    // Text labels below badge — large, balanced with badge
     if (config.title) {
-      const titleSprite = makeTextSprite(config.title, 56, 1.0);
-      titleSprite.position.set(0, -size - 10, 0);
-      titleSprite.scale.set(50, 7, 1);
+      const titleSprite = makeTextSprite(config.title, 72, 1.0);
+      titleSprite.position.set(0, -size - 12, 0);
+      titleSprite.scale.set(60, 8, 1);
       group.add(titleSprite);
     }
     if (config.subtitle) {
-      const subSprite = makeTextSprite(config.subtitle, 30, 0.5);
-      subSprite.position.set(0, -size - 16, 0);
-      subSprite.scale.set(48, 5, 1);
+      const subSprite = makeTextSprite(config.subtitle, 36, 0.45);
+      subSprite.position.set(0, -size - 19, 0);
+      subSprite.scale.set(56, 6, 1);
       group.add(subSprite);
     }
 
@@ -382,9 +382,9 @@ const GridScene = (function() {
 
   // ---- Create About Badges ----
   const badges = [
-    createHoloBadge({ pos: new THREE.Vector3(-55, 40, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18 }),
-    createHoloBadge({ pos: new THREE.Vector3(0, 40, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18 }),
-    createHoloBadge({ pos: new THREE.Vector3(55, 40, -10), iconFn: iconFlame, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18 }),
+    createHoloBadge({ pos: new THREE.Vector3(-55, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18 }),
+    createHoloBadge({ pos: new THREE.Vector3(0, 20, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18 }),
+    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconFlame, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18 }),
   ];
 
   // ---- Create Service Badges ----
@@ -399,8 +399,8 @@ const GridScene = (function() {
     const angle = (i / serviceData.length) * Math.PI * 2 - Math.PI / 2;
     const r = 50;
     return createHoloBadge({
-      pos: new THREE.Vector3(Math.cos(angle) * r, 40, Math.sin(angle) * r),
-      iconFn: s.icon, title: s.label.toUpperCase(), size: 16,
+      pos: new THREE.Vector3(Math.cos(angle) * r, 20, Math.sin(angle) * r),
+      iconFn: s.icon, title: s.label.toUpperCase(), size: 18,
       desc: s.desc, tags: s.tags
     });
   });
@@ -411,7 +411,7 @@ const GridScene = (function() {
   const orbitRingPoints = [];
   for (let i = 0; i <= orbitRingSegments; i++) {
     const theta = (i / orbitRingSegments) * Math.PI * 2;
-    orbitRingPoints.push(new THREE.Vector3(Math.cos(theta) * 50, 40, Math.sin(theta) * 50));
+    orbitRingPoints.push(new THREE.Vector3(Math.cos(theta) * 50, 20, Math.sin(theta) * 50));
   }
   const orbitRingGeom = new THREE.BufferGeometry().setFromPoints(orbitRingPoints);
   const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.08, depthWrite: false });
@@ -437,8 +437,8 @@ const GridScene = (function() {
 
   const camTargets = [
     { pos: new THREE.Vector3(0, 80, 140), look: new THREE.Vector3(0, 0, -60) },
-    { pos: new THREE.Vector3(0, 65, 95), look: new THREE.Vector3(0, 30, -10) },
-    { pos: new THREE.Vector3(0, 60, 100), look: new THREE.Vector3(0, 30, -5) },
+    { pos: new THREE.Vector3(0, 55, 95), look: new THREE.Vector3(0, 15, -10) },
+    { pos: new THREE.Vector3(0, 50, 100), look: new THREE.Vector3(0, 15, -5) },
     { pos: new THREE.Vector3(0, 50, 85), look: new THREE.Vector3(0, 15, -10) },
   ];
 

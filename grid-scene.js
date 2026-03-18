@@ -432,7 +432,7 @@ const GridScene = (function() {
 
   const serviceIcons = serviceData.map((s, i) => {
     const angle = (i / serviceData.length) * Math.PI * 2 - Math.PI / 2;
-    const r = 50;
+    const r = 70;
     return createHoloBadge({
       pos: new THREE.Vector3(Math.cos(angle) * r, 20, Math.sin(angle) * r),
       iconFn: s.icon, title: s.label.toUpperCase(), size: 18,
@@ -442,7 +442,7 @@ const GridScene = (function() {
   let serviceRingAngle = 0;
 
   // ---- Diamond border for services on the grid plane ----
-  const dR = 50;
+  const dR = 70;
   const dY = 0.5;
   var orbitRing = new THREE.Group();
   // Diamond outline
@@ -483,7 +483,7 @@ const GridScene = (function() {
   const camTargets = [
     { pos: new THREE.Vector3(0, 80, 140), look: new THREE.Vector3(0, 0, -60) },     // hero: high, looking down
     { pos: new THREE.Vector3(0, 55, 100), look: new THREE.Vector3(0, 15, -10) },      // about: centered, straight on
-    { pos: new THREE.Vector3(20, 55, 110), look: new THREE.Vector3(-10, 10, -10) },  // services: shifted right, wider
+    { pos: new THREE.Vector3(15, 60, 140), look: new THREE.Vector3(-5, 12, -10) },   // services: pulled back for wider badge spread
     { pos: new THREE.Vector3(0, 30, 60), look: new THREE.Vector3(0, 5, -30) },       // contact: close, low, intimate
   ];
 

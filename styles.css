@@ -909,11 +909,15 @@ body:hover .cursor-glow { opacity: 1; }
    ============================================ */
 .services-3d-content {
   position: absolute;
-  top: 60px;
-  left: 60px;
-  right: 60px;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 10;
   pointer-events: none;
+  width: calc(100% - 120px);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
 }
 .services-3d-content .section-label,
 .services-3d-content .section-title {

@@ -233,17 +233,18 @@ const GridScene = (function() {
       group.add(icon);
     }
 
-    // Text labels below badge — large, balanced with badge
+    // Text labels below badge
+    var ts = config.textScale || 1;
     if (config.title) {
-      const titleSprite = makeTextSprite(config.title, 96, 1.0);
-      titleSprite.position.set(0, -size - 14, 0);
-      titleSprite.scale.set(70, 10, 1);
+      const titleSprite = makeTextSprite(config.title, Math.round(96 * ts), 1.0);
+      titleSprite.position.set(0, -size - 14 * ts, 0);
+      titleSprite.scale.set(70 * ts, 10 * ts, 1);
       group.add(titleSprite);
     }
     if (config.subtitle) {
-      const subSprite = makeTextSprite(config.subtitle, 44, 0.4);
-      subSprite.position.set(0, -size - 23, 0);
-      subSprite.scale.set(65, 7, 1);
+      const subSprite = makeTextSprite(config.subtitle, Math.round(44 * ts), 0.5);
+      subSprite.position.set(0, -size - 14 * ts - 9 * ts, 0);
+      subSprite.scale.set(65 * ts, 7 * ts, 1);
       group.add(subSprite);
     }
 
@@ -303,31 +304,22 @@ const GridScene = (function() {
     return g;
   }
 
-  function iconFlame() {
+  function iconSpeed() {
     const g = new THREE.Group();
     const mat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.9 });
-    // Outer flame — pointed at top, wide at base
-    const outer = [
-      new THREE.Vector3(0, 16, 0),
-      new THREE.Vector3(-4, 10, 0), new THREE.Vector3(-8, 4, 0),
-      new THREE.Vector3(-9, -2, 0), new THREE.Vector3(-7, -8, 0),
-      new THREE.Vector3(-4, -12, 0), new THREE.Vector3(0, -14, 0),
-      new THREE.Vector3(4, -12, 0), new THREE.Vector3(7, -8, 0),
-      new THREE.Vector3(9, -2, 0), new THREE.Vector3(8, 4, 0),
-      new THREE.Vector3(4, 10, 0), new THREE.Vector3(0, 16, 0)
+    // Lightning bolt — sharp, aggressive speed symbol
+    const bolt = [
+      new THREE.Vector3(-2, 16, 0), new THREE.Vector3(-8, 2, 0),
+      new THREE.Vector3(-2, 2, 0), new THREE.Vector3(-6, -16, 0),
+      new THREE.Vector3(8, 0, 0), new THREE.Vector3(2, 0, 0),
+      new THREE.Vector3(6, 16, 0), new THREE.Vector3(-2, 16, 0)
     ];
-    const outerCurve = new THREE.CatmullRomCurve3(outer, false);
-    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(outerCurve.getPoints(48)), mat));
-    // Inner flame
-    const inner = [
-      new THREE.Vector3(0, 10, 0.1),
-      new THREE.Vector3(-3, 4, 0.1), new THREE.Vector3(-4, -2, 0.1),
-      new THREE.Vector3(-2, -6, 0.1), new THREE.Vector3(0, -8, 0.1),
-      new THREE.Vector3(2, -6, 0.1), new THREE.Vector3(4, -2, 0.1),
-      new THREE.Vector3(3, 4, 0.1), new THREE.Vector3(0, 10, 0.1)
-    ];
-    const innerCurve = new THREE.CatmullRomCurve3(inner, false);
-    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(innerCurve.getPoints(32)), mat.clone()));
+    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(bolt), mat));
+    // Speed lines (motion trails)
+    var slMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.4 });
+    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-16, 6, 0), new THREE.Vector3(-10, 6, 0)]), slMat));
+    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-18, 0, 0), new THREE.Vector3(-10, 0, 0)]), slMat));
+    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-16, -6, 0), new THREE.Vector3(-10, -6, 0)]), slMat));
     return g;
   }
 
@@ -400,7 +392,7 @@ const GridScene = (function() {
   const badges = [
     createHoloBadge({ pos: new THREE.Vector3(-55, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18 }),
     createHoloBadge({ pos: new THREE.Vector3(0, 20, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18 }),
-    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconFlame, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18 }),
+    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconSpeed, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18 }),
   ];
 
   // ---- Create Service Badges ----
@@ -417,7 +409,7 @@ const GridScene = (function() {
     return createHoloBadge({
       pos: new THREE.Vector3(Math.cos(angle) * r, 20, Math.sin(angle) * r),
       iconFn: s.icon, title: s.label.toUpperCase(), size: 18,
-      desc: s.desc, tags: s.tags
+      desc: s.desc, tags: s.tags, textScale: 1.8
     });
   });
   let serviceRingAngle = 0;

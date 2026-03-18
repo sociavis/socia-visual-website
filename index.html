@@ -355,11 +355,11 @@
   <!-- Music Player -->
   <div class="music-player" id="musicPlayer">
     <button class="music-toggle" id="musicToggle" title="Toggle Music">
-      <svg class="music-icon music-icon--play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg>
-      <svg class="music-icon music-icon--eq" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" style="display:none"><rect x="4" y="8" width="3" height="8"/><rect x="10" y="4" width="3" height="16"/><rect x="16" y="10" width="3" height="6"/></svg>
+      <svg class="music-icon" id="musicIconPlay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><polygon points="6,3 20,12 6,21"/></svg>
+      <svg class="music-icon" id="musicIconPause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
     </button>
-    <div class="music-embed" id="musicEmbed" style="display:none">
-      <iframe src="https://open.spotify.com/embed/playlist/5BrfEnzjgwmBXxbWwr4YO2?utm_source=generator&theme=0" width="260" height="80" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:8px;"></iframe>
+    <div class="music-bars" id="musicBars">
+      <span></span><span></span><span></span><span></span><span></span>
     </div>
   </div>
 

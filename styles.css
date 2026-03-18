@@ -530,6 +530,11 @@ body:hover .cursor-glow { opacity: 1; }
   z-index: 1;
   pointer-events: none;
 }
+#heroCanvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
 /* Hero horizontal lines */
 .hero-hline {

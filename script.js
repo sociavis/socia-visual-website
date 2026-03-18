@@ -359,156 +359,315 @@ if (window.location.hash) {
 }
 
 // ---- Hero Canvas — Advanced Particle Grid ----
-const canvas = document.getElementById('heroCanvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-let canvasMouseX = -1000, canvasMouseY = -1000;
+// ---- WebGL Particle Grid (Three.js) ----
+(function() {
+  const container = document.getElementById('heroCanvas');
+  const scene = new THREE.Scene();
 
-function resizeCanvas() {
-  canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-  canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  initParticles();
-}
+  // Camera: angled down to see the grid as a 3D plane
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+  camera.position.set(0, 280, 420);
+  camera.lookAt(0, 0, 0);
 
-function initParticles() {
-  particles = [];
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
-  const spacing = Math.max(35, Math.min(50, w / 35));
-  const cols = Math.ceil(w / spacing);
-  const rows = Math.ceil(h / spacing);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
 
+  // Grid dimensions
+  const gridSpacing = 12;
+  const gridExtent = 320;
+  const cols = Math.ceil(gridExtent * 2 / gridSpacing);
+  const rows = Math.ceil(gridExtent * 2 / gridSpacing);
+  const totalPoints = (cols + 1) * (rows + 1);
+
+  // Particle positions, colors, sizes, and origin data
+  const positions = new Float32Array(totalPoints * 3);
+  const colors = new Float32Array(totalPoints * 3);
+  const sizes = new Float32Array(totalPoints);
+  const origins = new Float32Array(totalPoints * 3);
+  const pulses = new Float32Array(totalPoints);
+
+  let idx = 0;
   for (let i = 0; i <= cols; i++) {
     for (let j = 0; j <= rows; j++) {
-      particles.push({
-        originX: i * spacing,
-        originY: j * spacing,
-        x: i * spacing,
-        y: j * spacing,
-        size: 1,
-        alpha: 0.1 + Math.random() * 0.05,
-        pulse: Math.random() * Math.PI * 2,
-      });
+      const x = -gridExtent + i * gridSpacing;
+      const z = -gridExtent + j * gridSpacing;
+      positions[idx * 3] = x;
+      positions[idx * 3 + 1] = 0;
+      positions[idx * 3 + 2] = z;
+      origins[idx * 3] = x;
+      origins[idx * 3 + 1] = 0;
+      origins[idx * 3 + 2] = z;
+      colors[idx * 3] = 0.12;
+      colors[idx * 3 + 1] = 0.12;
+      colors[idx * 3 + 2] = 0.12;
+      sizes[idx] = 1.5;
+      pulses[idx] = Math.random() * Math.PI * 2;
+      idx++;
     }
   }
-}
 
-document.addEventListener('mousemove', (e) => {
-  canvasMouseX = e.clientX;
-  canvasMouseY = e.clientY;
-});
-document.addEventListener('mouseleave', () => {
-  canvasMouseX = -1000;
-  canvasMouseY = -1000;
-});
+  const particleGeom = new THREE.BufferGeometry();
+  particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  particleGeom.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-let time = 0;
-function drawParticles() {
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
-  ctx.clearRect(0, 0, w, h);
-  time += 0.01;
+  // Custom shader for variable-size points with color
+  const particleMat = new THREE.ShaderMaterial({
+    vertexShader: `
+      attribute float size;
+      varying vec3 vColor;
+      void main() {
+        vColor = color;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = size * (200.0 / -mvPosition.z);
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vColor;
+      void main() {
+        float d = length(gl_PointCoord - vec2(0.5));
+        if (d > 0.5) discard;
+        float alpha = smoothstep(0.5, 0.15, d);
+        gl_FragColor = vec4(vColor, alpha);
+      }
+    `,
+    transparent: true,
+    vertexColors: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
 
-  const interactionRadius = 160;
-  const maxDisplacement = 35;
+  const pointCloud = new THREE.Points(particleGeom, particleMat);
+  scene.add(pointCloud);
 
-  for (const p of particles) {
-    const pdx = canvasMouseX - p.originX;
-    const pdy = canvasMouseY - p.originY;
-    const dist = Math.sqrt(pdx * pdx + pdy * pdy);
+  // Grid lines on the plane
+  const gridLineMat = new THREE.LineBasicMaterial({
+    color: 0xa8ff00,
+    transparent: true,
+    opacity: 0.018,
+    depthWrite: false,
+  });
+  const gridLineSpacing = 48;
+  for (let i = -gridExtent; i <= gridExtent; i += gridLineSpacing) {
+    // X-parallel lines
+    const gx = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-gridExtent, 0.01, i),
+      new THREE.Vector3(gridExtent, 0.01, i),
+    ]);
+    scene.add(new THREE.Line(gx, gridLineMat));
+    // Z-parallel lines
+    const gz = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(i, 0.01, -gridExtent),
+      new THREE.Vector3(i, 0.01, gridExtent),
+    ]);
+    scene.add(new THREE.Line(gz, gridLineMat));
+  }
 
-    p.pulse += 0.02;
-    const ambientAlpha = 0.08 + Math.sin(p.pulse) * 0.03;
+  // Connection lines near cursor (dynamic)
+  const maxConnections = 600;
+  const linePositions = new Float32Array(maxConnections * 6);
+  const lineColors = new Float32Array(maxConnections * 6);
+  const lineGeom = new THREE.BufferGeometry();
+  lineGeom.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+  lineGeom.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+  lineGeom.setDrawRange(0, 0);
+  const lineMat = new THREE.LineBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.35,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  const connectionLines = new THREE.LineSegments(lineGeom, lineMat);
+  scene.add(connectionLines);
 
-    if (dist < interactionRadius) {
-      const force = (1 - dist / interactionRadius);
-      const angle = Math.atan2(pdy, pdx);
-      const easeForce = force * force;
+  // Cursor ring on the ground plane
+  const ringGeom = new THREE.RingGeometry(14, 14.3, 64);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: 0xa8ff00,
+    transparent: true,
+    opacity: 0.08,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  const cursorRing = new THREE.Mesh(ringGeom, ringMat);
+  cursorRing.rotation.x = -Math.PI / 2;
+  cursorRing.position.y = 0.1;
+  cursorRing.visible = false;
+  scene.add(cursorRing);
 
-      p.x = p.originX - Math.cos(angle) * maxDisplacement * easeForce;
-      p.y = p.originY - Math.sin(angle) * maxDisplacement * easeForce;
-      p.size = 1 + easeForce * 3;
-      p.alpha = ambientAlpha + easeForce * 0.9;
+  const ring2Geom = new THREE.RingGeometry(4.5, 4.8, 32);
+  const cursorRing2 = new THREE.Mesh(ring2Geom, ringMat.clone());
+  cursorRing2.material.opacity = 0.1;
+  cursorRing2.rotation.x = -Math.PI / 2;
+  cursorRing2.position.y = 0.1;
+  cursorRing2.visible = false;
+  scene.add(cursorRing2);
+
+  // Raycaster for mouse → 3D plane intersection
+  const raycaster = new THREE.Raycaster();
+  const mouseNDC = new THREE.Vector2(-10, -10);
+  const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  const intersectPoint = new THREE.Vector3();
+  let mouseOnPlane = false;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+  document.addEventListener('mouseleave', () => {
+    mouseNDC.set(-10, -10);
+    mouseOnPlane = false;
+  });
+
+  // Subtle camera sway
+  let camTime = 0;
+  const baseCamPos = camera.position.clone();
+
+  let glTime = 0;
+
+  function animate() {
+    glTime += 0.01;
+    camTime += 0.003;
+
+    // Gentle camera breathing
+    camera.position.x = baseCamPos.x + Math.sin(camTime * 0.7) * 8;
+    camera.position.y = baseCamPos.y + Math.sin(camTime * 0.5) * 4;
+    camera.lookAt(0, 0, 0);
+
+    // Raycast mouse onto ground plane
+    raycaster.setFromCamera(mouseNDC, camera);
+    const ray = raycaster.ray;
+    mouseOnPlane = ray.intersectPlane(groundPlane, intersectPoint) !== null;
+
+    const hitX = intersectPoint.x;
+    const hitZ = intersectPoint.z;
+    const interactionRadius = 50;
+    const maxDisplacement = 8;
+
+    // Update cursor rings
+    if (mouseOnPlane && mouseNDC.x > -5) {
+      cursorRing.visible = true;
+      cursorRing2.visible = true;
+      const ringScale = 1 + Math.sin(glTime * 3) * 0.08;
+      cursorRing.position.set(hitX, 0.1, hitZ);
+      cursorRing.scale.set(ringScale, ringScale, 1);
+      cursorRing2.position.set(hitX, 0.1, hitZ);
     } else {
-      p.x += (p.originX - p.x) * 0.06;
-      p.y += (p.originY - p.y) * 0.06;
-      p.size += (1 - p.size) * 0.06;
-      p.alpha += (ambientAlpha - p.alpha) * 0.05;
+      cursorRing.visible = false;
+      cursorRing2.visible = false;
     }
 
-    const proximity = Math.max(0, 1 - dist / interactionRadius);
-    const r = Math.round(30 + proximity * 138);
-    const g = Math.round(30 + proximity * 225);
-    const b = Math.round(30 - proximity * 30);
+    // Update particles
+    let lineIdx = 0;
+    const nearbyIndices = [];
 
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${p.alpha})`;
-    ctx.fill();
-  }
+    for (let i = 0; i < totalPoints; i++) {
+      pulses[i] += 0.02;
+      const ox = origins[i * 3];
+      const oz = origins[i * 3 + 2];
 
-  // Draw connections near cursor
-  if (canvasMouseX > 0) {
-    const nearby = [];
-    for (const p of particles) {
-      const d = Math.sqrt((canvasMouseX - p.x) ** 2 + (canvasMouseY - p.y) ** 2);
-      if (d < interactionRadius * 1.3) nearby.push(p);
-    }
+      const ambientBright = 0.08 + Math.sin(pulses[i]) * 0.025;
 
-    for (let i = 0; i < nearby.length; i++) {
-      for (let j = i + 1; j < nearby.length; j++) {
-        const a = nearby[i], b = nearby[j];
-        const d = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-        if (d < 70) {
-          const lineAlpha = (1 - d / 70) * 0.2;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(168, 255, 0, ${lineAlpha})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+      if (mouseOnPlane && mouseNDC.x > -5) {
+        const dx = hitX - ox;
+        const dz = hitZ - oz;
+        const dist = Math.sqrt(dx * dx + dz * dz);
+
+        if (dist < interactionRadius) {
+          const force = 1 - dist / interactionRadius;
+          const ef = force * force;
+          const angle = Math.atan2(dz, dx);
+
+          positions[i * 3] = ox - Math.cos(angle) * maxDisplacement * ef;
+          positions[i * 3 + 1] = ef * 6; // lift up on Y
+          positions[i * 3 + 2] = oz - Math.sin(angle) * maxDisplacement * ef;
+          sizes[i] = 1.5 + ef * 5;
+
+          const bright = ambientBright + ef * 0.9;
+          colors[i * 3] = 0.12 + ef * 0.54;
+          colors[i * 3 + 1] = 0.12 + ef * 0.88;
+          colors[i * 3 + 2] = 0.12 - ef * 0.12;
+
+          nearbyIndices.push(i);
+        } else {
+          positions[i * 3] += (ox - positions[i * 3]) * 0.06;
+          positions[i * 3 + 1] += (0 - positions[i * 3 + 1]) * 0.06;
+          positions[i * 3 + 2] += (oz - positions[i * 3 + 2]) * 0.06;
+          sizes[i] += (1.5 - sizes[i]) * 0.06;
+          colors[i * 3] += (ambientBright - colors[i * 3]) * 0.05;
+          colors[i * 3 + 1] += (ambientBright - colors[i * 3 + 1]) * 0.05;
+          colors[i * 3 + 2] += (ambientBright - colors[i * 3 + 2]) * 0.05;
         }
+      } else {
+        positions[i * 3] += (ox - positions[i * 3]) * 0.06;
+        positions[i * 3 + 1] += (0 - positions[i * 3 + 1]) * 0.06;
+        positions[i * 3 + 2] += (oz - positions[i * 3 + 2]) * 0.06;
+        sizes[i] += (1.5 - sizes[i]) * 0.06;
+        colors[i * 3] += (ambientBright - colors[i * 3]) * 0.05;
+        colors[i * 3 + 1] += (ambientBright - colors[i * 3 + 1]) * 0.05;
+        colors[i * 3 + 2] += (ambientBright - colors[i * 3 + 2]) * 0.05;
       }
     }
 
-    const ringRadius = 60 + Math.sin(time * 3) * 5;
-    ctx.beginPath();
-    ctx.arc(canvasMouseX, canvasMouseY, ringRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(168, 255, 0, 0.06)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
+    // Draw connection lines between nearby particles
+    const connDist = 18;
+    for (let i = 0; i < nearbyIndices.length && lineIdx < maxConnections; i++) {
+      for (let j = i + 1; j < nearbyIndices.length && lineIdx < maxConnections; j++) {
+        const ai = nearbyIndices[i];
+        const bi = nearbyIndices[j];
+        const dx = positions[ai * 3] - positions[bi * 3];
+        const dy = positions[ai * 3 + 1] - positions[bi * 3 + 1];
+        const dz = positions[ai * 3 + 2] - positions[bi * 3 + 2];
+        const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (d < connDist) {
+          const alpha = (1 - d / connDist) * 0.5;
+          const li = lineIdx * 6;
+          linePositions[li] = positions[ai * 3];
+          linePositions[li + 1] = positions[ai * 3 + 1];
+          linePositions[li + 2] = positions[ai * 3 + 2];
+          linePositions[li + 3] = positions[bi * 3];
+          linePositions[li + 4] = positions[bi * 3 + 1];
+          linePositions[li + 5] = positions[bi * 3 + 2];
+          lineColors[li] = 0.66 * alpha;
+          lineColors[li + 1] = 1.0 * alpha;
+          lineColors[li + 2] = 0;
+          lineColors[li + 3] = 0.66 * alpha;
+          lineColors[li + 4] = 1.0 * alpha;
+          lineColors[li + 5] = 0;
+          lineIdx++;
+        }
+      }
+    }
+    // Clear unused line segments
+    for (let i = lineIdx * 6; i < maxConnections * 6; i++) {
+      linePositions[i] = 0;
+      lineColors[i] = 0;
+    }
 
-    ctx.beginPath();
-    ctx.arc(canvasMouseX, canvasMouseY, 20, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(168, 255, 0, 0.08)';
-    ctx.lineWidth = 0.5;
-    ctx.stroke();
+    particleGeom.attributes.position.needsUpdate = true;
+    particleGeom.attributes.color.needsUpdate = true;
+    particleGeom.attributes.size.needsUpdate = true;
+    lineGeom.attributes.position.needsUpdate = true;
+    lineGeom.attributes.color.needsUpdate = true;
+    lineGeom.setDrawRange(0, lineIdx * 2);
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
   }
 
-  // Grid overlay lines
-  ctx.strokeStyle = 'rgba(168, 255, 0, 0.015)';
-  ctx.lineWidth = 0.5;
-  const gridSize = 200;
-  for (let x = 0; x < w; x += gridSize) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, h);
-    ctx.stroke();
-  }
-  for (let y = 0; y < h; y += gridSize) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(w, y);
-    ctx.stroke();
-  }
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
-  requestAnimationFrame(drawParticles);
-}
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-drawParticles();
+  animate();
+})();
 
 // ---- Text Scramble Effect ----
 const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*<>[]{}';

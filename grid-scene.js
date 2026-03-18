@@ -80,7 +80,7 @@ const GridScene = (function() {
   scene.add(pointCloud);
 
   // Grid lines
-  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.035, depthWrite: false });
+  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.055, depthWrite: false });
   for (let i = -gridExtent; i <= gridExtent; i += 48) {
     const gx = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-gridExtent, 0.01, i), new THREE.Vector3(gridExtent, 0.01, i)]);
     scene.add(new THREE.Line(gx, gridLineMat));
@@ -127,29 +127,39 @@ const GridScene = (function() {
   document.addEventListener('mouseleave', () => { mouseNDC.set(-10, -10); mouseOnPlane = false; mousePixelX = -1; mousePixelY = -1; });
 
   // ---- Canvas text texture helper ----
+  const _textRedraws = [];
   function makeTextSprite(text, fontSize, opacity) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = 2048; canvas.height = 256;
     const fs = fontSize || 24;
-    ctx.font = `bold ${fs}px 'Share Tech Mono', monospace`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.letterSpacing = '0.15em';
-    // Stroke for extra boldness
-    ctx.strokeStyle = `rgba(168, 255, 0, ${(opacity || 0.8) * 0.3})`;
-    ctx.lineWidth = fs > 40 ? 2 : 1;
-    ctx.strokeText(text, 1024, 128);
-    // Fill
-    ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
-    ctx.fillText(text, 1024, 128);
+    const op = opacity || 0.8;
+
+    function draw() {
+      ctx.clearRect(0, 0, 2048, 256);
+      ctx.font = `${fs}px 'Share Tech Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      // Glow
+      ctx.shadowColor = `rgba(168, 255, 0, 0.5)`;
+      ctx.shadowBlur = fs > 50 ? 10 : 5;
+      ctx.fillStyle = `rgba(168, 255, 0, ${op})`;
+      ctx.fillText(text, 1024, 128);
+      ctx.shadowBlur = 0;
+      if (tex) tex.needsUpdate = true;
+    }
+
+    draw();
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
     const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
     const sprite = new THREE.Sprite(mat);
     sprite.scale.set(30, 4, 1);
+    _textRedraws.push(draw);
     return sprite;
   }
+  // Redraw all text after fonts load
+  if (document.fonts) document.fonts.ready.then(() => _textRedraws.forEach(fn => fn()));
 
   // ---- Holographic Diamond Badge (multi-layer 3D) ----
   function createHoloBadge(config) {
@@ -226,15 +236,15 @@ const GridScene = (function() {
 
     // Text labels below badge — large, balanced with badge
     if (config.title) {
-      const titleSprite = makeTextSprite(config.title, 72, 1.0);
-      titleSprite.position.set(0, -size - 12, 0);
-      titleSprite.scale.set(60, 8, 1);
+      const titleSprite = makeTextSprite(config.title, 96, 1.0);
+      titleSprite.position.set(0, -size - 14, 0);
+      titleSprite.scale.set(70, 10, 1);
       group.add(titleSprite);
     }
     if (config.subtitle) {
-      const subSprite = makeTextSprite(config.subtitle, 36, 0.45);
-      subSprite.position.set(0, -size - 19, 0);
-      subSprite.scale.set(56, 6, 1);
+      const subSprite = makeTextSprite(config.subtitle, 44, 0.4);
+      subSprite.position.set(0, -size - 23, 0);
+      subSprite.scale.set(65, 7, 1);
       group.add(subSprite);
     }
 
@@ -413,22 +423,30 @@ const GridScene = (function() {
   });
   let serviceRingAngle = 0;
 
-  // ---- Orbit ring for services (visible ring on Y=40 plane) ----
-  const orbitRingSegments = 128;
-  const orbitRingPoints = [];
-  for (let i = 0; i <= orbitRingSegments; i++) {
-    const theta = (i / orbitRingSegments) * Math.PI * 2;
-    orbitRingPoints.push(new THREE.Vector3(Math.cos(theta) * 50, 20, Math.sin(theta) * 50));
-  }
+  // ---- Diamond border for services on the grid plane ----
+  const dR = 60;
+  const dY = 0.5;
+  const orbitRingPoints = [
+    new THREE.Vector3(0, dY, -dR), new THREE.Vector3(dR, dY, 0),
+    new THREE.Vector3(0, dY, dR), new THREE.Vector3(-dR, dY, 0),
+    new THREE.Vector3(0, dY, -dR)
+  ];
   const orbitRingGeom = new THREE.BufferGeometry().setFromPoints(orbitRingPoints);
-  const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.08, depthWrite: false });
+  const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.12, depthWrite: false });
   const orbitRing = new THREE.Line(orbitRingGeom, orbitRingMat);
+  // Corner brackets on the diamond
+  const dcMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.2, depthWrite: false });
+  [[0, -dR, 1, 0, -1, 0], [dR, 0, 0, -1, 0, 1], [0, dR, 1, 0, -1, 0], [-dR, 0, 0, -1, 0, 1]].forEach(([x, z, a1x, a1z, a2x, a2z]) => {
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x, dY, z), new THREE.Vector3(x + a1x * 8, dY, z + a1z * 8)]), dcMat));
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x, dY, z), new THREE.Vector3(x + a2x * 8, dY, z + a2z * 8)]), dcMat));
+  });
   orbitRing.visible = false;
   scene.add(orbitRing);
 
   // ---- Service hover tooltip (HTML overlay) ----
-  let tooltipEl = document.createElement('div');
+  const tooltipEl = document.createElement('div');
   tooltipEl.id = 'serviceTooltip';
+  tooltipEl.style.cssText = 'position:fixed;z-index:200;pointer-events:none;max-width:300px;padding:18px 22px;background:rgba(5,5,5,0.94);border:1px solid rgba(168,255,0,0.3);backdrop-filter:blur(12px);font-family:var(--font-mono);clip-path:inset(0 100% 0 0);transition:clip-path 0.4s cubic-bezier(0.16,1,0.3,1);';
   document.body.appendChild(tooltipEl);
 
   // ---- Green wash plane ----
@@ -612,15 +630,15 @@ const GridScene = (function() {
       }
     });
 
-    // Service tooltip with pixel-wipe effect
+    // Service tooltip with pixel-wipe
     if (hoveredServiceIdx >= 0) {
       const ud = serviceIcons[hoveredServiceIdx].userData;
-      tooltipEl.innerHTML = `<div style="color:#a8ff00;font-size:16px;font-weight:bold;letter-spacing:0.12em;margin-bottom:8px;text-transform:uppercase;">${ud.label}</div><div style="color:#bbb;font-size:12px;line-height:1.6;margin-bottom:10px;">${ud.desc}</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${ud.tags.map(t => `<span style="color:#a8ff00;font-size:10px;letter-spacing:0.1em;border:1px solid rgba(168,255,0,0.3);padding:3px 8px;">${t}</span>`).join('')}</div>`;
-      tooltipEl.classList.add('visible');
+      tooltipEl.innerHTML = `<div style="color:#a8ff00;font-size:15px;font-weight:bold;letter-spacing:0.12em;margin-bottom:8px;text-transform:uppercase;">${ud.label}</div><div style="color:#bbb;font-size:12px;line-height:1.6;margin-bottom:10px;">${ud.desc}</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${ud.tags.map(t => `<span style="color:#a8ff00;font-size:10px;letter-spacing:0.1em;border:1px solid rgba(168,255,0,0.3);padding:3px 8px;">${t}</span>`).join('')}</div>`;
+      tooltipEl.style.clipPath = 'inset(0 0 0 0)';
       tooltipEl.style.left = Math.min(mousePixelX + 20, window.innerWidth - 320) + 'px';
       tooltipEl.style.top = (mousePixelY - 20) + 'px';
     } else {
-      tooltipEl.classList.remove('visible');
+      tooltipEl.style.clipPath = 'inset(0 100% 0 0)';
     }
 
     // Green wash

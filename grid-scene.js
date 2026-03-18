@@ -257,7 +257,7 @@ const GridScene = (function() {
     if (config.subtitle) {
       const subMesh = makeTextMesh(config.subtitle, 44, 0.4, 60, 7);
       subMesh.position.set(0, -size - 22, -0.5);
-      group.add(subSprite);
+      group.add(subMesh);
     }
 
     group.userData = {

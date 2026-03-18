@@ -80,7 +80,7 @@ const GridScene = (function() {
   scene.add(pointCloud);
 
   // Grid lines
-  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.035, depthWrite: false });
+  const gridLineMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.055, depthWrite: false });
   for (let i = -gridExtent; i <= gridExtent; i += 48) {
     const gx = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-gridExtent, 0.01, i), new THREE.Vector3(gridExtent, 0.01, i)]);
     scene.add(new THREE.Line(gx, gridLineMat));
@@ -132,17 +132,16 @@ const GridScene = (function() {
     const ctx = canvas.getContext('2d');
     canvas.width = 2048; canvas.height = 256;
     const fs = fontSize || 24;
-    ctx.font = `bold ${fs}px 'Share Tech Mono', monospace`;
+    ctx.font = `${fs}px 'Share Tech Mono', 'Courier New', monospace`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.letterSpacing = '0.15em';
-    // Stroke for extra boldness
-    ctx.strokeStyle = `rgba(168, 255, 0, ${(opacity || 0.8) * 0.3})`;
-    ctx.lineWidth = fs > 40 ? 2 : 1;
-    ctx.strokeText(text, 1024, 128);
+    // Glow shadow
+    ctx.shadowColor = 'rgba(168, 255, 0, 0.5)';
+    ctx.shadowBlur = fs > 50 ? 10 : 5;
     // Fill
     ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
     ctx.fillText(text, 1024, 128);
+    ctx.shadowBlur = 0;
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
     const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
@@ -226,15 +225,15 @@ const GridScene = (function() {
 
     // Text labels below badge — large, balanced with badge
     if (config.title) {
-      const titleSprite = makeTextSprite(config.title, 72, 1.0);
-      titleSprite.position.set(0, -size - 12, 0);
-      titleSprite.scale.set(60, 8, 1);
+      const titleSprite = makeTextSprite(config.title, 96, 1.0);
+      titleSprite.position.set(0, -size - 14, 0);
+      titleSprite.scale.set(70, 10, 1);
       group.add(titleSprite);
     }
     if (config.subtitle) {
-      const subSprite = makeTextSprite(config.subtitle, 36, 0.45);
-      subSprite.position.set(0, -size - 19, 0);
-      subSprite.scale.set(56, 6, 1);
+      const subSprite = makeTextSprite(config.subtitle, 44, 0.4);
+      subSprite.position.set(0, -size - 23, 0);
+      subSprite.scale.set(65, 7, 1);
       group.add(subSprite);
     }
 

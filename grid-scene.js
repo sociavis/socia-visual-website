@@ -189,77 +189,22 @@ const GridScene = (function() {
     const scanLine = new THREE.Line(scanGeom, scanMat);
     group.add(scanLine);
 
-    // Corner accents — rotated 45deg CW and pushed 8 units outward from each diamond point
-    // Diamond points are at (0,size), (size,0), (0,-size), (-size,0)
-    // Outward direction for each point along the diagonal (45deg rotated positions):
-    // Top point (0,size): outward along (1,1)/sqrt2, bracket rotated 45deg CW
-    // Right point (size,0): outward along (1,-1)/sqrt2
-    // Bottom point (0,-size): outward along (-1,-1)/sqrt2
-    // Left point (-size,0): outward along (-1,1)/sqrt2
+    // Corner brackets at the outer diamond corners (same radius as outer border)
     const cornerMat = new THREE.LineBasicMaterial({ color: accentColor, transparent: true, opacity: 0.5 });
-    const cos45 = Math.cos(Math.PI / 4); // ~0.7071
-    const sin45 = Math.sin(Math.PI / 4);
-    const bracketLen = 3;
-    const cornerOffset = 8;
-    // Each corner: [diamond point x, diamond point y, outward dir x, outward dir y]
-    // Then we place bracket center at point + offset*dir, and rotate the L-shape 45deg CW
+    const os = size * 1.25; // outer diamond radius (matches back frame)
+    const bl = 4; // bracket arm length
+    // Outer diamond corners: top (0,os), right (os,0), bottom (0,-os), left (-os,0)
+    // Each bracket has two arms along the diamond edges meeting at the corner
+    // Diamond edges run at 45° — normalized directions between adjacent corners
+    const d = Math.SQRT1_2; // ~0.7071
     [
-      // Top: point (0, size), outward diagonal (1,1)/sqrt2
-      { cx: 0, cy: size, odx: cos45, ody: cos45, rot: -Math.PI / 4 },
-      // Right: point (size, 0), outward diagonal (1,-1)/sqrt2
-      { cx: size, cy: 0, odx: cos45, ody: -cos45, rot: -Math.PI / 4 },
-      // Bottom: point (0, -size), outward diagonal (-1,-1)/sqrt2
-      { cx: 0, cy: -size, odx: -cos45, ody: -cos45, rot: -Math.PI / 4 },
-      // Left: point (-size, 0), outward diagonal (-1,1)/sqrt2
-      { cx: -size, cy: 0, odx: -cos45, ody: cos45, rot: -Math.PI / 4 },
-    ].forEach(({ cx, cy, odx, ody, rot }) => {
-      // New center pushed 8 units outward along the diagonal
-      const ncx = cx + odx * cornerOffset;
-      const ncy = cy + ody * cornerOffset;
-
-      // Original bracket arms before rotation:
-      // Arm1 goes in the direction that was originally (dx, 0) — horizontal
-      // Arm2 goes in the direction that was originally (0, dy) — vertical
-      // We need to figure out what the original dx, dy were for each corner:
-      // Top (0,size): dx=3, dy=-3 -> arm1 along +X, arm2 along -Y
-      // Right (size,0): dx=-3, dy=-3 -> arm1 along -X, arm2 along -Y
-      // Bottom (0,-size): dx=-3, dy=3 -> arm1 along -X, arm2 along +Y
-      // Left (-size,0): dx=3, dy=3 -> arm1 along +X, arm2 along +Y
-
-      // Instead of tracking original orientations, compute rotated arms:
-      // The L-shape at each diamond point originally had two arms from the point.
-      // After 45deg CW rotation, we rotate those arm directions by -45deg (CW).
-      // Original arms for each corner, then rotate by -45deg:
-      let arm1x, arm1y, arm2x, arm2y;
-
-      if (cx === 0 && cy > 0) {
-        // Top: original arms (3, 0) and (0, -3)
-        arm1x = 3 * cos45 - 0 * (-sin45);   // rotate (3,0) by -45deg
-        arm1y = 3 * (-sin45) + 0 * cos45;
-        arm2x = 0 * cos45 - (-3) * (-sin45);
-        arm2y = 0 * (-sin45) + (-3) * cos45;
-      } else if (cx > 0 && cy === 0) {
-        // Right: original arms (-3, 0) and (0, -3)
-        arm1x = -3 * cos45 - 0 * (-sin45);
-        arm1y = -3 * (-sin45) + 0 * cos45;
-        arm2x = 0 * cos45 - (-3) * (-sin45);
-        arm2y = 0 * (-sin45) + (-3) * cos45;
-      } else if (cx === 0 && cy < 0) {
-        // Bottom: original arms (-3, 0) and (0, 3)
-        arm1x = -3 * cos45 - 0 * (-sin45);
-        arm1y = -3 * (-sin45) + 0 * cos45;
-        arm2x = 0 * cos45 - 3 * (-sin45);
-        arm2y = 0 * (-sin45) + 3 * cos45;
-      } else {
-        // Left: original arms (3, 0) and (0, 3)
-        arm1x = 3 * cos45 - 0 * (-sin45);
-        arm1y = 3 * (-sin45) + 0 * cos45;
-        arm2x = 0 * cos45 - 3 * (-sin45);
-        arm2y = 0 * (-sin45) + 3 * cos45;
-      }
-
-      const c1 = [new THREE.Vector3(ncx, ncy, 0.3), new THREE.Vector3(ncx + arm1x, ncy + arm1y, 0.3)];
-      const c2 = [new THREE.Vector3(ncx, ncy, 0.3), new THREE.Vector3(ncx + arm2x, ncy + arm2y, 0.3)];
+      { x: 0, y: os,  a1x: d, a1y: -d, a2x: -d, a2y: -d },   // top: arms toward right & left
+      { x: os, y: 0,  a1x: -d, a1y: -d, a2x: -d, a2y: d },    // right: arms toward top & bottom
+      { x: 0, y: -os, a1x: -d, a1y: d, a2x: d, a2y: d },      // bottom: arms toward left & right
+      { x: -os, y: 0, a1x: d, a1y: d, a2x: d, a2y: -d },      // left: arms toward bottom & top
+    ].forEach(({ x, y, a1x, a1y, a2x, a2y }) => {
+      const c1 = [new THREE.Vector3(x, y, 0.3), new THREE.Vector3(x + a1x * bl, y + a1y * bl, 0.3)];
+      const c2 = [new THREE.Vector3(x, y, 0.3), new THREE.Vector3(x + a2x * bl, y + a2y * bl, 0.3)];
       group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(c1), cornerMat));
       group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(c2), cornerMat));
     });
@@ -272,17 +217,17 @@ const GridScene = (function() {
       group.add(icon);
     }
 
-    // Text labels below badge
+    // Text labels below badge — large and visible
     if (config.title) {
-      const titleSprite = makeTextSprite(config.title, 36, 1.0);
-      titleSprite.position.set(0, -size - 8, 0);
-      titleSprite.scale.set(38, 5, 1);
+      const titleSprite = makeTextSprite(config.title, 56, 1.0);
+      titleSprite.position.set(0, -size - 10, 0);
+      titleSprite.scale.set(50, 7, 1);
       group.add(titleSprite);
     }
     if (config.subtitle) {
-      const subSprite = makeTextSprite(config.subtitle, 20, 0.6);
-      subSprite.position.set(0, -size - 13, 0);
-      subSprite.scale.set(36, 4, 1);
+      const subSprite = makeTextSprite(config.subtitle, 30, 0.5);
+      subSprite.position.set(0, -size - 16, 0);
+      subSprite.scale.set(48, 5, 1);
       group.add(subSprite);
     }
 
@@ -477,7 +422,6 @@ const GridScene = (function() {
   // ---- Service hover tooltip (HTML overlay) ----
   let tooltipEl = document.createElement('div');
   tooltipEl.id = 'serviceTooltip';
-  tooltipEl.style.cssText = 'position:fixed;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.3s;font-family:var(--font-mono);padding:16px 20px;background:rgba(5,5,5,0.92);border:1px solid rgba(168,255,0,0.3);backdrop-filter:blur(8px);max-width:280px;';
   document.body.appendChild(tooltipEl);
 
   // ---- Green wash plane ----
@@ -583,13 +527,13 @@ const GridScene = (function() {
       ud.scanMat.opacity = 0.2 + Math.abs(Math.sin(glTime * 1.5 + i * 2)) * 0.3;
     }
 
-    // No glitch — smooth hover-based brightness
+    // No glitch, no pulsing — fill only on hover
     if (ud.isHovered) {
-      ud.mainMat.opacity += (1.0 - ud.mainMat.opacity) * 0.1;
-      ud.glowMat.opacity += (0.15 - ud.glowMat.opacity) * 0.1;
+      ud.mainMat.opacity += (1.0 - ud.mainMat.opacity) * 0.12;
+      ud.glowMat.opacity += (0.18 - ud.glowMat.opacity) * 0.12;
     } else {
-      ud.mainMat.opacity += (0.7 + Math.sin(glTime * 1.5 + i) * 0.15 - ud.mainMat.opacity) * 0.1;
-      ud.glowMat.opacity += (0.06 + Math.sin(glTime * 2 + i) * 0.02 - ud.glowMat.opacity) * 0.1;
+      ud.mainMat.opacity += (0.6 - ud.mainMat.opacity) * 0.08;
+      ud.glowMat.opacity += (0.0 - ud.glowMat.opacity) * 0.08;
     }
     badge.position.x += (ud.targetPos.x - badge.position.x) * 0.1;
 
@@ -661,15 +605,15 @@ const GridScene = (function() {
       }
     });
 
-    // Service tooltip
+    // Service tooltip with pixel-wipe effect
     if (hoveredServiceIdx >= 0) {
       const ud = serviceIcons[hoveredServiceIdx].userData;
-      tooltipEl.innerHTML = `<div style="color:#a8ff00;font-size:13px;font-weight:bold;margin-bottom:6px;">${ud.label}</div><div style="color:#ccc;font-size:11px;line-height:1.5;margin-bottom:8px;">${ud.desc}</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${ud.tags.map(t => `<span style="color:#a8ff00;font-size:10px;border:1px solid rgba(168,255,0,0.3);padding:2px 6px;">${t}</span>`).join('')}</div>`;
-      tooltipEl.style.opacity = '1';
-      tooltipEl.style.left = Math.min(mousePixelX + 16, window.innerWidth - 300) + 'px';
+      tooltipEl.innerHTML = `<div style="color:#a8ff00;font-size:16px;font-weight:bold;letter-spacing:0.12em;margin-bottom:8px;text-transform:uppercase;">${ud.label}</div><div style="color:#bbb;font-size:12px;line-height:1.6;margin-bottom:10px;">${ud.desc}</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${ud.tags.map(t => `<span style="color:#a8ff00;font-size:10px;letter-spacing:0.1em;border:1px solid rgba(168,255,0,0.3);padding:3px 8px;">${t}</span>`).join('')}</div>`;
+      tooltipEl.classList.add('visible');
+      tooltipEl.style.left = Math.min(mousePixelX + 20, window.innerWidth - 320) + 'px';
       tooltipEl.style.top = (mousePixelY - 20) + 'px';
     } else {
-      tooltipEl.style.opacity = '0';
+      tooltipEl.classList.remove('visible');
     }
 
     // Green wash

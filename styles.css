@@ -846,10 +846,14 @@ body:hover .cursor-glow { opacity: 1; }
 .marquee {
   padding: 28px 0;
   overflow: hidden;
-  position: relative;
-  margin-top: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
   border-top: 1px solid var(--grey);
   perspective: 600px;
+  z-index: 5;
 }
 .marquee-track {
   display: flex;
@@ -885,15 +889,18 @@ body:hover .cursor-glow { opacity: 1; }
    SERVICES
    ============================================ */
 .services-3d-content {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-top: 40px;
-  padding-bottom: 0;
-  height: auto;
-  max-height: 30vh;
+  padding: 40px 48px;
+  pointer-events: none;
+}
+.services-3d-content .section-label,
+.services-3d-content .section-title,
+.services-3d-content .services-hint {
+  pointer-events: auto;
 }
 .services-hint {
   font-family: var(--font-mono);
@@ -903,33 +910,22 @@ body:hover .cursor-glow { opacity: 1; }
   margin-top: 12px;
 }
 #serviceTooltip {
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  line-height: 1.6;
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  padding: 18px 22px;
+  background: rgba(5, 5, 5, 0.94);
+  border: 1px solid rgba(168, 255, 0, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  max-width: 300px;
   color: var(--white);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-#serviceTooltip .tooltip-title {
-  color: var(--accent-1);
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-#serviceTooltip .tooltip-desc {
-  color: var(--white-dim);
-  margin-bottom: 10px;
-}
-#serviceTooltip .tooltip-tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-#serviceTooltip .tooltip-tags span {
-  font-size: 0.55rem;
-  letter-spacing: 0.1em;
-  padding: 3px 8px;
-  border: 1px solid rgba(168, 255, 0, 0.2);
-  color: var(--accent-1);
+#serviceTooltip.visible {
+  clip-path: inset(0 0 0 0);
 }
 .services-grid {
   display: grid;

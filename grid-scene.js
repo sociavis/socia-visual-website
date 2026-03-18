@@ -518,28 +518,22 @@ const GridScene = (function() {
     // Slight X tilt
     badge.rotation.x = Math.sin(glTime * 0.4 + i * 1.8) * 0.06;
 
-    // Scan line sweep
+    // Scan line sweep — glow fill follows it
     if (ud.scanLine) {
-      const scanY = Math.sin(glTime * 1.5 + i * 2) * 14;
+      var scanPhase = Math.sin(glTime * 1.5 + i * 2);
+      var scanY = scanPhase * 14;
       ud.scanLine.position.y = scanY;
-      ud.scanMat.opacity = 0.2 + Math.abs(Math.sin(glTime * 1.5 + i * 2)) * 0.3;
+      ud.scanMat.opacity = 0.3 + Math.abs(scanPhase) * 0.4;
+      // Glow fill peaks when scan line crosses center, fades at edges
+      var glowIntensity = 0.02 + (1 - Math.abs(scanPhase)) * 0.1;
+      ud.glowMat.opacity += (glowIntensity - ud.glowMat.opacity) * 0.15;
     }
 
-    // Glitch effect — random flicker
-    ud.glitchTimer += 0.01;
-    const shouldGlitch = Math.sin(ud.glitchTimer * 7.3 + i * 13) > 0.97;
-    if (shouldGlitch) {
-      ud.mainMat.opacity = Math.random() * 0.5;
-      ud.glowMat.opacity = Math.random() * 0.15;
-      badge.position.x = ud.targetPos.x + (Math.random() - 0.5) * 1.5;
-    } else {
-      ud.mainMat.opacity += (0.7 + Math.sin(glTime * 1.5 + i) * 0.15 - ud.mainMat.opacity) * 0.1;
-      ud.glowMat.opacity += (0.06 + Math.sin(glTime * 2 + i) * 0.02 - ud.glowMat.opacity) * 0.1;
-      badge.position.x += (ud.targetPos.x - badge.position.x) * 0.1;
-    }
-
-    ud.backMat.opacity = 0.08 + Math.sin(glTime * 1.2 + i * 0.7) * 0.04;
-    ud.frontMat.opacity = 0.2 + Math.sin(glTime * 0.9 + i * 1.3) * 0.08;
+    // Steady opacity — no glitch
+    ud.mainMat.opacity += (0.7 - ud.mainMat.opacity) * 0.08;
+    badge.position.x += (ud.targetPos.x - badge.position.x) * 0.1;
+    ud.backMat.opacity = 0.1;
+    ud.frontMat.opacity = 0.25;
   }
 
   // ---- Animate Service Badge — NO glitch, hover brightens ----

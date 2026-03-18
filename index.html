@@ -251,18 +251,30 @@
                 <div class="form-corner form-corner--tl"></div>
                 <div class="form-corner form-corner--br"></div>
               </div>
-              <div class="form-group reveal">
-                <select id="service" name="service" required>
-                  <option value="" disabled selected></option>
-                  <option value="Web Design & Development">Web Design & Development</option>
-                  <option value="Graphic Design">Graphic Design</option>
-                  <option value="Brand Identity">Brand Identity</option>
-                  <option value="Motion & Video">Motion & Video</option>
-                </select>
-                <label for="service">Service Required</label>
-                <div class="form-line"></div>
-                <div class="form-corner form-corner--tl"></div>
-                <div class="form-corner form-corner--br"></div>
+              <div class="form-services reveal">
+                <span class="form-services-label">Services Required</span>
+                <div class="form-toggles">
+                  <label class="form-toggle">
+                    <input type="checkbox" name="services" value="Web Design & Development">
+                    <span class="toggle-box"></span>
+                    <span class="toggle-text">Web Design & Dev</span>
+                  </label>
+                  <label class="form-toggle">
+                    <input type="checkbox" name="services" value="Graphic Design">
+                    <span class="toggle-box"></span>
+                    <span class="toggle-text">Graphic Design</span>
+                  </label>
+                  <label class="form-toggle">
+                    <input type="checkbox" name="services" value="Brand Identity">
+                    <span class="toggle-box"></span>
+                    <span class="toggle-text">Brand Identity</span>
+                  </label>
+                  <label class="form-toggle">
+                    <input type="checkbox" name="services" value="Motion & Video">
+                    <span class="toggle-box"></span>
+                    <span class="toggle-text">Motion & Video</span>
+                  </label>
+                </div>
               </div>
               <div class="form-group reveal">
                 <textarea id="message" name="message" rows="3" required placeholder=" "></textarea>

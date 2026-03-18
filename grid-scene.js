@@ -88,75 +88,67 @@ const GridScene = (function() {
     scene.add(new THREE.Line(gz, gridLineMat));
   }
 
-  // ---- Stars (horizon band) ----
-  var starCount = 500;
+  // ---- Stars (horizon band — bright) ----
+  var starCount = 600;
   var starPositions = new Float32Array(starCount * 3);
   var starSizes = new Float32Array(starCount);
+  var starBaseSizes = new Float32Array(starCount);
   var starPulses = new Float32Array(starCount);
   for (var si = 0; si < starCount; si++) {
-    // Spread stars in a band along the horizon
     var angle = Math.random() * Math.PI * 2;
-    var dist = 200 + Math.random() * 500;
+    var dist = 100 + Math.random() * 500;
     starPositions[si * 3] = Math.cos(angle) * dist;
-    starPositions[si * 3 + 1] = 15 + Math.random() * 60; // low, just above grid
-    starPositions[si * 3 + 2] = Math.sin(angle) * dist - 200; // pushed back
-    starSizes[si] = 1.5 + Math.random() * 3;
+    starPositions[si * 3 + 1] = 10 + Math.random() * 50;
+    starPositions[si * 3 + 2] = Math.sin(angle) * dist - 150;
+    starBaseSizes[si] = 2.5 + Math.random() * 4;
+    starSizes[si] = starBaseSizes[si];
     starPulses[si] = Math.random() * Math.PI * 2;
   }
   var starGeom = new THREE.BufferGeometry();
   starGeom.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
   starGeom.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
   var starMat = new THREE.ShaderMaterial({
-    vertexShader: 'attribute float size; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * (300.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
-    fragmentShader: 'void main() { float d = length(gl_PointCoord - vec2(0.5)); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * 0.6; gl_FragColor = vec4(0.7, 0.95, 0.5, a); }',
+    vertexShader: 'attribute float size; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * (400.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: 'void main() { float d = length(gl_PointCoord - vec2(0.5)); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * 0.9; gl_FragColor = vec4(0.7, 1.0, 0.4, a); }',
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
   });
   scene.add(new THREE.Points(starGeom, starMat));
 
-  // ---- Comets (streak from sky to grid) ----
-  var maxComets = 4;
-  var comets = [];
-  function spawnComet() {
-    // Start high, streak diagonally downward toward the grid
-    var sx = (Math.random() - 0.5) * 300;
-    var sy = 120 + Math.random() * 80;
-    var sz = -200 - Math.random() * 200; // from the back/horizon
-    var speed = 2 + Math.random() * 1.5;
-    var tailLen = 25;
-    var dirX = (Math.random() - 0.5) * 0.15; // slight horizontal drift
-    var dirZ = 0.6 + Math.random() * 0.3; // streaks toward camera
-    // Build tail as a series of points from head to fading tail
+  // ---- Shooting Stars (occasional, fast, bright) ----
+  var shootingStars = [];
+  function spawnShootingStar() {
+    var sx = (Math.random() - 0.5) * 400;
+    var sy = 40 + Math.random() * 40;
+    var sz = -100 - Math.random() * 300;
+    var len = 40 + Math.random() * 30;
+    // Direction: mostly horizontal with slight downward angle
+    var dx = (Math.random() > 0.5 ? 1 : -1) * (0.8 + Math.random() * 0.4);
+    var dy = -0.1 - Math.random() * 0.15;
+    var dz = (Math.random() - 0.5) * 0.3;
     var pts = [];
-    for (var t = 0; t < tailLen; t++) {
-      var fade = t / tailLen;
-      pts.push(new THREE.Vector3(
-        sx - dirX * t * 5,
-        sy + t * 2, // tail goes up (head is lower, moving down)
-        sz - dirZ * t * 5
-      ));
+    var cols = new Float32Array(Math.floor(len) * 3);
+    for (var t = 0; t < len; t++) {
+      pts.push(new THREE.Vector3(sx + dx * t * 2, sy + dy * t * 2, sz + dz * t * 2));
+      var b = 1 - t / len;
+      cols[t * 3] = 0.66 * b; cols[t * 3 + 1] = 1.0 * b; cols[t * 3 + 2] = 0;
     }
-    var cGeom = new THREE.BufferGeometry().setFromPoints(pts);
-    // Vertex colors for head-to-tail gradient
-    var cColors = new Float32Array(tailLen * 3);
-    for (var t = 0; t < tailLen; t++) {
-      var bright = 1 - (t / tailLen);
-      cColors[t * 3] = 0.66 * bright;
-      cColors[t * 3 + 1] = 1.0 * bright;
-      cColors[t * 3 + 2] = 0;
-    }
-    cGeom.setAttribute('color', new THREE.BufferAttribute(cColors, 3));
-    var cMat = new THREE.LineBasicMaterial({
-      vertexColors: true, transparent: true, opacity: 0,
-      depthWrite: false, blending: THREE.AdditiveBlending
-    });
-    var cLine = new THREE.Line(cGeom, cMat);
-    scene.add(cLine);
-    comets.push({
-      mesh: cLine, mat: cMat, speed: speed,
-      dirX: dirX, dirZ: dirZ,
-      life: 0, maxLife: 80 + Math.random() * 50
-    });
+    var geom = new THREE.BufferGeometry().setFromPoints(pts);
+    geom.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+    var mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+    var line = new THREE.Line(geom, mat);
+    scene.add(line);
+    shootingStars.push({ mesh: line, mat: mat, dx: dx, dy: dy, dz: dz, speed: 3 + Math.random() * 2, life: 0, maxLife: 40 + Math.random() * 30 });
   }
+
+  // ---- Bass Shockwave Ring ----
+  var shockwaveGeom = new THREE.RingGeometry(0.5, 1, 64);
+  var shockwaveMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+  var shockwave = new THREE.Mesh(shockwaveGeom, shockwaveMat);
+  shockwave.rotation.x = -Math.PI / 2;
+  shockwave.position.y = 0.5;
+  scene.add(shockwave);
+  var shockwaveScale = 0;
+  var lastBassHit = 0;
 
   // Connection lines
   const maxConnections = 600;
@@ -722,45 +714,59 @@ const GridScene = (function() {
     var audioHigh = ar.high || 0;
     var audioAvg = ar.avg || 0;
 
-    // ---- Stars twinkle (brighter with high frequencies) ----
-    var starBoost = 1 + audioHigh * 3;
+    // ---- Stars (pulse with music) ----
+    var starBoost = 1 + audioHigh * 6 + audioBass * 2;
     for (var si = 0; si < starCount; si++) {
-      starPulses[si] += 0.01 + Math.random() * 0.005;
-      starSizes[si] = ((0.5 + Math.random() * 0.3) + Math.sin(starPulses[si]) * 0.5) * starBoost;
+      starPulses[si] += 0.008 + Math.random() * 0.004;
+      starSizes[si] = (starBaseSizes[si] + Math.sin(starPulses[si]) * 1.5) * starBoost;
     }
     starGeom.attributes.size.needsUpdate = true;
 
-    // ---- Comets (streak from sky toward grid) ----
-    var cometChance = 0.006 + audioBass * 0.03;
-    if (comets.length < maxComets && Math.random() < cometChance) spawnComet();
-    for (var ci = comets.length - 1; ci >= 0; ci--) {
-      var c = comets[ci];
-      c.life++;
-      var cPos = c.mesh.geometry.attributes.position.array;
-      var spd = c.speed * (1 + audioBass * 0.5);
-      // Move all points: down on Y, forward on Z, slight X drift
-      for (var cp = 0; cp < cPos.length; cp += 3) {
-        cPos[cp] += c.dirX * spd;
-        cPos[cp + 1] -= spd;
-        cPos[cp + 2] += c.dirZ * spd;
+    // ---- Shooting Stars ----
+    if (shootingStars.length < 2 && Math.random() < 0.003) spawnShootingStar();
+    for (var ssi = shootingStars.length - 1; ssi >= 0; ssi--) {
+      var ss = shootingStars[ssi];
+      ss.life++;
+      var sPos = ss.mesh.geometry.attributes.position.array;
+      for (var sp = 0; sp < sPos.length; sp += 3) {
+        sPos[sp] += ss.dx * ss.speed;
+        sPos[sp + 1] += ss.dy * ss.speed;
+        sPos[sp + 2] += ss.dz * ss.speed;
       }
-      c.mesh.geometry.attributes.position.needsUpdate = true;
-      var cProgress = c.life / c.maxLife;
-      c.mat.opacity = cProgress < 0.15 ? cProgress * 4 : Math.max(0, (1 - cProgress) * 0.7);
-      if (c.life >= c.maxLife) {
-        scene.remove(c.mesh);
-        c.mesh.geometry.dispose();
-        c.mat.dispose();
-        comets.splice(ci, 1);
+      ss.mesh.geometry.attributes.position.needsUpdate = true;
+      var ssP = ss.life / ss.maxLife;
+      ss.mat.opacity = ssP < 0.1 ? ssP * 8 : Math.max(0, (1 - ssP) * 0.9);
+      if (ss.life >= ss.maxLife) {
+        scene.remove(ss.mesh);
+        ss.mesh.geometry.dispose();
+        ss.mat.dispose();
+        shootingStars.splice(ssi, 1);
+      }
+    }
+
+    // ---- Bass Shockwave ----
+    if (audioBass > 0.6 && glTime - lastBassHit > 0.3) {
+      lastBassHit = glTime;
+      shockwaveScale = 1;
+      shockwaveMat.opacity = 0.3;
+    }
+    if (shockwaveScale > 0) {
+      shockwaveScale += 3;
+      shockwaveMat.opacity *= 0.94;
+      shockwave.scale.set(shockwaveScale, shockwaveScale, 1);
+      if (shockwaveMat.opacity < 0.005) {
+        shockwaveScale = 0;
+        shockwaveMat.opacity = 0;
+        shockwave.scale.set(0, 0, 1);
       }
     }
 
     // Grid line pulse with music
-    gridLineMat.opacity = 0.075 + audioBass * 0.06;
+    gridLineMat.opacity = 0.075 + audioBass * 0.15 + audioAvg * 0.05;
 
     // Green wash
     washMat.opacity += ((currentSection === 3 ? 0.1 : 0) - washMat.opacity) * 0.04;
-    const gridGreenBoost = (currentSection === 3 ? 0.15 : 0) + audioMid * 0.08;
+    const gridGreenBoost = (currentSection === 3 ? 0.15 : 0) + audioMid * 0.15;
 
     // Particle update
     raycaster.setFromCamera(mouseNDC, camera);
@@ -781,12 +787,12 @@ const GridScene = (function() {
     const nearbyIndices = [];
 
     // Audio-reactive particle lift
-    var audioLift = audioBass * 2;
+    var audioLift = audioBass * 5;
 
     for (let i = 0; i < totalPoints; i++) {
       pulses[i] += 0.02;
       const ox = origins[i * 3], oz = origins[i * 3 + 2];
-      const ab = 0.15 + Math.sin(pulses[i]) * 0.05 + audioAvg * 0.1;
+      const ab = 0.15 + Math.sin(pulses[i]) * 0.05 + audioAvg * 0.25;
       const gb = ab + gridGreenBoost;
 
       if (mouseOnPlane && mouseNDC.x > -5) {
@@ -807,7 +813,7 @@ const GridScene = (function() {
           positions[i * 3] += (ox - positions[i * 3]) * 0.06;
           positions[i * 3 + 1] += (audioLift * Math.sin(pulses[i]) - positions[i * 3 + 1]) * 0.06;
           positions[i * 3 + 2] += (oz - positions[i * 3 + 2]) * 0.06;
-          sizes[i] += (2.2 + audioAvg * 2 - sizes[i]) * 0.06;
+          sizes[i] += (2.2 + audioAvg * 4 - sizes[i]) * 0.06;
           colors[i * 3] += (gb - colors[i * 3]) * 0.05;
           colors[i * 3 + 1] += (gb - colors[i * 3 + 1]) * 0.05;
           colors[i * 3 + 2] += (ab - colors[i * 3 + 2]) * 0.05;

@@ -417,9 +417,9 @@ const GridScene = (function() {
 
   // ---- Create About Badges ----
   const badges = [
-    createHoloBadge({ pos: new THREE.Vector3(-55, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18, textScale: 1.2 }),
+    createHoloBadge({ pos: new THREE.Vector3(-75, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18, textScale: 1.2 }),
     createHoloBadge({ pos: new THREE.Vector3(0, 20, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18, textScale: 1.2 }),
-    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconSpeed, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18, textScale: 1.2 }),
+    createHoloBadge({ pos: new THREE.Vector3(75, 20, -10), iconFn: iconSpeed, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18, textScale: 1.2 }),
   ];
 
   // ---- Create Service Badges ----
@@ -593,12 +593,15 @@ const GridScene = (function() {
     camera.position.y += Math.sin(camTime * 0.5) * 2;
     camera.lookAt(currentCamLook);
 
-    // About badges (with glitch)
-    badges.forEach((b, i) => animateBadge(b, i, currentSection === 1));
+    // On mobile, hide 3D badges but keep grid
+    var isMobile = window.innerWidth <= 900;
+
+    // About badges
+    badges.forEach((b, i) => animateBadge(b, i, !isMobile && currentSection === 1));
 
     // Service badges — orbit + hover detection
     serviceRingAngle += 0.002;
-    const isServicesVisible = currentSection === 2;
+    const isServicesVisible = !isMobile && currentSection === 2;
 
     // Show/hide diamond border
     if (isServicesVisible && !orbitRing.visible) orbitRing.visible = true;

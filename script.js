@@ -685,3 +685,20 @@ document.addEventListener('keydown', (e) => {
     konamiIndex = 0;
   }
 });
+
+// ---- Music Player Toggle ----
+var musicPlayer = document.getElementById('musicPlayer');
+var musicToggle = document.getElementById('musicToggle');
+if (musicToggle && musicPlayer) {
+  musicToggle.addEventListener('click', function() {
+    musicPlayer.classList.toggle('open');
+    var icons = musicToggle.querySelectorAll('.music-icon');
+    if (musicPlayer.classList.contains('open')) {
+      icons[0].style.display = 'none';
+      icons[1].style.display = 'block';
+    } else {
+      icons[0].style.display = 'block';
+      icons[1].style.display = 'none';
+    }
+  });
+}

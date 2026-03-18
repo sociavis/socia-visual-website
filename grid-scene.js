@@ -88,6 +88,53 @@ const GridScene = (function() {
     scene.add(new THREE.Line(gz, gridLineMat));
   }
 
+  // ---- Stars (sky dome) ----
+  var starCount = 400;
+  var starPositions = new Float32Array(starCount * 3);
+  var starSizes = new Float32Array(starCount);
+  var starPulses = new Float32Array(starCount);
+  for (var si = 0; si < starCount; si++) {
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.random() * Math.PI * 0.4;
+    var r = 400 + Math.random() * 600;
+    starPositions[si * 3] = Math.sin(phi) * Math.cos(theta) * r;
+    starPositions[si * 3 + 1] = Math.cos(phi) * r * 0.5 + 80;
+    starPositions[si * 3 + 2] = Math.sin(phi) * Math.sin(theta) * r;
+    starSizes[si] = 0.5 + Math.random() * 1.5;
+    starPulses[si] = Math.random() * Math.PI * 2;
+  }
+  var starGeom = new THREE.BufferGeometry();
+  starGeom.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+  starGeom.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
+  var starMat = new THREE.ShaderMaterial({
+    vertexShader: 'attribute float size; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * (150.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: 'void main() { float d = length(gl_PointCoord - vec2(0.5)); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * 0.5; gl_FragColor = vec4(0.7, 0.85, 0.6, a); }',
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  });
+  scene.add(new THREE.Points(starGeom, starMat));
+
+  // ---- Comets ----
+  var maxComets = 5;
+  var comets = [];
+  function spawnComet() {
+    var sx = (Math.random() - 0.5) * 600;
+    var sy = 180 + Math.random() * 120;
+    var sz = (Math.random() - 0.5) * 600;
+    var speed = 1.5 + Math.random() * 2;
+    var tailLen = Math.floor(10 + Math.random() * 15);
+    var dx = (Math.random() - 0.5) * 0.4;
+    var dz = (Math.random() - 0.5) * 0.4;
+    var pts = [];
+    for (var t = 0; t < tailLen; t++) {
+      pts.push(new THREE.Vector3(sx + dx * t * 4, sy - t * 4, sz + dz * t * 4));
+    }
+    var cGeom = new THREE.BufferGeometry().setFromPoints(pts);
+    var cMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.0, depthWrite: false, blending: THREE.AdditiveBlending });
+    var cLine = new THREE.Line(cGeom, cMat);
+    scene.add(cLine);
+    comets.push({ mesh: cLine, mat: cMat, speed: speed, life: 0, maxLife: 60 + Math.random() * 60 });
+  }
+
   // Connection lines
   const maxConnections = 600;
   const linePositions = new Float32Array(maxConnections * 6);
@@ -643,6 +690,34 @@ const GridScene = (function() {
       tooltipEl.style.top = (mousePixelY - 20) + 'px';
     } else {
       tooltipEl.classList.remove('visible');
+    }
+
+    // ---- Stars twinkle ----
+    for (var si = 0; si < starCount; si++) {
+      starPulses[si] += 0.01 + Math.random() * 0.005;
+      starSizes[si] = (0.5 + Math.random() * 0.3) + Math.sin(starPulses[si]) * 0.5;
+    }
+    starGeom.attributes.size.needsUpdate = true;
+
+    // ---- Comets ----
+    if (comets.length < maxComets && Math.random() < 0.008) spawnComet();
+    for (var ci = comets.length - 1; ci >= 0; ci--) {
+      var c = comets[ci];
+      c.life++;
+      var cPos = c.mesh.geometry.attributes.position.array;
+      for (var cp = 0; cp < cPos.length; cp += 3) {
+        cPos[cp + 1] -= c.speed;
+      }
+      c.mesh.geometry.attributes.position.needsUpdate = true;
+      // Fade in then out
+      var cProgress = c.life / c.maxLife;
+      c.mat.opacity = cProgress < 0.2 ? cProgress * 2.5 : (1 - cProgress) * 0.6;
+      if (c.life >= c.maxLife) {
+        scene.remove(c.mesh);
+        c.mesh.geometry.dispose();
+        c.mat.dispose();
+        comets.splice(ci, 1);
+      }
     }
 
     // Green wash

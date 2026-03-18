@@ -412,16 +412,22 @@ const GridScene = (function() {
   });
   let serviceRingAngle = 0;
 
-  // ---- Orbit ring for services (visible ring on Y=40 plane) ----
-  const orbitRingSegments = 128;
-  const orbitRingPoints = [];
-  for (let i = 0; i <= orbitRingSegments; i++) {
-    const theta = (i / orbitRingSegments) * Math.PI * 2;
-    orbitRingPoints.push(new THREE.Vector3(Math.cos(theta) * 50, 20, Math.sin(theta) * 50));
-  }
-  const orbitRingGeom = new THREE.BufferGeometry().setFromPoints(orbitRingPoints);
-  const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.08, depthWrite: false });
-  const orbitRing = new THREE.Line(orbitRingGeom, orbitRingMat);
+  // ---- Diamond border for services on the grid plane ----
+  const dR = 65;
+  const dY = 0.5;
+  const diamondPts = [
+    new THREE.Vector3(0, dY, -dR), new THREE.Vector3(dR, dY, 0),
+    new THREE.Vector3(0, dY, dR), new THREE.Vector3(-dR, dY, 0),
+    new THREE.Vector3(0, dY, -dR)
+  ];
+  var orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.12, depthWrite: false });
+  var orbitRing = new THREE.Line(new THREE.BufferGeometry().setFromPoints(diamondPts), orbitRingMat);
+  // Corner brackets
+  var dcMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.2, depthWrite: false });
+  [[0, -dR, 8, 0, -8, 0], [dR, 0, 0, -8, 0, 8], [0, dR, 8, 0, -8, 0], [-dR, 0, 0, -8, 0, 8]].forEach(function(c) {
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], dY, c[1]), new THREE.Vector3(c[0] + c[2], dY, c[1] + c[3])]), dcMat));
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], dY, c[1]), new THREE.Vector3(c[0] + c[4], dY, c[1] + c[5])]), dcMat));
+  });
   orbitRing.visible = false;
   scene.add(orbitRing);
 

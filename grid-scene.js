@@ -413,21 +413,31 @@ const GridScene = (function() {
   let serviceRingAngle = 0;
 
   // ---- Diamond border for services on the grid plane ----
-  const dR = 65;
+  const dR = 50;
   const dY = 0.5;
-  const diamondPts = [
-    new THREE.Vector3(0, dY, -dR), new THREE.Vector3(dR, dY, 0),
-    new THREE.Vector3(0, dY, dR), new THREE.Vector3(-dR, dY, 0),
-    new THREE.Vector3(0, dY, -dR)
+  var orbitRing = new THREE.Group();
+  // Diamond outline
+  var orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.15, depthWrite: false });
+  var diamondPts = [
+    new THREE.Vector3(0, 0, -dR), new THREE.Vector3(dR, 0, 0),
+    new THREE.Vector3(0, 0, dR), new THREE.Vector3(-dR, 0, 0),
+    new THREE.Vector3(0, 0, -dR)
   ];
-  var orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.12, depthWrite: false });
-  var orbitRing = new THREE.Line(new THREE.BufferGeometry().setFromPoints(diamondPts), orbitRingMat);
+  orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(diamondPts), orbitRingMat));
+  // Filled diamond plane (subtle green)
+  var dShape = new THREE.Shape();
+  dShape.moveTo(0, -dR); dShape.lineTo(dR, 0); dShape.lineTo(0, dR); dShape.lineTo(-dR, 0); dShape.closePath();
+  var dFillMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.015, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+  var dFillMesh = new THREE.Mesh(new THREE.ShapeGeometry(dShape), dFillMat);
+  dFillMesh.rotation.x = -Math.PI / 2;
+  orbitRing.add(dFillMesh);
   // Corner brackets
-  var dcMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.2, depthWrite: false });
-  [[0, -dR, 8, 0, -8, 0], [dR, 0, 0, -8, 0, 8], [0, dR, 8, 0, -8, 0], [-dR, 0, 0, -8, 0, 8]].forEach(function(c) {
-    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], dY, c[1]), new THREE.Vector3(c[0] + c[2], dY, c[1] + c[3])]), dcMat));
-    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], dY, c[1]), new THREE.Vector3(c[0] + c[4], dY, c[1] + c[5])]), dcMat));
+  var dcMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.25, depthWrite: false });
+  [[0, -dR, 6, 0, -6, 0], [dR, 0, 0, -6, 0, 6], [0, dR, 6, 0, -6, 0], [-dR, 0, 0, -6, 0, 6]].forEach(function(c) {
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], 0, c[1]), new THREE.Vector3(c[0] + c[2], 0, c[1] + c[3])]), dcMat));
+    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], 0, c[1]), new THREE.Vector3(c[0] + c[4], 0, c[1] + c[5])]), dcMat));
   });
+  orbitRing.position.y = dY;
   orbitRing.visible = false;
   scene.add(orbitRing);
 
@@ -609,13 +619,21 @@ const GridScene = (function() {
       svc.userData.isHovered = (i === hoveredServiceIdx);
       animateServiceBadge(svc, i + 3, isServicesVisible);
       if (svc.visible && isServicesVisible) {
-        const angle = (i / serviceData.length) * Math.PI * 2 - Math.PI / 2 + serviceRingAngle;
-        const r = 50;
-        svc.userData.targetPos.x = Math.cos(angle) * r;
-        svc.userData.targetPos.z = Math.sin(angle) * r;
+        // Diamond corners: 0=top(0,-dR), 1=right(dR,0), 2=bottom(0,dR), 3=left(-dR,0)
+        // Rotate each corner by serviceRingAngle around Y axis
+        var baseX = [0, dR, 0, -dR][i];
+        var baseZ = [-dR, 0, dR, 0][i];
+        var cosA = Math.cos(serviceRingAngle);
+        var sinA = Math.sin(serviceRingAngle);
+        svc.userData.targetPos.x = baseX * cosA + baseZ * sinA;
+        svc.userData.targetPos.z = -baseX * sinA + baseZ * cosA;
         svc.position.z += (svc.userData.targetPos.z - svc.position.z) * 0.06;
       }
     });
+    // Rotate diamond with badges
+    if (orbitRing.visible) {
+      orbitRing.rotation.y = serviceRingAngle;
+    }
 
     // Service tooltip with pixel-wipe effect
     if (hoveredServiceIdx >= 0) {

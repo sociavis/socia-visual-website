@@ -1191,8 +1191,36 @@ body:hover .cursor-glow { opacity: 1; }
 }
 
 /* ============================================
-   CONTACT
+   CONTACT — Green mode transition
    ============================================ */
+body.contact-active .panel--contact {
+  background: rgba(168, 255, 0, 0.03);
+}
+body.contact-active .hud-corner { border-color: var(--accent-1); }
+body.contact-active .hud-data { color: var(--accent-1); }
+body.contact-active .section-nav-dot { border-color: var(--accent-1); }
+body.contact-active .scroll-progress-edge { background: var(--accent-1); box-shadow: 0 0 8px var(--accent-1); }
+body.contact-active .panel--contact .section-title { color: var(--white); }
+body.contact-active .panel--contact .form-group input,
+body.contact-active .panel--contact .form-group textarea {
+  border-color: rgba(168, 255, 0, 0.25);
+  background: rgba(168, 255, 0, 0.04);
+}
+body.contact-active .panel--contact .form-group input:focus,
+body.contact-active .panel--contact .form-group textarea:focus {
+  border-color: var(--accent-1);
+  background: rgba(168, 255, 0, 0.08);
+  box-shadow: 0 0 20px rgba(168, 255, 0, 0.1);
+}
+body.contact-active .panel--contact .form-submit {
+  background: var(--accent-1);
+  color: var(--black);
+  border-color: var(--accent-1);
+  box-shadow: 0 0 30px rgba(168, 255, 0, 0.3);
+}
+body.contact-active .panel--contact .form-corner { border-color: var(--accent-1); }
+body.contact-active .panel--contact .section-text { color: rgba(255, 255, 255, 0.85); }
+body.contact-active .panel--contact .coord-value--active { text-shadow: 0 0 10px rgba(168, 255, 0, 0.5); }
 .contact-coords {
   margin-top: 24px;
   padding: 12px 0;

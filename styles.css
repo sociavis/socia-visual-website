@@ -1032,49 +1032,52 @@ body:hover .cursor-glow { opacity: 1; }
 }
 
 /* Intro animation */
+/* Logo entrance — radial reveal with scale pulse */
 .hero-logo.intro-ready .logo-layer--1 {
-  animation: layerAssemble1 2s var(--ease) 0.2s forwards;
+  animation: layerReveal1 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
 }
 .hero-logo.intro-ready .logo-layer--2 {
-  animation: layerAssemble2 2s var(--ease) 0.6s forwards;
+  animation: layerReveal2 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
 }
 .hero-logo.intro-ready .logo-layer--3 {
-  animation: layerAssemble3 2s var(--ease) 1s forwards;
+  animation: layerReveal3 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
 }
 .hero-logo.intro-ready .logo-glow {
-  animation: glowBurst 2.4s var(--ease) 1.2s forwards;
+  animation: glowReveal 2.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
 }
 .hero-logo.intro-ready .logo-reveal-ring {
-  animation: ringExpand 2s var(--ease) 0.8s forwards, ringRotate 20s linear 3s infinite;
+  animation: ringReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards, ringRotate 20s linear 3s infinite;
 }
 .hero-logo.intro-ready .logo-reveal-ring--2 {
-  animation: ringExpand 2s var(--ease) 1.2s forwards, ringRotate 30s linear 3.4s infinite reverse;
+  animation: ringReveal 2s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards, ringRotate 30s linear 3.4s infinite reverse;
 }
 
-@keyframes layerAssemble1 {
-  0%   { opacity: 0; transform: scale(0.6) translateZ(100px) translateX(40px) rotate(8deg); filter: drop-shadow(0 0 30px rgba(168, 255, 0, 0.4)); }
-  50%  { opacity: 0.25; transform: scale(0.85) translateZ(70px) translateX(12px) rotate(3deg); filter: drop-shadow(0 0 20px rgba(168, 255, 0, 0.25)); }
-  100% { opacity: 0.45; transform: scale(1) translateZ(50px) translateX(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.15)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.4)) drop-shadow(0 0 15px rgba(168, 255, 0, 0.12)); }
+@keyframes layerReveal1 {
+  0%   { opacity: 0; transform: scale(0.4) translateZ(50px); filter: blur(8px) drop-shadow(0 0 40px rgba(168, 255, 0, 0.6)); }
+  40%  { opacity: 0.5; transform: scale(1.08) translateZ(50px); filter: blur(0px) drop-shadow(0 0 25px rgba(168, 255, 0, 0.3)); }
+  70%  { transform: scale(0.97) translateZ(50px); }
+  100% { opacity: 0.45; transform: scale(1) translateZ(50px); filter: blur(0px) drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.15)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.4)) drop-shadow(0 0 15px rgba(168, 255, 0, 0.12)); }
 }
-@keyframes layerAssemble2 {
-  0%   { opacity: 0; transform: scale(0.5) translateZ(70px) translateX(-30px) rotate(-6deg); filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3)); }
-  50%  { opacity: 0.15; transform: scale(0.8) translateZ(40px) translateX(-10px) rotate(-2deg); }
-  100% { opacity: 0.3; transform: scale(1) translateZ(20px) translateX(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(255, 255, 255, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.35)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.06)); }
+@keyframes layerReveal2 {
+  0%   { opacity: 0; transform: scale(0.3) translateZ(20px); filter: blur(10px) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4)); }
+  40%  { opacity: 0.35; transform: scale(1.06) translateZ(20px); filter: blur(0px); }
+  70%  { transform: scale(0.98) translateZ(20px); }
+  100% { opacity: 0.3; transform: scale(1) translateZ(20px); filter: blur(0px) drop-shadow(1px 2px 0 rgba(255, 255, 255, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.35)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.06)); }
 }
-@keyframes layerAssemble3 {
-  0%   { opacity: 0; transform: scale(0.6) translateZ(-50px) translateY(30px) rotate(5deg); filter: drop-shadow(0 0 25px rgba(168, 255, 0, 0.3)); }
-  50%  { opacity: 0.1; transform: scale(0.85) translateZ(-30px) translateY(10px) rotate(2deg); }
-  100% { opacity: 0.2; transform: scale(1) translateZ(-15px) translateY(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.3)) drop-shadow(0 0 8px rgba(168, 255, 0, 0.06)); }
+@keyframes layerReveal3 {
+  0%   { opacity: 0; transform: scale(0.3) translateZ(-15px); filter: blur(12px) drop-shadow(0 0 30px rgba(168, 255, 0, 0.4)); }
+  40%  { opacity: 0.25; transform: scale(1.05) translateZ(-15px); filter: blur(0px); }
+  70%  { transform: scale(0.98) translateZ(-15px); }
+  100% { opacity: 0.2; transform: scale(1) translateZ(-15px); filter: blur(0px) drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.3)) drop-shadow(0 0 8px rgba(168, 255, 0, 0.06)); }
 }
-@keyframes glowBurst {
-  0%   { opacity: 0; transform: translateZ(-40px) translate(-50%, -50%) scale(0.1); }
-  30%  { opacity: 0.8; transform: translateZ(-40px) translate(-50%, -50%) scale(2); }
-  60%  { opacity: 1; transform: translateZ(-40px) translate(-50%, -50%) scale(1.5); }
+@keyframes glowReveal {
+  0%   { opacity: 0; transform: translateZ(-40px) translate(-50%, -50%) scale(0.3); }
+  50%  { opacity: 1; transform: translateZ(-40px) translate(-50%, -50%) scale(1.3); }
   100% { opacity: 1; transform: translateZ(-40px) translate(-50%, -50%) scale(1); }
 }
-@keyframes ringExpand {
-  0%   { opacity: 0; transform: scale(0.2) translateZ(-25px); border-color: rgba(168, 255, 0, 0.4); }
-  50%  { opacity: 0.8; border-color: rgba(168, 255, 0, 0.2); }
+@keyframes ringReveal {
+  0%   { opacity: 0; transform: scale(0.5) translateZ(-25px); border-color: rgba(168, 255, 0, 0.5); }
+  60%  { opacity: 0.9; border-color: rgba(168, 255, 0, 0.25); }
   100% { opacity: 1; transform: scale(1) translateZ(-25px); border-color: rgba(168, 255, 0, 0.12); }
 }
 

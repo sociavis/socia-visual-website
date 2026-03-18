@@ -587,7 +587,7 @@ if (logoWrap) {
     const lcy = rect.top + rect.height / 2;
     const lmx = e.clientX - lcx;
     const lmy = e.clientY - lcy;
-    const maxTilt = 25;
+    const maxTilt = 15;
     targetRx = -(lmy / (rect.height / 2)) * maxTilt;
     targetRy = (lmx / (rect.width / 2)) * maxTilt;
   });

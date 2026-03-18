@@ -880,6 +880,46 @@ body:hover .cursor-glow { opacity: 1; }
 /* ============================================
    SERVICES
    ============================================ */
+.services-3d-content {
+  position: relative;
+  z-index: 10;
+}
+.services-hint {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--grey-light);
+  margin-top: 12px;
+}
+#serviceTooltip {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  color: var(--white);
+}
+#serviceTooltip .tooltip-title {
+  color: var(--accent-1);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+#serviceTooltip .tooltip-desc {
+  color: var(--white-dim);
+  margin-bottom: 10px;
+}
+#serviceTooltip .tooltip-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+#serviceTooltip .tooltip-tags span {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border: 1px solid rgba(168, 255, 0, 0.2);
+  color: var(--accent-1);
+}
 .services-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

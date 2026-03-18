@@ -113,50 +113,6 @@ const GridScene = (function() {
   });
   scene.add(new THREE.Points(starGeom, starMat));
 
-  // ---- Comets (streak from sky to grid) ----
-  var maxComets = 4;
-  var comets = [];
-  function spawnComet() {
-    // Start high, streak diagonally downward toward the grid
-    var sx = (Math.random() - 0.5) * 400;
-    var sy = 20 + Math.random() * 40;
-    var sz = -150 - Math.random() * 300;
-    var speed = 0.4 + Math.random() * 0.3;
-    var tailLen = 35;
-    var dirX = (Math.random() > 0.5 ? 1 : -1) * (0.7 + Math.random() * 0.3);
-    var dirZ = (Math.random() - 0.5) * 0.2;
-    // Build tail as a series of points from head to fading tail
-    var pts = [];
-    for (var t = 0; t < tailLen; t++) {
-      var fade = t / tailLen;
-      pts.push(new THREE.Vector3(
-        sx - dirX * t * 2,
-        sy - t * 0.1,
-        sz - dirZ * t * 2
-      ));
-    }
-    var cGeom = new THREE.BufferGeometry().setFromPoints(pts);
-    // Vertex colors for head-to-tail gradient
-    var cColors = new Float32Array(tailLen * 3);
-    for (var t = 0; t < tailLen; t++) {
-      var bright = 1 - (t / tailLen);
-      cColors[t * 3] = 0.66 * bright;
-      cColors[t * 3 + 1] = 1.0 * bright;
-      cColors[t * 3 + 2] = 0;
-    }
-    cGeom.setAttribute('color', new THREE.BufferAttribute(cColors, 3));
-    var cMat = new THREE.LineBasicMaterial({
-      vertexColors: true, transparent: true, opacity: 0,
-      depthWrite: false, blending: THREE.AdditiveBlending
-    });
-    var cLine = new THREE.Line(cGeom, cMat);
-    scene.add(cLine);
-    comets.push({
-      mesh: cLine, mat: cMat, speed: speed,
-      dirX: dirX, dirZ: dirZ,
-      life: 0, maxLife: 140 + Math.random() * 80
-    });
-  }
 
   // Connection lines
   const maxConnections = 600;
@@ -722,31 +678,6 @@ const GridScene = (function() {
       starSizes[si] = ((0.5 + Math.random() * 0.3) + Math.sin(starPulses[si]) * 0.5) * starBoost;
     }
     starGeom.attributes.size.needsUpdate = true;
-
-    // ---- Comets (streak from sky toward grid) ----
-    var cometChance = 0.0015;
-    if (comets.length < 2 && Math.random() < cometChance) spawnComet();
-    for (var ci = comets.length - 1; ci >= 0; ci--) {
-      var c = comets[ci];
-      c.life++;
-      var cPos = c.mesh.geometry.attributes.position.array;
-      var spd = c.speed;
-      // Move all points: down on Y, forward on Z, slight X drift
-      for (var cp = 0; cp < cPos.length; cp += 3) {
-        cPos[cp] += c.dirX * spd;
-        cPos[cp + 1] -= spd;
-        cPos[cp + 2] += c.dirZ * spd;
-      }
-      c.mesh.geometry.attributes.position.needsUpdate = true;
-      var cProgress = c.life / c.maxLife;
-      c.mat.opacity = cProgress < 0.15 ? cProgress * 4 : Math.max(0, (1 - cProgress) * 0.7);
-      if (c.life >= c.maxLife) {
-        scene.remove(c.mesh);
-        c.mesh.geometry.dispose();
-        c.mat.dispose();
-        comets.splice(ci, 1);
-      }
-    }
 
     // Green wash
     washMat.opacity += ((currentSection === 3 ? 0.1 : 0) - washMat.opacity) * 0.04;

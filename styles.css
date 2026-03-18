@@ -909,19 +909,18 @@ body:hover .cursor-glow { opacity: 1; }
    ============================================ */
 .services-3d-content {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 60px;
+  left: 60px;
+  right: 60px;
   z-index: 10;
-  padding: 40px 48px;
   pointer-events: none;
 }
 .services-3d-content .section-label,
-.services-3d-content .section-title,
-.services-3d-content .services-hint {
+.services-3d-content .section-title {
   pointer-events: auto;
 }
 .services-hint {
+  display: none;
   font-family: var(--font-mono);
   font-size: 0.65rem;
   letter-spacing: 0.15em;

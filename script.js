@@ -235,6 +235,7 @@ const SectionManager = {
     this.dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === this.currentIndex);
     });
+    this.updateMobileNav();
   },
 
   updateProgress() {
@@ -347,6 +348,19 @@ const SectionManager = {
           this.goTo(targetIndex);
         }
       });
+    });
+    // Mobile nav
+    document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = parseInt(btn.dataset.target);
+        this.goTo(target);
+      });
+    });
+  },
+
+  updateMobileNav() {
+    document.querySelectorAll('.mobile-nav-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === this.currentIndex);
     });
   }
 };

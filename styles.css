@@ -1238,15 +1238,13 @@ body:hover .cursor-glow { opacity: 1; }
 }
 
 .logo-3d-scene.idle {
-  animation: logoSpin 14s linear infinite, logoBreath 5s ease-in-out infinite;
+  animation: logoFloat 6s ease-in-out infinite;
 }
-@keyframes logoSpin {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(360deg); }
-}
-@keyframes logoBreath {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(168, 255, 0, 0.08)); }
-  50%      { filter: drop-shadow(0 0 25px rgba(168, 255, 0, 0.2)) drop-shadow(0 0 50px rgba(168, 255, 0, 0.08)); }
+@keyframes logoFloat {
+  0%, 100% { transform: rotateX(2deg) rotateY(-3deg); }
+  25%      { transform: rotateX(-1.5deg) rotateY(4deg); }
+  50%      { transform: rotateX(-3deg) rotateY(-1deg); }
+  75%      { transform: rotateX(1.5deg) rotateY(-4deg); }
 }
 
 /* ============================================

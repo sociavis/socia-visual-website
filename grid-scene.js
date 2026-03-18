@@ -234,16 +234,17 @@ const GridScene = (function() {
     }
 
     // Text labels below badge
+    // Text below badge — size driven by config.textScale
     var ts = config.textScale || 1;
     if (config.title) {
       const titleSprite = makeTextSprite(config.title, Math.round(96 * ts), 1.0);
-      titleSprite.position.set(0, -size - 14 * ts, 0);
+      titleSprite.position.set(0, -size - 16, 0);
       titleSprite.scale.set(70 * ts, 10 * ts, 1);
       group.add(titleSprite);
     }
     if (config.subtitle) {
       const subSprite = makeTextSprite(config.subtitle, Math.round(44 * ts), 0.5);
-      subSprite.position.set(0, -size - 14 * ts - 9 * ts, 0);
+      subSprite.position.set(0, -size - 16 - 10 * ts, 0);
       subSprite.scale.set(65 * ts, 7 * ts, 1);
       group.add(subSprite);
     }
@@ -390,9 +391,9 @@ const GridScene = (function() {
 
   // ---- Create About Badges ----
   const badges = [
-    createHoloBadge({ pos: new THREE.Vector3(-55, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18 }),
-    createHoloBadge({ pos: new THREE.Vector3(0, 20, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18 }),
-    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconSpeed, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18 }),
+    createHoloBadge({ pos: new THREE.Vector3(-55, 20, -10), iconFn: iconGauge, title: 'FULL SEND', subtitle: 'COMMITMENT LEVEL', size: 18, textScale: 1.5 }),
+    createHoloBadge({ pos: new THREE.Vector3(0, 20, -10), iconFn: iconPlate, title: 'HOLESHOT', subtitle: 'FIRST IMPRESSIONS THAT WIN', size: 18, textScale: 1.5 }),
+    createHoloBadge({ pos: new THREE.Vector3(55, 20, -10), iconFn: iconSpeed, title: 'NO BRAKES', subtitle: 'ON CREATIVITY', size: 18, textScale: 1.5 }),
   ];
 
   // ---- Create Service Badges ----
@@ -409,7 +410,7 @@ const GridScene = (function() {
     return createHoloBadge({
       pos: new THREE.Vector3(Math.cos(angle) * r, 20, Math.sin(angle) * r),
       iconFn: s.icon, title: s.label.toUpperCase(), size: 18,
-      desc: s.desc, tags: s.tags, textScale: 1.8
+      desc: s.desc, tags: s.tags, textScale: 1.5
     });
   });
   let serviceRingAngle = 0;

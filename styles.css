@@ -855,10 +855,10 @@ body:hover .cursor-glow { opacity: 1; }
    MARQUEE (inside About panel)
    ============================================ */
 .marquee {
-  padding: 24px 0;
+  padding: 16px 0;
   overflow: hidden;
   position: absolute;
-  bottom: 8%;
+  bottom: 14%;
   left: 0;
   right: 0;
   width: 100vw;
@@ -878,7 +878,7 @@ body:hover .cursor-glow { opacity: 1; }
 }
 .marquee-track span {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -892,7 +892,7 @@ body:hover .cursor-glow { opacity: 1; }
 }
 .marquee-track span.marquee-dot {
   color: rgba(168, 255, 0, 0.15);
-  font-size: 1.6rem;
+  font-size: 1.1rem;
   flex-shrink: 0;
   transition: color 0.4s;
 }

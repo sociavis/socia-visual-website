@@ -482,7 +482,7 @@ const GridScene = (function() {
 
   const camTargets = [
     { pos: new THREE.Vector3(0, 80, 140), look: new THREE.Vector3(0, 0, -60) },     // hero: high, looking down
-    { pos: new THREE.Vector3(-30, 45, 80), look: new THREE.Vector3(10, 15, -20) },   // about: shifted left, lower
+    { pos: new THREE.Vector3(0, 55, 100), look: new THREE.Vector3(0, 15, -10) },      // about: centered, straight on
     { pos: new THREE.Vector3(20, 55, 110), look: new THREE.Vector3(-10, 10, -10) },  // services: shifted right, wider
     { pos: new THREE.Vector3(0, 30, 60), look: new THREE.Vector3(0, 5, -30) },       // contact: close, low, intimate
   ];

@@ -115,22 +115,27 @@ const GridScene = (function() {
   const intersectPoint = new THREE.Vector3();
   let mouseOnPlane = false;
 
+  // Store raw mouse pixel coordinates for service hover detection
+  let mousePixelX = -1, mousePixelY = -1;
+
   document.addEventListener('mousemove', (e) => {
     mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    mousePixelX = e.clientX;
+    mousePixelY = e.clientY;
   });
-  document.addEventListener('mouseleave', () => { mouseNDC.set(-10, -10); mouseOnPlane = false; });
+  document.addEventListener('mouseleave', () => { mouseNDC.set(-10, -10); mouseOnPlane = false; mousePixelX = -1; mousePixelY = -1; });
 
   // ---- Canvas text texture helper ----
   function makeTextSprite(text, fontSize, opacity) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = 512; canvas.height = 64;
+    canvas.width = 1024; canvas.height = 128;
     ctx.font = `${fontSize || 24}px 'Share Tech Mono', monospace`;
     ctx.fillStyle = `rgba(168, 255, 0, ${opacity || 0.8})`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, 256, 32);
+    ctx.fillText(text, 512, 64);
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
     const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
@@ -184,11 +189,77 @@ const GridScene = (function() {
     const scanLine = new THREE.Line(scanGeom, scanMat);
     group.add(scanLine);
 
-    // Corner accents (small L-shapes at each diamond point)
+    // Corner accents — rotated 45deg CW and pushed 8 units outward from each diamond point
+    // Diamond points are at (0,size), (size,0), (0,-size), (-size,0)
+    // Outward direction for each point along the diagonal (45deg rotated positions):
+    // Top point (0,size): outward along (1,1)/sqrt2, bracket rotated 45deg CW
+    // Right point (size,0): outward along (1,-1)/sqrt2
+    // Bottom point (0,-size): outward along (-1,-1)/sqrt2
+    // Left point (-size,0): outward along (-1,1)/sqrt2
     const cornerMat = new THREE.LineBasicMaterial({ color: accentColor, transparent: true, opacity: 0.5 });
-    [[0, size, 3, -3], [size, 0, -3, -3], [0, -size, -3, 3], [-size, 0, 3, 3]].forEach(([cx, cy, dx, dy]) => {
-      const c1 = [new THREE.Vector3(cx, cy, 0.3), new THREE.Vector3(cx + dx, cy, 0.3)];
-      const c2 = [new THREE.Vector3(cx, cy, 0.3), new THREE.Vector3(cx, cy + dy, 0.3)];
+    const cos45 = Math.cos(Math.PI / 4); // ~0.7071
+    const sin45 = Math.sin(Math.PI / 4);
+    const bracketLen = 3;
+    const cornerOffset = 8;
+    // Each corner: [diamond point x, diamond point y, outward dir x, outward dir y]
+    // Then we place bracket center at point + offset*dir, and rotate the L-shape 45deg CW
+    [
+      // Top: point (0, size), outward diagonal (1,1)/sqrt2
+      { cx: 0, cy: size, odx: cos45, ody: cos45, rot: -Math.PI / 4 },
+      // Right: point (size, 0), outward diagonal (1,-1)/sqrt2
+      { cx: size, cy: 0, odx: cos45, ody: -cos45, rot: -Math.PI / 4 },
+      // Bottom: point (0, -size), outward diagonal (-1,-1)/sqrt2
+      { cx: 0, cy: -size, odx: -cos45, ody: -cos45, rot: -Math.PI / 4 },
+      // Left: point (-size, 0), outward diagonal (-1,1)/sqrt2
+      { cx: -size, cy: 0, odx: -cos45, ody: cos45, rot: -Math.PI / 4 },
+    ].forEach(({ cx, cy, odx, ody, rot }) => {
+      // New center pushed 8 units outward along the diagonal
+      const ncx = cx + odx * cornerOffset;
+      const ncy = cy + ody * cornerOffset;
+
+      // Original bracket arms before rotation:
+      // Arm1 goes in the direction that was originally (dx, 0) — horizontal
+      // Arm2 goes in the direction that was originally (0, dy) — vertical
+      // We need to figure out what the original dx, dy were for each corner:
+      // Top (0,size): dx=3, dy=-3 -> arm1 along +X, arm2 along -Y
+      // Right (size,0): dx=-3, dy=-3 -> arm1 along -X, arm2 along -Y
+      // Bottom (0,-size): dx=-3, dy=3 -> arm1 along -X, arm2 along +Y
+      // Left (-size,0): dx=3, dy=3 -> arm1 along +X, arm2 along +Y
+
+      // Instead of tracking original orientations, compute rotated arms:
+      // The L-shape at each diamond point originally had two arms from the point.
+      // After 45deg CW rotation, we rotate those arm directions by -45deg (CW).
+      // Original arms for each corner, then rotate by -45deg:
+      let arm1x, arm1y, arm2x, arm2y;
+
+      if (cx === 0 && cy > 0) {
+        // Top: original arms (3, 0) and (0, -3)
+        arm1x = 3 * cos45 - 0 * (-sin45);   // rotate (3,0) by -45deg
+        arm1y = 3 * (-sin45) + 0 * cos45;
+        arm2x = 0 * cos45 - (-3) * (-sin45);
+        arm2y = 0 * (-sin45) + (-3) * cos45;
+      } else if (cx > 0 && cy === 0) {
+        // Right: original arms (-3, 0) and (0, -3)
+        arm1x = -3 * cos45 - 0 * (-sin45);
+        arm1y = -3 * (-sin45) + 0 * cos45;
+        arm2x = 0 * cos45 - (-3) * (-sin45);
+        arm2y = 0 * (-sin45) + (-3) * cos45;
+      } else if (cx === 0 && cy < 0) {
+        // Bottom: original arms (-3, 0) and (0, 3)
+        arm1x = -3 * cos45 - 0 * (-sin45);
+        arm1y = -3 * (-sin45) + 0 * cos45;
+        arm2x = 0 * cos45 - 3 * (-sin45);
+        arm2y = 0 * (-sin45) + 3 * cos45;
+      } else {
+        // Left: original arms (3, 0) and (0, 3)
+        arm1x = 3 * cos45 - 0 * (-sin45);
+        arm1y = 3 * (-sin45) + 0 * cos45;
+        arm2x = 0 * cos45 - 3 * (-sin45);
+        arm2y = 0 * (-sin45) + 3 * cos45;
+      }
+
+      const c1 = [new THREE.Vector3(ncx, ncy, 0.3), new THREE.Vector3(ncx + arm1x, ncy + arm1y, 0.3)];
+      const c2 = [new THREE.Vector3(ncx, ncy, 0.3), new THREE.Vector3(ncx + arm2x, ncy + arm2y, 0.3)];
       group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(c1), cornerMat));
       group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(c2), cornerMat));
     });
@@ -203,15 +274,15 @@ const GridScene = (function() {
 
     // Text labels below badge
     if (config.title) {
-      const titleSprite = makeTextSprite(config.title, 28, 0.9);
-      titleSprite.position.set(0, -size - 6, 0);
-      titleSprite.scale.set(28, 3.5, 1);
+      const titleSprite = makeTextSprite(config.title, 36, 1.0);
+      titleSprite.position.set(0, -size - 8, 0);
+      titleSprite.scale.set(38, 5, 1);
       group.add(titleSprite);
     }
     if (config.subtitle) {
-      const subSprite = makeTextSprite(config.subtitle, 16, 0.4);
-      subSprite.position.set(0, -size - 10, 0);
-      subSprite.scale.set(28, 3, 1);
+      const subSprite = makeTextSprite(config.subtitle, 20, 0.6);
+      subSprite.position.set(0, -size - 13, 0);
+      subSprite.scale.set(36, 4, 1);
       group.add(subSprite);
     }
 
@@ -390,6 +461,19 @@ const GridScene = (function() {
   });
   let serviceRingAngle = 0;
 
+  // ---- Orbit ring for services (visible ring on Y=40 plane) ----
+  const orbitRingSegments = 128;
+  const orbitRingPoints = [];
+  for (let i = 0; i <= orbitRingSegments; i++) {
+    const theta = (i / orbitRingSegments) * Math.PI * 2;
+    orbitRingPoints.push(new THREE.Vector3(Math.cos(theta) * 50, 40, Math.sin(theta) * 50));
+  }
+  const orbitRingGeom = new THREE.BufferGeometry().setFromPoints(orbitRingPoints);
+  const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.08, depthWrite: false });
+  const orbitRing = new THREE.Line(orbitRingGeom, orbitRingMat);
+  orbitRing.visible = false;
+  scene.add(orbitRing);
+
   // ---- Service hover tooltip (HTML overlay) ----
   let tooltipEl = document.createElement('div');
   tooltipEl.id = 'serviceTooltip';
@@ -421,7 +505,7 @@ const GridScene = (function() {
     currentSection = toIdx;
   }
 
-  // ---- Animate Badge (shared logic for about + services) ----
+  // ---- Animate Badge — about badges with glitch ----
   function animateBadge(badge, i, visible) {
     if (visible && !badge.visible) {
       badge.visible = true;
@@ -469,6 +553,50 @@ const GridScene = (function() {
     ud.frontMat.opacity = 0.2 + Math.sin(glTime * 0.9 + i * 1.3) * 0.08;
   }
 
+  // ---- Animate Service Badge — NO glitch, hover brightens ----
+  function animateServiceBadge(badge, i, visible) {
+    if (visible && !badge.visible) {
+      badge.visible = true;
+      badge.scale.set(0.01, 0.01, 0.01);
+    }
+    if (!badge.visible) return;
+
+    const ud = badge.userData;
+    const targetScale = visible ? (ud.isHovered ? 1.15 : 1) : 0.01;
+    const s = badge.scale.x + (targetScale - badge.scale.x) * 0.06;
+    badge.scale.set(s, s, s);
+    if (!visible && s < 0.02) { badge.visible = false; return; }
+
+    // Continuous Y rotation (slow spin)
+    badge.rotation.y += 0.008 + i * 0.002;
+
+    // Ambient float
+    badge.position.y = ud.targetPos.y + Math.sin(glTime * 0.6 + i * 2.5) * 2.5;
+
+    // Slight X tilt
+    badge.rotation.x = Math.sin(glTime * 0.4 + i * 1.8) * 0.06;
+
+    // Scan line sweep
+    if (ud.scanLine) {
+      const scanY = Math.sin(glTime * 1.5 + i * 2) * 14;
+      ud.scanLine.position.y = scanY;
+      ud.scanMat.opacity = 0.2 + Math.abs(Math.sin(glTime * 1.5 + i * 2)) * 0.3;
+    }
+
+    // No glitch — smooth hover-based brightness
+    if (ud.isHovered) {
+      ud.mainMat.opacity += (1.0 - ud.mainMat.opacity) * 0.1;
+      ud.glowMat.opacity += (0.15 - ud.glowMat.opacity) * 0.1;
+    } else {
+      ud.mainMat.opacity += (0.7 + Math.sin(glTime * 1.5 + i) * 0.15 - ud.mainMat.opacity) * 0.1;
+      ud.glowMat.opacity += (0.06 + Math.sin(glTime * 2 + i) * 0.02 - ud.glowMat.opacity) * 0.1;
+    }
+    badge.position.x += (ud.targetPos.x - badge.position.x) * 0.1;
+
+    ud.backMat.opacity = 0.08 + Math.sin(glTime * 1.2 + i * 0.7) * 0.04;
+    ud.frontMat.opacity = 0.2 + Math.sin(glTime * 0.9 + i * 1.3) * 0.08;
+  }
+
   // ---- Main Animation Loop ----
   function animate() {
     glTime += 0.01;
@@ -483,15 +611,48 @@ const GridScene = (function() {
     camera.position.y += Math.sin(camTime * 0.5) * 2;
     camera.lookAt(currentCamLook);
 
-    // About badges
+    // About badges (with glitch)
     badges.forEach((b, i) => animateBadge(b, i, currentSection === 1));
 
-    // Service badges — orbit
+    // Service badges — orbit + hover detection
     serviceRingAngle += 0.002;
+    const isServicesVisible = currentSection === 2;
+
+    // Show/hide orbit ring
+    if (isServicesVisible && !orbitRing.visible) orbitRing.visible = true;
+    if (!isServicesVisible && orbitRing.visible) {
+      orbitRingMat.opacity += (0 - orbitRingMat.opacity) * 0.04;
+      if (orbitRingMat.opacity < 0.001) orbitRing.visible = false;
+    }
+    if (isServicesVisible) {
+      orbitRingMat.opacity += (0.08 - orbitRingMat.opacity) * 0.04;
+    }
+
+    // Service hover detection via screen-space projection
+    let hoveredServiceIdx = -1;
+    if (isServicesVisible && mousePixelX >= 0) {
+      const projVec = new THREE.Vector3();
+      let closestDist = Infinity;
+      serviceIcons.forEach((svc, i) => {
+        if (!svc.visible) return;
+        projVec.copy(svc.position);
+        projVec.project(camera);
+        const screenX = (projVec.x * 0.5 + 0.5) * window.innerWidth;
+        const screenY = (-projVec.y * 0.5 + 0.5) * window.innerHeight;
+        const dx = mousePixelX - screenX;
+        const dy = mousePixelY - screenY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 40 && dist < closestDist) {
+          closestDist = dist;
+          hoveredServiceIdx = i;
+        }
+      });
+    }
+
     serviceIcons.forEach((svc, i) => {
-      const vis = currentSection === 2;
-      animateBadge(svc, i + 3, vis);
-      if (svc.visible && vis) {
+      svc.userData.isHovered = (i === hoveredServiceIdx);
+      animateServiceBadge(svc, i + 3, isServicesVisible);
+      if (svc.visible && isServicesVisible) {
         const angle = (i / serviceData.length) * Math.PI * 2 - Math.PI / 2 + serviceRingAngle;
         const r = 50;
         svc.userData.targetPos.x = Math.cos(angle) * r;
@@ -499,6 +660,17 @@ const GridScene = (function() {
         svc.position.z += (svc.userData.targetPos.z - svc.position.z) * 0.06;
       }
     });
+
+    // Service tooltip
+    if (hoveredServiceIdx >= 0) {
+      const ud = serviceIcons[hoveredServiceIdx].userData;
+      tooltipEl.innerHTML = `<div style="color:#a8ff00;font-size:13px;font-weight:bold;margin-bottom:6px;">${ud.label}</div><div style="color:#ccc;font-size:11px;line-height:1.5;margin-bottom:8px;">${ud.desc}</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${ud.tags.map(t => `<span style="color:#a8ff00;font-size:10px;border:1px solid rgba(168,255,0,0.3);padding:2px 6px;">${t}</span>`).join('')}</div>`;
+      tooltipEl.style.opacity = '1';
+      tooltipEl.style.left = Math.min(mousePixelX + 16, window.innerWidth - 300) + 'px';
+      tooltipEl.style.top = (mousePixelY - 20) + 'px';
+    } else {
+      tooltipEl.style.opacity = '0';
+    }
 
     // Green wash
     washMat.opacity += ((currentSection === 3 ? 0.1 : 0) - washMat.opacity) * 0.04;

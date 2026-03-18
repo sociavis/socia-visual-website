@@ -598,7 +598,7 @@ body:hover .cursor-glow { opacity: 1; }
   font-family: var(--font-heading);
   font-size: clamp(2.2rem, 5vw, 4rem);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 0.95;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   margin-bottom: 24px;
@@ -887,7 +887,7 @@ body:hover .cursor-glow { opacity: 1; }
 .service-card {
   background: rgba(15, 15, 15, 0.8);
   border: 1px solid var(--grey);
-  padding: clamp(20px, 3vw, 32px);
+  padding: clamp(16px, 2vw, 22px);
   transition: all 0.5s var(--ease);
   position: relative;
   overflow: hidden;
@@ -945,9 +945,9 @@ body:hover .cursor-glow { opacity: 1; }
   z-index: 1;
 }
 .service-icon {
-  width: 36px;
-  height: 36px;
-  margin-bottom: 16px;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 10px;
   color: var(--accent-1);
   position: relative;
   z-index: 1;
@@ -966,9 +966,9 @@ body:hover .cursor-glow { opacity: 1; }
   letter-spacing: 0.05em;
 }
 .service-desc {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--white-dim);
-  line-height: 1.6;
+  line-height: 1.5;
   margin-bottom: 16px;
   position: relative;
   z-index: 1;
@@ -1052,27 +1052,18 @@ body:hover .cursor-glow { opacity: 1; }
 }
 
 @keyframes layerAssemble1 {
-  0%   { opacity: 0; transform: scale(0.3) translateZ(160px) translateX(80px) rotate(20deg); filter: drop-shadow(0 0 50px rgba(168, 255, 0, 0.7)); }
-  20%  { opacity: 0.1; }
-  40%  { opacity: 0.2; transform: scale(0.6) translateZ(110px) translateX(40px) rotate(10deg); }
-  60%  { opacity: 0.3; filter: drop-shadow(0 0 25px rgba(168, 255, 0, 0.3)); }
-  80%  { opacity: 0.38; transform: scale(0.9) translateZ(65px) translateX(8px) rotate(2deg); }
+  0%   { opacity: 0; transform: scale(0.6) translateZ(100px) translateX(40px) rotate(8deg); filter: drop-shadow(0 0 30px rgba(168, 255, 0, 0.4)); }
+  50%  { opacity: 0.25; transform: scale(0.85) translateZ(70px) translateX(12px) rotate(3deg); filter: drop-shadow(0 0 20px rgba(168, 255, 0, 0.25)); }
   100% { opacity: 0.45; transform: scale(1) translateZ(50px) translateX(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.15)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.4)) drop-shadow(0 0 15px rgba(168, 255, 0, 0.12)); }
 }
 @keyframes layerAssemble2 {
-  0%   { opacity: 0; transform: scale(0.2) translateZ(100px) translateX(-70px) rotate(-15deg); filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4)); }
-  20%  { opacity: 0.06; }
-  40%  { opacity: 0.12; transform: scale(0.5) translateZ(65px) translateX(-35px) rotate(-8deg); }
-  60%  { opacity: 0.18; }
-  80%  { opacity: 0.25; transform: scale(0.85) translateZ(30px) translateX(-8px) rotate(-2deg); }
+  0%   { opacity: 0; transform: scale(0.5) translateZ(70px) translateX(-30px) rotate(-6deg); filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3)); }
+  50%  { opacity: 0.15; transform: scale(0.8) translateZ(40px) translateX(-10px) rotate(-2deg); }
   100% { opacity: 0.3; transform: scale(1) translateZ(20px) translateX(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(255, 255, 255, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.35)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.06)); }
 }
 @keyframes layerAssemble3 {
-  0%   { opacity: 0; transform: scale(0.4) translateZ(-80px) translateY(60px) rotate(12deg); filter: drop-shadow(0 0 40px rgba(168, 255, 0, 0.5)); }
-  20%  { opacity: 0.04; }
-  40%  { opacity: 0.08; transform: scale(0.6) translateZ(-50px) translateY(30px) rotate(6deg); }
-  60%  { opacity: 0.12; }
-  80%  { opacity: 0.17; transform: scale(0.9) translateZ(-22px) translateY(6px) rotate(1deg); }
+  0%   { opacity: 0; transform: scale(0.6) translateZ(-50px) translateY(30px) rotate(5deg); filter: drop-shadow(0 0 25px rgba(168, 255, 0, 0.3)); }
+  50%  { opacity: 0.1; transform: scale(0.85) translateZ(-30px) translateY(10px) rotate(2deg); }
   100% { opacity: 0.2; transform: scale(1) translateZ(-15px) translateY(0) rotate(0deg); filter: drop-shadow(1px 2px 0 rgba(168, 255, 0, 0.08)) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.3)) drop-shadow(0 0 8px rgba(168, 255, 0, 0.06)); }
 }
 @keyframes glowBurst {

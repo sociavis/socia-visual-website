@@ -424,19 +424,13 @@ const GridScene = (function() {
     new THREE.Vector3(0, 0, -dR)
   ];
   orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(diamondPts), orbitRingMat));
-  // Filled diamond plane (subtle green)
+  // Filled diamond plane
   var dShape = new THREE.Shape();
   dShape.moveTo(0, -dR); dShape.lineTo(dR, 0); dShape.lineTo(0, dR); dShape.lineTo(-dR, 0); dShape.closePath();
-  var dFillMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.015, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+  var dFillMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.04, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
   var dFillMesh = new THREE.Mesh(new THREE.ShapeGeometry(dShape), dFillMat);
   dFillMesh.rotation.x = -Math.PI / 2;
   orbitRing.add(dFillMesh);
-  // Corner brackets
-  var dcMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.25, depthWrite: false });
-  [[0, -dR, 6, 0, -6, 0], [dR, 0, 0, -6, 0, 6], [0, dR, 6, 0, -6, 0], [-dR, 0, 0, -6, 0, 6]].forEach(function(c) {
-    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], 0, c[1]), new THREE.Vector3(c[0] + c[2], 0, c[1] + c[3])]), dcMat));
-    orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(c[0], 0, c[1]), new THREE.Vector3(c[0] + c[4], 0, c[1] + c[5])]), dcMat));
-  });
   orbitRing.position.y = dY;
   orbitRing.visible = false;
   scene.add(orbitRing);
@@ -584,14 +578,16 @@ const GridScene = (function() {
     serviceRingAngle += 0.002;
     const isServicesVisible = currentSection === 2;
 
-    // Show/hide orbit ring
+    // Show/hide diamond border
     if (isServicesVisible && !orbitRing.visible) orbitRing.visible = true;
     if (!isServicesVisible && orbitRing.visible) {
       orbitRingMat.opacity += (0 - orbitRingMat.opacity) * 0.04;
+      dFillMat.opacity += (0 - dFillMat.opacity) * 0.04;
       if (orbitRingMat.opacity < 0.001) orbitRing.visible = false;
     }
     if (isServicesVisible) {
-      orbitRingMat.opacity += (0.08 - orbitRingMat.opacity) * 0.04;
+      orbitRingMat.opacity += (0.12 - orbitRingMat.opacity) * 0.04;
+      dFillMat.opacity += (0.04 - dFillMat.opacity) * 0.04;
     }
 
     // Service hover detection via screen-space projection

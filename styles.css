@@ -1688,6 +1688,28 @@ body.contact-active .form-toggle:hover {
 }
 
 /* ============================================
+   FOCUS INDICATORS (Accessibility)
+   ============================================ */
+.section-nav-dot:focus-visible {
+  outline: 2px solid var(--accent-1);
+  outline-offset: 4px;
+  box-shadow: 0 0 16px rgba(168, 255, 0, 0.3);
+}
+.mobile-nav-btn:focus-visible {
+  outline: 2px solid var(--accent-1);
+  outline-offset: 2px;
+}
+.hero-cta:focus-visible,
+.hero-cta-ghost:focus-visible,
+.form-submit:focus-visible,
+.games-link:focus-visible,
+.form-toggle:focus-visible {
+  outline: 2px solid var(--accent-1);
+  outline-offset: 2px;
+  box-shadow: 0 0 12px rgba(168, 255, 0, 0.2);
+}
+
+/* ============================================
    SKIP LINK (Accessibility)
    ============================================ */
 .skip-link {

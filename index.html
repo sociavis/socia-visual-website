@@ -54,10 +54,13 @@
   <link rel="preload" href="styles.css" as="style" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Fonts (display=swap prevents invisible text, preconnect speeds up download) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <!-- Fonts (self-hosted, eliminates render-blocking Google Fonts chain) -->
+  <style>
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/chakra-petch-400.woff2) format('woff2')}
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/chakra-petch-600.woff2) format('woff2')}
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/chakra-petch-700.woff2) format('woff2')}
+    @font-face{font-family:'Share Tech Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/share-tech-mono.woff2) format('woff2')}
+  </style>
 
   <!-- Structured Data -->
   <script type="application/ld+json">

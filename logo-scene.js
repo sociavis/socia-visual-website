@@ -37,7 +37,7 @@
 
   /* ── Logo geometry ── */
   var CX = 960, CY = 960, SC = 3.2 / 960;
-  var DEPTH = 0.5;
+  var DEPTH = 0.575;
 
   function makeShape(coords) {
     var shape = new THREE.Shape();

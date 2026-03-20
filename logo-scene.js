@@ -19,9 +19,10 @@
   cvs.style.pointerEvents = "none";
 
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
-  camera.position.set(1.2, 0.4, 13);
-  camera.lookAt(0, 0, 0);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  // Angled view — slightly above and to the right, looking left-of-center
+  camera.position.set(2.5, 1.5, 16);
+  camera.lookAt(-0.5, -0.3, 0);
 
   /* ── Lighting ── */
   scene.add(new THREE.AmbientLight(0x505050, 1.2));
@@ -36,7 +37,7 @@
   scene.add(backLight);
 
   /* ── Logo geometry ── */
-  var CX = 960, CY = 960, SC = 4.5 / 960;
+  var CX = 960, CY = 960, SC = 3.6 / 960;
   var DEPTH = 0.35;
 
   function makeShape(coords) {
@@ -138,7 +139,7 @@
   }
 
   /* ── Inner Ring — nearly complete circle with 2 gaps + tick marks ── */
-  var INNER_R = 4.5;
+  var INNER_R = 3.8;
   var innerGroup = new THREE.Group();
   var innerMats = [];
 
@@ -161,7 +162,7 @@
   scene.add(innerGroup);
 
   /* ── Outer Ring — 6 segmented arcs with gaps + notch ticks ── */
-  var OUTER_R = 5.8;
+  var OUTER_R = 4.8;
   var outerGroup = new THREE.Group();
   var outerMats = [];
   var OUTER_SEGS = 6;
@@ -171,12 +172,12 @@
   for (var s = 0; s < OUTER_SEGS; s++) {
     var startA = s * slotSize;
     var endA = startA + arcSpan;
-    var seg = new THREE.Line(makeArc(OUTER_R, startA, endA, 24), lineMat(0.16));
+    var seg = new THREE.Line(makeArc(OUTER_R, startA, endA, 24), lineMat(0.3));
     outerMats.push(seg.material);
     outerGroup.add(seg);
 
     // Small notch at start of each segment
-    var notch = new THREE.Line(makeTick(startA, OUTER_R - 0.15, OUTER_R + 0.15), lineMat(0.12));
+    var notch = new THREE.Line(makeTick(startA, OUTER_R - 0.15, OUTER_R + 0.15), lineMat(0.22));
     outerMats.push(notch.material);
     outerGroup.add(notch);
   }
@@ -230,7 +231,7 @@
   var introStart = 0;
   var INTRO_DUR = 800;
   var time = 0;
-  var camBaseX = 1.2, camBaseY = 0.4, camBaseZ = 13;
+  var camBaseX = 2.5, camBaseY = 1.5, camBaseZ = 16;
 
   // Start invisible
   logoGroup.scale.set(0, 0, 0);
@@ -307,13 +308,14 @@
       matShape.emissiveIntensity = 0.13 + hoverT * 0.18;
     }
 
-    // Camera drift
-    var driftX = Math.sin(time * 0.13) * 0.35;
-    var driftY = Math.sin(time * 0.1) * 0.2;
-    var driftZ = Math.sin(time * 0.07) * 0.25;
+    // Camera drift — slow lissajous orbit around the scene
+    var driftX = Math.sin(time * 0.1) * 0.8 + Math.sin(time * 0.23) * 0.3;
+    var driftY = Math.cos(time * 0.08) * 0.5 + Math.sin(time * 0.17) * 0.2;
+    var driftZ = Math.sin(time * 0.06) * 0.6;
     camera.position.set(camBaseX + driftX, camBaseY + driftY, camBaseZ + driftZ);
-    camera.lookAt(driftX * 0.12, driftY * 0.08, 0);
-    camera.fov = 46 - hoverT * 3;
+    // Look target drifts opposite to camera for parallax
+    camera.lookAt(-0.5 - driftX * 0.2, -0.3 - driftY * 0.15, 0);
+    camera.fov = 40 - hoverT * 3;
     camera.updateProjectionMatrix();
 
     // Ring rotation — inner CW, outer CCW
@@ -324,7 +326,7 @@
     var hoverBright = hoverT * 0.18;
     var pulse = 0.03 * Math.sin(time * 2);
     var innerOpacity = Math.min(0.5, 0.2 + hoverBright + pulse);
-    var outerOpacity = Math.min(0.45, 0.16 + hoverBright + pulse * 0.7);
+    var outerOpacity = Math.min(0.55, 0.3 + hoverBright + pulse * 0.7);
     innerMats.forEach(function (m) { m.opacity = innerOpacity; });
     outerMats.forEach(function (m) { m.opacity = outerOpacity; });
 
@@ -360,12 +362,6 @@
   wrap.addEventListener("touchstart", function () { hovering = true; }, { passive: true });
   wrap.addEventListener("touchend", function () { hovering = false; });
 
-  // Force initial render with a test frame
   resize();
-  renderer.render(scene, camera);
   requestAnimationFrame(tick);
-
-  // Debug: confirm scene initialized
-  console.log("logo-scene: initialized, container:", container.offsetWidth, "x", container.offsetHeight,
-    "meshes:", logoGroup.children.length, "cam:", camera.position.z);
 })();

@@ -19,10 +19,9 @@
   cvs.style.pointerEvents = "none";
 
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-  // Angled view — slightly above and to the right, looking left-of-center
-  camera.position.set(2.5, 1.5, 16);
-  camera.lookAt(-0.5, -0.3, 0);
+  var camera = new THREE.PerspectiveCamera(44, 1, 0.1, 100);
+  camera.position.set(0, 0, 14);
+  camera.lookAt(0, 0, 0);
 
   /* ── Lighting ── */
   scene.add(new THREE.AmbientLight(0x505050, 1.2));
@@ -37,8 +36,8 @@
   scene.add(backLight);
 
   /* ── Logo geometry ── */
-  var CX = 960, CY = 960, SC = 3.6 / 960;
-  var DEPTH = 0.35;
+  var CX = 960, CY = 960, SC = 3.2 / 960;
+  var DEPTH = 0.5;
 
   function makeShape(coords) {
     var shape = new THREE.Shape();
@@ -139,7 +138,7 @@
   }
 
   /* ── Inner Ring — nearly complete circle with 2 gaps + tick marks ── */
-  var INNER_R = 3.8;
+  var INNER_R = 3.4;
   var innerGroup = new THREE.Group();
   var innerMats = [];
 
@@ -162,7 +161,7 @@
   scene.add(innerGroup);
 
   /* ── Outer Ring — 6 segmented arcs with gaps + notch ticks ── */
-  var OUTER_R = 4.8;
+  var OUTER_R = 4.3;
   var outerGroup = new THREE.Group();
   var outerMats = [];
   var OUTER_SEGS = 6;
@@ -213,9 +212,9 @@
 
   var pMat = new THREE.PointsMaterial({
     map: glowTex,
-    size: 0.4,
+    size: 0.55,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.95,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     sizeAttenuation: true
@@ -231,7 +230,7 @@
   var introStart = 0;
   var INTRO_DUR = 800;
   var time = 0;
-  var camBaseX = 2.5, camBaseY = 1.5, camBaseZ = 16;
+  var camBaseX = 0, camBaseY = 0, camBaseZ = 14;
 
   // Start invisible
   logoGroup.scale.set(0, 0, 0);
@@ -308,14 +307,8 @@
       matShape.emissiveIntensity = 0.13 + hoverT * 0.18;
     }
 
-    // Camera drift — slow lissajous orbit around the scene
-    var driftX = Math.sin(time * 0.1) * 0.8 + Math.sin(time * 0.23) * 0.3;
-    var driftY = Math.cos(time * 0.08) * 0.5 + Math.sin(time * 0.17) * 0.2;
-    var driftZ = Math.sin(time * 0.06) * 0.6;
-    camera.position.set(camBaseX + driftX, camBaseY + driftY, camBaseZ + driftZ);
-    // Look target drifts opposite to camera for parallax
-    camera.lookAt(-0.5 - driftX * 0.2, -0.3 - driftY * 0.15, 0);
-    camera.fov = 40 - hoverT * 3;
+    // Logo scene camera stays centered — background scene handles the drift
+    camera.fov = 44 - hoverT * 3;
     camera.updateProjectionMatrix();
 
     // Ring rotation — inner CW, outer CCW
@@ -349,8 +342,8 @@
       posArr[i * 3 + 2] = 0.02; // flat, slightly in front
     }
     pGeo.attributes.position.needsUpdate = true;
-    pMat.opacity = 0.85 + hoverT * 0.1;
-    pMat.size = 0.4 + hoverT * 0.12;
+    pMat.opacity = 0.9 + hoverT * 0.1;
+    pMat.size = 0.55 + hoverT * 0.15;
 
     resize();
     renderer.render(scene, camera);

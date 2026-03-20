@@ -13,7 +13,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0a0a0a">
+  <meta name="color-scheme" content="dark">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -52,10 +54,13 @@
   </script>
 
   <!-- reCAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Leau4ksAAAAAPDsayHMnlB8wLZk7yK88EIPnBuS"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="https://www.google.com/recaptcha/api.js?render=6Leau4ksAAAAAPDsayHMnlB8wLZk7yK88EIPnBuS"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
+
+  <!-- Skip to main content -->
+  <a href="#viewport" class="skip-link">Skip to main content</a>
 
   <!-- Boot sequence overlay -->
   <div class="boot-overlay" id="bootOverlay">
@@ -79,13 +84,13 @@
   <div class="scanlines"></div>
 
   <!-- Custom cursor -->
-  <div class="cursor" id="cursor">
+  <div class="cursor" id="cursor" aria-hidden="true">
     <div class="cursor-cross"></div>
   </div>
-  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
   <!-- Cursor glow -->
-  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
   <!-- Scroll progress -->
   <div class="scroll-progress-frame">
@@ -96,7 +101,7 @@
   </div>
 
   <!-- Persistent HUD overlay -->
-  <div class="hud-overlay" id="hudOverlay">
+  <div class="hud-overlay" id="hudOverlay" aria-hidden="true">
     <div class="hud-corner hud-corner--tl"></div>
     <div class="hud-corner hud-corner--tr"></div>
     <div class="hud-corner hud-corner--bl"></div>
@@ -128,7 +133,7 @@
   </div>
 
   <!-- Section navigation dots -->
-  <div class="section-nav" id="sectionNav">
+  <nav class="section-nav" id="sectionNav" aria-label="Page sections">
     <button class="section-nav-dot active" data-target="0">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
       <span>Home</span>
@@ -145,7 +150,7 @@
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/></svg>
       <span>Contact</span>
     </button>
-  </div>
+  </nav>
 
   <!-- Mobile bottom nav -->
   <nav class="mobile-nav" id="mobileNav">
@@ -168,7 +173,7 @@
   </nav>
 
   <!-- Viewport container -->
-  <div class="viewport" id="viewport">
+  <div class="viewport" id="viewport" role="main">
 
     <!-- Global particle canvas -->
     <div id="heroCanvas"></div>
@@ -358,7 +363,7 @@
           </div>
           <div class="section-right">
             <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/scott@sociavisual.com" method="POST">
-              <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+              <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
               <input type="hidden" name="_captcha" value="false">
               <input type="hidden" name="_subject" value="New inquiry from sociavisual.com">
 
@@ -410,7 +415,7 @@
               </div>
 
               <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
-              <div class="form-status" id="formStatus"></div>
+              <div class="form-status" id="formStatus" aria-live="polite" aria-atomic="true"></div>
 
               <button type="submit" class="form-submit magnetic reveal">
                 <span class="cta-text">Transmit Message</span>

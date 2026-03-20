@@ -89,24 +89,24 @@ const GridScene = (function() {
   }
 
   // ---- Stars (horizon band) ----
-  var starCount = 500;
-  var starPositions = new Float32Array(starCount * 3);
-  var starSizes = new Float32Array(starCount);
-  var starPulses = new Float32Array(starCount);
-  for (var si = 0; si < starCount; si++) {
+  const starCount = 500;
+  const starPositions = new Float32Array(starCount * 3);
+  const starSizes = new Float32Array(starCount);
+  const starPulses = new Float32Array(starCount);
+  for (let si = 0; si < starCount; si++) {
     // Spread stars in a band along the horizon
-    var angle = Math.random() * Math.PI * 2;
-    var dist = 200 + Math.random() * 500;
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 200 + Math.random() * 500;
     starPositions[si * 3] = Math.cos(angle) * dist;
     starPositions[si * 3 + 1] = 15 + Math.random() * 60; // low, just above grid
     starPositions[si * 3 + 2] = Math.sin(angle) * dist - 200; // pushed back
     starSizes[si] = 1.5 + Math.random() * 3;
     starPulses[si] = Math.random() * Math.PI * 2;
   }
-  var starGeom = new THREE.BufferGeometry();
+  const starGeom = new THREE.BufferGeometry();
   starGeom.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
   starGeom.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
-  var starMat = new THREE.ShaderMaterial({
+  const starMat = new THREE.ShaderMaterial({
     vertexShader: 'attribute float size; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * (300.0 / -mv.z); gl_Position = projectionMatrix * mv; }',
     fragmentShader: 'void main() { float d = length(gl_PointCoord - vec2(0.5)); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * 0.6; gl_FragColor = vec4(0.7, 0.95, 0.5, a); }',
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
@@ -153,13 +153,13 @@ const GridScene = (function() {
   document.addEventListener('mouseleave', () => { mouseNDC.set(-10, -10); mouseOnPlane = false; mousePixelX = -1; mousePixelY = -1; });
 
   // ---- Canvas text texture helper ----
-  var _pendingRedraws = [];
+  const _pendingRedraws = [];
   function makeTextSprite(text, fontSize, opacity) {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     canvas.width = 2048; canvas.height = 256;
-    var fs = fontSize || 24;
-    var op = opacity || 0.8;
+    const fs = fontSize || 24;
+    const op = opacity || 0.8;
 
     function draw() {
       ctx.clearRect(0, 0, 2048, 256);
@@ -174,10 +174,10 @@ const GridScene = (function() {
     }
 
     draw();
-    var tex = new THREE.CanvasTexture(canvas);
+    const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
-    var mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
-    var sprite = new THREE.Sprite(mat);
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    const sprite = new THREE.Sprite(mat);
     sprite.scale.set(30, 4, 1);
 
     _pendingRedraws.push(function() { draw(); tex.needsUpdate = true; });
@@ -261,7 +261,7 @@ const GridScene = (function() {
 
     // Text labels below badge
     // Text below badge — size driven by config.textScale
-    var ts = config.textScale || 1;
+    const ts = config.textScale || 1;
     if (config.title) {
       const titleSprite = makeTextSprite(config.title, Math.round(96 * ts), 1.0);
       titleSprite.position.set(0, -size - 16, 0);
@@ -343,7 +343,7 @@ const GridScene = (function() {
     ];
     g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(bolt), mat));
     // Speed lines (motion trails)
-    var slMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.4 });
+    const slMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.4 });
     g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-16, 6, 0), new THREE.Vector3(-10, 6, 0)]), slMat));
     g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-18, 0, 0), new THREE.Vector3(-10, 0, 0)]), slMat));
     g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-16, -6, 0), new THREE.Vector3(-10, -6, 0)]), slMat));
@@ -444,20 +444,20 @@ const GridScene = (function() {
   // ---- Diamond border for services on the grid plane ----
   const dR = 70;
   const dY = 0.5;
-  var orbitRing = new THREE.Group();
+  const orbitRing = new THREE.Group();
   // Diamond outline
-  var orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.15, depthWrite: false });
-  var diamondPts = [
+  const orbitRingMat = new THREE.LineBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0.15, depthWrite: false });
+  const diamondPts = [
     new THREE.Vector3(0, 0, -dR), new THREE.Vector3(dR, 0, 0),
     new THREE.Vector3(0, 0, dR), new THREE.Vector3(-dR, 0, 0),
     new THREE.Vector3(0, 0, -dR)
   ];
   orbitRing.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(diamondPts), orbitRingMat));
   // Filled diamond plane
-  var dShape = new THREE.Shape();
+  const dShape = new THREE.Shape();
   dShape.moveTo(0, -dR); dShape.lineTo(dR, 0); dShape.lineTo(0, dR); dShape.lineTo(-dR, 0); dShape.closePath();
-  var dFillMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
-  var dFillMesh = new THREE.Mesh(new THREE.ShapeGeometry(dShape), dFillMat);
+  const dFillMat = new THREE.MeshBasicMaterial({ color: 0xa8ff00, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+  const dFillMesh = new THREE.Mesh(new THREE.ShapeGeometry(dShape), dFillMat);
   dFillMesh.rotation.x = -Math.PI / 2;
   orbitRing.add(dFillMesh);
   orbitRing.position.y = dY;
@@ -465,7 +465,7 @@ const GridScene = (function() {
   scene.add(orbitRing);
 
   // ---- Service hover tooltip (HTML overlay) ----
-  let tooltipEl = document.createElement('div');
+  const tooltipEl = document.createElement('div');
   tooltipEl.id = 'serviceTooltip';
   document.body.appendChild(tooltipEl);
 
@@ -659,7 +659,17 @@ const GridScene = (function() {
     // Service tooltip with pixel-wipe effect
     if (hoveredServiceIdx >= 0) {
       const ud = serviceIcons[hoveredServiceIdx].userData;
-      tooltipEl.innerHTML = `<div style="color:#a8ff00;font-size:16px;font-weight:bold;letter-spacing:0.12em;margin-bottom:8px;text-transform:uppercase;">${ud.label}</div><div style="color:#bbb;font-size:12px;line-height:1.6;margin-bottom:10px;">${ud.desc}</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${ud.tags.map(t => `<span style="color:#a8ff00;font-size:10px;letter-spacing:0.1em;border:1px solid rgba(168,255,0,0.3);padding:3px 8px;">${t}</span>`).join('')}</div>`;
+      tooltipEl.textContent = '';
+      const titleDiv = document.createElement('div');
+      titleDiv.style.cssText = 'color:#a8ff00;font-size:16px;font-weight:bold;letter-spacing:0.12em;margin-bottom:8px;text-transform:uppercase;';
+      titleDiv.textContent = ud.label;
+      const descDiv = document.createElement('div');
+      descDiv.style.cssText = 'color:#bbb;font-size:12px;line-height:1.6;margin-bottom:10px;';
+      descDiv.textContent = ud.desc;
+      const tagsDiv = document.createElement('div');
+      tagsDiv.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;';
+      ud.tags.forEach(t => { const tag = document.createElement('span'); tag.style.cssText = 'color:#a8ff00;font-size:10px;letter-spacing:0.1em;border:1px solid rgba(168,255,0,0.3);padding:3px 8px;'; tag.textContent = t; tagsDiv.appendChild(tag); });
+      tooltipEl.appendChild(titleDiv); tooltipEl.appendChild(descDiv); tooltipEl.appendChild(tagsDiv);
       tooltipEl.classList.add('visible');
       tooltipEl.style.left = Math.min(mousePixelX + 20, window.innerWidth - 320) + 'px';
       tooltipEl.style.top = (mousePixelY - 20) + 'px';

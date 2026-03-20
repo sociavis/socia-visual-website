@@ -16,6 +16,7 @@
   --accent-2: #d4ff00;
   --gradient: linear-gradient(135deg, #a8ff00, #d4ff00);
   --gradient-text: linear-gradient(135deg, #a8ff00 0%, #d4ff00 50%, #c8ff30 100%);
+  --error: #ff4444;
   --font-body: 'Chakra Petch', monospace, sans-serif;
   --font-heading: 'Chakra Petch', monospace, sans-serif;
   --font-mono: 'Share Tech Mono', monospace;
@@ -1392,7 +1393,7 @@ body.contact-active .form-toggle:hover {
   display: none;
 }
 .form-status.success { display: block; color: var(--accent-1); }
-.form-status.error { display: block; color: #ff4444; }
+.form-status.error { display: block; color: var(--error, #ff4444); }
 
 .form-submit {
   display: inline-flex;
@@ -1684,4 +1685,82 @@ body.contact-active .form-toggle:hover {
   .mobile-services-grid { grid-template-columns: 1fr; gap: 6px; }
   .form-toggles { grid-template-columns: 1fr; }
   .contact-form { gap: 14px; }
+}
+
+/* ============================================
+   SKIP LINK (Accessibility)
+   ============================================ */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 16px;
+  z-index: 10000;
+  padding: 12px 24px;
+  background: var(--accent-1);
+  color: var(--black);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 16px;
+  outline: 2px solid var(--accent-1);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   REDUCED MOTION (Accessibility)
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .boot-overlay { display: none; }
+  body.loaded .panel--hero .reveal { opacity: 1; transform: none; }
+  .marquee-track { animation: none; }
+  .hero-scroll-line { animation: none; }
+  .logo-reveal-ring { animation: none; }
+  .noise, .scanlines { display: none; }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .cursor, .cursor-dot, .cursor-glow,
+  .noise, .scanlines,
+  .scroll-progress-frame,
+  .hud-overlay,
+  .section-nav, .mobile-nav,
+  .boot-overlay,
+  .scan-line,
+  .hero-scroll,
+  #heroCanvas { display: none !important; }
+
+  body {
+    overflow: visible;
+    height: auto;
+    cursor: auto;
+    background: #fff;
+    color: #000;
+  }
+  .viewport, .panel {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+  .panel { display: block !important; page-break-inside: avoid; }
+  .panel-content { width: 100%; padding: 24px 0; }
+  .hero-title, .section-title { color: #000; }
+  .text-accent { color: #333; }
+  a { text-decoration: underline; color: #000; }
 }

@@ -504,7 +504,8 @@ if (logoWrap) {
 // ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA v3) ----
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
-const RECAPTCHA_SITE_KEY = '6Leau4ksAAAAAPDsayHMnlB8wLZk7yK88EIPnBuS';
+// Site key derived from the reCAPTCHA script tag in index.html
+const RECAPTCHA_SITE_KEY = document.querySelector('script[src*="recaptcha"]')?.src.split('render=')[1] || '';
 
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();

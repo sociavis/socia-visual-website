@@ -37,7 +37,7 @@
 
   /* ── Logo geometry ── */
   var CX = 960, CY = 960, SC = 3.2 / 960;
-  var DEPTH = 0.575;
+  var DEPTH = 0.69;
 
   function makeShape(coords) {
     var shape = new THREE.Shape();
@@ -144,15 +144,15 @@
 
   // 2 arcs with gaps at 90° and 270°
   var gapSize = 0.18; // radians (~10°)
-  var arc1 = new THREE.Line(makeArc(INNER_R, gapSize / 2, Math.PI - gapSize / 2, 64), lineMat(0.2));
-  var arc2 = new THREE.Line(makeArc(INNER_R, Math.PI + gapSize / 2, Math.PI * 2 - gapSize / 2, 64), lineMat(0.2));
+  var arc1 = new THREE.Line(makeArc(INNER_R, gapSize / 2, Math.PI - gapSize / 2, 64), lineMat(0.32));
+  var arc2 = new THREE.Line(makeArc(INNER_R, Math.PI + gapSize / 2, Math.PI * 2 - gapSize / 2, 64), lineMat(0.32));
   innerMats.push(arc1.material, arc2.material);
   innerGroup.add(arc1, arc2);
 
   // Tick marks at the gaps (crosshair style)
   for (var t = 0; t < 4; t++) {
     var tickAngle = t * Math.PI / 2;
-    var tickLine = new THREE.Line(makeTick(tickAngle, INNER_R - 0.25, INNER_R + 0.25), lineMat(0.15));
+    var tickLine = new THREE.Line(makeTick(tickAngle, INNER_R - 0.25, INNER_R + 0.25), lineMat(0.25));
     innerMats.push(tickLine.material);
     innerGroup.add(tickLine);
   }
@@ -171,12 +171,12 @@
   for (var s = 0; s < OUTER_SEGS; s++) {
     var startA = s * slotSize;
     var endA = startA + arcSpan;
-    var seg = new THREE.Line(makeArc(OUTER_R, startA, endA, 24), lineMat(0.3));
+    var seg = new THREE.Line(makeArc(OUTER_R, startA, endA, 24), lineMat(0.42));
     outerMats.push(seg.material);
     outerGroup.add(seg);
 
     // Small notch at start of each segment
-    var notch = new THREE.Line(makeTick(startA, OUTER_R - 0.15, OUTER_R + 0.15), lineMat(0.22));
+    var notch = new THREE.Line(makeTick(startA, OUTER_R - 0.15, OUTER_R + 0.15), lineMat(0.35));
     outerMats.push(notch.material);
     outerGroup.add(notch);
   }
@@ -212,9 +212,9 @@
 
   var pMat = new THREE.PointsMaterial({
     map: glowTex,
-    size: 0.55,
+    size: 0.66,
     transparent: true,
-    opacity: 0.95,
+    opacity: 1.0,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     sizeAttenuation: true
@@ -299,41 +299,36 @@
     hoverT = Math.max(0, Math.min(1, hoverT));
 
     if (introState === 2) {
-      logoGroup.rotation.y += 0.003;
+      // Hover: speed up rotation ~20% instead of growing
+      logoGroup.rotation.y += 0.003 + hoverT * 0.0006;
 
-      var sc = 1 + hoverT * 0.04;
+      var sc = 1 + hoverT * 0.015;
       logoGroup.scale.set(sc, sc, sc);
-      matBar.emissiveIntensity = 0.5 + hoverT * 0.4;
-      matShape.emissiveIntensity = 0.13 + hoverT * 0.18;
+      matBar.emissiveIntensity = 0.5 + hoverT * 0.15;
+      matShape.emissiveIntensity = 0.13 + hoverT * 0.06;
     }
 
-    // Logo scene camera stays centered — background scene handles the drift
-    camera.fov = 44 - hoverT * 3;
+    // Logo scene camera stays centered
+    camera.fov = 44 - hoverT * 1;
     camera.updateProjectionMatrix();
 
-    // Ring rotation — inner CW, outer CCW
-    innerGroup.rotation.z += 0.002 + hoverT * 0.003;
-    outerGroup.rotation.z -= 0.0015 + hoverT * 0.002;
+    // Ring rotation — speed up ~20% on hover
+    innerGroup.rotation.z += 0.002 + hoverT * 0.0004;
+    outerGroup.rotation.z -= 0.0015 + hoverT * 0.0003;
 
-    // Ring hover effects — brighten + pulse
-    var hoverBright = hoverT * 0.18;
+    // Ring hover effects — subtle brighten
+    var hoverBright = hoverT * 0.08;
     var pulse = 0.03 * Math.sin(time * 2);
-    var innerOpacity = Math.min(0.5, 0.2 + hoverBright + pulse);
-    var outerOpacity = Math.min(0.55, 0.3 + hoverBright + pulse * 0.7);
+    var innerOpacity = Math.min(0.5, 0.32 + hoverBright + pulse);
+    var outerOpacity = Math.min(0.6, 0.42 + hoverBright + pulse * 0.7);
     innerMats.forEach(function (m) { m.opacity = innerOpacity; });
     outerMats.forEach(function (m) { m.opacity = outerOpacity; });
 
-    // On hover: outer ring subtle scale breathe
-    if (introState === 2) {
-      var breathe = 1 + hoverT * 0.015 * Math.sin(time * 2.5);
-      outerGroup.scale.set(breathe, breathe, 1);
-    }
-
-    // Update particles — orbit flat along their ring
+    // Update particles — orbit flat along their ring, speed up ~20% on hover
     var posArr = pGeo.attributes.position.array;
     for (var i = 0; i < particles.length; i++) {
       var p = particles[i];
-      p.angle += p.speed * p.dir * 0.012;
+      p.angle += p.speed * p.dir * (0.012 + hoverT * 0.0024);
       // Particles follow the ring's rotation
       var ringRot = p.radius === INNER_R ? innerGroup.rotation.z : outerGroup.rotation.z;
       var worldAngle = p.angle + ringRot;
@@ -342,8 +337,8 @@
       posArr[i * 3 + 2] = 0.02; // flat, slightly in front
     }
     pGeo.attributes.position.needsUpdate = true;
-    pMat.opacity = 0.9 + hoverT * 0.1;
-    pMat.size = 0.55 + hoverT * 0.15;
+    pMat.opacity = 1.0;
+    pMat.size = 0.66 + hoverT * 0.05;
 
     resize();
     renderer.render(scene, camera);

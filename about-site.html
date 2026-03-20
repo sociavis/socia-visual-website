@@ -12,20 +12,17 @@
   <meta property="og:title" content="Socia Visual — System Diagnostics">
   <meta property="og:description" content="Technical stack, performance metrics, and accessibility report.">
   <meta property="og:image" content="https://sociavisual.com/og-image.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/chakra-petch-400.woff2) format('woff2')}
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/chakra-petch-600.woff2) format('woff2')}
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/chakra-petch-700.woff2) format('woff2')}
+    @font-face{font-family:'Share Tech Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/share-tech-mono.woff2) format('woff2')}
+  </style>
   <style>
     :root {
-      --black: #050505;
-      --dark: #0a0a0a;
-      --grey: #1a1a1a;
-      --grey-mid: #2a2a2a;
-      --grey-light: #666;
-      --white: #e8e8e8;
-      --white-dim: #888;
-      --accent: #a8ff00;
-      --accent-2: #d4ff00;
+      --black: #050505; --dark: #0a0a0a; --grey: #1a1a1a; --grey-mid: #2a2a2a;
+      --grey-light: #666; --white: #e8e8e8; --white-dim: #888;
+      --accent: #a8ff00; --accent-2: #d4ff00;
       --gradient: linear-gradient(135deg, #a8ff00, #d4ff00);
       --font-body: 'Chakra Petch', monospace, sans-serif;
       --font-mono: 'Share Tech Mono', monospace;
@@ -33,264 +30,121 @@
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font-body);
-      background: var(--black);
-      color: var(--white);
-      -webkit-font-smoothing: antialiased;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+    body { font-family: var(--font-body); background: var(--black); color: var(--white); -webkit-font-smoothing: antialiased; line-height: 1.6; overflow-x: hidden; }
     ::selection { background: var(--accent); color: var(--black); }
+    body::after { content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none; background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px); }
 
-    /* Scanlines */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      pointer-events: none;
-      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
-    }
-
-    /* Skip link */
-    .skip-link {
-      position: fixed; top: -100%; left: 16px; z-index: 10000;
-      padding: 12px 24px; background: var(--accent); color: var(--black);
-      font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
-      transition: top 0.2s;
-    }
+    .skip-link { position: fixed; top: -100%; left: 16px; z-index: 10000; padding: 12px 24px; background: var(--accent); color: var(--black); font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: top 0.2s; }
     .skip-link:focus { top: 16px; outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* Header */
-    .site-header {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 32px;
-      background: rgba(5, 5, 5, 0.92);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(168, 255, 0, 0.08);
-    }
+    .site-header { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: rgba(5,5,5,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(168,255,0,0.08); }
     .header-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--accent); }
     .header-logo svg { width: 28px; height: 28px; }
     .header-logo span { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; }
-    .header-back {
-      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--grey-light); text-decoration: none;
-      transition: color 0.3s;
-    }
+    .header-back { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-light); text-decoration: none; transition: color 0.3s; }
     .header-back:hover { color: var(--accent); }
     .header-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* Page container */
     .page { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
 
-    /* Hero */
     .hero-section { text-align: center; margin-bottom: 64px; padding-top: 24px; }
-    .hero-label {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--font-mono); font-size: 0.65rem;
-      letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent);
-      margin-bottom: 20px;
-    }
-    .hero-label::before, .hero-label::after {
-      content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent); opacity: 0.4;
-    }
-    .hero-title {
-      font-family: var(--font-body); font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
-      line-height: 1.1; margin-bottom: 16px;
-    }
-    .hero-title .accent {
-      background: var(--gradient); -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .hero-sub {
-      font-size: 0.9rem; color: var(--white-dim); max-width: 560px;
-      margin: 0 auto; font-weight: 300;
-    }
+    .hero-label { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+    .hero-label::before, .hero-label::after { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent); opacity: 0.4; }
+    .hero-title { font-family: var(--font-body); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 16px; }
+    .hero-title .accent { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: 0.9rem; color: var(--white-dim); max-width: 560px; margin: 0 auto; font-weight: 300; }
 
-    /* Module (card) */
-    .module {
-      border: 1px solid rgba(168, 255, 0, 0.1);
-      background: rgba(10, 10, 10, 0.6);
-      padding: 28px 24px;
-      margin-bottom: 24px;
-      position: relative;
-    }
-    .module::before, .module::after {
-      content: ''; position: absolute; width: 12px; height: 12px;
-      border-color: rgba(168, 255, 0, 0.2); border-style: solid;
-    }
+    .module { border: 1px solid rgba(168,255,0,0.1); background: rgba(10,10,10,0.6); padding: 28px 24px; margin-bottom: 24px; position: relative; }
+    .module::before, .module::after { content: ''; position: absolute; width: 12px; height: 12px; border-color: rgba(168,255,0,0.2); border-style: solid; }
     .module::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
     .module::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
-    .module-label {
-      font-family: var(--font-mono); font-size: 0.6rem;
-      letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent);
-      margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
-    }
+    .module-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     .module-label::before { content: ''; width: 16px; height: 1px; background: var(--accent); }
 
-    /* Section title */
-    .section-heading {
-      font-family: var(--font-body); font-size: 1.3rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px;
+    /* Score rings */
+    .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .score-grid--perf { grid-template-columns: repeat(2, 1fr); margin-bottom: 24px; }
+    .score-row-label { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey-light); margin-bottom: 12px; margin-top: 20px; }
+    .score-row-label:first-of-type { margin-top: 0; }
+    .score-card { text-align: center; padding: 16px 8px; }
+    .score-ring-wrap { position: relative; width: 90px; height: 90px; margin: 0 auto 10px; }
+    .score-ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .score-ring-bg { fill: none; stroke: var(--grey); stroke-width: 3; }
+    .score-ring-fill { fill: none; stroke: url(#ringGrad); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.5s var(--ease); }
+    .score-ring-value {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700;
+      background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
+    .score-label { font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-light); }
 
-    /* Score grid */
-    .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .score-card { text-align: center; padding: 20px 12px; }
-    .score-value {
-      font-family: var(--font-mono); font-size: clamp(2rem, 5vw, 2.8rem);
-      font-weight: 700; line-height: 1;
-      background: var(--gradient); -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .score-label {
-      font-family: var(--font-mono); font-size: 0.55rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--grey-light); margin-top: 8px;
-    }
-    .score-bar {
-      width: 100%; height: 3px; background: var(--grey);
-      margin-top: 12px; border-radius: 2px; overflow: hidden;
-    }
-    .score-bar-fill {
-      height: 100%; background: var(--gradient); border-radius: 2px;
-      animation: fillBar 1.5s var(--ease) forwards;
-      transform-origin: left;
-    }
-    @keyframes fillBar { from { width: 0; } }
+    /* Vitals tabs */
+    .vitals-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid rgba(168,255,0,0.1); }
+    .vitals-tab { flex: 1; padding: 10px 16px; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; text-align: center; background: transparent; border: none; color: var(--grey-light); cursor: pointer; transition: all 0.3s; }
+    .vitals-tab.active { color: var(--accent); background: rgba(168,255,0,0.06); }
+    .vitals-tab:hover { color: var(--accent); }
+    .vitals-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .vitals-panel { display: none; }
+    .vitals-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .vital-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 1px solid rgba(168,255,0,0.06); background: rgba(15,15,15,0.5); }
+    .vital-name { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-dim); }
+    .vital-value { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: var(--accent); }
+    .vital-status { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 10px; box-shadow: 0 0 8px rgba(168,255,0,0.4); display: inline-block; }
 
-    /* Vitals */
-    .vitals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .vital-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px;
-      border: 1px solid rgba(168, 255, 0, 0.06);
-      background: rgba(15, 15, 15, 0.5);
-    }
-    .vital-name {
-      font-family: var(--font-mono); font-size: 0.65rem;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-dim);
-    }
-    .vital-value {
-      font-family: var(--font-mono); font-size: 0.85rem;
-      font-weight: 600; color: var(--accent);
-    }
-    .vital-status {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); margin-right: 10px;
-      box-shadow: 0 0 8px rgba(168, 255, 0, 0.4);
-      display: inline-block;
-    }
-
-    /* Tech grid */
     .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .tech-card {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 10px; padding: 24px 16px; text-align: center;
-      border: 1px solid rgba(168, 255, 0, 0.06);
-      background: rgba(15, 15, 15, 0.4);
-      transition: border-color 0.3s, background 0.3s;
-    }
-    .tech-card:hover {
-      border-color: rgba(168, 255, 0, 0.2);
-      background: rgba(168, 255, 0, 0.02);
-    }
+    .tech-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 24px 16px; text-align: center; border: 1px solid rgba(168,255,0,0.06); background: rgba(15,15,15,0.4); transition: border-color 0.3s, background 0.3s; }
+    .tech-card:hover { border-color: rgba(168,255,0,0.2); background: rgba(168,255,0,0.02); }
     .tech-icon { width: 32px; height: 32px; color: var(--accent); opacity: 0.8; }
     .tech-icon svg { width: 100%; height: 100%; }
-    .tech-name {
-      font-family: var(--font-body); font-size: 0.8rem;
-      font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    .tech-desc {
-      font-family: var(--font-mono); font-size: 0.55rem;
-      color: var(--grey-light); letter-spacing: 0.08em; text-transform: uppercase;
-    }
+    .tech-name { font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tech-desc { font-family: var(--font-mono); font-size: 0.55rem; color: var(--grey-light); letter-spacing: 0.08em; text-transform: uppercase; }
 
-    /* Checklist */
     .checklist { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .checklist li {
-      font-family: var(--font-mono); font-size: 0.7rem;
-      letter-spacing: 0.08em; color: var(--white-dim);
-      padding: 10px 14px;
-      border: 1px solid rgba(168, 255, 0, 0.04);
-      display: flex; align-items: center; gap: 10px;
-    }
+    .checklist li { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--white-dim); padding: 10px 14px; border: 1px solid rgba(168,255,0,0.04); display: flex; align-items: center; gap: 10px; }
     .check-mark { color: var(--accent); font-size: 0.8rem; flex-shrink: 0; }
 
-    /* Console block */
-    .console-block {
-      font-family: var(--font-mono); font-size: 0.65rem;
-      letter-spacing: 0.06em; line-height: 2;
-      padding: 20px 24px;
-      background: rgba(5, 5, 5, 0.8);
-      border: 1px solid rgba(168, 255, 0, 0.06);
-      overflow-x: auto;
-    }
+    .console-block { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.06em; line-height: 2; padding: 20px 24px; background: rgba(5,5,5,0.8); border: 1px solid rgba(168,255,0,0.06); overflow-x: auto; }
     .console-key { color: var(--grey-light); }
     .console-val { color: var(--accent); }
 
-    /* Color palette */
     .palette { display: flex; gap: 12px; flex-wrap: wrap; }
-    .swatch {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-    }
-    .swatch-color {
-      width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.08);
-    }
-    .swatch-label {
-      font-family: var(--font-mono); font-size: 0.5rem;
-      letter-spacing: 0.1em; color: var(--grey-light); text-transform: uppercase;
-    }
+    .swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .swatch-color { width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.08); }
+    .swatch-label { font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.1em; color: var(--grey-light); text-transform: uppercase; }
 
-    /* Footer */
-    .site-footer {
-      text-align: center; padding: 40px 24px;
-      border-top: 1px solid var(--grey);
-      margin-top: 48px;
-    }
-    .footer-link {
-      font-family: var(--font-mono); font-size: 0.65rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--grey-light); text-decoration: none;
-      transition: color 0.3s;
-    }
+    .section-heading { font-family: var(--font-body); font-size: 1.3rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; }
+
+    .site-footer { text-align: center; padding: 40px 24px; border-top: 1px solid var(--grey); margin-top: 48px; }
+    .footer-link { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-light); text-decoration: none; transition: color 0.3s; }
     .footer-link:hover { color: var(--accent); }
     .footer-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .footer-copy {
-      font-family: var(--font-mono); font-size: 0.5rem;
-      color: var(--grey-light); margin-top: 12px; letter-spacing: 0.1em;
-    }
+    .footer-copy { font-family: var(--font-mono); font-size: 0.5rem; color: var(--grey-light); margin-top: 12px; letter-spacing: 0.1em; }
 
-    /* Responsive */
     @media (max-width: 768px) {
-      .score-grid { grid-template-columns: repeat(2, 1fr); }
+      .score-grid { grid-template-columns: repeat(3, 1fr); }
+      .score-grid--perf { grid-template-columns: repeat(2, 1fr); }
       .tech-grid { grid-template-columns: repeat(2, 1fr); }
-      .vitals-grid { grid-template-columns: 1fr; }
+      .vitals-panel.active { grid-template-columns: 1fr; }
       .checklist { grid-template-columns: 1fr; }
       .site-header { padding: 12px 16px; }
       .page { padding: 32px 16px 64px; }
     }
     @media (max-width: 480px) {
       .tech-grid { grid-template-columns: 1fr; }
-      .score-grid { grid-template-columns: repeat(2, 1fr); }
+      .score-grid { grid-template-columns: repeat(3, 1fr); }
       .palette { justify-content: center; }
+      .score-ring-wrap { width: 72px; height: 72px; }
+      .score-ring-value { font-size: 1.2rem; }
     }
-
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Shared SVG gradient for rings -->
+  <svg width="0" height="0" aria-hidden="true"><defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a8ff00"/><stop offset="100%" stop-color="#d4ff00"/></linearGradient></defs></svg>
 
   <a href="#main" class="skip-link">Skip to main content</a>
 
@@ -308,68 +162,82 @@
 
   <main id="main" class="page">
 
-    <!-- Hero -->
     <section class="hero-section" aria-label="Page introduction">
       <div class="hero-label">System Report</div>
       <h1 class="hero-title">About <span class="accent">This Site</span></h1>
       <p class="hero-sub">Technical specifications, performance metrics, and accessibility report for sociavisual.com</p>
     </section>
 
-    <!-- PageSpeed Scores -->
+    <!-- PageSpeed Scores with Rings -->
     <section class="module" aria-label="PageSpeed scores">
       <div class="module-label">01 // PageSpeed Insights</div>
+
+      <div class="score-row-label">Performance</div>
+      <div class="score-grid score-grid--perf">
+        <div class="score-card">
+          <div class="score-ring-wrap">
+            <svg viewBox="0 0 36 36"><circle class="score-ring-bg" cx="18" cy="18" r="16"/><circle class="score-ring-fill" cx="18" cy="18" r="16" stroke-dasharray="100.5" stroke-dashoffset="7"/></svg>
+            <div class="score-ring-value" role="meter" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100" aria-label="Mobile performance">93</div>
+          </div>
+          <div class="score-label">Mobile</div>
+        </div>
+        <div class="score-card">
+          <div class="score-ring-wrap">
+            <svg viewBox="0 0 36 36"><circle class="score-ring-bg" cx="18" cy="18" r="16"/><circle class="score-ring-fill" cx="18" cy="18" r="16" stroke-dasharray="100.5" stroke-dashoffset="0"/></svg>
+            <div class="score-ring-value" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Desktop performance">100</div>
+          </div>
+          <div class="score-label">Desktop</div>
+        </div>
+      </div>
+
+      <div class="score-row-label">Accessibility / Best Practices / SEO</div>
       <div class="score-grid">
         <div class="score-card">
-          <div class="score-value" role="meter" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100" aria-label="Mobile performance score">93</div>
-          <div class="score-label">Mobile</div>
-          <div class="score-bar"><div class="score-bar-fill" style="width:93%"></div></div>
+          <div class="score-ring-wrap">
+            <svg viewBox="0 0 36 36"><circle class="score-ring-bg" cx="18" cy="18" r="16"/><circle class="score-ring-fill" cx="18" cy="18" r="16" stroke-dasharray="100.5" stroke-dashoffset="0"/></svg>
+            <div class="score-ring-value" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Accessibility score">100</div>
+          </div>
+          <div class="score-label">Accessibility</div>
         </div>
         <div class="score-card">
-          <div class="score-value" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Desktop performance score">100</div>
-          <div class="score-label">Desktop</div>
-          <div class="score-bar"><div class="score-bar-fill" style="width:100%"></div></div>
-        </div>
-        <div class="score-card">
-          <div class="score-value" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Best practices score">100</div>
+          <div class="score-ring-wrap">
+            <svg viewBox="0 0 36 36"><circle class="score-ring-bg" cx="18" cy="18" r="16"/><circle class="score-ring-fill" cx="18" cy="18" r="16" stroke-dasharray="100.5" stroke-dashoffset="0"/></svg>
+            <div class="score-ring-value" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Best practices score">100</div>
+          </div>
           <div class="score-label">Best Practices</div>
-          <div class="score-bar"><div class="score-bar-fill" style="width:100%"></div></div>
         </div>
         <div class="score-card">
-          <div class="score-value" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="SEO score">100</div>
+          <div class="score-ring-wrap">
+            <svg viewBox="0 0 36 36"><circle class="score-ring-bg" cx="18" cy="18" r="16"/><circle class="score-ring-fill" cx="18" cy="18" r="16" stroke-dasharray="100.5" stroke-dashoffset="0"/></svg>
+            <div class="score-ring-value" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="SEO score">100</div>
+          </div>
           <div class="score-label">SEO</div>
-          <div class="score-bar"><div class="score-bar-fill" style="width:100%"></div></div>
         </div>
       </div>
     </section>
 
-    <!-- Core Web Vitals -->
+    <!-- Core Web Vitals with Tabs -->
     <section class="module" aria-label="Core Web Vitals">
       <div class="module-label">02 // Core Web Vitals</div>
-      <div class="vitals-grid">
-        <div class="vital-row">
-          <span class="vital-name"><span class="vital-status" aria-hidden="true"></span>First Contentful Paint</span>
-          <span class="vital-value">0.3s</span>
-        </div>
-        <div class="vital-row">
-          <span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Largest Contentful Paint</span>
-          <span class="vital-value">0.6s</span>
-        </div>
-        <div class="vital-row">
-          <span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Cumulative Layout Shift</span>
-          <span class="vital-value">0</span>
-        </div>
-        <div class="vital-row">
-          <span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Total Blocking Time</span>
-          <span class="vital-value">40ms</span>
-        </div>
-        <div class="vital-row">
-          <span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Speed Index</span>
-          <span class="vital-value">0.5s</span>
-        </div>
-        <div class="vital-row">
-          <span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Time to Interactive</span>
-          <span class="vital-value">0.6s</span>
-        </div>
+      <div class="vitals-tabs" role="tablist" aria-label="Device type">
+        <button class="vitals-tab active" role="tab" aria-selected="true" aria-controls="vitals-desktop" id="tab-desktop" onclick="document.getElementById('vitals-desktop').classList.add('active');document.getElementById('vitals-mobile').classList.remove('active');this.classList.add('active');this.setAttribute('aria-selected','true');document.getElementById('tab-mobile').classList.remove('active');document.getElementById('tab-mobile').setAttribute('aria-selected','false')">Desktop</button>
+        <button class="vitals-tab" role="tab" aria-selected="false" aria-controls="vitals-mobile" id="tab-mobile" onclick="document.getElementById('vitals-mobile').classList.add('active');document.getElementById('vitals-desktop').classList.remove('active');this.classList.add('active');this.setAttribute('aria-selected','true');document.getElementById('tab-desktop').classList.remove('active');document.getElementById('tab-desktop').setAttribute('aria-selected','false')">Mobile</button>
+      </div>
+      <div class="vitals-panel active" id="vitals-desktop" role="tabpanel" aria-labelledby="tab-desktop">
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>First Contentful Paint</span><span class="vital-value">0.3s</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Largest Contentful Paint</span><span class="vital-value">0.6s</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Cumulative Layout Shift</span><span class="vital-value">0</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Total Blocking Time</span><span class="vital-value">40ms</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Speed Index</span><span class="vital-value">0.5s</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Time to Interactive</span><span class="vital-value">0.6s</span></div>
+      </div>
+      <div class="vitals-panel" id="vitals-mobile" role="tabpanel" aria-labelledby="tab-mobile">
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>First Contentful Paint</span><span class="vital-value">1.0s</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Largest Contentful Paint</span><span class="vital-value">2.5s</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Cumulative Layout Shift</span><span class="vital-value">0</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Total Blocking Time</span><span class="vital-value">250ms</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Speed Index</span><span class="vital-value">1.8s</span></div>
+        <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>Time to Interactive</span><span class="vital-value">2.5s</span></div>
       </div>
     </section>
 
@@ -377,36 +245,12 @@
     <section class="module" aria-label="Technology stack">
       <div class="module-label">03 // Tech Stack</div>
       <div class="tech-grid">
-        <div class="tech-card">
-          <div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3l1.8 17.2L12 22l6.2-1.8L20 3H4z"/><path d="M7 7h10l-.5 5H9.5"/></svg></div>
-          <div class="tech-name">HTML5</div>
-          <div class="tech-desc">Semantic Structure</div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3l1.8 17.2L12 22l6.2-1.8L20 3H4z"/><path d="M7 12h6l-.3 3H9.5"/></svg></div>
-          <div class="tech-name">CSS3</div>
-          <div class="tech-desc">Custom Properties & Grid</div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17c0-2 1-3 3-3s2 1 2 2-1 2-3 2"/><path d="M14 7v5c0 1 .5 2 2 2"/></svg></div>
-          <div class="tech-name">JavaScript</div>
-          <div class="tech-desc">ES6+ / No Framework</div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-7-14l3 2m8 4l3 2m-14 0l3-2m8-4l3-2"/></svg></div>
-          <div class="tech-name">Three.js</div>
-          <div class="tech-desc">WebGL 3D Engine</div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L24 22H0L12 1z"/></svg></div>
-          <div class="tech-name">Vercel</div>
-          <div class="tech-desc">Edge Deployment</div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12l3 3 5-5"/></svg></div>
-          <div class="tech-name">reCAPTCHA v3</div>
-          <div class="tech-desc">Lazy-loaded Bot Protection</div>
-        </div>
+        <div class="tech-card"><div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3l1.8 17.2L12 22l6.2-1.8L20 3H4z"/><path d="M7 7h10l-.5 5H9.5"/></svg></div><div class="tech-name">HTML5</div><div class="tech-desc">Semantic Structure</div></div>
+        <div class="tech-card"><div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3l1.8 17.2L12 22l6.2-1.8L20 3H4z"/><path d="M7 12h6l-.3 3H9.5"/></svg></div><div class="tech-name">CSS3</div><div class="tech-desc">Custom Properties & Grid</div></div>
+        <div class="tech-card"><div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17c0-2 1-3 3-3s2 1 2 2-1 2-3 2"/><path d="M14 7v5c0 1 .5 2 2 2"/></svg></div><div class="tech-name">JavaScript</div><div class="tech-desc">ES6+ / No Framework</div></div>
+        <div class="tech-card"><div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-7-14l3 2m8 4l3 2m-14 0l3-2m8-4l3-2"/></svg></div><div class="tech-name">Three.js</div><div class="tech-desc">WebGL 3D Engine</div></div>
+        <div class="tech-card"><div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L24 22H0L12 1z"/></svg></div><div class="tech-name">Vercel</div><div class="tech-desc">Edge Deployment</div></div>
+        <div class="tech-card"><div class="tech-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12l3 3 5-5"/></svg></div><div class="tech-name">reCAPTCHA v3</div><div class="tech-desc">Lazy-loaded Bot Protection</div></div>
       </div>
     </section>
 

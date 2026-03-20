@@ -186,9 +186,10 @@ const SectionManager = {
       GridScene.onSectionChange(this.currentIndex, targetIndex);
     }
 
-    // Contact section green mode
+    // Contact section green mode + lazy-load reCAPTCHA
     if (targetIndex === 3) {
       document.body.classList.add('contact-active');
+      loadRecaptcha();
     } else {
       document.body.classList.remove('contact-active');
     }
@@ -501,11 +502,20 @@ if (logoWrap) {
   logoWrap.addEventListener('touchend', function() { isLogoHovering = false; });
 }
 
+// ---- Lazy-load reCAPTCHA ----
+const RECAPTCHA_SITE_KEY = '6Leau4ksAAAAAPDsayHMnlB8wLZk7yK88EIPnBuS';
+let recaptchaLoaded = false;
+function loadRecaptcha() {
+  if (recaptchaLoaded) return;
+  recaptchaLoaded = true;
+  const s = document.createElement('script');
+  s.src = 'https://www.google.com/recaptcha/api.js?render=' + RECAPTCHA_SITE_KEY;
+  document.head.appendChild(s);
+}
+
 // ---- Contact form (AJAX via Formsubmit.co + reCAPTCHA v3) ----
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
-// Site key derived from the reCAPTCHA script tag in index.html
-const RECAPTCHA_SITE_KEY = document.querySelector('script[src*="recaptcha"]')?.src.split('render=')[1] || '';
 
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -514,7 +524,17 @@ contactForm.addEventListener('submit', async (e) => {
   const originalText = btn.textContent;
   btn.textContent = 'VERIFYING...';
 
+  // Ensure reCAPTCHA is loaded before trying to use it
+  loadRecaptcha();
+
   try {
+    // Wait for grecaptcha to be available (up to 5s)
+    let waited = 0;
+    while (typeof grecaptcha === 'undefined' || !grecaptcha.execute) {
+      await new Promise(r => setTimeout(r, 100));
+      waited += 100;
+      if (waited > 5000) throw new Error('reCAPTCHA failed to load');
+    }
     const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
     document.getElementById('recaptchaResponse').value = token;
 

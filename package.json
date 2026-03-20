@@ -1,0 +1,19 @@
+{
+  "name": "socia-visual-website",
+  "version": "2.0.26",
+  "description": "Web Design, Graphics & Brand Identity Studio — sociavisual.com",
+  "private": true,
+  "scripts": {
+    "start": "echo 'Static site — open index.html or deploy to Vercel'"
+  },
+  "dependencies": {
+    "three": "0.128.0"
+  },
+  "homepage": "https://sociavisual.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sociavis/socia-visual-website"
+  },
+  "author": "Socia Visual <scott@sociavisual.com>",
+  "license": "UNLICENSED"
+}

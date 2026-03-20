@@ -209,7 +209,7 @@
   <main class="viewport" id="viewport">
 
     <!-- Global particle canvas -->
-    <div id="heroCanvas"></div>
+    <div id="heroCanvas" aria-hidden="true"></div>
 
     <!-- Panel 0: Hero -->
     <section class="panel panel--hero active" id="hero" data-panel="0">
@@ -242,7 +242,7 @@
           </div>
         </div>
 
-        <div class="hero-logo" id="logo3d">
+        <div class="hero-logo" id="logo3d" aria-hidden="true">
           <div class="logo-3d-scene">
             <svg class="logo-layer logo-layer--1" viewBox="0 0 1920 1920">
               <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a8ff00"/><stop offset="100%" stop-color="#d4ff00"/></linearGradient></defs>
@@ -473,7 +473,7 @@
     </section>
 
     <!-- Scan line transition effect -->
-    <div class="scan-line" id="scanLine"></div>
+    <div class="scan-line" id="scanLine" aria-hidden="true"></div>
   </main>
 
   <!-- Scripts loaded via defer in <head> for correct order without render-blocking -->

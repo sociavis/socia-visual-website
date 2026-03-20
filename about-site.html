@@ -25,7 +25,7 @@
   <style>
     :root {
       --black: #050505; --dark: #0a0a0a; --grey: #1a1a1a; --grey-mid: #2a2a2a;
-      --grey-light: #666; --white: #e8e8e8; --white-dim: #888;
+      --grey-light: #787878; --white: #e8e8e8; --white-dim: #888;
       --accent: #a8ff00; --accent-2: #d4ff00;
       --gradient: linear-gradient(135deg, #a8ff00, #d4ff00);
       --font-body: 'Chakra Petch', monospace, sans-serif;
@@ -309,8 +309,8 @@
     <section class="module" aria-label="Core Web Vitals">
       <div class="module-label">02 // Core Web Vitals</div>
       <div class="vitals-tabs" role="tablist" aria-label="Device type">
-        <button class="vitals-tab active" role="tab" aria-selected="true" aria-controls="vitals-desktop" id="tab-desktop" onclick="document.getElementById('vitals-desktop').classList.add('active');document.getElementById('vitals-mobile').classList.remove('active');this.classList.add('active');this.setAttribute('aria-selected','true');document.getElementById('tab-mobile').classList.remove('active');document.getElementById('tab-mobile').setAttribute('aria-selected','false')">Desktop</button>
-        <button class="vitals-tab" role="tab" aria-selected="false" aria-controls="vitals-mobile" id="tab-mobile" onclick="document.getElementById('vitals-mobile').classList.add('active');document.getElementById('vitals-desktop').classList.remove('active');this.classList.add('active');this.setAttribute('aria-selected','true');document.getElementById('tab-desktop').classList.remove('active');document.getElementById('tab-desktop').setAttribute('aria-selected','false')">Mobile</button>
+        <button class="vitals-tab active" role="tab" aria-selected="true" aria-controls="vitals-desktop" id="tab-desktop" tabindex="0">Desktop</button>
+        <button class="vitals-tab" role="tab" aria-selected="false" aria-controls="vitals-mobile" id="tab-mobile" tabindex="-1">Mobile</button>
       </div>
       <div class="vitals-panel active" id="vitals-desktop" role="tabpanel" aria-labelledby="tab-desktop">
         <div class="vital-row"><span class="vital-name"><span class="vital-status" aria-hidden="true"></span>First Contentful Paint</span><span class="vital-value">0.3s</span></div>
@@ -408,12 +408,12 @@
       <div class="module-label">06 // Design System</div>
       <h2 class="section-heading" style="font-size:0.9rem; margin-bottom:16px;">Color Palette</h2>
       <div class="palette">
-        <div class="swatch"><div class="swatch-color" style="background:#050505"></div><div class="swatch-label">#050505</div></div>
-        <div class="swatch"><div class="swatch-color" style="background:#0a0a0a"></div><div class="swatch-label">#0a0a0a</div></div>
-        <div class="swatch"><div class="swatch-color" style="background:#1a1a1a"></div><div class="swatch-label">#1a1a1a</div></div>
-        <div class="swatch"><div class="swatch-color" style="background:#e8e8e8"></div><div class="swatch-label">#e8e8e8</div></div>
-        <div class="swatch"><div class="swatch-color" style="background:#a8ff00"></div><div class="swatch-label">#a8ff00</div></div>
-        <div class="swatch"><div class="swatch-color" style="background:#d4ff00"></div><div class="swatch-label">#d4ff00</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#050505" role="img" aria-label="Black color swatch #050505"></div><div class="swatch-label">#050505</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#0a0a0a" role="img" aria-label="Dark color swatch #0a0a0a"></div><div class="swatch-label">#0a0a0a</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#1a1a1a" role="img" aria-label="Grey color swatch #1a1a1a"></div><div class="swatch-label">#1a1a1a</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#e8e8e8" role="img" aria-label="White color swatch #e8e8e8"></div><div class="swatch-label">#e8e8e8</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#a8ff00" role="img" aria-label="Accent green color swatch #a8ff00"></div><div class="swatch-label">#a8ff00</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#d4ff00" role="img" aria-label="Accent lime color swatch #d4ff00"></div><div class="swatch-label">#d4ff00</div></div>
       </div>
       <h2 class="section-heading" style="font-size:0.9rem; margin-top:24px; margin-bottom:12px;">Typography</h2>
       <div style="display:flex; gap:32px; flex-wrap:wrap;">
@@ -542,5 +542,50 @@
     <div class="footer-copy">&copy; 2026 Socia Visual. All systems operational.</div>
   </footer>
 
+  <script>
+    // Accessible tab widget with arrow key navigation (WAI-ARIA Authoring Practices)
+    (function(){
+      var tabs = document.querySelectorAll('[role="tab"]');
+      var panels = {
+        'tab-desktop': document.getElementById('vitals-desktop'),
+        'tab-mobile': document.getElementById('vitals-mobile')
+      };
+      function activateTab(tab) {
+        tabs.forEach(function(t) {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+          t.setAttribute('tabindex', '-1');
+          var panel = panels[t.id];
+          if (panel) panel.classList.remove('active');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
+        tab.focus();
+        var panel = panels[tab.id];
+        if (panel) panel.classList.add('active');
+      }
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() { activateTab(tab); });
+        tab.addEventListener('keydown', function(e) {
+          var tabArr = Array.from(tabs);
+          var idx = tabArr.indexOf(tab);
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            activateTab(tabArr[(idx + 1) % tabArr.length]);
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            activateTab(tabArr[(idx - 1 + tabArr.length) % tabArr.length]);
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            activateTab(tabArr[0]);
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            activateTab(tabArr[tabArr.length - 1]);
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

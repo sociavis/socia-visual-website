@@ -95,9 +95,9 @@
   <a href="#viewport" class="skip-link">Skip to main content</a>
 
   <!-- Boot sequence overlay -->
-  <div class="boot-overlay" id="bootOverlay">
+  <div class="boot-overlay" id="bootOverlay" role="status" aria-live="polite" aria-label="Loading">
     <div class="boot-content">
-      <div class="boot-logo">
+      <div class="boot-logo" aria-hidden="true">
         <svg viewBox="0 0 1920 1920">
           <defs><linearGradient id="svgGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a8ff00"/><stop offset="100%" stop-color="#d4ff00"/></linearGradient></defs>
           <polygon fill="url(#svgGrad)" points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
@@ -111,10 +111,10 @@
   </div>
 
   <!-- Noise overlay -->
-  <div class="noise"></div>
+  <div class="noise" aria-hidden="true"></div>
 
   <!-- Scan lines -->
-  <div class="scanlines"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
   <!-- Custom cursor -->
   <div class="cursor" id="cursor" aria-hidden="true">
@@ -126,7 +126,7 @@
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
   <!-- Scroll progress -->
-  <div class="scroll-progress-frame">
+  <div class="scroll-progress-frame" aria-hidden="true">
     <div class="scroll-progress-edge scroll-progress-edge--top" id="scrollProgressTop"></div>
     <div class="scroll-progress-edge scroll-progress-edge--right" id="scrollProgressRight"></div>
     <div class="scroll-progress-edge scroll-progress-edge--bottom" id="scrollProgressBottom"></div>
@@ -206,7 +206,7 @@
   </nav>
 
   <!-- Viewport container -->
-  <div class="viewport" id="viewport" role="main">
+  <main class="viewport" id="viewport">
 
     <!-- Global particle canvas -->
     <div id="heroCanvas"></div>
@@ -261,13 +261,13 @@
         </div>
       </div>
 
-      <div class="hero-scroll">
+      <div class="hero-scroll" aria-hidden="true">
         <div class="hero-scroll-line"></div>
         <span data-scramble>Scroll</span>
       </div>
 
-      <div class="hero-hline hero-hline--top"></div>
-      <div class="hero-hline hero-hline--bottom"></div>
+      <div class="hero-hline hero-hline--top" aria-hidden="true"></div>
+      <div class="hero-hline hero-hline--bottom" aria-hidden="true"></div>
     </section>
 
     <!-- Panel 1: About -->
@@ -312,7 +312,7 @@
         </div>
 
         <!-- Marquee -->
-        <div class="marquee">
+        <div class="marquee" aria-hidden="true">
           <div class="marquee-track">
             <span>Web Design</span><span class="marquee-dot">◆</span>
             <span>Branding</span><span class="marquee-dot">◆</span>
@@ -422,8 +422,8 @@
                 <div class="form-corner form-corner--tl"></div>
                 <div class="form-corner form-corner--br"></div>
               </div>
-              <div class="form-services reveal">
-                <span class="form-services-label">Services Required</span>
+              <fieldset class="form-services reveal">
+                <legend class="form-services-label">Services Required</legend>
                 <div class="form-toggles">
                   <label class="form-toggle">
                     <input type="checkbox" name="services" value="Web Design & Development">
@@ -446,7 +446,7 @@
                     <span class="toggle-text">Motion & Video</span>
                   </label>
                 </div>
-              </div>
+              </fieldset>
               <div class="form-group reveal">
                 <textarea id="message" name="message" rows="3" required placeholder=" "></textarea>
                 <label for="message">Tell us about your project</label>
@@ -474,7 +474,7 @@
 
     <!-- Scan line transition effect -->
     <div class="scan-line" id="scanLine"></div>
-  </div>
+  </main>
 
   <!-- Scripts loaded via defer in <head> for correct order without render-blocking -->
 </body>

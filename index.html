@@ -178,6 +178,10 @@
       <span>Services</span>
     </button>
     <button class="section-nav-dot" data-target="3">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4z"/><path d="M13 13h7v7h-7" stroke-dasharray="3 2"/></svg>
+      <span>Work</span>
+    </button>
+    <button class="section-nav-dot" data-target="4">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/></svg>
       <span>Contact</span>
     </button>
@@ -198,6 +202,10 @@
       <span>Services</span>
     </button>
     <button class="mobile-nav-btn" data-target="3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4z"/><path d="M13 13h7v7h-7" stroke-dasharray="3 2"/></svg>
+      <span>Work</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="4">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/></svg>
       <span>Contact</span>
     </button>
@@ -371,12 +379,125 @@
       </div>
     </section>
 
-    <!-- Panel 3: Contact + Footer -->
-    <section class="panel panel--contact" id="contact" data-panel="3">
+    <!-- Panel 3: Work / Portfolio -->
+    <section class="panel panel--work" id="work" data-panel="3">
+      <div class="panel-content">
+        <span class="section-label reveal"><span class="label-line"></span>04 // Work</span>
+        <h2 class="section-title reveal" data-scramble>Selected <span class="text-accent">projects</span></h2>
+
+        <!-- Service filter toggles -->
+        <div class="work-filters reveal">
+          <button class="work-filter active" data-filter="all">All</button>
+          <button class="work-filter" data-filter="web">Web</button>
+          <button class="work-filter" data-filter="brand">Branding</button>
+          <button class="work-filter" data-filter="graphics">Graphics</button>
+          <button class="work-filter" data-filter="motion">Motion</button>
+        </div>
+
+        <!-- Project grid -->
+        <div class="work-grid" id="workGrid">
+          <div class="work-card reveal" data-category="web" data-project="apex-moto">
+            <div class="work-card-img"><div class="work-card-placeholder">APEX MOTO</div></div>
+            <div class="work-card-info">
+              <div class="work-card-tags"><span>Web Design</span><span>Development</span></div>
+              <h3 class="work-card-title">Apex Moto Co.</h3>
+              <p class="work-card-desc">Full website redesign for a premium motocross parts retailer.</p>
+            </div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="brand" data-project="venom-racing">
+            <div class="work-card-img"><div class="work-card-placeholder">VENOM RACING</div></div>
+            <div class="work-card-info">
+              <div class="work-card-tags"><span>Brand Identity</span><span>Guidelines</span></div>
+              <h3 class="work-card-title">Venom Racing</h3>
+              <p class="work-card-desc">Complete brand identity system for an off-road racing team.</p>
+            </div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="graphics" data-project="dust-series">
+            <div class="work-card-img"><div class="work-card-placeholder">DUST SERIES</div></div>
+            <div class="work-card-info">
+              <div class="work-card-tags"><span>Graphic Design</span><span>Print</span></div>
+              <h3 class="work-card-title">Dust Series Posters</h3>
+              <p class="work-card-desc">Event poster series for a desert motocross championship.</p>
+            </div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="web" data-project="ride-collective">
+            <div class="work-card-img"><div class="work-card-placeholder">RIDE CO.</div></div>
+            <div class="work-card-info">
+              <div class="work-card-tags"><span>Web Design</span><span>Shopify</span></div>
+              <h3 class="work-card-title">Ride Collective</h3>
+              <p class="work-card-desc">E-commerce storefront for a rider lifestyle brand.</p>
+            </div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="motion" data-project="ignite-reel">
+            <div class="work-card-img"><div class="work-card-placeholder">IGNITE</div></div>
+            <div class="work-card-info">
+              <div class="work-card-tags"><span>Motion</span><span>Logo Animation</span></div>
+              <h3 class="work-card-title">Ignite Logo Reveal</h3>
+              <p class="work-card-desc">Animated logo intro for a powersports media company.</p>
+            </div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="brand" data-project="steel-city">
+            <div class="work-card-img"><div class="work-card-placeholder">STEEL CITY</div></div>
+            <div class="work-card-info">
+              <div class="work-card-tags"><span>Brand Identity</span><span>Web</span></div>
+              <h3 class="work-card-title">Steel City MX</h3>
+              <p class="work-card-desc">Brand + website for a new motocross training facility.</p>
+            </div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project detail overlay -->
+    <div class="project-overlay" id="projectOverlay">
+      <div class="project-detail">
+        <button class="project-close" id="projectClose" aria-label="Close project">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="project-hero"><div class="work-card-placeholder" id="projectHeroText">PROJECT</div></div>
+        <div class="project-content">
+          <div class="project-meta">
+            <span class="section-label"><span class="label-line"></span><span id="projectCategory">Web Design</span></span>
+          </div>
+          <h2 class="section-title" id="projectTitle">Project Title</h2>
+          <p class="section-text" id="projectDesc">Detailed project description goes here. This would include the challenge, approach, and results.</p>
+          <div class="project-stats">
+            <div class="project-stat"><span class="project-stat-label">Client</span><span class="project-stat-value" id="projectClient">Client Name</span></div>
+            <div class="project-stat"><span class="project-stat-label">Year</span><span class="project-stat-value">2026</span></div>
+            <div class="project-stat"><span class="project-stat-label">Scope</span><span class="project-stat-value" id="projectScope">Design & Development</span></div>
+          </div>
+          <div class="project-gallery">
+            <div class="project-gallery-item"><div class="work-card-placeholder">DETAIL 01</div></div>
+            <div class="project-gallery-item"><div class="work-card-placeholder">DETAIL 02</div></div>
+            <div class="project-gallery-item"><div class="work-card-placeholder">DETAIL 03</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 4: Contact + Footer -->
+    <section class="panel panel--contact" id="contact" data-panel="4">
       <div class="panel-content">
         <div class="section-grid">
           <div class="section-left">
-            <span class="section-label reveal"><span class="label-line"></span>04 // Contact</span>
+            <span class="section-label reveal"><span class="label-line"></span>05 // Contact</span>
             <h2 class="section-title reveal" data-scramble>Let's build <br><span class="text-accent">something sick</span></h2>
             <p class="section-text reveal">Got a project in mind? Let's drop the green flag. Shoot us a message and we'll be in touch.</p>
 

@@ -21,9 +21,12 @@
 <meta name="twitter:description" content="Explore interactive 3D experiences and games built by Socia Visual.">
 <meta name="twitter:image" content="https://sociavisual.com/og-image.png">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DCE063DN4T"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-DCE063DN4T');</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<!-- Google Analytics — loaded only after cookie consent -->
+<script>
+function svLoadGA(){if(window._gaLoaded)return;window._gaLoaded=true;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-DCE063DN4T';document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config','G-DCE063DN4T');}
+if(document.cookie.indexOf('sv_consent=accepted')!==-1)svLoadGA();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
@@ -213,7 +216,7 @@
     <div class="contact-btn" id="contactBtn" role="button" tabindex="0" aria-label="Contact us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2C6.48 2 2 5.58 2 10c0 2.24 1.12 4.26 2.92 5.7L4 22l4.2-2.52C9.38 19.82 10.66 20 12 20c5.52 0 10-3.58 10-8s-4.48-8-10-8z"/><circle cx="8" cy="10" r="1" fill="currentColor"/><circle cx="12" cy="10" r="1" fill="currentColor"/><circle cx="16" cy="10" r="1" fill="currentColor"/></svg></div>
   </div>
   <div class="stats-panel" id="statsPanel"></div>
-  <div class="contact-overlay" id="contactOverlay" role="dialog" aria-modal="true" aria-label="Contact form"><div class="contact-modal" id="contactModal" style="position:relative"><div class="cm-close" id="contactClose" role="button" tabindex="0" aria-label="Close contact form">×</div><div class="cm-title">Get In Touch</div><div class="cm-sub">Socia Visual — Web Design & Development</div><form id="contactForm" action="https://formsubmit.co/scott@sociavisual.com" method="POST"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="box"><input type="hidden" name="_subject" value="New Contact from Interactive Hero"><input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true"><input type="hidden" name="_next" value="https://sociavisual.com"><div class="cm-field"><label for="cm-name">Name</label><input type="text" id="cm-name" name="name" required autocomplete="name"></div><div class="cm-field"><label for="cm-email">Email</label><input type="email" id="cm-email" name="email" required autocomplete="email"></div><div class="cm-field"><label id="cm-services-label">Services</label><div class="cm-services" id="svcList" role="group" aria-labelledby="cm-services-label"><div class="cm-svc" data-svc="Web Design" role="button" tabindex="0"><span class="svc-check">○</span> Web</div><div class="cm-svc" data-svc="Graphics" role="button" tabindex="0"><span class="svc-check">○</span> Graphics</div><div class="cm-svc" data-svc="Marketing" role="button" tabindex="0"><span class="svc-check">○</span> Marketing</div></div><input type="hidden" name="services" id="svcInput" value=""></div><div class="cm-field"><label for="cm-message">Message</label><textarea id="cm-message" name="message" required></textarea></div><button type="submit" class="cm-submit">Transmit</button><div class="cm-status" id="cmStatus" aria-live="polite"></div></form></div></div>
+  <div class="contact-overlay" id="contactOverlay" role="dialog" aria-modal="true" aria-label="Contact form"><div class="contact-modal" id="contactModal" style="position:relative"><div class="cm-close" id="contactClose" role="button" tabindex="0" aria-label="Close contact form">×</div><div class="cm-title">Get In Touch</div><div class="cm-sub">Socia Visual — Web Design & Development</div><form id="contactForm" action="https://formsubmit.co/scott@sociavisual.com" method="POST"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="box"><input type="hidden" name="_subject" value="New Contact from Interactive Hero"><input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true"><input type="hidden" name="_next" value="https://sociavisual.com"><div class="cm-field"><label for="cm-name">Name</label><input type="text" id="cm-name" name="name" required autocomplete="name"></div><div class="cm-field"><label for="cm-email">Email</label><input type="email" id="cm-email" name="email" required autocomplete="email"></div><div class="cm-field"><label id="cm-services-label">Services</label><div class="cm-services" id="svcList" role="group" aria-labelledby="cm-services-label"><div class="cm-svc" data-svc="Web Design" role="button" tabindex="0"><span class="svc-check">○</span> Web</div><div class="cm-svc" data-svc="Graphics" role="button" tabindex="0"><span class="svc-check">○</span> Graphics</div><div class="cm-svc" data-svc="Marketing" role="button" tabindex="0"><span class="svc-check">○</span> Marketing</div></div><input type="hidden" name="services" id="svcInput" value=""></div><div class="cm-field"><label for="cm-message">Message</label><textarea id="cm-message" name="message" required></textarea></div><button type="submit" class="cm-submit">Transmit</button><div class="cm-status" id="cmStatus" aria-live="polite"></div><div style="font-size:7px;opacity:0.5;letter-spacing:0.08em;margin-top:6px;text-align:center">Protected by reCAPTCHA. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:inherit">Google Privacy</a> &amp; <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:inherit">Terms</a> apply. <a href="privacy.html" style="color:inherit">Privacy Policy</a>.</div></form></div></div>
   <nav class="hud-nav" id="hudNav" aria-label="Experience sections">
     <div class="nav-section on" data-idx="0" role="button" tabindex="0" aria-label="Command" aria-current="true"><div class="nav-track" aria-hidden="true"><div class="nav-track-bg"></div><div class="nav-track-fill"></div></div><div class="nav-chevron" aria-hidden="true"><svg viewBox="0 0 1061 1061"><path d="M1039.62,582.53c-.1,.1-.18,.18-.29,.29l-456.51,456.51c-28.89,28.89-75.75,28.89-104.64,0l-93.93-93.93-150.65-150.65h144.88l152.02,152.02,416.27-416.27-107.13-107.13H363.24l103.37-102.03h415.88l156.84,156.84c.76,.76,1.51,1.53,2.22,2.33,26.57,28.93,25.91,73.89-1.94,102.03Zm-341.44,53.05H219.32l-105.09-105.09L530.5,114.23l72.5,72.5,77.48,77.48h144.88l-149.43-149.43-93.11-93.11c-28.89-28.89-75.75-28.89-104.64,0L21.67,478.18c-.76,.76-1.51,1.53-2.22,2.33-26.57,28.93-25.91,73.89,1.94,102.03,.1,.1,.18,.18,.29,.29l154.8,154.8h418.33l103.37-102.03Zm157.16-155.08H305.33l-103.37,102.03H751.94l103.39-102.03Z"/></svg></div><div class="nav-label">Command</div></div>
     <div class="nav-section" data-idx="1" role="button" tabindex="0" aria-label="Light Bike"><div class="nav-track" aria-hidden="true"><div class="nav-track-bg"></div><div class="nav-track-fill"></div></div><div class="nav-chevron" aria-hidden="true"><svg viewBox="0 0 1061 1061"><path d="M1039.62,582.53c-.1,.1-.18,.18-.29,.29l-456.51,456.51c-28.89,28.89-75.75,28.89-104.64,0l-93.93-93.93-150.65-150.65h144.88l152.02,152.02,416.27-416.27-107.13-107.13H363.24l103.37-102.03h415.88l156.84,156.84c.76,.76,1.51,1.53,2.22,2.33,26.57,28.93,25.91,73.89-1.94,102.03Zm-341.44,53.05H219.32l-105.09-105.09L530.5,114.23l72.5,72.5,77.48,77.48h144.88l-149.43-149.43-93.11-93.11c-28.89-28.89-75.75-28.89-104.64,0L21.67,478.18c-.76,.76-1.51,1.53-2.22,2.33-26.57,28.93-25.91,73.89,1.94,102.03,.1,.1,.18,.18,.29,.29l154.8,154.8h418.33l103.37-102.03Zm157.16-155.08H305.33l-103.37,102.03H751.94l103.39-102.03Z"/></svg></div><div class="nav-label">Light Bike</div></div>
@@ -1633,7 +1636,7 @@ const achState={unlocked:new Set(),visited:new Set([0]),maxHold:0,maxVel:0,orbit
 const achTray=document.getElementById('achTray');let activePopup=null;
 function checkAch(){for(const a of ACH_DEFS){if(achState.unlocked.has(a.id))continue;if(a.check()){achState.unlocked.add(a.id);a.sec=SECTION_NAMES[curSec];showToast(a);addBadge(a)}}}
 function _toastOffset(){const toasts=document.querySelectorAll('.ach-toast');return toasts.length*46}
-function showToast(a){sndAchievement();const e=document.createElement('div');e.className='ach-toast';const dc=DIFF_COLORS[a.diff],t=T();e.style.borderColor=rgba(dc,.4);e.style.color=rgba(dc,1);e.style.background=rgba(t.bg,.85);e.style.top=(130+_toastOffset())+'px';e.innerHTML=`<span class="toast-icon">${a.icon}</span><span class="toast-name">${a.name}</span><span class="toast-sep" style="background:${rgba(dc,.4)}"></span><span class="toast-desc">${a.desc}</span>`;document.getElementById('hero').appendChild(e);setTimeout(()=>e.remove(),3200)}
+function showToast(a){sndAchievement();const e=document.createElement('div');e.className='ach-toast';const dc=DIFF_COLORS[a.diff],t=T();e.style.borderColor=rgba(dc,.4);e.style.color=rgba(dc,1);e.style.background=rgba(t.bg,.85);e.style.top=(130+_toastOffset())+'px';e.innerHTML=`<span class="toast-icon">${a.icon}</span><span class="toast-name">${a.name}</span><span class="toast-sep" style="background:${rgba(dc,.4)}"></span><span class="toast-desc">${a.desc}</span>`;document.getElementById('hero').appendChild(e);if(window._achLiveRegion)window._achLiveRegion.textContent='Achievement unlocked: '+a.name+'. '+a.desc;setTimeout(()=>e.remove(),3200)}
 function showWRToast(trackName,lapTime,isGlobal){
   const t=T();const e=document.createElement('div');e.className='ach-toast';
   const col=isGlobal?[255,215,0]:[0,229,255];
@@ -1827,8 +1830,42 @@ document.querySelectorAll('[role="button"]').forEach(function(el){
     }
   });
 });
-// Enable Enter/Space for radio group items
-document.querySelectorAll('[role="radio"]').forEach(function(el){
+// Enable Enter/Space for radio group items + roving tabindex with arrow keys
+(function(){
+  var radios=Array.from(document.querySelectorAll('[role="radio"]'));
+  radios.forEach(function(el,i){
+    if(i>0)el.setAttribute('tabindex','-1');
+    el.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        el.click();
+      }else if(e.key==='ArrowRight'||e.key==='ArrowDown'){
+        e.preventDefault();
+        var next=radios[(i+1)%radios.length];
+        el.setAttribute('tabindex','-1');
+        next.setAttribute('tabindex','0');
+        next.focus();
+        next.click();
+      }else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){
+        e.preventDefault();
+        var prev=radios[(i-1+radios.length)%radios.length];
+        el.setAttribute('tabindex','-1');
+        prev.setAttribute('tabindex','0');
+        prev.focus();
+        prev.click();
+      }
+    });
+  });
+})();
+
+// Fix cm-svc: role=checkbox with aria-checked + keyboard support
+document.querySelectorAll('.cm-svc').forEach(function(el){
+  el.setAttribute('role','checkbox');
+  el.setAttribute('aria-checked','false');
+  el.addEventListener('click',function(){
+    var checked=el.getAttribute('aria-checked')==='true';
+    el.setAttribute('aria-checked',checked?'false':'true');
+  });
   el.addEventListener('keydown',function(e){
     if(e.key==='Enter'||e.key===' '){
       e.preventDefault();
@@ -1836,6 +1873,88 @@ document.querySelectorAll('[role="radio"]').forEach(function(el){
     }
   });
 });
+
+// Contact modal: focus trap + Escape key
+(function(){
+  var overlay=document.getElementById('contactOverlay');
+  var modal=document.getElementById('contactModal');
+  if(!overlay||!modal)return;
+  function getFocusable(){
+    return modal.querySelectorAll('input:not([type="hidden"]):not([tabindex="-1"]),textarea,button,[role="checkbox"][tabindex="0"],.cm-close');
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&overlay.classList.contains('open')){
+      e.preventDefault();
+      overlay.classList.remove('open');
+      document.getElementById('contactBtn').focus();
+      return;
+    }
+    if(e.key==='Tab'&&overlay.classList.contains('open')){
+      var focusable=Array.from(getFocusable());
+      if(focusable.length===0)return;
+      var first=focusable[0],last=focusable[focusable.length-1];
+      if(e.shiftKey){
+        if(document.activeElement===first||!modal.contains(document.activeElement)){
+          e.preventDefault();last.focus();
+        }
+      }else{
+        if(document.activeElement===last||!modal.contains(document.activeElement)){
+          e.preventDefault();first.focus();
+        }
+      }
+    }
+  });
+  // Move focus into modal on open
+  var origOpen=window.openContact;
+  window.openContact=function(){origOpen();setTimeout(function(){var f=modal.querySelector('input:not([type="hidden"]):not([tabindex="-1"])');if(f)f.focus()},100)};
+  // Re-bind contactBtn to use window.openContact
+  var cb=document.getElementById('contactBtn');
+  cb.addEventListener('click',function(e){e.stopPropagation();window.openContact()});
+})();
+
+// Stats panel: Escape key
+(function(){
+  var sp=document.getElementById('statsPanel');
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&sp&&sp.classList.contains('open')){
+      sp.classList.remove('open');
+      document.getElementById('globeBtn').focus();
+    }
+  });
+})();
+
+// Achievement toast live region
+(function(){
+  var liveRegion=document.createElement('div');
+  liveRegion.setAttribute('aria-live','assertive');
+  liveRegion.setAttribute('aria-atomic','true');
+  liveRegion.setAttribute('role','alert');
+  liveRegion.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0';
+  document.body.appendChild(liveRegion);
+  window._achLiveRegion=liveRegion;
+})();
+</script>
+
+<!-- Cookie consent banner -->
+<div id="cookieBanner" role="dialog" aria-label="Cookie consent" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10001;padding:12px 20px;background:rgba(6,10,16,0.96);border-top:1px solid rgba(255,100,0,0.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.08em;color:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;text-align:center">
+  <span>We use cookies for analytics. <a href="privacy.html" style="color:#ff6400;text-decoration:underline">Privacy Policy</a></span>
+  <button id="cookieAccept" style="background:#ff6400;color:#060a10;border:0;padding:6px 16px;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;font-weight:600">Accept</button>
+  <button id="cookieReject" style="background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);padding:6px 16px;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Decline</button>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('cookieBanner');
+  if(document.cookie.indexOf('sv_consent=')!==-1){b.style.display='none';return;}
+  b.style.display='flex';
+  document.getElementById('cookieAccept').addEventListener('click',function(){
+    document.cookie='sv_consent=accepted;path=/;max-age=31536000;SameSite=Lax';
+    b.style.display='none';svLoadGA();
+  });
+  document.getElementById('cookieReject').addEventListener('click',function(){
+    document.cookie='sv_consent=declined;path=/;max-age=31536000;SameSite=Lax';
+    b.style.display='none';
+  });
+})();
 </script>
 </body>
 </html>

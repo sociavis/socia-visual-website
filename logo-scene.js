@@ -152,9 +152,9 @@
   // Tick marks at the gaps (crosshair style)
   for (var t = 0; t < 4; t++) {
     var tickAngle = t * Math.PI / 2;
-    var tick = new THREE.Line(makeTick(tickAngle, INNER_R - 0.25, INNER_R + 0.25), lineMat(0.15));
-    innerMats.push(tick.material);
-    innerGroup.add(tick);
+    var tickLine = new THREE.Line(makeTick(tickAngle, INNER_R - 0.25, INNER_R + 0.25), lineMat(0.15));
+    innerMats.push(tickLine.material);
+    innerGroup.add(tickLine);
   }
 
   innerGroup.position.z = 0.01; // just slightly in front

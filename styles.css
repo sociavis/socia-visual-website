@@ -9,3 +9,39 @@
 .skip-link,.form-toggle input:checked~.toggle-box{background:var(--gradient)}
 .cursor-cross::before,.cursor-cross::after{background:var(--gradient)}
 .hero-scroll-line{background:linear-gradient(to bottom,#a8ff00,#d4ff00,transparent)}
+
+/* View Transitions API */
+::view-transition-old(root){animation:fade-out .3s ease forwards}
+::view-transition-new(root){animation:fade-in .3s ease forwards}
+@keyframes fade-out{from{opacity:1;filter:brightness(1)}to{opacity:0;filter:brightness(2)}}
+@keyframes fade-in{from{opacity:0;filter:brightness(2)}to{opacity:1;filter:brightness(1)}}
+
+/* Theme toggle button */
+.theme-toggle{position:fixed;top:32px;right:32px;z-index:102;width:32px;height:32px;background:none;border:1px solid rgba(168,255,0,.15);display:flex;align-items:center;justify-content:center;cursor:none;transition:border-color .3s,background .3s;padding:0}
+.theme-toggle:hover{border-color:rgba(168,255,0,.4);background:rgba(168,255,0,.05)}
+.theme-toggle:focus-visible{outline:2px solid var(--accent-1);outline-offset:2px}
+.theme-toggle svg{width:16px;height:16px;color:var(--accent-1)}
+.theme-icon--light{display:none}
+[data-theme=light] .theme-icon--dark{display:none}
+[data-theme=light] .theme-icon--light{display:block}
+@media(max-width:900px){.theme-toggle{top:16px;right:16px;width:28px;height:28px;cursor:auto}.theme-toggle svg{width:14px;height:14px}}
+
+/* Light theme overrides */
+[data-theme=light]{--black:#f5f5f0;--dark:#eeeee8;--dark-2:#e8e8e0;--grey:#ddd;--grey-mid:#ccc;--grey-light:#888;--white:#1a1a1a;--white-dim:#444}
+[data-theme=light] body{background:var(--black);color:var(--white)}
+[data-theme=light] .boot-overlay{background:var(--black)}
+[data-theme=light] .panel{background:rgba(245,245,240,.9)}
+[data-theme=light] .panel--hero{background:var(--black)}
+[data-theme=light] .panel--services{background:rgba(238,238,232,.92)}
+[data-theme=light] .noise{opacity:.015}
+[data-theme=light] .scanlines{background:repeating-linear-gradient(to bottom,transparent 0,transparent 2px,rgba(0,0,0,.02) 2px,rgba(0,0,0,.02) 4px)}
+[data-theme=light] .cursor-cross::before,[data-theme=light] .cursor-cross::after{background:var(--accent-1)}
+[data-theme=light] .cursor-dot{background:var(--accent-1)}
+[data-theme=light] .hero-cta{color:#1a1a1a}
+[data-theme=light] .service-card,[data-theme=light] .mobile-service-card{background:rgba(255,255,255,.6);border-color:rgba(0,0,0,.08)}
+[data-theme=light] .form-group input,[data-theme=light] .form-group textarea,[data-theme=light] .form-toggle{background:rgba(255,255,255,.5);border-color:rgba(0,0,0,.1)}
+[data-theme=light] .form-group input:focus~label,[data-theme=light] .form-group textarea:focus~label{background:var(--black)}
+[data-theme=light] .mobile-nav{background:rgba(245,245,240,.94);border-top-color:rgba(0,0,0,.06)}
+[data-theme=light] #serviceTooltip{background:rgba(245,245,240,.96);border-color:rgba(168,255,0,.4)}
+[data-theme=light] .hero-title--accent,[data-theme=light] .text-accent{-webkit-text-fill-color:transparent}
+[data-theme=light] ::selection{background:var(--accent-1);color:#fff}

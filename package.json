@@ -1,13 +1,18 @@
 {
   "name": "socia-visual-website",
-  "version": "2.0.26",
+  "version": "3.0.0",
   "description": "Web Design, Graphics & Brand Identity Studio — sociavisual.com",
   "private": true,
   "scripts": {
-    "start": "echo 'Static site — open index.html or deploy to Vercel'"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "three": "0.128.0"
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^8.0.1"
   },
   "homepage": "https://sociavisual.com",
   "repository": {

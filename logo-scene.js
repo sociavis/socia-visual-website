@@ -202,13 +202,17 @@
   var INTRO_DUR = 800;
   var time = 0;
 
-  logoGroup.scale.set(0, 0, 0);
-  innerGroup.scale.set(0, 0, 0);
-  outerGroup.scale.set(0, 0, 0);
+  // Start slightly small and dim — will materialize in
+  logoGroup.scale.set(0.001, 0.001, 0.001);
+  innerGroup.scale.set(0.001, 0.001, 0.001);
+  outerGroup.scale.set(0.001, 0.001, 0.001);
+  matBar.opacity = 0; matBar.transparent = true;
+  matShape.opacity = 0; matShape.transparent = true;
   pPoints.visible = false;
 
-  function backOut(t) {
-    return 1 + 2.7 * Math.pow(t - 1, 3) + 1.7 * Math.pow(t - 1, 2);
+  // Smooth ease-out — no overshoot
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
   }
 
   var lastW = 0, lastH = 0;
@@ -241,18 +245,38 @@
     if (introState === 1) {
       introT = Math.max(0, Math.min(1, (now - introStart) / INTRO_DUR));
       if (introT > 0) {
-        var e = backOut(introT);
-        logoGroup.scale.set(e, e, e);
-        innerGroup.scale.set(backOut(Math.min(1, introT * 1.2)), backOut(Math.min(1, introT * 1.2)), 1);
-        outerGroup.scale.set(backOut(Math.min(1, introT * 1.4)), backOut(Math.min(1, introT * 1.4)), 1);
-        var flash = Math.max(0, 1 - introT * 4);
-        matBar.emissiveIntensity = 0.5 + flash * 2;
-        matShape.emissiveIntensity = 0.13 + flash * 0.5;
+        // Smooth materialize: scale 0.85→1.0, opacity 0→1
+        var e = easeOutCubic(introT);
+        var scaleVal = 0.85 + 0.15 * e;
+        logoGroup.scale.set(scaleVal, scaleVal, scaleVal);
+
+        // Rings materialize with staggered delay
+        var innerT = easeOutCubic(Math.max(0, Math.min(1, (introT - 0.1) / 0.9)));
+        var outerT = easeOutCubic(Math.max(0, Math.min(1, (introT - 0.25) / 0.75)));
+        var innerSc = 0.9 + 0.1 * innerT;
+        var outerSc = 0.9 + 0.1 * outerT;
+        innerGroup.scale.set(innerSc, innerSc, 1);
+        outerGroup.scale.set(outerSc, outerSc, 1);
+
+        // Fade in materials
+        matBar.opacity = e;
+        matShape.opacity = e;
+
+        // Brief emissive flash at the start, then settle
+        var flash = Math.max(0, 1 - introT * 3);
+        matBar.emissiveIntensity = 0.5 + flash * 1.2;
+        matShape.emissiveIntensity = 0.13 + flash * 0.3;
+
+        // Ring materials fade in
+        innerMats.forEach(function (m) { m.opacity = innerT * 0.45; });
+        outerMats.forEach(function (m) { m.opacity = outerT * 0.28; });
       }
       if (introT >= 1) {
         introState = 2;
         matBar.emissiveIntensity = 0.5;
         matShape.emissiveIntensity = 0.13;
+        matBar.opacity = 1;
+        matShape.opacity = 1;
         logoGroup.scale.set(1, 1, 1);
         innerGroup.scale.set(1, 1, 1);
         outerGroup.scale.set(1, 1, 1);

@@ -48,8 +48,10 @@
 .work-card:hover .work-card-corner{border-color:var(--accent-1)}
 
 /* Project detail overlay */
-.project-overlay{position:fixed;inset:0;z-index:10001;background:rgba(5,5,5,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s var(--ease),visibility .4s;overflow-y:auto}
+.project-overlay{position:fixed;inset:0;z-index:10001;background:rgba(5,5,5,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s var(--ease),visibility .4s;overflow-y:auto;cursor:auto}
+.project-overlay *{cursor:auto}
 .project-overlay.active{opacity:1;visibility:visible;pointer-events:auto}
+body.project-open .cursor,body.project-open .cursor-dot,body.project-open .cursor-glow{display:none!important}
 .project-detail{max-width:900px;margin:0 auto;padding:60px 24px 80px}
 .project-close{position:fixed;top:32px;right:32px;z-index:10002;width:36px;height:36px;border:1px solid rgba(168,255,0,.2);background:rgba(5,5,5,.8);display:flex;align-items:center;justify-content:center;cursor:none;transition:border-color .3s}
 .project-close:hover{border-color:var(--accent-1)}

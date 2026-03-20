@@ -50,10 +50,9 @@
     .boot-bar-fill{height:100%;width:0%;background:var(--gradient);transition:width .15s linear}
   </style>
 
-  <!-- Full stylesheet loaded async (non-render-blocking) -->
+  <!-- Full stylesheet (minified, 34KB — loads fast with preload hint) -->
   <link rel="preload" href="styles.css" as="style">
-  <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="styles.css"></noscript>
+  <link rel="stylesheet" href="styles.css">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">

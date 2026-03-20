@@ -62,63 +62,37 @@
     bevelSegments: 2
   };
 
-  // Solid materials (visible on hover)
-  var matBarSolid = new THREE.MeshPhongMaterial({
+  var matBar = new THREE.MeshPhongMaterial({
     color: 0x5a8800, emissive: 0xa8ff00, emissiveIntensity: 0.5,
-    specular: 0xa8ff00, shininess: 100, side: THREE.DoubleSide,
-    transparent: true, opacity: 0
+    specular: 0xa8ff00, shininess: 100, side: THREE.DoubleSide
   });
-  var matShapeSolid = new THREE.MeshPhongMaterial({
+  var matShape = new THREE.MeshPhongMaterial({
     color: 0x555555, emissive: 0xa8ff00, emissiveIntensity: 0.13,
-    specular: 0x999999, shininess: 70, side: THREE.DoubleSide,
-    transparent: true, opacity: 0
-  });
-
-  // Wireframe edge materials (visible in normal state)
-  var wireMatBar = new THREE.LineBasicMaterial({
-    color: 0xa8ff00, transparent: true, opacity: 0.7,
-    blending: THREE.AdditiveBlending, depthWrite: false
-  });
-  var wireMatShape = new THREE.LineBasicMaterial({
-    color: 0xa8ff00, transparent: true, opacity: 0.4,
-    blending: THREE.AdditiveBlending, depthWrite: false
+    specular: 0x999999, shininess: 70, side: THREE.DoubleSide
   });
 
   var logoGroup = new THREE.Group();
-  var solidMeshes = [];
-  var wireMeshes = [];
 
-  function createLayer(pts, solidMat, wireMat, zPos) {
+  function createLayer(pts, material, zPos) {
     try {
       var shape = makeShape(pts);
       var geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-      // Solid mesh
-      var solid = new THREE.Mesh(geo, solidMat);
-      solid.position.z = zPos - DEPTH / 2;
-      // Wireframe edges
-      var edges = new THREE.EdgesGeometry(geo, 15);
-      var wire = new THREE.LineSegments(edges, wireMat);
-      wire.position.z = zPos - DEPTH / 2;
-      solidMeshes.push(solid);
-      wireMeshes.push(wire);
-      return { solid: solid, wire: wire };
+      var mesh = new THREE.Mesh(geo, material);
+      mesh.position.z = zPos - DEPTH / 2;
+      return mesh;
     } catch (e) {
       var shape2 = makeShape(pts);
       var geo2 = new THREE.ShapeGeometry(shape2);
-      var solid2 = new THREE.Mesh(geo2, solidMat);
-      solid2.position.z = zPos;
-      solidMeshes.push(solid2);
-      return { solid: solid2, wire: null };
+      var mesh2 = new THREE.Mesh(geo2, material);
+      mesh2.position.z = zPos;
+      return mesh2;
     }
   }
 
-  var l1 = createLayer(layer1Pts, matBarSolid, wireMatBar, 0.2);
-  var l2 = createLayer(layer2Pts, matShapeSolid, wireMatShape, 0);
-  var l3 = createLayer(layer3Pts, matShapeSolid, wireMatShape, -0.2);
-  logoGroup.add(l1.solid, l2.solid, l3.solid);
-  if (l1.wire) logoGroup.add(l1.wire);
-  if (l2.wire) logoGroup.add(l2.wire);
-  if (l3.wire) logoGroup.add(l3.wire);
+  var mesh1 = createLayer(layer1Pts, matBar, 0.2);
+  var mesh2 = createLayer(layer2Pts, matShape, 0);
+  var mesh3 = createLayer(layer3Pts, matShape, -0.2);
+  logoGroup.add(mesh1, mesh2, mesh3);
   scene.add(logoGroup);
 
   /* ── HUD Ring helpers ── */
@@ -264,7 +238,6 @@
       pPoints.visible = true;
     }
 
-    // Intro — starts as wireframe
     if (introState === 1) {
       introT = Math.max(0, Math.min(1, (now - introStart) / INTRO_DUR));
       if (introT > 0) {
@@ -273,11 +246,13 @@
         innerGroup.scale.set(backOut(Math.min(1, introT * 1.2)), backOut(Math.min(1, introT * 1.2)), 1);
         outerGroup.scale.set(backOut(Math.min(1, introT * 1.4)), backOut(Math.min(1, introT * 1.4)), 1);
         var flash = Math.max(0, 1 - introT * 4);
-        wireMatBar.opacity = 0.7 + flash * 0.3;
-        wireMatShape.opacity = 0.4 + flash * 0.3;
+        matBar.emissiveIntensity = 0.5 + flash * 2;
+        matShape.emissiveIntensity = 0.13 + flash * 0.5;
       }
       if (introT >= 1) {
         introState = 2;
+        matBar.emissiveIntensity = 0.5;
+        matShape.emissiveIntensity = 0.13;
         logoGroup.scale.set(1, 1, 1);
         innerGroup.scale.set(1, 1, 1);
         outerGroup.scale.set(1, 1, 1);
@@ -289,24 +264,14 @@
     hoverT += ((hovering ? 1 : 0) - hoverT) * 0.045;
     hoverT = Math.max(0, Math.min(1, hoverT));
 
-    /* ── Wireframe ↔ Solid crossfade ── */
-    // Normal: wireframe full, solid invisible
-    // Hover: wireframe fades out, solid fades in
-    var solidOpacity = hoverT;
-    var wireOpacity = 1 - hoverT;
-    matBarSolid.opacity = solidOpacity;
-    matShapeSolid.opacity = solidOpacity;
-    matBarSolid.emissiveIntensity = 0.5 + hoverT * 0.15;
-    matShapeSolid.emissiveIntensity = 0.13 + hoverT * 0.06;
-    wireMatBar.opacity = 0.7 * wireOpacity;
-    wireMatShape.opacity = 0.4 * wireOpacity;
-
     if (introState === 2) {
-      // Rotation: 50% faster on hover (more noticeable than 20%)
+      // Hover: 50% faster rotation
       logoGroup.rotation.y += 0.003 + hoverT * 0.0015;
 
       var sc = 1 + hoverT * 0.01;
       logoGroup.scale.set(sc, sc, sc);
+      matBar.emissiveIntensity = 0.5 + hoverT * 0.15;
+      matShape.emissiveIntensity = 0.13 + hoverT * 0.06;
     }
 
     camera.fov = 44 - hoverT * 0.5;

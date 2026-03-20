@@ -35,7 +35,7 @@
 .work-card{position:relative;border:1px solid rgba(168,255,0,.06);background:rgba(15,15,15,.6);cursor:none;overflow:hidden;transition:all .4s var(--ease)}
 .work-card:hover{border-color:rgba(168,255,0,.25);background:rgba(168,255,0,.03)}
 .work-card:hover .work-card-img{transform:scale(1.03)}
-.work-card-img{aspect-ratio:16/10;overflow:hidden;transition:transform .4s var(--ease)}
+.work-card-img{aspect-ratio:16/9;overflow:hidden;transition:transform .4s var(--ease)}
 .work-card-placeholder{width:100%;height:100%;background:linear-gradient(135deg,rgba(168,255,0,.04),rgba(168,255,0,.01));display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.3em;color:rgba(168,255,0,.2);text-transform:uppercase}
 .work-card-info{padding:16px}
 .work-card-tags{display:flex;gap:6px;margin-bottom:8px}

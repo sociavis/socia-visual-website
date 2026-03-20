@@ -1,4 +1,4 @@
-/* Logo 3D Scene — Extruded logo centered in two orbital rings with electrons */
+/* Logo 3D Scene — Extruded logo inside 2D HUD rings with orbiting particles */
 (function () {
   if (typeof THREE === "undefined") return;
   var wrap = document.getElementById("logo3d");
@@ -19,9 +19,8 @@
   cvs.style.pointerEvents = "none";
 
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
-  // Angled camera — looks slightly to the right
-  camera.position.set(1.5, 0.5, 13);
+  var camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+  camera.position.set(1.2, 0.4, 13);
   camera.lookAt(0, 0, 0);
 
   /* ── Lighting ── */
@@ -37,14 +36,14 @@
   scene.add(backLight);
 
   /* ── Logo geometry ── */
-  var CX = 960, CY = 960, S = 4.5 / 960;
+  var CX = 960, CY = 960, SC = 4.5 / 960;
   var DEPTH = 0.35;
 
   function makeShape(coords) {
     var shape = new THREE.Shape();
     for (var i = 0; i < coords.length; i += 2) {
-      var x = (coords[i] - CX) * S;
-      var y = -(coords[i + 1] - CY) * S;
+      var x = (coords[i] - CX) * SC;
+      var y = -(coords[i + 1] - CY) * SC;
       if (i === 0) shape.moveTo(x, y);
       else shape.lineTo(x, y);
     }
@@ -96,106 +95,122 @@
   logoGroup.add(mesh1, mesh2, mesh3);
   scene.add(logoGroup);
 
-  /* ── Two orbital rings — centered on the logo ── */
-  var RING_RADIUS = 5.2;
-  var RING_SEG = 128;
-
-  function createRing(tiltX, tiltY) {
-    var pts = [];
-    for (var j = 0; j <= RING_SEG; j++) {
-      var a = (j / RING_SEG) * Math.PI * 2;
-      pts.push(new THREE.Vector3(Math.cos(a) * RING_RADIUS, Math.sin(a) * RING_RADIUS, 0));
-    }
-    var geo = new THREE.BufferGeometry().setFromPoints(pts);
-    var mat = new THREE.LineBasicMaterial({
-      color: 0xa8ff00,
+  /* ── HUD Ring helpers ── */
+  var GREEN = 0xa8ff00;
+  var lineMat = function (opacity) {
+    return new THREE.LineBasicMaterial({
+      color: GREEN,
       transparent: true,
-      opacity: 0.22,
+      opacity: opacity,
       blending: THREE.AdditiveBlending,
       depthWrite: false
     });
-    var line = new THREE.Line(geo, mat);
-    line.rotation.x = tiltX;
-    line.rotation.y = tiltY;
-    return { line: line, mat: mat, tiltX: tiltX, tiltY: tiltY };
+  };
+
+  // Create an arc from startAngle to endAngle at given radius, flat on XY plane
+  function makeArc(radius, startA, endA, segments) {
+    var pts = [];
+    var segs = segments || 48;
+    for (var i = 0; i <= segs; i++) {
+      var a = startA + (endA - startA) * (i / segs);
+      pts.push(new THREE.Vector3(Math.cos(a) * radius, Math.sin(a) * radius, 0));
+    }
+    return new THREE.BufferGeometry().setFromPoints(pts);
   }
 
-  // Two rings at different tilts, logo sits in the center
-  var ringA = createRing(1.2, 0.3);   // tilted ~70° from horizontal
-  var ringB = createRing(0.4, -0.5);  // tilted ~25° the other way
-  scene.add(ringA.line);
-  scene.add(ringB.line);
+  // Small tick mark (radial line)
+  function makeTick(angle, innerR, outerR) {
+    var pts = [
+      new THREE.Vector3(Math.cos(angle) * innerR, Math.sin(angle) * innerR, 0),
+      new THREE.Vector3(Math.cos(angle) * outerR, Math.sin(angle) * outerR, 0)
+    ];
+    return new THREE.BufferGeometry().setFromPoints(pts);
+  }
 
-  /* ── Electrons orbiting on each ring ── */
-  // Ring A: 5 electrons, Ring B: 3 electrons, different directions
-  var electronDefs = [
-    { ring: ringA, count: 5, speed: 0.7, dir: 1 },
-    { ring: ringB, count: 3, speed: 0.5, dir: -1 }
-  ];
+  /* ── Inner Ring — nearly complete circle with 2 gaps + tick marks ── */
+  var INNER_R = 4.5;
+  var innerGroup = new THREE.Group();
+  var innerMats = [];
 
-  // Glow texture
+  // 2 arcs with gaps at 90° and 270°
+  var gapSize = 0.18; // radians (~10°)
+  var arc1 = new THREE.Line(makeArc(INNER_R, gapSize / 2, Math.PI - gapSize / 2, 64), lineMat(0.2));
+  var arc2 = new THREE.Line(makeArc(INNER_R, Math.PI + gapSize / 2, Math.PI * 2 - gapSize / 2, 64), lineMat(0.2));
+  innerMats.push(arc1.material, arc2.material);
+  innerGroup.add(arc1, arc2);
+
+  // Tick marks at the gaps (crosshair style)
+  for (var t = 0; t < 4; t++) {
+    var tickAngle = t * Math.PI / 2;
+    var tick = new THREE.Line(makeTick(tickAngle, INNER_R - 0.25, INNER_R + 0.25), lineMat(0.15));
+    innerMats.push(tick.material);
+    innerGroup.add(tick);
+  }
+
+  innerGroup.position.z = 0.01; // just slightly in front
+  scene.add(innerGroup);
+
+  /* ── Outer Ring — 6 segmented arcs with gaps + notch ticks ── */
+  var OUTER_R = 5.8;
+  var outerGroup = new THREE.Group();
+  var outerMats = [];
+  var OUTER_SEGS = 6;
+  var arcSpan = (Math.PI * 2 / OUTER_SEGS) * 0.78; // each arc covers 78% of its slot
+  var slotSize = Math.PI * 2 / OUTER_SEGS;
+
+  for (var s = 0; s < OUTER_SEGS; s++) {
+    var startA = s * slotSize;
+    var endA = startA + arcSpan;
+    var seg = new THREE.Line(makeArc(OUTER_R, startA, endA, 24), lineMat(0.16));
+    outerMats.push(seg.material);
+    outerGroup.add(seg);
+
+    // Small notch at start of each segment
+    var notch = new THREE.Line(makeTick(startA, OUTER_R - 0.15, OUTER_R + 0.15), lineMat(0.12));
+    outerMats.push(notch.material);
+    outerGroup.add(notch);
+  }
+
+  outerGroup.position.z = 0.01;
+  scene.add(outerGroup);
+
+  /* ── Orbiting particles — dots traveling along the rings ── */
+  // Inner ring: 3 particles clockwise, Outer ring: 2 particles counter-clockwise
   var gc = document.createElement("canvas");
   gc.width = 64; gc.height = 64;
   var gx = gc.getContext("2d");
   var gg = gx.createRadialGradient(32, 32, 0, 32, 32, 32);
   gg.addColorStop(0, "rgba(168,255,0,1)");
   gg.addColorStop(0.1, "rgba(168,255,0,0.8)");
-  gg.addColorStop(0.35, "rgba(168,255,0,0.2)");
+  gg.addColorStop(0.35, "rgba(168,255,0,0.15)");
   gg.addColorStop(1, "rgba(168,255,0,0)");
   gx.fillStyle = gg;
   gx.fillRect(0, 0, 64, 64);
   var glowTex = new THREE.CanvasTexture(gc);
 
-  var allElectrons = [];
-  var totalE = 0;
-  electronDefs.forEach(function (def) { totalE += def.count; });
+  var particles = [
+    { radius: INNER_R, angle: 0, speed: 0.55, dir: 1 },
+    { radius: INNER_R, angle: Math.PI * 0.66, speed: 0.6, dir: 1 },
+    { radius: INNER_R, angle: Math.PI * 1.33, speed: 0.52, dir: 1 },
+    { radius: OUTER_R, angle: 0, speed: 0.35, dir: -1 },
+    { radius: OUTER_R, angle: Math.PI, speed: 0.38, dir: -1 }
+  ];
 
-  var ePositions = new Float32Array(totalE * 3);
-  var eGeo = new THREE.BufferGeometry();
-  eGeo.setAttribute("position", new THREE.BufferAttribute(ePositions, 3));
+  var pPositions = new Float32Array(particles.length * 3);
+  var pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute("position", new THREE.BufferAttribute(pPositions, 3));
 
-  var eMat = new THREE.PointsMaterial({
+  var pMat = new THREE.PointsMaterial({
     map: glowTex,
-    size: 0.45,
+    size: 0.4,
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.9,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     sizeAttenuation: true
   });
-  var ePoints = new THREE.Points(eGeo, eMat);
-  scene.add(ePoints);
-
-  var eIdx = 0;
-  electronDefs.forEach(function (def) {
-    for (var i = 0; i < def.count; i++) {
-      allElectrons.push({
-        ring: def.ring,
-        angle: (i / def.count) * Math.PI * 2,
-        speed: def.speed + (Math.random() - 0.5) * 0.15,
-        dir: def.dir,
-        idx: eIdx++
-      });
-    }
-  });
-
-  // Get world position of an electron on its ring
-  function electronWorldPos(el, radius) {
-    var x = Math.cos(el.angle) * radius;
-    var y = Math.sin(el.angle) * radius;
-    var z = 0;
-    var r = el.ring;
-    // Apply ring tilt
-    var cx1 = Math.cos(r.tiltX), sx1 = Math.sin(r.tiltX);
-    var y2 = y * cx1 - z * sx1; z = y * sx1 + z * cx1; y = y2;
-    var cy1 = Math.cos(r.tiltY), sy1 = Math.sin(r.tiltY);
-    var x2 = x * cy1 + z * sy1; z = -x * sy1 + z * cy1; x = x2;
-    // Apply ring's live z-rotation
-    var rz = r.line.rotation.z;
-    var cz = Math.cos(rz), sz = Math.sin(rz);
-    x2 = x * cz - y * sz; y2 = x * sz + y * cz;
-    return { x: x2, y: y2, z: z };
-  }
+  var pPoints = new THREE.Points(pGeo, pMat);
+  scene.add(pPoints);
 
   /* ── State ── */
   var hovering = false;
@@ -205,14 +220,13 @@
   var introStart = 0;
   var INTRO_DUR = 800;
   var time = 0;
+  var camBaseX = 1.2, camBaseY = 0.4, camBaseZ = 13;
 
-  // Camera drift state
-  var camBaseX = 1.5, camBaseY = 0.5, camBaseZ = 13;
-
+  // Start invisible
   logoGroup.scale.set(0, 0, 0);
-  ePoints.visible = false;
-  ringA.line.scale.set(0, 0, 0);
-  ringB.line.scale.set(0, 0, 0);
+  innerGroup.scale.set(0, 0, 0);
+  outerGroup.scale.set(0, 0, 0);
+  pPoints.visible = false;
 
   function backOut(t) {
     return 1 + 2.7 * Math.pow(t - 1, 3) + 1.7 * Math.pow(t - 1, 2);
@@ -232,15 +246,15 @@
     camera.updateProjectionMatrix();
   }
 
-  /* ── Render loop ── */
+  /* ── Render ── */
   function tick() {
     var now = performance.now();
-    time = now * 0.001; // seconds
+    time = now * 0.001;
 
     if (introState === 0 && document.body.classList.contains("loaded")) {
       introState = 1;
       introStart = now + 200;
-      ePoints.visible = true;
+      pPoints.visible = true;
     }
 
     // Intro
@@ -249,9 +263,10 @@
       if (introT > 0) {
         var e = backOut(introT);
         logoGroup.scale.set(e, e, e);
-        var re = backOut(Math.min(1, introT * 1.3));
-        ringA.line.scale.set(re, re, re);
-        ringB.line.scale.set(re, re, re);
+        var re = backOut(Math.min(1, introT * 1.2));
+        innerGroup.scale.set(re, re, re);
+        var re2 = backOut(Math.min(1, introT * 1.4));
+        outerGroup.scale.set(re2, re2, re2);
         var flash = Math.max(0, 1 - introT * 4);
         matBar.emissiveIntensity = 0.5 + flash * 2;
         matShape.emissiveIntensity = 0.13 + flash * 0.5;
@@ -261,8 +276,8 @@
         matBar.emissiveIntensity = 0.5;
         matShape.emissiveIntensity = 0.13;
         logoGroup.scale.set(1, 1, 1);
-        ringA.line.scale.set(1, 1, 1);
-        ringB.line.scale.set(1, 1, 1);
+        innerGroup.scale.set(1, 1, 1);
+        outerGroup.scale.set(1, 1, 1);
         wrap.classList.add("intro-done");
       }
     }
@@ -272,7 +287,6 @@
     hoverT = Math.max(0, Math.min(1, hoverT));
 
     if (introState === 2) {
-      // Logo slow rotation
       logoGroup.rotation.y += 0.003;
 
       var sc = 1 + hoverT * 0.04;
@@ -281,57 +295,48 @@
       matShape.emissiveIntensity = 0.13 + hoverT * 0.18;
     }
 
-    // Ambient camera drift — slow figure-8 / lissajous movement
-    var driftX = Math.sin(time * 0.15) * 0.4;
-    var driftY = Math.sin(time * 0.12) * 0.25;
-    var driftZ = Math.sin(time * 0.08) * 0.3;
-    camera.position.set(
-      camBaseX + driftX,
-      camBaseY + driftY,
-      camBaseZ + driftZ
-    );
-    // Look target also drifts slightly
-    camera.lookAt(
-      driftX * 0.15,
-      driftY * 0.1,
-      0
-    );
-    // FOV tightens slightly on hover
-    camera.fov = 48 - hoverT * 3;
+    // Camera drift
+    var driftX = Math.sin(time * 0.13) * 0.35;
+    var driftY = Math.sin(time * 0.1) * 0.2;
+    var driftZ = Math.sin(time * 0.07) * 0.25;
+    camera.position.set(camBaseX + driftX, camBaseY + driftY, camBaseZ + driftZ);
+    camera.lookAt(driftX * 0.12, driftY * 0.08, 0);
+    camera.fov = 46 - hoverT * 3;
     camera.updateProjectionMatrix();
 
-    // Ring rotation — opposite directions, continuous
-    ringA.line.rotation.z += 0.004;
-    ringB.line.rotation.z -= 0.003;
+    // Ring rotation — inner CW, outer CCW
+    innerGroup.rotation.z += 0.002 + hoverT * 0.003;
+    outerGroup.rotation.z -= 0.0015 + hoverT * 0.002;
 
-    // Ring hover effect — brighten, slight scale pulse
-    var ringBaseOpacity = 0.22;
-    var ringHoverOpacity = ringBaseOpacity + hoverT * 0.15;
-    var ringPulse = 1 + hoverT * 0.06 * Math.sin(time * 3);
-    ringA.mat.opacity = Math.min(0.45, ringHoverOpacity + 0.03 * Math.sin(time * 0.8));
-    ringB.mat.opacity = Math.min(0.45, ringHoverOpacity + 0.03 * Math.sin(time * 0.8 + 1));
+    // Ring hover effects — brighten + pulse
+    var hoverBright = hoverT * 0.18;
+    var pulse = 0.03 * Math.sin(time * 2);
+    var innerOpacity = Math.min(0.5, 0.2 + hoverBright + pulse);
+    var outerOpacity = Math.min(0.45, 0.16 + hoverBright + pulse * 0.7);
+    innerMats.forEach(function (m) { m.opacity = innerOpacity; });
+    outerMats.forEach(function (m) { m.opacity = outerOpacity; });
+
+    // On hover: outer ring subtle scale breathe
     if (introState === 2) {
-      var rsc = 1 + hoverT * 0.03 * Math.sin(time * 2.5);
-      ringA.line.scale.set(1 + rsc * 0.01, 1 + rsc * 0.01, 1);
-      ringB.line.scale.set(1 - rsc * 0.01, 1 - rsc * 0.01, 1);
+      var breathe = 1 + hoverT * 0.015 * Math.sin(time * 2.5);
+      outerGroup.scale.set(breathe, breathe, 1);
     }
 
-    // Update electrons — orbit along their ring paths
-    var posArr = eGeo.attributes.position.array;
-    for (var i = 0; i < allElectrons.length; i++) {
-      var el = allElectrons[i];
-      el.angle += el.speed * el.dir * 0.012;
-
-      var pos = electronWorldPos(el, RING_RADIUS);
-      posArr[el.idx * 3] = pos.x;
-      posArr[el.idx * 3 + 1] = pos.y;
-      posArr[el.idx * 3 + 2] = pos.z;
+    // Update particles — orbit flat along their ring
+    var posArr = pGeo.attributes.position.array;
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.angle += p.speed * p.dir * 0.012;
+      // Particles follow the ring's rotation
+      var ringRot = p.radius === INNER_R ? innerGroup.rotation.z : outerGroup.rotation.z;
+      var worldAngle = p.angle + ringRot;
+      posArr[i * 3] = Math.cos(worldAngle) * p.radius;
+      posArr[i * 3 + 1] = Math.sin(worldAngle) * p.radius;
+      posArr[i * 3 + 2] = 0.02; // flat, slightly in front
     }
-    eGeo.attributes.position.needsUpdate = true;
-
-    // Electron brightness on hover
-    eMat.opacity = 0.8 + hoverT * 0.15;
-    eMat.size = 0.45 + hoverT * 0.1;
+    pGeo.attributes.position.needsUpdate = true;
+    pMat.opacity = 0.85 + hoverT * 0.1;
+    pMat.size = 0.4 + hoverT * 0.12;
 
     resize();
     renderer.render(scene, camera);

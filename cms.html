@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socia Visual — CMS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/chakra-petch-400.woff2) format('woff2')}
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/chakra-petch-600.woff2) format('woff2')}
+    @font-face{font-family:'Chakra Petch';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/chakra-petch-700.woff2) format('woff2')}
+    @font-face{font-family:'Share Tech Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/share-tech-mono.woff2) format('woff2')}
+
+    :root {
+      --bg: #0a0a0a; --surface: #111; --surface-2: #161616; --surface-3: #1c1c1c;
+      --border: #222; --border-focus: #a8ff00; --text: #e0e0e0; --text-dim: #777;
+      --accent: #a8ff00; --accent-2: #d4ff00; --gradient: linear-gradient(135deg, #a8ff00, #d4ff00);
+      --danger: #ff4444; --warn: #ffaa00;
+      --font: 'Chakra Petch', sans-serif; --mono: 'Share Tech Mono', monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --radius: 2px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+    ::selection { background: var(--accent); color: #000; }
+
+    /* Layout */
+    .cms-layout { display: flex; min-height: 100vh; }
+    .cms-sidebar { width: 240px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; z-index: 10; }
+    .cms-main { flex: 1; margin-left: 240px; }
+
+    /* Sidebar */
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--accent); margin-bottom: 4px; }
+    .sidebar-logo svg { width: 22px; height: 22px; }
+    .sidebar-logo span { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; }
+    .sidebar-sub { font-family: var(--mono); font-size: 0.45rem; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; }
+
+    .sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+    .nav-group-label { font-family: var(--mono); font-size: 0.45rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); padding: 16px 20px 6px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em; color: var(--text-dim); text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+    .nav-item:hover { color: var(--text); background: rgba(168,255,0,0.03); }
+    .nav-item.active { color: var(--accent); background: rgba(168,255,0,0.06); border-right: 2px solid var(--accent); }
+    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .nav-item .badge { margin-left: auto; font-size: 0.5rem; padding: 1px 6px; background: rgba(168,255,0,0.1); color: var(--accent); border-radius: var(--radius); }
+
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; }
+    .sidebar-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--surface-3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.55rem; color: var(--accent); }
+    .sidebar-user-info { font-family: var(--mono); font-size: 0.55rem; color: var(--text-dim); letter-spacing: 0.08em; }
+    .sidebar-user-name { color: var(--text); font-size: 0.6rem; }
+
+    /* Top bar */
+    .cms-topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 5; }
+    .topbar-title { font-family: var(--font); font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .topbar-actions { display: flex; gap: 10px; }
+
+    /* Buttons */
+    .btn { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 18px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius); }
+    .btn:hover { border-color: var(--accent); color: var(--text); }
+    .btn-primary { background: var(--gradient); color: #000; border: none; font-weight: 600; }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-danger { border-color: rgba(255,68,68,0.3); color: var(--danger); }
+    .btn-danger:hover { border-color: var(--danger); background: rgba(255,68,68,0.06); }
+    .btn svg { width: 14px; height: 14px; }
+
+    /* Content area */
+    .cms-content { padding: 32px; }
+
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: var(--radius); }
+    .stat-card-label { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .stat-card-value { font-family: var(--mono); font-size: 1.8rem; font-weight: 700; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-card-sub { font-family: var(--mono); font-size: 0.5rem; color: var(--text-dim); margin-top: 4px; }
+
+    /* Table */
+    .cms-table { width: 100%; border-collapse: collapse; }
+    .cms-table th { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); text-align: left; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--surface); }
+    .cms-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+    .cms-table tr:hover td { background: rgba(168,255,0,0.02); }
+    .cms-table .thumb { width: 48px; height: 28px; background: var(--surface-3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.35rem; color: var(--text-dim); letter-spacing: 0.1em; }
+    .status { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 5px; }
+    .status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+    .status--live::before { background: var(--accent); box-shadow: 0 0 6px rgba(168,255,0,0.4); }
+    .status--live { color: var(--accent); }
+    .status--draft::before { background: var(--warn); }
+    .status--draft { color: var(--warn); }
+    .table-actions { display: flex; gap: 6px; }
+    .table-btn { font-family: var(--mono); font-size: 0.45rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--border); background: none; color: var(--text-dim); cursor: pointer; transition: all 0.2s; border-radius: var(--radius); }
+    .table-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .table-btn--del:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* Card wrapper for table */
+    .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 24px; }
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .table-title { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+
+    /* Form modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; border-radius: var(--radius); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+    .modal-title { font-family: var(--font); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .modal-close { width: 28px; height: 28px; border: 1px solid var(--border); background: none; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; border-radius: var(--radius); }
+    .modal-close:hover { border-color: var(--accent); color: var(--accent); }
+    .modal-close svg { width: 14px; height: 14px; }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
+    /* Form fields */
+    .form-field { margin-bottom: 20px; }
+    .form-label { display: block; font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+    .form-input, .form-textarea, .form-select { width: 100%; background: var(--surface-2); border: 1px solid var(--border); padding: 10px 14px; font-family: var(--font); font-size: 0.8rem; color: var(--text); outline: none; transition: border-color 0.2s; border-radius: var(--radius); }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-hint { font-family: var(--mono); font-size: 0.45rem; color: var(--text-dim); margin-top: 4px; letter-spacing: 0.06em; }
+    .form-upload { border: 1px dashed var(--border); padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; border-radius: var(--radius); }
+    .form-upload:hover { border-color: var(--accent); background: rgba(168,255,0,0.02); }
+    .form-upload-text { font-family: var(--mono); font-size: 0.55rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+    .form-upload svg { width: 24px; height: 24px; color: var(--text-dim); margin-bottom: 8px; }
+
+    /* Tabs */
+    .cms-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .cms-tab { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 12px 20px; color: var(--text-dim); cursor: pointer; border: none; background: none; transition: all 0.2s; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .cms-tab:hover { color: var(--text); }
+    .cms-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; background: var(--surface-2); border: 1px solid var(--accent); font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; color: var(--accent); z-index: 200; transform: translateY(100px); opacity: 0; transition: all 0.3s var(--ease); border-radius: var(--radius); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 48px 24px; }
+    .empty-state svg { width: 40px; height: 40px; color: var(--text-dim); margin-bottom: 16px; opacity: 0.4; }
+    .empty-state-text { font-family: var(--mono); font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cms-sidebar { width: 60px; }
+      .cms-main { margin-left: 60px; }
+      .sidebar-header span, .sidebar-sub, .nav-item span, .nav-group-label, .sidebar-footer { display: none; }
+      .nav-item { justify-content: center; padding: 12px; }
+      .sidebar-header { padding: 16px; justify-content: center; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .cms-content { padding: 16px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cms-layout">
+
+    <!-- Sidebar -->
+    <aside class="cms-sidebar">
+      <div class="sidebar-header">
+        <a href="/" class="sidebar-logo">
+          <svg viewBox="0 0 1920 1920" fill="currentColor"><polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/><polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/><polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/></svg>
+          <span>Socia CMS</span>
+        </a>
+        <div class="sidebar-sub">Content Manager</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">Content</div>
+        <button class="nav-item active" data-section="projects" onclick="showSection('projects')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Projects</span>
+          <span class="badge">6</span>
+        </button>
+        <button class="nav-item" data-section="clients" onclick="showSection('clients')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Clients</span>
+          <span class="badge">4</span>
+        </button>
+        <button class="nav-item" data-section="blog" onclick="showSection('blog')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Blog</span>
+          <span class="badge">3</span>
+        </button>
+
+        <div class="nav-group-label">System</div>
+        <button class="nav-item" data-section="media" onclick="showSection('media')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>Media</span>
+        </button>
+        <a href="/" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          <span>View Site</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">SS</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">Scott Socia</div>
+            admin
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="cms-main">
+
+      <!-- PROJECTS SECTION -->
+      <div id="section-projects">
+        <div class="cms-topbar">
+          <div class="topbar-title">Projects</div>
+          <div class="topbar-actions">
+            <button class="btn btn-primary" onclick="openModal('project')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Project
+            </button>
+          </div>
+        </div>
+        <div class="cms-content">
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-card-label">Total Projects</div><div class="stat-card-value">6</div><div class="stat-card-sub">2 added this month</div></div>
+            <div class="stat-card"><div class="stat-card-label">Published</div><div class="stat-card-value">5</div><div class="stat-card-sub">1 draft</div></div>
+            <div class="stat-card"><div class="stat-card-label">Categories</div><div class="stat-card-value">4</div><div class="stat-card-sub">Web, Brand, Graphics, Motion</div></div>
+            <div class="stat-card"><div class="stat-card-label">Total Views</div><div class="stat-card-value">2.4k</div><div class="stat-card-sub">+18% this week</div></div>
+          </div>
+          <div class="table-card">
+            <div class="table-header"><div class="table-title">All Projects</div></div>
+            <table class="cms-table">
+              <thead><tr><th>Thumb</th><th>Title</th><th>Category</th><th>Status</th><th>Date</th><th></th></tr></thead>
+              <tbody>
+                <tr><td><div class="thumb">IMG</div></td><td>Apex Moto Co.</td><td>Web Design</td><td><span class="status status--live">Live</span></td><td>Mar 15, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">IMG</div></td><td>Venom Racing</td><td>Brand Identity</td><td><span class="status status--live">Live</span></td><td>Mar 10, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">IMG</div></td><td>Dust Series Posters</td><td>Graphic Design</td><td><span class="status status--live">Live</span></td><td>Mar 8, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">IMG</div></td><td>Ride Collective</td><td>Web Design</td><td><span class="status status--live">Live</span></td><td>Feb 28, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">IMG</div></td><td>Ignite Logo Reveal</td><td>Motion</td><td><span class="status status--live">Live</span></td><td>Feb 20, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">IMG</div></td><td>Steel City MX</td><td>Brand Identity</td><td><span class="status status--draft">Draft</span></td><td>Feb 15, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTS SECTION -->
+      <div id="section-clients" style="display:none">
+        <div class="cms-topbar">
+          <div class="topbar-title">Client Logos</div>
+          <div class="topbar-actions"><button class="btn btn-primary" onclick="openModal('client')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Client</button></div>
+        </div>
+        <div class="cms-content">
+          <p style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:20px;">LOGOS APPEAR IN THE MARQUEE ON THE HOMEPAGE</p>
+          <div class="table-card">
+            <div class="table-header"><div class="table-title">Client Logos</div></div>
+            <table class="cms-table">
+              <thead><tr><th>Logo</th><th>Client Name</th><th>URL</th><th>Order</th><th></th></tr></thead>
+              <tbody>
+                <tr><td><div class="thumb">SVG</div></td><td>Apex Moto Co.</td><td>apexmoto.com</td><td>1</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">SVG</div></td><td>Venom Racing</td><td>venomracing.com</td><td>2</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">SVG</div></td><td>Ride Collective</td><td>ridecollective.co</td><td>3</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td><div class="thumb">SVG</div></td><td>Ignite Media</td><td>ignitemedia.tv</td><td>4</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOG SECTION -->
+      <div id="section-blog" style="display:none">
+        <div class="cms-topbar">
+          <div class="topbar-title">Blog Posts</div>
+          <div class="topbar-actions"><button class="btn btn-primary" onclick="openModal('blog')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Post</button></div>
+        </div>
+        <div class="cms-content">
+          <div class="cms-tabs">
+            <button class="cms-tab active">All</button>
+            <button class="cms-tab">Published</button>
+            <button class="cms-tab">Drafts</button>
+          </div>
+          <div class="table-card">
+            <table class="cms-table">
+              <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Date</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>How We Built the Socia Visual 3D Experience</td><td>Dev</td><td><span class="status status--live">Published</span></td><td>Mar 18, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td>5 Brand Identity Mistakes in Powersports</td><td>Design</td><td><span class="status status--live">Published</span></td><td>Mar 12, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+                <tr><td>Why Your MX Brand Needs a Website in 2026</td><td>Strategy</td><td><span class="status status--draft">Draft</span></td><td>Mar 5, 2026</td><td><div class="table-actions"><button class="table-btn">Edit</button><button class="table-btn table-btn--del">Del</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDIA SECTION -->
+      <div id="section-media" style="display:none">
+        <div class="cms-topbar">
+          <div class="topbar-title">Media Library</div>
+          <div class="topbar-actions"><button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload</button></div>
+        </div>
+        <div class="cms-content">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <div class="empty-state-text">Drag & drop files here or click Upload</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- New Project Modal -->
+  <div class="modal-overlay" id="modal-project">
+    <div class="modal">
+      <div class="modal-header"><div class="modal-title">New Project</div><button class="modal-close" onclick="closeModal('project')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+      <div class="modal-body">
+        <div class="form-field"><label class="form-label">Project Title</label><input class="form-input" placeholder="e.g. Apex Moto Co."></div>
+        <div class="form-row">
+          <div class="form-field"><label class="form-label">Category</label><select class="form-select"><option>Web Design</option><option>Brand Identity</option><option>Graphic Design</option><option>Motion & Video</option></select></div>
+          <div class="form-field"><label class="form-label">Client Name</label><input class="form-input" placeholder="Client"></div>
+        </div>
+        <div class="form-field"><label class="form-label">Description</label><textarea class="form-textarea" placeholder="Project description..."></textarea></div>
+        <div class="form-field"><label class="form-label">Thumbnail (800x450)</label><div class="form-upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="form-upload-text">Click to upload or drag file</div></div><div class="form-hint">WebP or PNG, max 200KB</div></div>
+        <div class="form-row">
+          <div class="form-field"><label class="form-label">Tags</label><input class="form-input" placeholder="Responsive, Custom Code, SEO"></div>
+          <div class="form-field"><label class="form-label">Status</label><select class="form-select"><option>Draft</option><option>Published</option></select></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn" onclick="closeModal('project')">Cancel</button><button class="btn btn-primary" onclick="closeModal('project');showToast('Project saved')">Save Project</button></div>
+    </div>
+  </div>
+
+  <!-- New Client Modal -->
+  <div class="modal-overlay" id="modal-client">
+    <div class="modal">
+      <div class="modal-header"><div class="modal-title">Add Client Logo</div><button class="modal-close" onclick="closeModal('client')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+      <div class="modal-body">
+        <div class="form-field"><label class="form-label">Client Name</label><input class="form-input" placeholder="Company name"></div>
+        <div class="form-field"><label class="form-label">Website URL</label><input class="form-input" placeholder="https://"></div>
+        <div class="form-field"><label class="form-label">Logo (SVG preferred)</label><div class="form-upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="form-upload-text">Upload SVG or PNG logo</div></div><div class="form-hint">SVG for best quality, max 50KB</div></div>
+        <div class="form-field"><label class="form-label">Display Order</label><input class="form-input" type="number" value="5" min="1"></div>
+      </div>
+      <div class="modal-footer"><button class="btn" onclick="closeModal('client')">Cancel</button><button class="btn btn-primary" onclick="closeModal('client');showToast('Client added to marquee')">Add Client</button></div>
+    </div>
+  </div>
+
+  <!-- New Blog Post Modal -->
+  <div class="modal-overlay" id="modal-blog">
+    <div class="modal">
+      <div class="modal-header"><div class="modal-title">New Blog Post</div><button class="modal-close" onclick="closeModal('blog')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+      <div class="modal-body">
+        <div class="form-field"><label class="form-label">Post Title</label><input class="form-input" placeholder="Your post title"></div>
+        <div class="form-field"><label class="form-label">Slug</label><input class="form-input" placeholder="your-post-title"><div class="form-hint">Auto-generated from title</div></div>
+        <div class="form-row">
+          <div class="form-field"><label class="form-label">Category</label><select class="form-select"><option>Design</option><option>Dev</option><option>Strategy</option><option>Industry</option></select></div>
+          <div class="form-field"><label class="form-label">Status</label><select class="form-select"><option>Draft</option><option>Published</option></select></div>
+        </div>
+        <div class="form-field"><label class="form-label">Featured Image</label><div class="form-upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="form-upload-text">Upload featured image</div></div></div>
+        <div class="form-field"><label class="form-label">Content</label><textarea class="form-textarea" style="min-height:200px" placeholder="Write your post content here... Markdown supported."></textarea></div>
+        <div class="form-field"><label class="form-label">Tags</label><input class="form-input" placeholder="design, branding, web"></div>
+      </div>
+      <div class="modal-footer"><button class="btn" onclick="closeModal('blog')">Cancel</button><button class="btn" onclick="showToast('Draft saved')">Save Draft</button><button class="btn btn-primary" onclick="closeModal('blog');showToast('Post published')">Publish</button></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function showSection(name) {
+      document.querySelectorAll('[id^="section-"]').forEach(s => s.style.display = 'none');
+      document.getElementById('section-' + name).style.display = '';
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelector('[data-section="' + name + '"]').classList.add('active');
+    }
+    function openModal(type) {
+      document.getElementById('modal-' + type).classList.add('active');
+    }
+    function closeModal(type) {
+      document.getElementById('modal-' + type).classList.remove('active');
+    }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = '[ ✓ ] ' + msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-/* Logo 3D Scene — Extruded logo inside 2D HUD rings with orbiting particles */
+/* Logo 3D Scene — Wireframe→solid logo with HUD rings + orbiting particles */
 (function () {
   if (typeof THREE === "undefined") return;
   var wrap = document.getElementById("logo3d");
@@ -37,7 +37,7 @@
 
   /* ── Logo geometry ── */
   var CX = 960, CY = 960, SC = 3.2 / 960;
-  var DEPTH = 0.69;
+  var DEPTH = 0.83; // +20% from 0.69
 
   function makeShape(coords) {
     var shape = new THREE.Shape();
@@ -62,62 +62,74 @@
     bevelSegments: 2
   };
 
-  var matBar = new THREE.MeshPhongMaterial({
-    color: 0x5a8800,
-    emissive: 0xa8ff00,
-    emissiveIntensity: 0.5,
-    specular: 0xa8ff00,
-    shininess: 100,
-    side: THREE.DoubleSide
+  // Solid materials (visible on hover)
+  var matBarSolid = new THREE.MeshPhongMaterial({
+    color: 0x5a8800, emissive: 0xa8ff00, emissiveIntensity: 0.5,
+    specular: 0xa8ff00, shininess: 100, side: THREE.DoubleSide,
+    transparent: true, opacity: 0
   });
-  var matShape = new THREE.MeshPhongMaterial({
-    color: 0x555555,
-    emissive: 0xa8ff00,
-    emissiveIntensity: 0.13,
-    specular: 0x999999,
-    shininess: 70,
-    side: THREE.DoubleSide
+  var matShapeSolid = new THREE.MeshPhongMaterial({
+    color: 0x555555, emissive: 0xa8ff00, emissiveIntensity: 0.13,
+    specular: 0x999999, shininess: 70, side: THREE.DoubleSide,
+    transparent: true, opacity: 0
+  });
+
+  // Wireframe edge materials (visible in normal state)
+  var wireMatBar = new THREE.LineBasicMaterial({
+    color: 0xa8ff00, transparent: true, opacity: 0.7,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  var wireMatShape = new THREE.LineBasicMaterial({
+    color: 0xa8ff00, transparent: true, opacity: 0.4,
+    blending: THREE.AdditiveBlending, depthWrite: false
   });
 
   var logoGroup = new THREE.Group();
+  var solidMeshes = [];
+  var wireMeshes = [];
 
-  function createLayer(pts, material, zPos) {
+  function createLayer(pts, solidMat, wireMat, zPos) {
     try {
       var shape = makeShape(pts);
       var geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-      var mesh = new THREE.Mesh(geo, material);
-      mesh.position.z = zPos - DEPTH / 2;
-      return mesh;
+      // Solid mesh
+      var solid = new THREE.Mesh(geo, solidMat);
+      solid.position.z = zPos - DEPTH / 2;
+      // Wireframe edges
+      var edges = new THREE.EdgesGeometry(geo, 15);
+      var wire = new THREE.LineSegments(edges, wireMat);
+      wire.position.z = zPos - DEPTH / 2;
+      solidMeshes.push(solid);
+      wireMeshes.push(wire);
+      return { solid: solid, wire: wire };
     } catch (e) {
-      // Fallback: flat shape if extrude fails
-      console.warn("ExtrudeGeometry failed, using flat shape:", e);
       var shape2 = makeShape(pts);
       var geo2 = new THREE.ShapeGeometry(shape2);
-      var mesh2 = new THREE.Mesh(geo2, material);
-      mesh2.position.z = zPos;
-      return mesh2;
+      var solid2 = new THREE.Mesh(geo2, solidMat);
+      solid2.position.z = zPos;
+      solidMeshes.push(solid2);
+      return { solid: solid2, wire: null };
     }
   }
 
-  var mesh1 = createLayer(layer1Pts, matBar, 0.2);
-  var mesh2 = createLayer(layer2Pts, matShape, 0);
-  var mesh3 = createLayer(layer3Pts, matShape, -0.2);
-  logoGroup.add(mesh1, mesh2, mesh3);
+  var l1 = createLayer(layer1Pts, matBarSolid, wireMatBar, 0.2);
+  var l2 = createLayer(layer2Pts, matShapeSolid, wireMatShape, 0);
+  var l3 = createLayer(layer3Pts, matShapeSolid, wireMatShape, -0.2);
+  logoGroup.add(l1.solid, l2.solid, l3.solid);
+  if (l1.wire) logoGroup.add(l1.wire);
+  if (l2.wire) logoGroup.add(l2.wire);
+  if (l3.wire) logoGroup.add(l3.wire);
   scene.add(logoGroup);
 
   /* ── HUD Ring helpers ── */
   var GREEN = 0xa8ff00;
   var lineMat = function (opacity) {
     return new THREE.LineBasicMaterial({
-      color: GREEN,
-      transparent: true,
-      opacity: opacity,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
+      color: GREEN, transparent: true, opacity: opacity,
+      blending: THREE.AdditiveBlending, depthWrite: false
     });
   };
 
-  // Create an arc from startAngle to endAngle at given radius, flat on XY plane
   function makeArc(radius, startA, endA, segments) {
     var pts = [];
     var segs = segments || 48;
@@ -128,71 +140,61 @@
     return new THREE.BufferGeometry().setFromPoints(pts);
   }
 
-  // Small tick mark (radial line)
   function makeTick(angle, innerR, outerR) {
-    var pts = [
+    return new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(Math.cos(angle) * innerR, Math.sin(angle) * innerR, 0),
       new THREE.Vector3(Math.cos(angle) * outerR, Math.sin(angle) * outerR, 0)
-    ];
-    return new THREE.BufferGeometry().setFromPoints(pts);
+    ]);
   }
 
-  /* ── Inner Ring — nearly complete circle with 2 gaps + tick marks ── */
+  /* ── Inner Ring — brighter than outer ── */
   var INNER_R = 3.4;
   var innerGroup = new THREE.Group();
   var innerMats = [];
-
-  // 2 arcs with gaps at 90° and 270°
-  var gapSize = 0.18; // radians (~10°)
-  var arc1 = new THREE.Line(makeArc(INNER_R, gapSize / 2, Math.PI - gapSize / 2, 64), lineMat(0.32));
-  var arc2 = new THREE.Line(makeArc(INNER_R, Math.PI + gapSize / 2, Math.PI * 2 - gapSize / 2, 64), lineMat(0.32));
+  var gapSize = 0.18;
+  var arc1 = new THREE.Line(makeArc(INNER_R, gapSize / 2, Math.PI - gapSize / 2, 64), lineMat(0.45));
+  var arc2 = new THREE.Line(makeArc(INNER_R, Math.PI + gapSize / 2, Math.PI * 2 - gapSize / 2, 64), lineMat(0.45));
   innerMats.push(arc1.material, arc2.material);
   innerGroup.add(arc1, arc2);
 
-  // Tick marks at the gaps (crosshair style)
-  for (var t = 0; t < 4; t++) {
-    var tickAngle = t * Math.PI / 2;
-    var tickLine = new THREE.Line(makeTick(tickAngle, INNER_R - 0.25, INNER_R + 0.25), lineMat(0.25));
+  for (var ti = 0; ti < 4; ti++) {
+    var tickAngle = ti * Math.PI / 2;
+    var tickLine = new THREE.Line(makeTick(tickAngle, INNER_R - 0.25, INNER_R + 0.25), lineMat(0.35));
     innerMats.push(tickLine.material);
     innerGroup.add(tickLine);
   }
-
-  innerGroup.position.z = 0.01; // just slightly in front
+  innerGroup.position.z = 0.01;
   scene.add(innerGroup);
 
-  /* ── Outer Ring — 6 segmented arcs with gaps + notch ticks ── */
+  /* ── Outer Ring — less bright than inner ── */
   var OUTER_R = 4.3;
   var outerGroup = new THREE.Group();
   var outerMats = [];
   var OUTER_SEGS = 6;
-  var arcSpan = (Math.PI * 2 / OUTER_SEGS) * 0.78; // each arc covers 78% of its slot
+  var arcSpan = (Math.PI * 2 / OUTER_SEGS) * 0.78;
   var slotSize = Math.PI * 2 / OUTER_SEGS;
 
-  for (var s = 0; s < OUTER_SEGS; s++) {
-    var startA = s * slotSize;
+  for (var si = 0; si < OUTER_SEGS; si++) {
+    var startA = si * slotSize;
     var endA = startA + arcSpan;
-    var seg = new THREE.Line(makeArc(OUTER_R, startA, endA, 24), lineMat(0.42));
+    var seg = new THREE.Line(makeArc(OUTER_R, startA, endA, 24), lineMat(0.28));
     outerMats.push(seg.material);
     outerGroup.add(seg);
-
-    // Small notch at start of each segment
-    var notch = new THREE.Line(makeTick(startA, OUTER_R - 0.15, OUTER_R + 0.15), lineMat(0.35));
+    var notch = new THREE.Line(makeTick(startA, OUTER_R - 0.15, OUTER_R + 0.15), lineMat(0.22));
     outerMats.push(notch.material);
     outerGroup.add(notch);
   }
-
   outerGroup.position.z = 0.01;
   scene.add(outerGroup);
 
-  /* ── Orbiting particles — dots traveling along the rings ── */
-  // Inner ring: 3 particles clockwise, Outer ring: 2 particles counter-clockwise
+  /* ── Orbiting particles ── */
   var gc = document.createElement("canvas");
   gc.width = 64; gc.height = 64;
   var gx = gc.getContext("2d");
   var gg = gx.createRadialGradient(32, 32, 0, 32, 32, 32);
   gg.addColorStop(0, "rgba(168,255,0,1)");
-  gg.addColorStop(0.1, "rgba(168,255,0,0.8)");
-  gg.addColorStop(0.35, "rgba(168,255,0,0.15)");
+  gg.addColorStop(0.1, "rgba(168,255,0,0.85)");
+  gg.addColorStop(0.35, "rgba(168,255,0,0.2)");
   gg.addColorStop(1, "rgba(168,255,0,0)");
   gx.fillStyle = gg;
   gx.fillRect(0, 0, 64, 64);
@@ -211,13 +213,8 @@
   pGeo.setAttribute("position", new THREE.BufferAttribute(pPositions, 3));
 
   var pMat = new THREE.PointsMaterial({
-    map: glowTex,
-    size: 0.66,
-    transparent: true,
-    opacity: 1.0,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    sizeAttenuation: true
+    map: glowTex, size: 0.8, transparent: true, opacity: 1.0,
+    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
   });
   var pPoints = new THREE.Points(pGeo, pMat);
   scene.add(pPoints);
@@ -230,9 +227,7 @@
   var introStart = 0;
   var INTRO_DUR = 800;
   var time = 0;
-  var camBaseX = 0, camBaseY = 0, camBaseZ = 14;
 
-  // Start invisible
   logoGroup.scale.set(0, 0, 0);
   innerGroup.scale.set(0, 0, 0);
   outerGroup.scale.set(0, 0, 0);
@@ -269,24 +264,20 @@
       pPoints.visible = true;
     }
 
-    // Intro
+    // Intro — starts as wireframe
     if (introState === 1) {
       introT = Math.max(0, Math.min(1, (now - introStart) / INTRO_DUR));
       if (introT > 0) {
         var e = backOut(introT);
         logoGroup.scale.set(e, e, e);
-        var re = backOut(Math.min(1, introT * 1.2));
-        innerGroup.scale.set(re, re, re);
-        var re2 = backOut(Math.min(1, introT * 1.4));
-        outerGroup.scale.set(re2, re2, re2);
+        innerGroup.scale.set(backOut(Math.min(1, introT * 1.2)), backOut(Math.min(1, introT * 1.2)), 1);
+        outerGroup.scale.set(backOut(Math.min(1, introT * 1.4)), backOut(Math.min(1, introT * 1.4)), 1);
         var flash = Math.max(0, 1 - introT * 4);
-        matBar.emissiveIntensity = 0.5 + flash * 2;
-        matShape.emissiveIntensity = 0.13 + flash * 0.5;
+        wireMatBar.opacity = 0.7 + flash * 0.3;
+        wireMatShape.opacity = 0.4 + flash * 0.3;
       }
       if (introT >= 1) {
         introState = 2;
-        matBar.emissiveIntensity = 0.5;
-        matShape.emissiveIntensity = 0.13;
         logoGroup.scale.set(1, 1, 1);
         innerGroup.scale.set(1, 1, 1);
         outerGroup.scale.set(1, 1, 1);
@@ -294,51 +285,61 @@
       }
     }
 
-    // Hover
-    hoverT += ((hovering ? 1 : 0) - hoverT) * 0.05;
+    // Hover interpolation
+    hoverT += ((hovering ? 1 : 0) - hoverT) * 0.045;
     hoverT = Math.max(0, Math.min(1, hoverT));
 
-    if (introState === 2) {
-      // Hover: speed up rotation ~20% instead of growing
-      logoGroup.rotation.y += 0.003 + hoverT * 0.0006;
+    /* ── Wireframe ↔ Solid crossfade ── */
+    // Normal: wireframe full, solid invisible
+    // Hover: wireframe fades out, solid fades in
+    var solidOpacity = hoverT;
+    var wireOpacity = 1 - hoverT;
+    matBarSolid.opacity = solidOpacity;
+    matShapeSolid.opacity = solidOpacity;
+    matBarSolid.emissiveIntensity = 0.5 + hoverT * 0.15;
+    matShapeSolid.emissiveIntensity = 0.13 + hoverT * 0.06;
+    wireMatBar.opacity = 0.7 * wireOpacity;
+    wireMatShape.opacity = 0.4 * wireOpacity;
 
-      var sc = 1 + hoverT * 0.015;
+    if (introState === 2) {
+      // Rotation: 50% faster on hover (more noticeable than 20%)
+      logoGroup.rotation.y += 0.003 + hoverT * 0.0015;
+
+      var sc = 1 + hoverT * 0.01;
       logoGroup.scale.set(sc, sc, sc);
-      matBar.emissiveIntensity = 0.5 + hoverT * 0.15;
-      matShape.emissiveIntensity = 0.13 + hoverT * 0.06;
     }
 
-    // Logo scene camera stays centered
-    camera.fov = 44 - hoverT * 1;
+    camera.fov = 44 - hoverT * 0.5;
     camera.updateProjectionMatrix();
 
-    // Ring rotation — speed up ~20% on hover
-    innerGroup.rotation.z += 0.002 + hoverT * 0.0004;
-    outerGroup.rotation.z -= 0.0015 + hoverT * 0.0003;
+    // Ring rotation — 50% faster on hover
+    innerGroup.rotation.z += 0.002 + hoverT * 0.001;
+    outerGroup.rotation.z -= 0.0015 + hoverT * 0.00075;
 
-    // Ring hover effects — subtle brighten
-    var hoverBright = hoverT * 0.08;
-    var pulse = 0.03 * Math.sin(time * 2);
-    var innerOpacity = Math.min(0.5, 0.32 + hoverBright + pulse);
-    var outerOpacity = Math.min(0.6, 0.42 + hoverBright + pulse * 0.7);
+    // Ring brightness — inner brighter than outer
+    var pulse = 0.04 * Math.sin(time * 1.5);
+    var innerOpacity = Math.min(0.6, 0.45 + hoverT * 0.08 + pulse);
+    var outerOpacity = Math.min(0.45, 0.28 + hoverT * 0.06 + pulse * 0.6);
     innerMats.forEach(function (m) { m.opacity = innerOpacity; });
     outerMats.forEach(function (m) { m.opacity = outerOpacity; });
 
-    // Update particles — orbit flat along their ring, speed up ~20% on hover
+    // Particles — orbit along rings, 50% faster on hover
     var posArr = pGeo.attributes.position.array;
     for (var i = 0; i < particles.length; i++) {
       var p = particles[i];
-      p.angle += p.speed * p.dir * (0.012 + hoverT * 0.0024);
-      // Particles follow the ring's rotation
+      p.angle += p.speed * p.dir * (0.012 + hoverT * 0.006);
       var ringRot = p.radius === INNER_R ? innerGroup.rotation.z : outerGroup.rotation.z;
       var worldAngle = p.angle + ringRot;
       posArr[i * 3] = Math.cos(worldAngle) * p.radius;
       posArr[i * 3 + 1] = Math.sin(worldAngle) * p.radius;
-      posArr[i * 3 + 2] = 0.02; // flat, slightly in front
+      posArr[i * 3 + 2] = 0.02;
     }
     pGeo.attributes.position.needsUpdate = true;
-    pMat.opacity = 1.0;
-    pMat.size = 0.66 + hoverT * 0.05;
+
+    // Ambient particle brightness pulse
+    var ambientPulse = 0.85 + 0.15 * Math.sin(time * 1.2);
+    pMat.opacity = ambientPulse;
+    pMat.size = 0.8 + 0.08 * Math.sin(time * 0.9) + hoverT * 0.06;
 
     resize();
     renderer.render(scene, camera);

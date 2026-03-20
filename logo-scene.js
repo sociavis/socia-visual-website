@@ -82,11 +82,21 @@
   var logoGroup = new THREE.Group();
 
   function createLayer(pts, material, zPos) {
-    var shape = makeShape(pts);
-    var geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    var mesh = new THREE.Mesh(geo, material);
-    mesh.position.z = zPos - DEPTH / 2;
-    return mesh;
+    try {
+      var shape = makeShape(pts);
+      var geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      var mesh = new THREE.Mesh(geo, material);
+      mesh.position.z = zPos - DEPTH / 2;
+      return mesh;
+    } catch (e) {
+      // Fallback: flat shape if extrude fails
+      console.warn("ExtrudeGeometry failed, using flat shape:", e);
+      var shape2 = makeShape(pts);
+      var geo2 = new THREE.ShapeGeometry(shape2);
+      var mesh2 = new THREE.Mesh(geo2, material);
+      mesh2.position.z = zPos;
+      return mesh2;
+    }
   }
 
   var mesh1 = createLayer(layer1Pts, matBar, 0.2);
@@ -350,6 +360,12 @@
   wrap.addEventListener("touchstart", function () { hovering = true; }, { passive: true });
   wrap.addEventListener("touchend", function () { hovering = false; });
 
+  // Force initial render with a test frame
   resize();
+  renderer.render(scene, camera);
   requestAnimationFrame(tick);
+
+  // Debug: confirm scene initialized
+  console.log("logo-scene: initialized, container:", container.offsetWidth, "x", container.offsetHeight,
+    "meshes:", logoGroup.children.length, "cam:", camera.position.z);
 })();

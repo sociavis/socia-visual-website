@@ -194,6 +194,7 @@
   scene.add(pPoints);
 
   /* ── State ── */
+  var heroPanel = document.querySelector(".panel--hero");
   var hovering = false;
   var hoverT = 0;
   var introState = 0;
@@ -220,8 +221,8 @@
     var rect = wrap.getBoundingClientRect();
     var bw = rect.width || 300;
     var bh = rect.height || 300;
-    var w = Math.round(bw * 1.6);
-    var h = Math.round(bh * 1.6);
+    var w = Math.round(bw * 1.4);
+    var h = Math.round(bh * 1.4);
     if (w === lastW && h === lastH) return;
     lastW = w; lastH = h;
     cvs.style.width = w + "px";
@@ -230,6 +231,9 @@
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
+  // Only resize on window resize, not every frame
+  window.addEventListener("resize", resize);
+  resize();
 
   /* ── Render ── */
   function tick() {
@@ -298,8 +302,11 @@
       matShape.emissiveIntensity = 0.13 + hoverT * 0.06;
     }
 
-    camera.fov = 44 - hoverT * 0.5;
-    camera.updateProjectionMatrix();
+    var newFov = 44 - hoverT * 0.5;
+    if (Math.abs(camera.fov - newFov) > 0.01) {
+      camera.fov = newFov;
+      camera.updateProjectionMatrix();
+    }
 
     // Ring rotation — 50% faster on hover
     innerGroup.rotation.z += 0.002 + hoverT * 0.001;
@@ -330,8 +337,10 @@
     pMat.opacity = ambientPulse;
     pMat.size = 0.8 + 0.08 * Math.sin(time * 0.9) + hoverT * 0.06;
 
-    resize();
-    renderer.render(scene, camera);
+    // Only render when hero panel is visible
+    if (!heroPanel || heroPanel.classList.contains("active")) {
+      renderer.render(scene, camera);
+    }
     requestAnimationFrame(tick);
   }
 
@@ -340,6 +349,5 @@
   wrap.addEventListener("touchstart", function () { hovering = true; }, { passive: true });
   wrap.addEventListener("touchend", function () { hovering = false; });
 
-  resize();
   requestAnimationFrame(tick);
 })();

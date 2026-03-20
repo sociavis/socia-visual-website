@@ -203,7 +203,17 @@ if(document.cookie.indexOf('sv_consent=accepted')!==-1)svLoadGA();
 </div>
 <main id="hero" tabindex="-1" style="opacity:0;transition:opacity 0.6s ease">
   <h1 class="sr-only">Socia Visual — Interactive Experiences</h1>
-  <canvas id="c3d" aria-label="Interactive 3D experience">Your browser does not support canvas. This is an interactive 3D visual experience.</canvas>
+  <div class="sr-only" id="sceneDescriptions">
+    <p>This page showcases four interactive 3D experiences built by Socia Visual, demonstrating our interactive development capabilities using Three.js and WebGL:</p>
+    <ul>
+      <li>Command — A radar-style interface where clicking deploys energy pulses across a 3D grid</li>
+      <li>Light Bike — A Tron-inspired game where you race a light cycle and compete for speed</li>
+      <li>Frequency — An audio-reactive visualizer that responds to music and mouse interaction</li>
+      <li>MX — A motocross racing experience with lap timing and track records</li>
+    </ul>
+    <p>Use the navigation on the right side to switch between experiences. All interactive elements require mouse interaction on desktop.</p>
+  </div>
+  <canvas id="c3d" aria-label="Interactive 3D showcase featuring four scenes: a radar command interface, a Tron-style light bike game, an audio frequency visualizer, and a motocross racing experience">Your browser does not support canvas. This is an interactive 3D visual experience featuring four scenes built with Three.js WebGL.</canvas>
   <div class="scanlines" aria-hidden="true"></div>
   <div class="tflash" id="tflash" aria-hidden="true"></div>
   <div class="hud-corner tl" aria-hidden="true"></div><div class="hud-corner tr" aria-hidden="true"></div><div class="hud-corner bl" aria-hidden="true"></div><div class="hud-corner br" aria-hidden="true"></div>

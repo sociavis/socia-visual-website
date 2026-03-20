@@ -47,7 +47,7 @@
     @keyframes bootPulse{from{opacity:.4}to{opacity:1}}
     .boot-text{font-family:var(--font-mono);font-size:.75rem;color:var(--accent-1);margin-bottom:24px;height:20px;letter-spacing:.1em}
     .boot-bar{width:200px;height:2px;background:var(--grey);margin:0 auto;overflow:hidden}
-    .boot-bar-fill{height:100%;width:0%;background:var(--gradient);transition:width .15s linear}
+    .boot-bar-fill{height:100%;width:100%;background:var(--gradient);transform:scaleX(0);transform-origin:left;transition:transform .15s linear}
   </style>
 
   <!-- Full stylesheet (minified, 34KB — loads fast with preload hint) -->

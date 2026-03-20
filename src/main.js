@@ -5,22 +5,6 @@ import './three-setup.js';
 import '../grid-scene.js';
 import '../script.js';
 
-// Dark/light theme toggle
-const themeToggle = document.getElementById('themeToggle');
-if (themeToggle) {
-  // Restore saved theme
-  const saved = localStorage.getItem('sv-theme');
-  if (saved) document.documentElement.setAttribute('data-theme', saved);
-
-  themeToggle.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('sv-theme', next);
-    themeToggle.setAttribute('aria-label', next === 'light' ? 'Toggle dark mode' : 'Toggle light mode');
-  });
-}
-
 // Animated page transitions (View Transitions API)
 if ('startViewTransition' in document) {
   document.addEventListener('click', (e) => {

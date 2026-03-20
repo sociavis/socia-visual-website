@@ -652,11 +652,11 @@
     if(document.cookie.indexOf('sv_consent=')!==-1){b.style.display='none';return;}
     b.style.display='flex';
     document.getElementById('cookieAccept').addEventListener('click',function(){
-      document.cookie='sv_consent=accepted;path=/;max-age=31536000;SameSite=Lax';
+      document.cookie='sv_consent=accepted;path=/;max-age=31536000;SameSite=Lax;Secure';
       b.style.display='none';svLoadGA();
     });
     document.getElementById('cookieReject').addEventListener('click',function(){
-      document.cookie='sv_consent=declined;path=/;max-age=31536000;SameSite=Lax';
+      document.cookie='sv_consent=declined;path=/;max-age=31536000;SameSite=Lax;Secure';
       b.style.display='none';
     });
   })();

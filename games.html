@@ -1962,14 +1962,28 @@ document.querySelectorAll('.cm-svc').forEach(function(el){
   if(document.cookie.indexOf('sv_consent=')!==-1){b.style.display='none';return;}
   b.style.display='flex';
   document.getElementById('cookieAccept').addEventListener('click',function(){
-    document.cookie='sv_consent=accepted;path=/;max-age=31536000;SameSite=Lax';
+    document.cookie='sv_consent=accepted;path=/;max-age=31536000;SameSite=Lax;Secure';
     b.style.display='none';svLoadGA();
   });
   document.getElementById('cookieReject').addEventListener('click',function(){
-    document.cookie='sv_consent=declined;path=/;max-age=31536000;SameSite=Lax';
+    document.cookie='sv_consent=declined;path=/;max-age=31536000;SameSite=Lax;Secure';
     b.style.display='none';
   });
 })();
+// Keyboard activation for role="button" elements
+document.querySelectorAll('[role="button"][tabindex="0"]').forEach(function(el){
+  el.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}
+  });
+});
 </script>
+<footer class="sr-only" role="contentinfo">
+  <p>&copy; 2026 Socia Visual. All rights reserved.</p>
+  <nav aria-label="Legal">
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/accessibility.html">Accessibility Statement</a>
+    <button onclick="document.cookie='sv_consent=;path=/;max-age=0';location.reload()" style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit">Manage Cookie Preferences</button>
+  </nav>
+</footer>
 </body>
 </html>

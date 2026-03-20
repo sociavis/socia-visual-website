@@ -400,12 +400,12 @@
             <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
               <a href="games.html" class="games-link reveal magnetic">
                 <span class="bracket bracket--left">[</span>
-                <span>Want to have some fun?</span>
+                <span>Play Interactive Games</span>
                 <span class="bracket bracket--right">]</span>
               </a>
               <a href="about-site.html" class="games-link reveal magnetic">
                 <span class="bracket bracket--left">[</span>
-                <span>About this site</span>
+                <span>Site Diagnostics</span>
                 <span class="bracket bracket--right">]</span>
               </a>
             </div>
@@ -417,14 +417,14 @@
               <input type="hidden" name="_subject" value="New inquiry from sociavisual.com">
 
               <div class="form-group reveal">
-                <input type="text" id="name" name="name" required placeholder=" " autocomplete="off">
+                <input type="text" id="name" name="name" required placeholder=" " autocomplete="name" aria-describedby="name-error"><span id="name-error" class="form-field-error" aria-live="polite"></span>
                 <label for="name">Your Name</label>
                 <div class="form-line"></div>
                 <div class="form-corner form-corner--tl"></div>
                 <div class="form-corner form-corner--br"></div>
               </div>
               <div class="form-group reveal">
-                <input type="email" id="email" name="email" required placeholder=" " autocomplete="off">
+                <input type="email" id="email" name="email" required placeholder=" " autocomplete="email" aria-describedby="email-error"><span id="email-error" class="form-field-error" aria-live="polite"></span>
                 <label for="email">Email Address</label>
                 <div class="form-line"></div>
                 <div class="form-corner form-corner--tl"></div>
@@ -456,7 +456,7 @@
                 </div>
               </fieldset>
               <div class="form-group reveal">
-                <textarea id="message" name="message" rows="3" required placeholder=" "></textarea>
+                <textarea id="message" name="message" rows="3" required placeholder=" " aria-describedby="message-error"><span id="message-error" class="form-field-error" aria-live="polite"></span></textarea>
                 <label for="message">Tell us about your project</label>
                 <div class="form-line"></div>
                 <div class="form-corner form-corner--tl"></div>
@@ -465,7 +465,7 @@
 
               <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
               <div class="form-status" id="formStatus" aria-live="polite" aria-atomic="true"></div>
-              <div style="font-family:var(--font-mono);font-size:.5rem;color:var(--grey-light);letter-spacing:.08em;margin-top:8px;line-height:1.5">Protected by reCAPTCHA. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Google Privacy Policy</a> &amp; <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Terms</a> apply. <a href="privacy.html" style="color:inherit;text-decoration:underline">Our Privacy Policy</a>.</div>
+              <div style="font-family:var(--font-mono);font-size:.5rem;color:var(--grey-light);letter-spacing:.08em;margin-top:8px;line-height:1.5">Protected by reCAPTCHA. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline"style="padding:4px 2px">Google Privacy Policy<span class="sr-only"> (opens in new tab)</span></a> &amp; <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline"style="padding:4px 2px">Google Terms of Service<span class="sr-only"> (opens in new tab)</span></a> apply. <a href="privacy.html" style="color:inherit;text-decoration:underline">Our Privacy Policy</a>.</div>
 
               <button type="submit" class="form-submit magnetic reveal">
                 <span class="cta-text">Transmit Message</span>
@@ -493,6 +493,7 @@
     <nav aria-label="Legal">
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/accessibility.html">Accessibility Statement</a>
+      <button onclick="document.cookie='sv_consent=;path=/;max-age=0';location.reload()" style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit">Manage Cookie Preferences</button>
     </nav>
   </footer>
 
@@ -511,11 +512,11 @@
     if(document.cookie.indexOf('sv_consent=')!==-1){b.style.display='none';return;}
     b.style.display='flex';
     document.getElementById('cookieAccept').addEventListener('click',function(){
-      document.cookie='sv_consent=accepted;path=/;max-age=31536000;SameSite=Lax';
+      document.cookie='sv_consent=accepted;path=/;max-age=31536000;SameSite=Lax;Secure';
       b.style.display='none';svLoadGA();
     });
     document.getElementById('cookieReject').addEventListener('click',function(){
-      document.cookie='sv_consent=declined;path=/;max-age=31536000;SameSite=Lax';
+      document.cookie='sv_consent=declined;path=/;max-age=31536000;SameSite=Lax;Secure';
       b.style.display='none';
     });
   })();

@@ -235,8 +235,10 @@
   var lastW = 0, lastH = 0;
   function resize() {
     var rect = wrap.getBoundingClientRect();
-    var w = Math.round(rect.width * 1.6);
-    var h = Math.round(rect.height * 1.6);
+    var bw = rect.width || 300;
+    var bh = rect.height || 300;
+    var w = Math.round(bw * 1.6);
+    var h = Math.round(bh * 1.6);
     if (w === lastW && h === lastH) return;
     lastW = w; lastH = h;
     cvs.style.width = w + "px";

@@ -51,8 +51,8 @@
   </style>
 
   <!-- Full stylesheet (minified, 34KB — loads fast with preload hint) -->
-  <link rel="preload" href="styles.css" as="style" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" href="styles.css?v=6" as="style" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=6">
 
   <!-- Fonts (self-hosted, eliminates render-blocking Google Fonts chain) -->
   <style>
@@ -90,7 +90,7 @@
   <script defer src="three.min.js"></script>
   <script defer src="grid-scene.js"></script>
   <script defer src="logo-scene.js"></script>
-  <script defer src="script.js"></script>
+  <script defer src="script.js?v=6"></script>
   <noscript><style>
     .boot-overlay{display:none!important}
     .panel{position:static!important;opacity:1!important;visibility:visible!important;height:auto!important}
@@ -168,7 +168,7 @@
     </div>
 
     <div class="hud-data hud-data--right">
-      <div class="hud-data-item"><span class="hud-label">SCR</span><span class="hud-value" id="hudScroll">1/4</span></div>
+      <div class="hud-data-item"><span class="hud-label">SCR</span><span class="hud-value" id="hudScroll">1/5</span></div>
       <div class="hud-data-item"><span class="hud-label">UPT</span><span class="hud-value" id="hudUptime">00:00</span></div>
       <div class="hud-data-item"><span class="hud-label">MEM</span><span class="hud-bar"><span class="hud-bar-fill" id="hudMemBar"></span></span><span class="hud-value hud-value--active" id="hudMem">45%</span></div>
     </div>
@@ -185,10 +185,14 @@
       <span>About</span>
     </button>
     <button class="section-nav-dot" data-target="2">
-      <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       <span>Services</span>
     </button>
     <button class="section-nav-dot" data-target="3">
+      <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Work</span>
+    </button>
+    <button class="section-nav-dot" data-target="4">
       <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/></svg>
       <span>Contact</span>
     </button>
@@ -205,10 +209,14 @@
       <span>About</span>
     </button>
     <button class="mobile-nav-btn" data-target="2">
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       <span>Services</span>
     </button>
     <button class="mobile-nav-btn" data-target="3">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Work</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="4">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/></svg>
       <span>Contact</span>
     </button>
@@ -368,12 +376,88 @@
       </div>
     </section>
 
-    <!-- Panel 3: Contact + Footer -->
-    <section class="panel panel--contact" id="contact" data-panel="3">
+    <!-- Panel 3: Work / Portfolio -->
+    <section class="panel panel--work" id="work" data-panel="3">
+      <div class="panel-content">
+        <span class="section-label reveal"><span class="label-line"></span>04 // Work</span>
+        <h2 class="section-title reveal" data-scramble>Selected <span class="text-accent">projects</span></h2>
+
+        <!-- Service filter toggles -->
+        <div class="work-filters reveal">
+          <button class="work-filter active" data-filter="all">All</button>
+          <button class="work-filter" data-filter="web">Web</button>
+          <button class="work-filter" data-filter="brand">Branding</button>
+          <button class="work-filter" data-filter="graphics">Graphics</button>
+          <button class="work-filter" data-filter="motion">Motion</button>
+        </div>
+
+        <!-- Project grid -->
+        <div class="work-grid" id="workGrid">
+          <div class="work-card reveal" data-category="web,brand,graphics,motion" data-project="arenacross">
+            <div class="work-card-img"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0058.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0058.jpg" alt="AMA Arenacross Championship starting gate" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Web</span><span>Brand</span><span>Graphics</span><span>Motion</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">AMA Arenacross Championship</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="web,brand,graphics,motion" data-project="bitd">
+            <div class="work-card-img"><picture><source srcset="portfolio/Best in the Desert/BITD_V2R-AD.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_V2R-AD.png" alt="Best in the Desert Vegas to Reno" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Web</span><span>Brand</span><span>Graphics</span><span>Motion</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Best in the Desert</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="brand" data-project="venom-racing">
+            <div class="work-card-img"><div class="work-card-placeholder">VENOM RACING</div></div>
+            <div class="work-card-tags"><span>Brand Identity</span><span>Guidelines</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Venom Racing</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="graphics" data-project="dust-series">
+            <div class="work-card-img"><div class="work-card-placeholder">DUST SERIES</div></div>
+            <div class="work-card-tags"><span>Graphic Design</span><span>Print</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Dust Series Posters</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="web" data-project="ride-collective">
+            <div class="work-card-img"><div class="work-card-placeholder">RIDE CO.</div></div>
+            <div class="work-card-tags"><span>Web Design</span><span>Shopify</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Ride Collective</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="motion" data-project="ignite-reel">
+            <div class="work-card-img"><div class="work-card-placeholder">IGNITE</div></div>
+            <div class="work-card-tags"><span>Motion</span><span>Logo Animation</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Ignite Logo Reveal</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="brand" data-project="steel-city">
+            <div class="work-card-img"><div class="work-card-placeholder">STEEL CITY</div></div>
+            <div class="work-card-tags"><span>Brand Identity</span><span>Web</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Steel City MX</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 4: Contact + Footer -->
+    <section class="panel panel--contact" id="contact" data-panel="4">
       <div class="panel-content">
         <div class="section-grid">
           <div class="section-left">
-            <span class="section-label reveal"><span class="label-line"></span>04 // Contact</span>
+            <span class="section-label reveal"><span class="label-line"></span>05 // Contact</span>
             <h2 class="section-title reveal" data-scramble>Let's build <br><span class="text-accent">something sick</span></h2>
             <p class="section-text reveal">Got a project in mind? Let's throw the green flag. Shoot us a message and we'll be in touch.</p>
 
@@ -472,6 +556,377 @@
     <div class="scan-line" id="scanLine" aria-hidden="true"></div>
   </main>
 
+  <!-- Project detail overlay -->
+  <style>
+  /* Case study overlay — mobile first */
+  .cs-header{margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid rgba(168,255,0,.08)}
+  .cs-header .section-label{margin-bottom:10px}
+  .cs-header .section-title{margin:0;font-size:clamp(1.3rem,5vw,2.2rem)}
+  .cs-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+  .cs-stat{display:flex;flex-direction:column;gap:3px}
+  .cs-stat-label{font-family:'Share Tech Mono',monospace;font-size:.45rem;letter-spacing:.15em;text-transform:uppercase;color:#666}
+  .cs-stat-value{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.08em;color:#a8ff00}
+
+  /* Case study sections */
+  .cs-section{padding:32px 0;border-bottom:1px solid rgba(168,255,0,.06)}
+  .cs-section:last-child{border-bottom:none}
+  .cs-section-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#a8ff00;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  .cs-section-eyebrow::before{content:"";width:20px;height:1px;background:linear-gradient(90deg,#a8ff00,transparent)}
+  .cs-section-title{font-family:var(--font-heading,'Dharma Gothic E',sans-serif);font-size:clamp(1rem,3vw,1.4rem);text-transform:uppercase;letter-spacing:.04em;color:#fff;margin:0 0 12px}
+  .cs-section-desc{font-size:.72rem;line-height:1.7;color:#999;margin:0 0 20px;max-width:520px}
+  .cs-row{display:flex;flex-direction:column;gap:20px}
+
+  /* HUD-framed image */
+  .cs-frame{position:relative;overflow:hidden;border:1px solid rgba(168,255,0,.08);background:rgba(10,10,10,.5)}
+  .cs-frame::before,.cs-frame::after{content:"";position:absolute;width:12px;height:12px;z-index:2;pointer-events:none}
+  .cs-frame::before{top:0;left:0;border-top:1px solid #a8ff00;border-left:1px solid #a8ff00}
+  .cs-frame::after{bottom:0;right:0;border-bottom:1px solid #a8ff00;border-right:1px solid #a8ff00}
+  .cs-frame img{width:100%;display:block}
+
+  /* Branding: logo showcase */
+  .cs-logos{display:flex;flex-direction:column;gap:16px}
+  .cs-logo-frame{background:rgba(10,10,10,.5);border:1px solid rgba(168,255,0,.08);padding:24px;display:flex;align-items:center;justify-content:center;position:relative}
+  .cs-logo-frame::before,.cs-logo-frame::after{content:"";position:absolute;width:10px;height:10px;pointer-events:none}
+  .cs-logo-frame::before{top:0;left:0;border-top:1px solid rgba(168,255,0,.3);border-left:1px solid rgba(168,255,0,.3)}
+  .cs-logo-frame::after{bottom:0;right:0;border-bottom:1px solid rgba(168,255,0,.3);border-right:1px solid rgba(168,255,0,.3)}
+  .cs-logo-frame img{max-height:80px;width:auto;max-width:100%}
+  .cs-logo-label{font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.15em;text-transform:uppercase;color:#555;position:absolute;top:8px;right:10px}
+
+  /* Web: browser mockup frames */
+  .cs-browser{border:1px solid rgba(168,255,0,.08);overflow:hidden;background:rgba(10,10,10,.4)}
+  .cs-browser-bar{height:24px;background:rgba(15,15,15,.9);border-bottom:1px solid rgba(168,255,0,.06);display:flex;align-items:center;padding:0 10px;gap:5px}
+  .cs-browser-dot{width:6px;height:6px;border-radius:50%;border:1px solid rgba(168,255,0,.15)}
+  .cs-browser-url{font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.08em;color:#a8ff00;margin-left:10px}
+  .cs-browser img{width:100%;display:block}
+  .cs-web-grid{display:flex;flex-direction:column;gap:12px}
+
+  /* Intro photo strip */
+  .cs-intro-text{font-size:.78rem;line-height:1.8;color:#999;max-width:600px;margin-bottom:24px}
+  .cs-intro-text strong{color:#fff}
+  .cs-photo-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cs-photo{position:relative;overflow:hidden;border:1px solid rgba(168,255,0,.08)}
+  .cs-photo img{width:100%;display:block}
+  .cs-photo-caption{position:absolute;bottom:0;left:0;right:0;padding:8px 10px;background:linear-gradient(to top,rgba(5,5,5,.9),transparent);font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(168,255,0,.7)}
+  .cs-photo-full{grid-column:1/-1}
+  @media(min-width:768px){
+    .cs-photo-strip{grid-template-columns:repeat(4,1fr)}
+    .cs-photo-full{grid-column:auto}
+  }
+
+
+  /* Solid cover over top sections — hides bg image behind header/intro/branding */
+  .cs-top-cover{position:absolute;top:0;left:0;right:0;background:#050505;z-index:1;pointer-events:none}
+
+  /* Section entrance animations */
+  .cs-section,.cs-header,.cs-bottom-nav{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+  .cs-visible{opacity:1;transform:translateY(0)}
+
+  /* Bottom nav buttons */
+  .cs-bottom-nav{display:flex;justify-content:center;gap:12px;padding:40px 0 20px;border-top:1px solid rgba(168,255,0,.08);margin-top:36px}
+  .cs-bottom-btn{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:#a8ff00;background:transparent;border:1px solid rgba(168,255,0,.15);padding:10px 20px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:border-color .3s,background .3s}
+  .cs-bottom-btn:hover{border-color:#a8ff00;background:rgba(168,255,0,.06)}
+  .cs-bottom-btn svg{color:#a8ff00}
+
+  /* Intro photo hover captions */
+  .cs-photo-strip .cs-frame{position:relative;cursor:pointer}
+  .cs-photo-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(168,255,0,.85);color:#050505;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:16px;opacity:0;transition:opacity .3s ease;z-index:3}
+  .cs-frame:hover .cs-photo-overlay{opacity:1}
+
+  /* Subcategory labels */
+  .cs-sub{margin-bottom:36px}
+  .cs-sub:last-child{margin-bottom:0}
+  .cs-sub-label{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#a8ff00;margin-bottom:14px;padding:10px 0;border-top:1px solid rgba(168,255,0,.15);display:flex;align-items:center;gap:10px}
+  .cs-sub-label::before{content:"";width:16px;height:1px;background:linear-gradient(90deg,#a8ff00,transparent)}
+
+  /* Graphics: uniform grid, no cropping */
+  .cs-graphics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cs-graphics-grid .cs-frame{background:rgba(10,10,10,.5);display:flex;align-items:center;justify-content:center;padding:8px}
+  .cs-graphics-grid .cs-frame img{width:100%;height:auto;display:block;object-fit:contain}
+
+  /* Print mosaic — CSS columns */
+  .cs-mosaic{column-count:2;column-gap:10px}
+  .cs-mosaic .cs-frame{break-inside:avoid;margin-bottom:10px;background:rgba(10,10,10,.5);overflow:hidden;padding:0;-webkit-column-break-inside:avoid}
+  .cs-mosaic .cs-frame img{width:100%;height:auto;display:block}
+  .cs-mosaic-3{column-count:2;column-gap:10px}
+
+  @media(min-width:768px){
+    .cs-row{flex-direction:row;gap:28px;align-items:flex-start}
+    .cs-row>*:first-child{flex:0 0 36%}
+    .cs-row>*:last-child{flex:1;min-width:0}
+    .cs-logos{flex-direction:row}
+    .cs-logos .cs-logo-frame{flex:1}
+    .cs-logo-frame img{max-height:100px}
+    .cs-web-grid{flex-direction:row}
+    .cs-web-grid .cs-browser{flex:1}
+    .cs-web-grid .cs-browser:first-child{flex:1.2}
+    .cs-graphics-grid{grid-template-columns:repeat(4,1fr);gap:12px}
+    .cs-mosaic{column-count:4;column-gap:12px}
+    .cs-mosaic-3{column-count:3;column-gap:12px}
+  }
+  </style>
+  <div class="project-overlay" id="projectOverlay">
+    <div class="cs-top-cover" id="csTopCover"></div>
+    <div class="project-detail" id="projectDetail">
+      <button class="project-close" id="projectClose" aria-label="Close project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Header -->
+      <div class="cs-header">
+        <span class="section-label"><span class="label-line"></span><span id="projectCategory">Web / Brand / Graphics / Motion</span></span>
+        <h2 class="section-title" id="projectTitle">AMA Arenacross Championship</h2>
+        <div class="cs-stats">
+          <div class="cs-stat"><span class="cs-stat-label">Client</span><span class="cs-stat-value" id="projectClient">AMA FIM North America</span></div>
+          <div class="cs-stat"><span class="cs-stat-label">Year</span><span class="cs-stat-value" id="projectYear">2023 — Present</span></div>
+          <div class="cs-stat"><span class="cs-stat-label">Scope</span><span class="cs-stat-value" id="projectScope">Full Creative Partnership</span></div>
+        </div>
+      </div>
+
+      <!-- Sections container (populated dynamically from templates) -->
+      <div id="projectSections"></div>
+
+  <template id="tpl-arenacross">
+        <!-- 00 INTRO -->
+        <div class="cs-section">
+          <p class="cs-intro-text">Running a professional racing series demands more than great racing — it takes a <strong>complete visual identity</strong> that lives across every surface of the arena and every screen in a fan's hand. From the starting gate backdrop to the finish line structure to the podium stage, our work is woven into every detail of the Arenacross experience. For over <strong>three years</strong>, we've served as the creative engine behind the championship — handling web, brand, print, social, motion, email, and sponsor integration. When you love the sport, the work hits different. And we're not afraid to get our hands dirty.</p>
+          <div class="cs-photo-strip">
+            <div class="cs-frame">
+              <picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0058.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0058.jpg" alt="Starting gate — our backdrop in action" loading="lazy"></picture>
+              <span class="cs-photo-overlay">Start Gate Backdrop Design and Print Prep</span>
+            </div>
+            <div class="cs-frame">
+              <picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0111.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0111.jpg" alt="Finish line — our graphics on the structure" loading="lazy"></picture>
+              <span class="cs-photo-overlay">Finish Line Design</span>
+            </div>
+            <div class="cs-frame">
+              <picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0081.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Loveland Ax 0081.jpg" alt="Podium — our branding behind every interview" loading="lazy"></picture>
+              <span class="cs-photo-overlay">Podium Backdrop Design and Print Prep</span>
+            </div>
+            <div class="cs-frame">
+              <picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Pits-3.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Pits-3.jpg" alt="Getting our hands dirty — watering the track" loading="lazy"></picture>
+              <span class="cs-photo-overlay">Epic Track Watering Skills</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 01 BRANDING -->
+        <div class="cs-section">
+          <div class="cs-row">
+            <div>
+              <div class="cs-section-eyebrow">01 Branding</div>
+              <h3 class="cs-section-title">Crafting the Identity</h3>
+              <p class="cs-section-desc">Developed the complete brand identity system for the AMA FIM North America Arenacross Championship — a mark built to carry the intensity of indoor short-track racing across every touchpoint, from arena signage to digital platforms.</p>
+            </div>
+            <div class="cs-logos">
+              <div class="cs-logo-frame">
+                <span class="cs-logo-label">Horizontal</span>
+                <picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AMAFIMNA_AX-Logo-HZ v2.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AMAFIMNA_AX-Logo-HZ v2.png" alt="Arenacross horizontal logo" loading="lazy"></picture>
+              </div>
+              <div class="cs-logo-frame">
+                <span class="cs-logo-label">Stacked</span>
+                <picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AMAFIMNA_AX-Logo-Stacked v2.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AMAFIMNA_AX-Logo-Stacked v2.png" alt="Arenacross stacked logo" loading="lazy"></picture>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 WEB -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">02 Web</div>
+          <h3 class="cs-section-title">A Digital Home for the Series</h3>
+          <p class="cs-section-desc">Designed and developed a fully responsive WordPress platform serving as the central hub for the championship. Built custom plugins including a live scrolling results ticker and dynamic schedule displays, while maintaining every element of the series identity through the digital experience.</p>
+          <div class="cs-web-grid">
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">arenacrossusa.com</span></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Homepage.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Homepage.png" alt="Arenacross homepage" loading="lazy"></picture></div>
+            </div>
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">arenacrossusa.com/schedule</span></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Schedulepage.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Schedulepage.png" alt="Arenacross schedule page" loading="lazy"></picture></div>
+            </div>
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">arenacrossusa.com/stats</span></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/statspage.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/statspage.png" alt="Arenacross stats page" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03 GRAPHIC DESIGN -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">03 Graphic Design</div>
+          <h3 class="cs-section-title">Visual Firepower</h3>
+          <p class="cs-section-desc">A relentless output of visual assets engineered to match the energy of Arenacross racing — across every medium and every platform.</p>
+
+          <!-- 03a Social Media -->
+          <div class="cs-sub">
+            <div class="cs-sub-label">Social Media</div>
+            <div class="cs-graphics-grid">
+              <!-- 4:5 portrait (1080×1350) -->
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Boise Main 1 Winner Politelli v2.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Boise Main 1 Winner Politelli v2.png" alt="Winner graphic Politelli" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Boise Main 2 Winner Wageman 1.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Boise Main 2 Winner Wageman 1.png" alt="Winner graphic Wageman" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Toronto 1 Winner AX Pro Breece.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Toronto 1 Winner AX Pro Breece.png" alt="Toronto winner Breece" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Watch on Ryde Slide 1B.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Watch on Ryde Slide 1B.png" alt="Watch on Ryde slide" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-HBHS-PV-Portrait.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-HBHS-PV-Portrait.png" alt="Prescott Valley portrait" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-HBHS-Reno-MTR.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-HBHS-Reno-MTR.jpeg" alt="Reno MTR graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-Reno-CT.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-Reno-CT.jpeg" alt="Reno CT graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Breece Points Leader Graphic.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Breece Points Leader Graphic.png" alt="Points leader graphic Breece" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Reno 2023-Peters.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Reno 2023-Peters.png" alt="Reno Peters graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-Ams-PV v5 4x5.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-Ams-PV v5 4x5.png" alt="Amateurs Prescott Valley" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-Ams-Reno v2 4x5.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26-Ams-Reno v2 4x5.png" alt="Amateurs Reno" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Reno Urgency.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Reno Urgency.png" alt="Reno urgency graphic" loading="lazy"></picture></div>
+              <!-- 1:1 square (1080–1200) -->
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Holiday Square Boise.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Holiday Square Boise.png" alt="Holiday square Boise" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_BF-Square_1080x1080.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_BF-Square_1080x1080.png" alt="Black Friday deals" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_ANAC-ImRacing.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_ANAC-ImRacing.png" alt="Im Racing graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25 R12 Clash AP.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25 R12 Clash AP.png" alt="Round 12 clash graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/472296058_18486997828006513_4112645245939118460_n.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/472296058_18486997828006513_4112645245939118460_n.jpg" alt="Social media post" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_GrandIsland Ad.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_GrandIsland Ad.png" alt="Grand Island ad" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX 24-25 Schgraphics-Square.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX 24-25 Schgraphics-Square.png" alt="24-25 schedule square" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AXAA_1995-Promo-Square.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AXAA_1995-Promo-Square.png" alt="All Access promo square" loading="lazy"></picture></div>
+              <!-- 9:16 story (1080×1920) -->
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25-26 Event Poster - Toronto.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25-26 Event Poster - Toronto.png" alt="Toronto event poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Politelli-Cover1.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Politelli-Cover1.png" alt="Politelli cover graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AXAA_Madison Recap Graphic.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AXAA_Madison Recap Graphic.png" alt="Madison recap graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/OA_2024_ArenacrossChampionshipVegas_CasinoFloor_1080x1920.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/OA_2024_ArenacrossChampionshipVegas_CasinoFloor_1080x1920.jpg" alt="Vegas casino floor promo" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+          <!-- 03b Print -->
+          <div class="cs-sub">
+            <div class="cs-sub-label">Print</div>
+            <div class="cs-mosaic">
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Gate-Backdrop Mockup v1.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Gate-Backdrop Mockup v1.png" alt="Gate backdrop mockup" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Daytona-Flyer.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Daytona-Flyer.png" alt="Daytona event flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/IMG_7858.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/IMG_7858.jpeg" alt="Trailer wrap" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Event Poster - Loveland.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26 Event Poster - Loveland.jpg" alt="Loveland event poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Pit Backdrop Banners v4.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Pit Backdrop Banners v4.png" alt="Pit backdrop banners" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Flyer-LittleRock-Mar24.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Flyer-LittleRock-Mar24.png" alt="Little Rock flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Boise Spread v1.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Boise Spread v1.png" alt="Boise ad campaign spread" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25-26 Event Poster - Boise.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25-26 Event Poster - Boise.png" alt="Boise event poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/United Finish Mockup 2024-2025.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/United Finish Mockup 2024-2025.png" alt="Finish line structure mockup" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Guthrie2-Print_8.5x11 With Bleed.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Guthrie2-Print_8.5x11 With Bleed.png" alt="Guthrie event flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Arenacross25_Poster_11x17.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Arenacross25_Poster_11x17.png" alt="2025 season poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Gallup AX 8 flyer.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Gallup AX 8 flyer.png" alt="Gallup event flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Rollup Banner Boise MU.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Rollup Banner Boise MU.png" alt="Rollup banner Boise mockup" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Hobbs.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Hobbs.png" alt="Hobbs event flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26_Reno Flyer.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX26_Reno Flyer.png" alt="Reno event flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Sturgis-Poster_11x17.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX25_Sturgis-Poster_11x17.png" alt="Sturgis event poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Amateur National Flyer.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Amateur National Flyer.png" alt="Amateur National flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Arenacross23_Poster_11x17.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Arenacross23_Poster_11x17.jpg" alt="2023 season poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Print Flyer RD6-01.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Print Flyer RD6-01.png" alt="Round 6 flyer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_AM-2025 Poster 11x17 v4.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_AM-2025 Poster 11x17 v4.jpg" alt="2025 Amateur poster" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+          <!-- 03c Apparel -->
+          <div class="cs-sub">
+            <div class="cs-sub-label">Apparel</div>
+            <div class="cs-mosaic cs-mosaic-3">
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Apparel Concepts.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Apparel Concepts.png" alt="Apparel concepts lineup" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Vintage-Shirt-C1_Mockup.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Vintage-Shirt-C1_Mockup.png" alt="Vintage shirt mockup" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Event Tee Mockup v3.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX Event Tee Mockup v3.png" alt="Event tee front and back" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Taco Shirt Idea.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Taco Shirt Idea.png" alt="Taco shirt design" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Daytona Shirt Mockup3.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AX_Daytona Shirt Mockup3.png" alt="Daytona shirt mockup" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/HBshirtlight2-Recovered.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/HBshirtlight2-Recovered.png" alt="Huntington Beach event tee" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+
+        </div>
+  </template>
+
+  <template id="tpl-bitd">
+        <!-- 01 BRANDING & EVENT LOGOS -->
+        <div class="cs-section">
+          <div class="cs-row">
+            <div>
+              <div class="cs-section-eyebrow">01 Branding</div>
+              <h3 class="cs-section-title">The Series &amp; Every Race</h3>
+              <p class="cs-section-desc">Maintained and evolved the Best in the Desert brand identity while designing unique event logos for each race on the calendar — giving every stop on the circuit its own visual personality while keeping the series cohesive.</p>
+            </div>
+            <div class="cs-logos">
+              <div class="cs-logo-frame">
+                <span class="cs-logo-label">Series Logo</span>
+                <picture><source srcset="portfolio/Best in the Desert/BITD HZ Black.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD HZ Black.png" alt="BITD horizontal logo" loading="lazy"></picture>
+              </div>
+            </div>
+          </div>
+          <div class="cs-sub">
+            <div class="cs-sub-label">Event Logos</div>
+            <div class="cs-graphics-grid">
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD-Laughlin-Logo-V1.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD-Laughlin-Logo-V1.png" alt="Laughlin Desert Classic logo" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_2025-SS300_LogoBD.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_2025-SS300_LogoBD.png" alt="Silver State 300 logo" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD-World Hare and Hound-Logo.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD-World Hare and Hound-Logo.png" alt="World Hare and Hound logo" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_VegastoReno2023-Logo-300x300-1.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_VegastoReno2023-Logo-300x300-1.png" alt="Vegas to Reno logo" loading="lazy"></picture></div>
+            </div>
+          </div>
+          <div class="cs-sub">
+            <div class="cs-sub-label">Decals &amp; Stickers</div>
+            <div class="cs-graphics-grid">
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_2025SS300-Decals-Participant.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_2025SS300-Decals-Participant.png" alt="SS300 participant decal" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD-Laughlin-Sticker-01.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD-Laughlin-Sticker-01.png" alt="Laughlin Desert Classic sticker" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 GRAPHIC DESIGN -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">02 Graphic Design</div>
+          <h3 class="cs-section-title">Built for the Desert</h3>
+          <p class="cs-section-desc">Event posters, social media campaigns, course maps, race schedules, sponsor graphics, and promotional assets — a constant stream of visual firepower for the longest off-road racing series in the United States.</p>
+
+          <div class="cs-sub">
+            <div class="cs-sub-label">Social Media</div>
+            <div class="cs-graphics-grid">
+              <!-- 4:5 portrait -->
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD V2R Whos Coming Coleman.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD V2R Whos Coming Coleman.png" alt="Whos Coming Coleman" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_Pcampbell.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_Pcampbell.png" alt="Preston Campbell spotlight" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_PC-WTA-MC.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_PC-WTA-MC.jpg" alt="Winner Takes All motorcycle" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/SS300 Payouts Updated.webp" type="image/webp"><img src="portfolio/Best in the Desert/SS300 Payouts Updated.png" alt="SS300 payouts graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_2025 SS300 SOE v4.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_2025 SS300 SOE v4.png" alt="SS300 schedule of events" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_TransponderDeadline.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_TransponderDeadline.png" alt="Transponder deadline reminder" loading="lazy"></picture></div>
+              <!-- 1:1 square -->
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/SS300 Next Race Graphic.webp" type="image/webp"><img src="portfolio/Best in the Desert/SS300 Next Race Graphic.png" alt="SS300 next race graphic" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_V2R Beer Mockup v1.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_V2R Beer Mockup v1.png" alt="V2R limited edition beer" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_LDC_RW Schedule.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_LDC_RW Schedule.png" alt="Laughlin race week schedule" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/2025_V2RMap V4.webp" type="image/webp"><img src="portfolio/Best in the Desert/2025_V2RMap V4.png" alt="V2R 2025 illustrated course map" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+          <div class="cs-sub">
+            <div class="cs-sub-label">Print</div>
+            <div class="cs-mosaic">
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_V2R-AD.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_V2R-AD.png" alt="Vegas to Reno ad poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_NV1000-Poster-13x19.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_NV1000-Poster-13x19.png" alt="Nevada 1000 poster" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_V2R2025-FULL-VERTICAL.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_V2R2025-FULL-VERTICAL.png" alt="V2R 2025 course map poster" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+          <div class="cs-sub">
+            <div class="cs-sub-label">Apparel</div>
+            <div class="cs-mosaic cs-mosaic-3">
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_2025-StaffShirt-Mockup.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_2025-StaffShirt-Mockup.png" alt="2025 staff shirt mockup" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_LDC-Shirt Mockup.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_LDC-Shirt Mockup.png" alt="Laughlin Desert Classic shirt" loading="lazy"></picture></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD V2R S2.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD V2R S2.png" alt="Vegas to Reno event tee" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+  </template>
+
+      <!-- Bottom nav -->
+      <div class="cs-bottom-nav">
+        <button class="cs-bottom-btn" id="csBackToTop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M18 15l-6-6-6 6"/></svg>
+          Back to Top
+        </button>
+        <button class="cs-bottom-btn" id="csBackToWork">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to Portfolio
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Live region for section change announcements -->
   <div id="sectionAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
@@ -488,8 +943,8 @@
   <div class="sr-only" id="recaptchaDisclosure">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</div>
 
   <!-- Cookie consent banner -->
-  <div id="cookieBanner" role="dialog" aria-label="Cookie consent" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10001;padding:16px 24px;background:rgba(10,10,10,0.96);border-top:1px solid rgba(168,255,0,0.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:.65rem;letter-spacing:.08em;color:var(--white-dim);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center;cursor:auto">
-    <span style="cursor:auto">We use cookies for analytics. See our <a href="privacy.html" style="color:#a8ff00;text-decoration:underline;cursor:pointer">Privacy Policy</a>.</span>
+  <div id="cookieBanner" role="dialog" aria-label="Cookie consent" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10001;padding:16px 24px;background:rgba(10,10,10,0.96);border-top:1px solid rgba(168,255,0,0.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:var(--font-mono);font-size:.65rem;letter-spacing:.08em;color:var(--white-dim);align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center">
+    <span>We use cookies for analytics. See our <a href="privacy.html" style="color:#a8ff00;text-decoration:underline">Privacy Policy</a>.</span>
     <button id="cookieAccept" style="background:linear-gradient(135deg,#a8ff00,#d4ff00);color:#050505;border:0;padding:8px 20px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-weight:600">Accept</button>
     <button id="cookieReject" style="background:transparent;color:#949494;border:1px solid #2a2a2a;padding:8px 20px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer">Decline</button>
   </div>

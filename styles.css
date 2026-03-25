@@ -47,10 +47,9 @@
 .work-card:hover .work-card-corner{border-color:var(--accent-1)}
 
 /* Project detail overlay */
-.project-overlay{position:fixed;inset:0;z-index:10001;background:#050505 url('portfolio/AMA FIM Arenacross Championship/Arenacross/axbg3.webp') center/cover no-repeat fixed;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s var(--ease),visibility .4s;overflow-y:auto;cursor:none}
+.project-overlay{position:fixed;inset:0;z-index:10001;background:#050505;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s var(--ease),visibility .4s;overflow-y:auto;cursor:none;background-size:cover;background-position:center;background-repeat:no-repeat}
 .project-overlay::after{content:"";position:fixed;inset:0;background:rgba(5,5,5,.88);pointer-events:none;z-index:0}
-.project-overlay>*{position:relative;z-index:2}
-.project-overlay>.cs-top-cover{z-index:1}
+.project-overlay>*{position:relative;z-index:1}
 .project-overlay.active{opacity:1;visibility:visible;pointer-events:auto}
 body.project-open{overflow:hidden}
 body.project-open .cursor{z-index:10003}

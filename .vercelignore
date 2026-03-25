@@ -1,0 +1,4 @@
+# Ignore source files and large assets not needed for web
+*.psd
+*.pdf
+email-signature*.html

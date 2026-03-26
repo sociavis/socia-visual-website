@@ -17,6 +17,12 @@
   <meta name="theme-color" content="#0a0a0a">
   <meta name="color-scheme" content="dark">
 
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="https://www.google.com">
+  <link rel="dns-prefetch" href="https://www.gstatic.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://formsubmit.co">
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sociavisual.com/">
@@ -176,23 +182,23 @@
 
   <!-- Section navigation dots -->
   <nav class="section-nav" id="sectionNav" aria-label="Page sections">
-    <button class="section-nav-dot active" data-target="0">
+    <button class="section-nav-dot active" data-target="0" aria-label="Navigate to Home section">
       <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
       <span>Home</span>
     </button>
-    <button class="section-nav-dot" data-target="1">
+    <button class="section-nav-dot" data-target="1" aria-label="Navigate to About section">
       <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
       <span>About</span>
     </button>
-    <button class="section-nav-dot" data-target="2">
+    <button class="section-nav-dot" data-target="2" aria-label="Navigate to Services section">
       <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       <span>Services</span>
     </button>
-    <button class="section-nav-dot" data-target="3">
+    <button class="section-nav-dot" data-target="3" aria-label="Navigate to Work section">
       <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span>Work</span>
     </button>
-    <button class="section-nav-dot" data-target="4">
+    <button class="section-nav-dot" data-target="4" aria-label="Navigate to Contact section">
       <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/></svg>
       <span>Contact</span>
     </button>
@@ -200,23 +206,23 @@
 
   <!-- Mobile bottom nav -->
   <nav class="mobile-nav" id="mobileNav" aria-label="Page sections mobile">
-    <button class="mobile-nav-btn active" data-target="0">
+    <button class="mobile-nav-btn active" data-target="0" aria-label="Navigate to Home section">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
       <span>Home</span>
     </button>
-    <button class="mobile-nav-btn" data-target="1">
+    <button class="mobile-nav-btn" data-target="1" aria-label="Navigate to About section">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
       <span>About</span>
     </button>
-    <button class="mobile-nav-btn" data-target="2">
+    <button class="mobile-nav-btn" data-target="2" aria-label="Navigate to Services section">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       <span>Services</span>
     </button>
-    <button class="mobile-nav-btn" data-target="3">
+    <button class="mobile-nav-btn" data-target="3" aria-label="Navigate to Work section">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span>Work</span>
     </button>
-    <button class="mobile-nav-btn" data-target="4">
+    <button class="mobile-nav-btn" data-target="4" aria-label="Navigate to Contact section">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/></svg>
       <span>Contact</span>
     </button>
@@ -454,6 +460,7 @@
           <div class="section-right">
             <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/scott@sociavisual.com" method="POST">
               <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+              <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
               <input type="hidden" name="_captcha" value="false">
               <input type="hidden" name="_subject" value="New inquiry from sociavisual.com">
 
@@ -506,7 +513,7 @@
 
               <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
               <div class="form-status" id="formStatus" aria-live="polite" aria-atomic="true"></div>
-              <div style="font-family:var(--font-mono);font-size:.5rem;color:var(--grey-light);letter-spacing:.08em;margin-top:8px;line-height:1.5">Protected by reCAPTCHA. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline"style="padding:4px 2px">Google Privacy Policy<span class="sr-only"> (opens in new tab)</span></a> &amp; <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline"style="padding:4px 2px">Google Terms of Service<span class="sr-only"> (opens in new tab)</span></a> apply. <a href="privacy.html" style="color:inherit;text-decoration:underline">Our Privacy Policy</a>.</div>
+              <div style="font-family:var(--font-mono);font-size:.5rem;color:var(--grey-light);letter-spacing:.08em;margin-top:8px;line-height:1.5">Protected by reCAPTCHA. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;padding:4px 2px">Google Privacy Policy<span class="sr-only"> (opens in new tab)</span></a> &amp; <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;padding:4px 2px">Google Terms of Service<span class="sr-only"> (opens in new tab)</span></a> apply. <a href="privacy.html" style="color:inherit;text-decoration:underline">Our Privacy Policy</a>.</div>
 
               <button type="submit" class="form-submit magnetic reveal">
                 <span class="cta-text">Transmit Message</span>
@@ -543,7 +550,7 @@
   .cs-section-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:#a8ff00;margin-bottom:6px;display:flex;align-items:center;gap:10px}
   .cs-section-eyebrow::before{content:"";width:20px;height:1px;background:linear-gradient(90deg,#a8ff00,transparent)}
   .cs-section-title{font-family:var(--font-heading,'Dharma Gothic E',sans-serif);font-size:clamp(1rem,3vw,1.4rem);text-transform:uppercase;letter-spacing:.04em;color:#fff;margin:0 0 12px}
-  .cs-section-desc{font-size:.72rem;line-height:1.7;color:#999;margin:0 0 20px;max-width:520px}
+  .cs-section-desc{font-size:.72rem;line-height:1.7;color:#aaa;margin:0 0 20px;max-width:520px}
   .cs-row{display:flex;flex-direction:column;gap:20px}
 
   /* HUD-framed image */
@@ -571,7 +578,7 @@
   .cs-web-grid{display:flex;flex-direction:column;gap:12px}
 
   /* Intro photo strip */
-  .cs-intro-text{font-size:.78rem;line-height:1.8;color:#999;max-width:600px;margin-bottom:24px}
+  .cs-intro-text{font-size:.78rem;line-height:1.8;color:#aaa;max-width:600px;margin-bottom:24px}
   .cs-intro-text strong{color:#fff}
   .cs-photo-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .cs-photo{position:relative;overflow:hidden;border:1px solid rgba(168,255,0,.08)}
@@ -585,6 +592,63 @@
 
 
 
+
+  /* Brand DNA — color palette, typography, attributes */
+  .cs-brand-dna{display:flex;flex-direction:column;gap:28px;margin-top:28px;padding:24px;border:1px solid rgba(168,255,0,.06);background:rgba(5,5,5,.6);position:relative}
+  .cs-brand-dna::before,.cs-brand-dna::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none}
+  .cs-brand-dna::before{top:0;left:0;border-top:1px solid rgba(168,255,0,.2);border-left:1px solid rgba(168,255,0,.2)}
+  .cs-brand-dna::after{bottom:0;right:0;border-bottom:1px solid rgba(168,255,0,.2);border-right:1px solid rgba(168,255,0,.2)}
+  .cs-dna-row{display:flex;flex-direction:column;gap:10px}
+  .cs-dna-label{font-family:'Share Tech Mono',monospace;font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;color:#555;display:flex;align-items:center;gap:8px}
+  .cs-dna-label::before{content:"//";color:rgba(168,255,0,.3)}
+
+  /* Color swatches */
+  .cs-palette{display:flex;flex-wrap:wrap;gap:8px}
+  .cs-swatch{display:flex;align-items:center;gap:8px;padding:6px 10px 6px 6px;border:1px solid rgba(255,255,255,.06);background:rgba(10,10,10,.6);transition:border-color .3s}
+  .cs-swatch:hover{border-color:rgba(168,255,0,.2)}
+  .cs-swatch-color{width:28px;height:28px;border-radius:2px;flex-shrink:0;border:1px solid rgba(255,255,255,.08)}
+  .cs-swatch-info{display:flex;flex-direction:column;gap:1px}
+  .cs-swatch-name{font-family:'Share Tech Mono',monospace;font-size:.42rem;letter-spacing:.08em;color:#ccc}
+  .cs-swatch-hex{font-family:'Share Tech Mono',monospace;font-size:.38rem;letter-spacing:.1em;color:#666;text-transform:uppercase}
+
+  /* Typography showcase */
+  .cs-type-list{display:flex;flex-wrap:wrap;gap:8px}
+  .cs-type-item{padding:10px 14px;border:1px solid rgba(255,255,255,.06);background:rgba(10,10,10,.6);display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px;transition:border-color .3s}
+  .cs-type-item:hover{border-color:rgba(168,255,0,.2)}
+  .cs-type-role{font-family:'Share Tech Mono',monospace;font-size:.36rem;letter-spacing:.15em;text-transform:uppercase;color:#555}
+  .cs-type-name{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.04em;color:#fff}
+  .cs-type-sample{font-size:.48rem;color:#888;letter-spacing:.02em;line-height:1.4;margin-top:2px}
+
+  /* Brand attributes */
+  .cs-attributes{display:flex;flex-wrap:wrap;gap:6px}
+  .cs-attr{font-family:'Share Tech Mono',monospace;font-size:.42rem;letter-spacing:.12em;text-transform:uppercase;color:#a8ff00;padding:5px 12px;border:1px solid rgba(168,255,0,.12);background:rgba(168,255,0,.04);transition:background .3s,border-color .3s}
+  .cs-attr:hover{background:rgba(168,255,0,.08);border-color:rgba(168,255,0,.25)}
+
+  /* Deliverables stat bar */
+  .cs-deliverables{display:flex;flex-wrap:wrap;gap:16px;margin-top:4px}
+  .cs-del-stat{display:flex;flex-direction:column;gap:2px}
+  .cs-del-num{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:#a8ff00;letter-spacing:.04em}
+  .cs-del-label{font-family:'Share Tech Mono',monospace;font-size:.36rem;letter-spacing:.15em;text-transform:uppercase;color:#555}
+
+  @media(min-width:768px){
+    .cs-brand-dna{flex-direction:row;flex-wrap:wrap;gap:24px 32px;padding:28px 32px}
+    .cs-dna-row{flex:1;min-width:200px}
+    .cs-dna-row.cs-dna-full{flex-basis:100%;min-width:100%}
+  }
+
+  /* Video boot activation effect */
+  .cs-frame:has(.cs-autovideo){position:relative;overflow:hidden}
+  .cs-autovideo{filter:brightness(0);transition:filter .6s ease}
+  .cs-autovideo.cs-vid-live{filter:brightness(1)}
+  .cs-vid-scanline{position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(180deg,rgba(168,255,0,.12) 0%,transparent 4%,transparent 100%);transform:translateY(-100%);opacity:0}
+  .cs-vid-scanline.cs-vid-sweep{opacity:1;transform:translateY(100%);transition:transform .5s ease-out,opacity .4s .3s ease}
+  .cs-vid-label{position:absolute;bottom:6px;left:8px;font-family:'Share Tech Mono',monospace;font-size:.35rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(168,255,0,.5);z-index:3;opacity:0;transition:opacity .4s ease .3s}
+  .cs-vid-live~.cs-vid-label{opacity:1}
+
+  /* Redacted / confidential blur */
+  .cs-redacted{position:relative}
+  .cs-redacted img{filter:blur(6px);-webkit-filter:blur(6px);transition:filter .3s}
+  .cs-redacted-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:#a8ff00;background:rgba(5,5,5,.3);z-index:3;pointer-events:none}
 
   /* Sections that sit on solid dark (no bg image) */
   .cs-header,.cs-section-solid{background:#050505}
@@ -698,6 +762,43 @@
               <div class="cs-logo-frame">
                 <span class="cs-logo-label">Stacked</span>
                 <picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/AMAFIMNA_AX-Logo-Stacked v2.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/AMAFIMNA_AX-Logo-Stacked v2.webp" alt="Arenacross stacked logo" loading="lazy"></picture>
+              </div>
+            </div>
+          </div>
+
+          <!-- Brand DNA -->
+          <div class="cs-brand-dna">
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Color Palette</div>
+              <div class="cs-palette">
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#002B43"></div><div class="cs-swatch-info"><span class="cs-swatch-name">AX Navy</span><span class="cs-swatch-hex">#002B43</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#FFFFFF;border-color:rgba(255,255,255,.2)"></div><div class="cs-swatch-info"><span class="cs-swatch-name">White</span><span class="cs-swatch-hex">#FFFFFF</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#D9202A"></div><div class="cs-swatch-info"><span class="cs-swatch-name">AX Red</span><span class="cs-swatch-hex">#D9202A</span></div></div>
+              </div>
+            </div>
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Typography</div>
+              <div class="cs-type-list">
+                <div class="cs-type-item"><span class="cs-type-role">Main Typeface</span><span class="cs-type-name">Vango</span><span class="cs-type-sample">Italic — Headlines, Logos & Event Titles</span></div>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Brand Attributes</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">High-Energy</span>
+                <span class="cs-attr">Championship-Grade</span>
+                <span class="cs-attr">Arena-Ready</span>
+                <span class="cs-attr">Broadcast-First</span>
+                <span class="cs-attr">Fan-Facing</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Deliverables</div>
+              <div class="cs-deliverables">
+                <div class="cs-del-stat"><span class="cs-del-num">500+</span><span class="cs-del-label">Graphics Produced</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">3</span><span class="cs-del-label">Seasons</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">60+</span><span class="cs-del-label">Events Supported</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">12+</span><span class="cs-del-label">Sponsors Integrated</span></div>
               </div>
             </div>
           </div>
@@ -841,6 +942,44 @@
               <div class="cs-frame"><picture><source srcset="portfolio/Best in the Desert/BITD_GS250-Logo v3.webp" type="image/webp"><img src="portfolio/Best in the Desert/BITD_GS250-Logo v3.webp" alt="Golden State 250 logo" loading="lazy"></picture></div>
             </div>
           </div>
+
+          <!-- Brand DNA -->
+          <div class="cs-brand-dna">
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Color Palette</div>
+              <div class="cs-palette">
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#231F20"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Process Black</span><span class="cs-swatch-hex">#231F20</span><span class="cs-swatch-hex">PMS Black U</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#DA002D"></div><div class="cs-swatch-info"><span class="cs-swatch-name">BITD Red</span><span class="cs-swatch-hex">#DA002D</span><span class="cs-swatch-hex">PMS 185 U</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#F8D501"></div><div class="cs-swatch-info"><span class="cs-swatch-name">BITD Yellow</span><span class="cs-swatch-hex">#F8D501</span><span class="cs-swatch-hex">PMS 395 U</span></div></div>
+              </div>
+            </div>
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Typography</div>
+              <div class="cs-type-list">
+                <div class="cs-type-item"><span class="cs-type-role">Headings</span><span class="cs-type-name">Tungsten</span><span class="cs-type-sample">Bold, Semibold — Race Titles</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name">Barlow</span><span class="cs-type-sample">Regular, Medium — All Copy</span></div>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Brand Attributes</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Rugged</span>
+                <span class="cs-attr">Endurance</span>
+                <span class="cs-attr">Desert Heritage</span>
+                <span class="cs-attr">Off-Road</span>
+                <span class="cs-attr">Legacy</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Deliverables</div>
+              <div class="cs-deliverables">
+                <div class="cs-del-stat"><span class="cs-del-num">800+</span><span class="cs-del-label">Graphics Produced</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">4</span><span class="cs-del-label">Seasons</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">40+</span><span class="cs-del-label">Events Covered</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">15+</span><span class="cs-del-label">Event Logos</span></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- 02 WEB -->
@@ -965,6 +1104,46 @@
           <h3 class="cs-section-title">Sponsorship Proposal Deck</h3>
           <p class="cs-section-desc">A premium sponsorship proposal designed for Nathan Gouker Racing — a young American motorcycle road racer competing in Spain's ESBK Talent Cup series. The deck was built to secure sponsor partnerships, combining bold motorsport typography with dynamic race photography across a cinematic widescreen format. Every page was crafted to communicate professionalism, momentum, and opportunity — from rider stats and series overview to audience demographics and financial breakdowns.</p>
 
+          <!-- Brand DNA -->
+          <div class="cs-brand-dna" style="margin-bottom:28px">
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Color Palette</div>
+              <div class="cs-palette">
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#0D0D0D"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Black</span><span class="cs-swatch-hex">#0D0D0D</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#FFFFFF;border-color:rgba(255,255,255,.2)"></div><div class="cs-swatch-info"><span class="cs-swatch-name">White</span><span class="cs-swatch-hex">#FFFFFF</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#002395"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Racing Blue</span><span class="cs-swatch-hex">#002395</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#ED2939"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Racing Red</span><span class="cs-swatch-hex">#ED2939</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#4A90D9"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Livery Blue</span><span class="cs-swatch-hex">#4A90D9</span></div></div>
+              </div>
+            </div>
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Typography</div>
+              <div class="cs-type-list">
+                <div class="cs-type-item"><span class="cs-type-role">Headings</span><span class="cs-type-name">Edo SZ</span><span class="cs-type-sample">Regular — Section Titles & Cover</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Stats</span><span class="cs-type-name">Barlow Condensed</span><span class="cs-type-sample">Bold — Numbers & Metrics</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name">DM Sans</span><span class="cs-type-sample">Regular, Medium — Deck Copy</span></div>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Brand Attributes</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Speed</span>
+                <span class="cs-attr">Youth</span>
+                <span class="cs-attr">Global</span>
+                <span class="cs-attr">Determined</span>
+                <span class="cs-attr">Cinematic</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Deliverables</div>
+              <div class="cs-deliverables">
+                <div class="cs-del-stat"><span class="cs-del-num">9</span><span class="cs-del-label">Pages Designed</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">16:9</span><span class="cs-del-label">Widescreen Format</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">1</span><span class="cs-del-label">Sponsorship Deck</span></div>
+              </div>
+            </div>
+          </div>
+
           <div class="cs-graphics-grid cs-grid-3">
             <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-1.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-1.webp" alt="Nathan Gouker proposal cover" loading="lazy"></picture></div>
             <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-2.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-2.webp" alt="Introduction page" loading="lazy"></picture></div>
@@ -972,7 +1151,7 @@
             <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-4.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-4.webp" alt="About the ESBK Talent Cup series" loading="lazy"></picture></div>
             <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-5.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-5.webp" alt="Target audience breakdown" loading="lazy"></picture></div>
             <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-6.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-6.webp" alt="Sponsorship benefits" loading="lazy"></picture></div>
-            <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-7.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-7.webp" alt="Financial and partnership commitment" loading="lazy"></picture></div>
+            <div class="cs-frame cs-redacted"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-7.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-7.webp" alt="Financial and partnership commitment" loading="lazy"></picture><span class="cs-redacted-label">Confidential</span></div>
             <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-8.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-8.webp" alt="2024 season highlights and path forward" loading="lazy"></picture></div>
             <div class="cs-frame"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-9.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-9.webp" alt="Next steps and closing" loading="lazy"></picture></div>
           </div>

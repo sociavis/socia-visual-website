@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Socia Visual</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta name="theme-color" content="#0a0a0a">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Chakra+Petch:wght@400;600&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#050505;color:#e8e8e8;font-family:'Chakra Petch',monospace,sans-serif;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .container{text-align:center;padding:24px}
+    .code{font-family:'Share Tech Mono',monospace;font-size:clamp(4rem,15vw,8rem);letter-spacing:.08em;background:linear-gradient(135deg,#a8ff00,#d4ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+    .message{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#666;margin:16px 0 32px}
+    .back{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#a8ff00;background:transparent;border:1px solid rgba(168,255,0,.2);padding:12px 24px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:border-color .3s,background .3s}
+    .back:hover{border-color:#a8ff00;background:rgba(168,255,0,.06)}
+    .scanline{position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:10}
+  </style>
+</head>
+<body>
+  <div class="scanline"></div>
+  <div class="container">
+    <div class="code">404</div>
+    <p class="message">Signal lost — page not found</p>
+    <a href="/" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M15 18l-6-6 6-6"/></svg>
+      Return to Base
+    </a>
+  </div>
+</body>
+</html>

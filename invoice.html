@@ -238,9 +238,10 @@
 
   @media print {
     .action-bar { display: none; }
-    body { background: #fff; padding: 0; }
+    body { background: #fff; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .invoice-page { padding: 0; }
     .invoice-wrap { box-shadow: none; max-width: 100%; }
+    .invoice-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
 </head>
@@ -366,7 +367,7 @@ function renderInvoice(invoice) {
     <div class="invoice-header">
       <h1>INVOICE</h1>
       <div class="header-logo">
-        <svg viewBox="0 0 2098.6 515.2" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 2098.6 515.2" xmlns="http://www.w3.org/2000/svg" fill="#1a1a1a" stroke="none">
           <polygon points="633.2 164 567 236.2 546.5 258.5 480.3 330.8 100.9 330.8 167.1 258.5 452.9 258.5 473.4 236.2 187.6 236.2 253.8 164 633.2 164"/>
           <g>
             <polygon points="1059 69.5 992.8 141.7 907.3 234.9 813.7 234.9 899.2 141.7 274.3 141.7 340.5 69.5 1059 69.5"/>

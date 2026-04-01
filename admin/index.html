@@ -817,7 +817,6 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 // ═══ CONFIG ═══
@@ -1112,14 +1111,23 @@ function buildInvoiceHTML(inv) {
 
 async function exportPDF() {
   const inv = await getCurrentInvoice(); if (!inv) return;
-  const el = document.createElement('div');
-  el.style.cssText = 'width:800px;font-family:"Chakra Petch",sans-serif;background:#fff;color:#1a1a1a;position:fixed;top:0;left:0;z-index:9999;';
-  el.innerHTML = buildInvoiceHTML(inv);
-  document.body.appendChild(el);
-  // Let the browser paint before capturing
-  await new Promise(r => setTimeout(r, 300));
-  const height = el.scrollHeight;
-  html2pdf().set({ margin:0, filename:`Socia_Invoice_${inv.number}_${(inv.companyName||inv.clientName||'Client').replace(/\s+/g,'_')}.pdf`, image:{type:'jpeg',quality:.98}, html2canvas:{scale:2,useCORS:true,scrollY:0,windowHeight:height}, jsPDF:{unit:'px',format:[800,height],hotfixes:['px_scaling']} }).from(el).save().then(() => { document.body.removeChild(el); toast('PDF exported'); });
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>Invoice #${inv.number}</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap');
+      *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+      body { font-family:'Chakra Petch',sans-serif; background:#fff; color:#1a1a1a; }
+      @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+    </style>
+  </head><body>
+    <div style="width:800px;margin:0 auto;">${buildInvoiceHTML(inv)}</div>
+    <script>
+      window.onafterprint = function() { window.close(); };
+      setTimeout(function() { window.print(); }, 400);
+    <\/script>
+  </body></html>`);
+  w.document.close();
+  toast('Print dialog opened — save as PDF');
 }
 
 async function copyLink() {

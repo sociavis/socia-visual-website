@@ -373,6 +373,120 @@
   .badge-paid { background: rgba(76,175,80,.15); color: var(--green); }
   .badge-unpaid { background: rgba(255,180,40,.15); color: var(--yellow); }
   .badge-overdue { background: rgba(255,68,68,.15); color: var(--red); }
+  .badge-draft { background: rgba(150,150,150,.15); color: #999; }
+  .badge-sent { background: rgba(255,180,40,.15); color: var(--yellow); }
+  .badge-signed { background: rgba(76,175,80,.15); color: var(--green); }
+  .badge-expired { background: rgba(255,68,68,.15); color: var(--red); }
+
+  .status-dot.draft { background: #999; }
+  .status-dot.sent { background: var(--yellow); }
+  .status-dot.signed { background: var(--green); }
+  .status-dot.expired { background: var(--red); }
+
+  /* ═══ CONTRACTS PAGE ═══ */
+  .contracts-layout {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+  .con-sidebar {
+    width: 300px;
+    min-width: 300px;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+  }
+  .con-sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .con-sidebar-header h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+  .con-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px;
+  }
+  .con-item {
+    padding: 12px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .12s;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+  }
+  .con-item:hover { background: var(--surface-2); }
+  .con-item.active { background: var(--surface-2); border-color: var(--accent); }
+  .con-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+  }
+  .con-item-num { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  .con-item-amount { font-weight: 700; font-size: 13px; }
+  .con-item-client { font-size: 12px; color: var(--text-dim); }
+  .con-item-date { font-size: 10px; color: var(--text-muted); font-family: var(--mono); margin-top: 2px; }
+
+  .con-editor {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+  }
+  .con-editor-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .con-editor-title .tag {
+    font-size: 11px;
+    font-family: var(--mono);
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  .deliverable-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 8px;
+    animation: fadeIn .15s ease;
+  }
+  .deliverable-item .form-group:nth-child(1) { flex: 3; }
+  .deliverable-item .form-group:nth-child(2) { flex: 0 0 130px; }
+  .deliverable-item .btn-remove {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px 9px;
+    transition: color .15s;
+  }
+  .deliverable-item .btn-remove:hover { color: var(--red); }
+
+  .con-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
 
   /* ═══ INVOICES PAGE ═══ */
   .invoices-layout {
@@ -626,14 +740,68 @@
     .sidebar-brand svg { width: 24px; }
     .nav-item { justify-content: center; padding: 10px; }
     .inv-sidebar { width: 240px; min-width: 240px; }
+    .con-sidebar { width: 240px; min-width: 240px; }
   }
 
   @media (max-width: 700px) {
-    .invoices-layout { flex-direction: column; }
-    .inv-sidebar { width: 100%; min-width: 100%; max-height: 180px; border-right: none; border-bottom: 1px solid var(--border); }
+    body { overflow: auto; }
+    .app.visible { flex-direction: column; height: auto; min-height: 100vh; }
+    .sidebar {
+      width: 100%; min-width: 100%; height: auto;
+      flex-direction: row; border-right: none; border-bottom: 1px solid var(--border);
+    }
+    .sidebar-brand { display: none; }
+    .sidebar-nav {
+      display: flex; flex-direction: row; padding: 6px 8px; gap: 2px;
+      overflow-x: auto; flex: 1;
+    }
+    .nav-section-label { display: none; }
+    .nav-item {
+      flex-shrink: 0; padding: 8px 14px; font-size: 12px;
+      flex-direction: row; gap: 6px;
+    }
+    .nav-item span { display: inline; }
+    .nav-badge { display: inline; }
+    .sidebar-footer {
+      border-top: none; border-left: 1px solid var(--border);
+      padding: 8px 12px;
+    }
+    .sidebar-footer .user-name { display: none; }
+
+    .main-content { overflow: visible; }
+    .page-area { overflow: visible; }
+    .page.active { height: auto; min-height: calc(100vh - 120px); }
+
+    .invoices-layout, .contracts-layout { flex-direction: column; }
+    .inv-sidebar, .con-sidebar {
+      width: 100%; min-width: 100%; max-height: none;
+      border-right: none; border-bottom: 1px solid var(--border);
+    }
+    .inv-list, .con-list { max-height: 200px; }
+    .inv-editor, .con-editor { padding: 20px 16px; }
     .form-row { flex-direction: column; }
-    .line-item { flex-wrap: wrap; }
+    .line-item, .deliverable-item { flex-wrap: wrap; }
+    .line-item .form-group:nth-child(1) { flex: 0 0 100%; }
+    .line-item .form-group:nth-child(2) { flex: 1; }
+    .line-item .form-group:nth-child(3) { flex: 0 0 100px; }
+    .deliverable-item .form-group:nth-child(1) { flex: 1 1 100%; }
+    .deliverable-item .form-group:nth-child(2) { flex: 0 0 100%; }
     .dashboard-grid { grid-template-columns: repeat(2, 1fr); padding: 16px; }
+    .recent-section { padding: 0 16px 16px; }
+    .recent-table { font-size: 12px; }
+    .recent-table th, .recent-table td { padding: 8px 10px; }
+    .inv-actions, .con-actions { flex-direction: column; }
+    .inv-actions .btn, .con-actions .btn { width: 100%; justify-content: center; }
+    .topbar { padding: 12px 16px; }
+    .inv-sidebar-header, .con-sidebar-header { padding: 12px; }
+    .inv-total, .settings-content { padding: 16px 0; }
+    .settings-content { padding: 16px; max-width: 100%; }
+  }
+
+  @media (max-width: 420px) {
+    .dashboard-grid { grid-template-columns: 1fr; padding: 12px; }
+    .stat-card { padding: 16px; }
+    .stat-card .stat-value { font-size: 24px; }
   }
 </style>
 </head>
@@ -690,6 +858,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <span>Invoices</span>
         <span class="nav-badge" id="invoiceCount">0</span>
+      </div>
+      <div class="nav-item" onclick="navigate('contracts')" data-page="contracts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Contracts</span>
+        <span class="nav-badge" id="contractCount">0</span>
       </div>
 
       <div class="nav-section-label">System</div>
@@ -780,6 +953,76 @@
         </div>
       </div>
 
+      <!-- ── CONTRACTS ── -->
+      <div class="page" id="page-contracts">
+        <div class="contracts-layout">
+          <div class="con-sidebar">
+            <div class="con-sidebar-header">
+              <h3>All Contracts</h3>
+              <button class="btn btn-primary btn-sm" onclick="newContract()">+ New</button>
+            </div>
+            <div class="con-list" id="conList"></div>
+          </div>
+          <div class="con-editor" id="conEditor">
+            <div class="empty-state" id="conEmpty">
+              <p style="margin-bottom:6px;">No contract selected</p>
+              <p>Create a new contract or select one from the list.</p>
+            </div>
+            <div id="conForm" style="display:none;">
+              <div class="con-editor-title">Contract <span id="editConNumber" class="tag">#0001</span></div>
+              <div class="form-row">
+                <div class="form-group"><label>Contract Number</label><input type="text" id="cNumber" placeholder="0001"></div>
+                <div class="form-group"><label>Date</label><input type="date" id="cDate"></div>
+                <div class="form-group"><label>Status</label>
+                  <select id="cStatus"><option value="draft">Draft</option><option value="sent">Sent</option><option value="signed">Signed</option><option value="expired">Expired</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Contract Title</label><input type="text" id="cTitle" placeholder="Web Development Service Agreement"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Company Name</label><input type="text" id="cCompany" placeholder="DME Academy"></div>
+                <div class="form-group"><label>Client Name</label><input type="text" id="cClient" placeholder="John Smith"></div>
+                <div class="form-group"><label>Client Email</label><input type="email" id="cClientEmail" placeholder="john@dmeacademy.com"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Start Date</label><input type="date" id="cStartDate"></div>
+                <div class="form-group"><label>End Date</label><input type="date" id="cEndDate"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Scope of Work</label><textarea id="cScope" style="min-height:100px;" placeholder="Describe the services to be provided..."></textarea></div>
+              </div>
+              <div class="line-items-header">Deliverables</div>
+              <div id="deliverableItems"></div>
+              <button class="add-line-btn" onclick="addDeliverable()">+ Add Deliverable</button>
+              <div class="inv-total">
+                <span class="total-label">TOTAL</span>
+                <span class="total-amount" id="conTotalAmount">$0</span>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Timeline</label><textarea id="cTimeline" placeholder="Project milestones and timeline..."></textarea></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Payment Terms</label><textarea id="cPaymentTerms" placeholder="50% deposit upon signing, 50% upon completion..."></textarea></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Terms & Conditions</label><textarea id="cTerms" style="min-height:120px;" placeholder="Additional terms and conditions..."></textarea></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Notes (optional)</label><textarea id="cNotes" placeholder="Internal notes..."></textarea></div>
+              </div>
+              <div class="con-actions">
+                <button class="btn btn-primary" onclick="saveContract()">Save</button>
+                <button class="btn" onclick="exportContractPDF()">Export PDF</button>
+                <button class="btn" onclick="copyContractLink()">Copy Client Link</button>
+                <button class="btn" onclick="openContractPreview()">Preview</button>
+                <button class="btn btn-danger" onclick="deleteContract()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── SETTINGS ── -->
       <div class="page" id="page-settings">
         <div class="settings-content">
@@ -827,7 +1070,9 @@ const AUTH_KEY = 'sv_admin_auth';
 
 let adminPassword = null; // fetched from Supabase
 let invoices = [];
+let contracts = [];
 let activeId = null;
+let activeConId = null;
 let currentPage = 'dashboard';
 
 // ═══ AUTH ═══
@@ -865,11 +1110,11 @@ if (sessionStorage.getItem(AUTH_KEY)) {
 
 // ═══ INIT ═══
 async function init() {
-  await loadInvoices();
+  await Promise.all([loadInvoices(), loadContracts()]);
   renderDashboard();
   renderInvList();
+  renderConList();
   subscribeToChanges();
-  // Check hash for direct page nav
   if (window.location.hash) navigate(window.location.hash.slice(1));
 }
 
@@ -882,7 +1127,7 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', settings: 'Settings' };
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') renderDashboard();
@@ -890,6 +1135,16 @@ function navigate(page) {
 
 // ═══ REALTIME ═══
 function subscribeToChanges() {
+  sb.channel('contracts-admin')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'contracts' }, async () => {
+      await loadContracts();
+      renderConList();
+      if (activeConId) {
+        const con = contracts.find(c => c.id === activeConId);
+        if (con) document.getElementById('cStatus').value = con.status || 'draft';
+      }
+    })
+    .subscribe();
   sb.channel('invoices-admin')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'invoices' }, async () => {
       await loadInvoices();
@@ -1141,6 +1396,176 @@ async function copyLink() {
 async function openPreview() {
   const inv = await getCurrentInvoice(); if (!inv) return;
   window.open(`../invoice.html?id=${inv.id}`, '_blank');
+}
+
+// ═══ CONTRACTS DB ═══
+function rowToCon(r) {
+  return { id: r.id, number: r.number, title: r.title, date: r.date, status: r.status, companyName: r.company_name, clientName: r.client_name, clientEmail: r.client_email, scope: r.scope, deliverables: r.deliverables || [], timeline: r.timeline, paymentTotal: r.payment_total, paymentTerms: r.payment_terms, terms: r.terms, startDate: r.start_date, endDate: r.end_date, notes: r.notes };
+}
+function conToRow(c) {
+  return { id: c.id, number: c.number, title: c.title, date: c.date, status: c.status, company_name: c.companyName, client_name: c.clientName, client_email: c.clientEmail, scope: c.scope, deliverables: c.deliverables, timeline: c.timeline, payment_total: c.paymentTotal, payment_terms: c.paymentTerms, terms: c.terms, start_date: c.startDate, end_date: c.endDate, notes: c.notes, updated_at: new Date().toISOString() };
+}
+
+async function loadContracts() {
+  const { data, error } = await sb.from('contracts').select('*').order('number', { ascending: false });
+  if (error) { console.error(error); return; }
+  contracts = (data || []).map(rowToCon);
+  document.getElementById('contractCount').textContent = contracts.length;
+}
+
+// ═══ CONTRACT LIST ═══
+function renderConList() {
+  const el = document.getElementById('conList');
+  if (!contracts.length) { el.innerHTML = '<div class="empty-state">No contracts yet.</div>'; return; }
+  el.innerHTML = contracts.map(con => {
+    const t = con.paymentTotal || (con.deliverables || []).reduce((s, d) => s + (d.price || 0), 0);
+    return `<div class="con-item ${con.id === activeConId ? 'active' : ''}" onclick="selectContract('${con.id}')">
+      <div class="con-item-top">
+        <span class="con-item-num"><span class="status-dot ${con.status || 'draft'}"></span>#${con.number || '—'}</span>
+        <span class="con-item-amount">$${Number(t).toLocaleString('en-US')}</span>
+      </div>
+      <div class="con-item-client">${con.companyName || con.clientName || 'No client'}</div>
+      <div class="con-item-date">${con.date || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ CONTRACT EDITOR ═══
+function selectContract(id) {
+  activeConId = id;
+  const con = contracts.find(c => c.id === id);
+  if (!con) return;
+  document.getElementById('conEmpty').style.display = 'none';
+  document.getElementById('conForm').style.display = 'block';
+  document.getElementById('cNumber').value = con.number || '';
+  document.getElementById('cDate').value = con.date || '';
+  document.getElementById('cStatus').value = con.status || 'draft';
+  document.getElementById('cTitle').value = con.title || '';
+  document.getElementById('cCompany').value = con.companyName || '';
+  document.getElementById('cClient').value = con.clientName || '';
+  document.getElementById('cClientEmail').value = con.clientEmail || '';
+  document.getElementById('cStartDate').value = con.startDate || '';
+  document.getElementById('cEndDate').value = con.endDate || '';
+  document.getElementById('cScope').value = con.scope || '';
+  document.getElementById('cTimeline').value = con.timeline || '';
+  document.getElementById('cPaymentTerms').value = con.paymentTerms || '';
+  document.getElementById('cTerms').value = con.terms || '';
+  document.getElementById('cNotes').value = con.notes || '';
+  document.getElementById('editConNumber').textContent = '#' + (con.number || '0001');
+  const dc = document.getElementById('deliverableItems'); dc.innerHTML = '';
+  (con.deliverables || []).forEach(d => addDeliverable(d));
+  if (!con.deliverables || !con.deliverables.length) addDeliverable();
+  calcConTotal();
+  renderConList();
+}
+
+async function newContract() {
+  const maxNum = contracts.reduce((m, c) => { const n = parseInt(c.number) || 0; return n > m ? n : m; }, 0);
+  const con = {
+    id: 'con_' + Date.now(),
+    number: String(maxNum + 1).padStart(4, '0'),
+    title: '',
+    date: new Date().toISOString().split('T')[0],
+    status: 'draft',
+    companyName: '', clientName: '', clientEmail: '',
+    scope: '', deliverables: [{ description: '', price: 0 }],
+    timeline: '', paymentTotal: 0, paymentTerms: '',
+    terms: '', startDate: '', endDate: '', notes: ''
+  };
+  const { error } = await sb.from('contracts').insert(conToRow(con));
+  if (error) { console.error(error); toast('Error creating contract'); return; }
+  contracts.unshift(con);
+  document.getElementById('contractCount').textContent = contracts.length;
+  selectContract(con.id);
+}
+
+function addDeliverable(data) {
+  const c = document.getElementById('deliverableItems');
+  const d = document.createElement('div'); d.className = 'deliverable-item';
+  d.innerHTML = `
+    <div class="form-group"><label>Description</label><input type="text" value="${data ? (data.description || '') : ''}" placeholder="Website Design & Development"></div>
+    <div class="form-group"><label>Price</label><input type="number" min="0" step="any" value="${data ? (data.price || '') : ''}" placeholder="0" oninput="calcConTotal()"></div>
+    <button class="btn-remove" onclick="this.parentElement.remove();calcConTotal();">&times;</button>
+  `;
+  c.appendChild(d); calcConTotal();
+}
+
+function calcConTotal() {
+  let total = 0;
+  document.querySelectorAll('.deliverable-item').forEach(row => {
+    const inp = row.querySelectorAll('input');
+    total += parseFloat(inp[1].value) || 0;
+  });
+  document.getElementById('conTotalAmount').textContent = '$' + total.toLocaleString('en-US');
+}
+
+async function saveContract() {
+  if (!activeConId) return;
+  let con = contracts.find(c => c.id === activeConId);
+  if (!con) return;
+  con.number = document.getElementById('cNumber').value;
+  con.date = document.getElementById('cDate').value;
+  con.status = document.getElementById('cStatus').value;
+  con.title = document.getElementById('cTitle').value;
+  con.companyName = document.getElementById('cCompany').value;
+  con.clientName = document.getElementById('cClient').value;
+  con.clientEmail = document.getElementById('cClientEmail').value;
+  con.startDate = document.getElementById('cStartDate').value;
+  con.endDate = document.getElementById('cEndDate').value;
+  con.scope = document.getElementById('cScope').value;
+  con.timeline = document.getElementById('cTimeline').value;
+  con.paymentTerms = document.getElementById('cPaymentTerms').value;
+  con.terms = document.getElementById('cTerms').value;
+  con.notes = document.getElementById('cNotes').value;
+  con.deliverables = [];
+  document.querySelectorAll('.deliverable-item').forEach(row => {
+    const inp = row.querySelectorAll('input');
+    con.deliverables.push({ description: inp[0].value, price: parseFloat(inp[1].value) || 0 });
+  });
+  con.paymentTotal = con.deliverables.reduce((s, d) => s + (d.price || 0), 0);
+  document.getElementById('editConNumber').textContent = '#' + con.number;
+  const { error } = await sb.from('contracts').upsert(conToRow(con));
+  if (error) { console.error(error); toast('Error saving'); return; }
+  renderConList();
+  toast('Contract saved');
+}
+
+async function deleteContract() {
+  if (!activeConId || !confirm('Delete this contract?')) return;
+  const { error } = await sb.from('contracts').delete().eq('id', activeConId);
+  if (error) { console.error(error); toast('Error deleting'); return; }
+  contracts = contracts.filter(c => c.id !== activeConId);
+  activeConId = null;
+  document.getElementById('contractCount').textContent = contracts.length;
+  renderConList();
+  document.getElementById('conForm').style.display = 'none';
+  document.getElementById('conEmpty').style.display = 'block';
+  toast('Contract deleted');
+}
+
+async function getCurrentContract() {
+  if (!activeConId) return null;
+  await saveContract();
+  return contracts.find(c => c.id === activeConId);
+}
+
+async function exportContractPDF() {
+  const con = await getCurrentContract(); if (!con) return;
+  window.open(`../contract.html?id=${con.id}`, '_blank');
+  toast('Contract opened — use browser print to save as PDF');
+}
+
+async function copyContractLink() {
+  const con = await getCurrentContract(); if (!con) return;
+  const link = `${window.location.origin}/contract.html?id=${con.id}`;
+  navigator.clipboard.writeText(link).then(() => toast('Contract link copied')).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Contract link copied');
+  });
+}
+
+async function openContractPreview() {
+  const con = await getCurrentContract(); if (!con) return;
+  window.open(`../contract.html?id=${con.id}`, '_blank');
 }
 
 // ═══ CHANGE PASSWORD ═══

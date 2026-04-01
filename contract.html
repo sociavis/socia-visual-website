@@ -320,6 +320,7 @@ let currentContract = null;
     terms: data.terms,
     startDate: data.start_date ? new Date(data.start_date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '',
     endDate: data.end_date ? new Date(data.end_date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '',
+    proposalUrl: data.proposal_url,
     notes: data.notes
   };
 
@@ -363,6 +364,13 @@ function renderContract(c) {
     clientBlock = `${c.companyName}<br>${c.clientName}`;
   }
   let emailLine = c.clientEmail ? `<div class="client-email">${c.clientEmail}</div>` : '';
+
+  let proposalHTML = '';
+  if (c.proposalUrl) {
+    proposalHTML = `<div class="contract-section" style="margin-bottom:24px;">
+      <p style="font-size:14px;"><strong>Related Proposal:</strong> <a href="${c.proposalUrl}" target="_blank" style="color:#48b8d0;text-decoration:none;border-bottom:1px solid #48b8d0;">${c.proposalUrl}</a></p>
+    </div>`;
+  }
 
   let scopeHTML = '';
   if (c.scope) {
@@ -476,6 +484,7 @@ function renderContract(c) {
         ${emailLine}
       </div>
 
+      ${proposalHTML}
       ${scopeHTML}
       ${delSection}
       ${timelineHTML}

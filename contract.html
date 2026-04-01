@@ -340,23 +340,40 @@ function renderContract(c) {
   let deliverablesHTML = '';
   let total = 0;
   if (c.deliverables && c.deliverables.length) {
-    let rows = c.deliverables.map(d => {
-      total += d.price || 0;
-      return `<tr>
-        <td>${d.description}</td>
-        <td style="text-align:right;">${formatCurrency(d.price || 0)}</td>
-      </tr>`;
-    }).join('');
-    deliverablesHTML = `
-      <table class="deliverables-table">
-        <thead><tr><th>Deliverable</th><th style="text-align:right;">Price</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-      <div class="total-row">
-        <table>
-          <tr><td><strong>Total Contract Value</strong></td><td><strong>${formatCurrency(c.paymentTotal || total)}</strong></td></tr>
+    // Check if deliverables have rate/type fields (hourly model) vs just price (fixed model)
+    const isHourly = c.deliverables.some(d => d.rate || d.type);
+    if (isHourly) {
+      let rows = c.deliverables.map(d => {
+        return `<tr>
+          <td><strong>${d.type || ''}</strong></td>
+          <td style="text-align:right;font-size:18px;font-weight:700;">${d.rate ? '$' + d.rate : ''}<span style="font-size:13px;font-weight:400;color:#666;"> / hour</span></td>
+          <td>${d.description || ''}</td>
+        </tr>`;
+      }).join('');
+      deliverablesHTML = `
+        <table class="deliverables-table">
+          <thead><tr><th>Rate Tier</th><th style="text-align:right;">Rate</th><th>Description</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    } else {
+      let rows = c.deliverables.map(d => {
+        total += d.price || 0;
+        return `<tr>
+          <td>${d.description}</td>
+          <td style="text-align:right;">${formatCurrency(d.price || 0)}</td>
+        </tr>`;
+      }).join('');
+      deliverablesHTML = `
+        <table class="deliverables-table">
+          <thead><tr><th>Deliverable</th><th style="text-align:right;">Price</th></tr></thead>
+          <tbody>${rows}</tbody>
         </table>
-      </div>`;
+        <div class="total-row">
+          <table>
+            <tr><td><strong>Total Contract Value</strong></td><td><strong>${formatCurrency(c.paymentTotal || total)}</strong></td></tr>
+          </table>
+        </div>`;
+    }
   }
 
   let clientBlock = c.companyName || c.clientName || '';

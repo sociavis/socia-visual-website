@@ -466,8 +466,9 @@
     margin-bottom: 8px;
     animation: fadeIn .15s ease;
   }
-  .deliverable-item .form-group:nth-child(1) { flex: 3; }
-  .deliverable-item .form-group:nth-child(2) { flex: 0 0 130px; }
+  .deliverable-item .form-group:nth-child(1) { flex: 0 0 140px; }
+  .deliverable-item .form-group:nth-child(2) { flex: 0 0 100px; }
+  .deliverable-item .form-group:nth-child(3) { flex: 3; }
   .deliverable-item .btn-remove {
     background: none;
     border: none;
@@ -786,6 +787,7 @@
     .line-item .form-group:nth-child(3) { flex: 0 0 100px; }
     .deliverable-item .form-group:nth-child(1) { flex: 1 1 100%; }
     .deliverable-item .form-group:nth-child(2) { flex: 0 0 100%; }
+    .deliverable-item .form-group:nth-child(3) { flex: 1 1 100%; }
     .dashboard-grid { grid-template-columns: repeat(2, 1fr); padding: 16px; }
     .recent-section { padding: 0 16px 16px; }
     .recent-table { font-size: 12px; }
@@ -1421,11 +1423,12 @@ function renderConList() {
   const el = document.getElementById('conList');
   if (!contracts.length) { el.innerHTML = '<div class="empty-state">No contracts yet.</div>'; return; }
   el.innerHTML = contracts.map(con => {
-    const t = con.paymentTotal || (con.deliverables || []).reduce((s, d) => s + (d.price || 0), 0);
+    const rates = (con.deliverables || []).map(d => d.rate).filter(r => r > 0);
+    const rateLabel = rates.length > 1 ? '$' + Math.min(...rates) + '–$' + Math.max(...rates) + '/hr' : rates.length === 1 ? '$' + rates[0] + '/hr' : '$0';
     return `<div class="con-item ${con.id === activeConId ? 'active' : ''}" onclick="selectContract('${con.id}')">
       <div class="con-item-top">
         <span class="con-item-num"><span class="status-dot ${con.status || 'draft'}"></span>#${con.number || '—'}</span>
-        <span class="con-item-amount">$${Number(t).toLocaleString('en-US')}</span>
+        <span class="con-item-amount">${rateLabel}</span>
       </div>
       <div class="con-item-client">${con.companyName || con.clientName || 'No client'}</div>
       <div class="con-item-date">${con.date || ''}</div>
@@ -1487,20 +1490,28 @@ function addDeliverable(data) {
   const c = document.getElementById('deliverableItems');
   const d = document.createElement('div'); d.className = 'deliverable-item';
   d.innerHTML = `
-    <div class="form-group"><label>Description</label><input type="text" value="${data ? (data.description || '') : ''}" placeholder="Website Design & Development"></div>
-    <div class="form-group"><label>Price</label><input type="number" min="0" step="any" value="${data ? (data.price || '') : ''}" placeholder="0" oninput="calcConTotal()"></div>
+    <div class="form-group"><label>Rate Tier</label><input type="text" value="${data ? (data.type || '') : ''}" placeholder="Standard Rate"></div>
+    <div class="form-group"><label>$/Hour</label><input type="number" min="0" step="any" value="${data ? (data.rate || '') : ''}" placeholder="65" oninput="calcConTotal()"></div>
+    <div class="form-group"><label>Description</label><input type="text" value="${data ? (data.description || '') : ''}" placeholder="For scheduled, planned work"></div>
     <button class="btn-remove" onclick="this.parentElement.remove();calcConTotal();">&times;</button>
   `;
   c.appendChild(d); calcConTotal();
 }
 
 function calcConTotal() {
-  let total = 0;
+  let rates = [];
   document.querySelectorAll('.deliverable-item').forEach(row => {
     const inp = row.querySelectorAll('input');
-    total += parseFloat(inp[1].value) || 0;
+    const rate = parseFloat(inp[1].value) || 0;
+    if (rate) rates.push(rate);
   });
-  document.getElementById('conTotalAmount').textContent = '$' + total.toLocaleString('en-US');
+  if (rates.length > 1) {
+    document.getElementById('conTotalAmount').textContent = '$' + Math.min(...rates) + ' – $' + Math.max(...rates) + '/hr';
+  } else if (rates.length === 1) {
+    document.getElementById('conTotalAmount').textContent = '$' + rates[0] + '/hr';
+  } else {
+    document.getElementById('conTotalAmount').textContent = '$0';
+  }
 }
 
 async function saveContract() {
@@ -1525,9 +1536,10 @@ async function saveContract() {
   con.deliverables = [];
   document.querySelectorAll('.deliverable-item').forEach(row => {
     const inp = row.querySelectorAll('input');
-    con.deliverables.push({ description: inp[0].value, price: parseFloat(inp[1].value) || 0 });
+    con.deliverables.push({ type: inp[0].value, rate: parseFloat(inp[1].value) || 0, description: inp[2].value });
   });
-  con.paymentTotal = con.deliverables.reduce((s, d) => s + (d.price || 0), 0);
+  const rates = con.deliverables.map(d => d.rate).filter(r => r > 0);
+  con.paymentTotal = rates.length ? Math.max(...rates) : 0;
   document.getElementById('editConNumber').textContent = '#' + con.number;
   const { error } = await sb.from('contracts').upsert(conToRow(con));
   if (error) { console.error(error); toast('Error saving'); return; }

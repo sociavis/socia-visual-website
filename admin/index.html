@@ -1403,7 +1403,7 @@ function rowToCon(r) {
   return { id: r.id, number: r.number, title: r.title, date: r.date, status: r.status, companyName: r.company_name, clientName: r.client_name, clientEmail: r.client_email, scope: r.scope, deliverables: r.deliverables || [], timeline: r.timeline, paymentTotal: r.payment_total, paymentTerms: r.payment_terms, terms: r.terms, startDate: r.start_date, endDate: r.end_date, notes: r.notes };
 }
 function conToRow(c) {
-  return { id: c.id, number: c.number, title: c.title, date: c.date, status: c.status, company_name: c.companyName, client_name: c.clientName, client_email: c.clientEmail, scope: c.scope, deliverables: c.deliverables, timeline: c.timeline, payment_total: c.paymentTotal, payment_terms: c.paymentTerms, terms: c.terms, start_date: c.startDate, end_date: c.endDate, notes: c.notes, updated_at: new Date().toISOString() };
+  return { id: c.id, number: c.number, title: c.title || null, date: c.date || null, status: c.status || 'draft', company_name: c.companyName || null, client_name: c.clientName || null, client_email: c.clientEmail || null, scope: c.scope || null, deliverables: c.deliverables || [], timeline: c.timeline || null, payment_total: c.paymentTotal || 0, payment_terms: c.paymentTerms || null, terms: c.terms || null, start_date: c.startDate || null, end_date: c.endDate || null, notes: c.notes || null, updated_at: new Date().toISOString() };
 }
 
 async function loadContracts() {

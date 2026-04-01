@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invoice — Socia Visual</title>
 <meta name="robots" content="noindex, nofollow">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
@@ -21,7 +22,6 @@
     min-height: 100vh;
   }
 
-  /* Action bar at top */
   .action-bar {
     background: #fff;
     border-bottom: 1px solid #e0e0e0;
@@ -62,7 +62,6 @@
 
   .action-bar .ab-btn-primary:hover { background: #333; }
 
-  /* Status toggle */
   .status-toggle {
     display: inline-flex;
     align-items: center;
@@ -132,7 +131,6 @@
     overflow: hidden;
   }
 
-  /* Header - teal gradient matching existing invoice */
   .invoice-header {
     background: linear-gradient(135deg, #7dd3c0, #5bc4d4, #48b8d0);
     padding: 48px 56px 40px;
@@ -148,15 +146,9 @@
     letter-spacing: 2px;
   }
 
-  .header-logo svg {
-    width: 160px;
-    height: auto;
-  }
+  .header-logo svg { width: 160px; height: auto; }
 
-  /* Body */
-  .invoice-body {
-    padding: 40px 56px 56px;
-  }
+  .invoice-body { padding: 40px 56px 56px; }
 
   .meta-row {
     display: flex;
@@ -174,11 +166,7 @@
     margin-bottom: 4px;
   }
 
-  .meta-col span {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1a1a1a;
-  }
+  .meta-col span { font-size: 16px; font-weight: 600; color: #1a1a1a; }
 
   .section-label {
     font-size: 11px;
@@ -192,139 +180,34 @@
     display: inline-block;
   }
 
-  .from-block, .to-block {
-    margin-bottom: 28px;
-  }
+  .from-block, .to-block { margin-bottom: 28px; }
+  .from-block p, .to-block p { font-size: 15px; line-height: 1.6; color: #1a1a1a; }
+  .to-block .client-email { font-size: 13px; color: #666; margin-top: 2px; }
 
-  .from-block p, .to-block p {
-    font-size: 15px;
-    line-height: 1.6;
-    color: #1a1a1a;
-  }
+  .period { font-size: 18px; font-weight: 700; margin-bottom: 24px; color: #1a1a1a; }
 
-  .to-block .client-email {
-    font-size: 13px;
-    color: #666;
-    margin-top: 2px;
-  }
+  .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .invoice-table thead th { font-size: 14px; font-weight: 600; padding: 10px 12px; border-bottom: 2px solid #1a1a1a; text-align: left; color: #1a1a1a; }
+  .invoice-table thead th:nth-child(3), .invoice-table thead th:nth-child(4) { text-align: right; }
+  .invoice-table tbody td { font-size: 14px; padding: 12px; border: 1px solid #ddd; color: #333; }
+  .invoice-table tbody td:nth-child(3), .invoice-table tbody td:nth-child(4) { text-align: right; }
+  .invoice-table tbody td:first-child { width: 80px; text-align: center; }
 
-  .period {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 24px;
-    color: #1a1a1a;
-  }
+  .total-row { display: flex; justify-content: flex-end; margin-bottom: 40px; }
+  .total-row table { border-collapse: collapse; }
+  .total-row td { padding: 8px 12px; font-size: 14px; font-weight: 700; border: 1px solid #ddd; }
+  .total-row td:last-child { text-align: right; min-width: 100px; }
 
-  /* Table */
-  .invoice-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 8px;
-  }
+  .payment-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #1a1a1a; }
+  .payment-section p { font-size: 14px; line-height: 1.8; color: #333; }
+  .payment-section strong { font-weight: 700; color: #1a1a1a; }
 
-  .invoice-table thead th {
-    font-size: 14px;
-    font-weight: 600;
-    padding: 10px 12px;
-    border-bottom: 2px solid #1a1a1a;
-    text-align: left;
-    color: #1a1a1a;
-  }
+  .notes-section { margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; }
+  .notes-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .notes-section p { font-size: 14px; line-height: 1.6; color: #555; }
 
-  .invoice-table thead th:nth-child(3),
-  .invoice-table thead th:nth-child(4) {
-    text-align: right;
-  }
+  .not-found { text-align: center; padding: 100px 40px; font-size: 18px; color: #999; }
 
-  .invoice-table tbody td {
-    font-size: 14px;
-    padding: 12px;
-    border: 1px solid #ddd;
-    color: #333;
-  }
-
-  .invoice-table tbody td:nth-child(3),
-  .invoice-table tbody td:nth-child(4) {
-    text-align: right;
-  }
-
-  .invoice-table tbody td:first-child {
-    width: 80px;
-    text-align: center;
-  }
-
-  /* Total row */
-  .total-row {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 40px;
-  }
-
-  .total-row table {
-    border-collapse: collapse;
-  }
-
-  .total-row td {
-    padding: 8px 12px;
-    font-size: 14px;
-    font-weight: 700;
-    border: 1px solid #ddd;
-  }
-
-  .total-row td:last-child {
-    text-align: right;
-    min-width: 100px;
-  }
-
-  /* Payment info */
-  .payment-section h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #1a1a1a;
-  }
-
-  .payment-section p {
-    font-size: 14px;
-    line-height: 1.8;
-    color: #333;
-  }
-
-  .payment-section strong {
-    font-weight: 700;
-    color: #1a1a1a;
-  }
-
-  /* Notes */
-  .notes-section {
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid #eee;
-  }
-
-  .notes-section h3 {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .notes-section p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #555;
-  }
-
-  .not-found {
-    text-align: center;
-    padding: 100px 40px;
-    font-size: 18px;
-    color: #999;
-  }
-
-  /* Toast */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -342,10 +225,7 @@
     pointer-events: none;
   }
 
-  .toast.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .toast.show { opacity: 1; transform: translateY(0); }
 
   @media (max-width: 640px) {
     .action-bar { flex-wrap: wrap; padding: 12px 16px; gap: 10px; }
@@ -385,7 +265,7 @@
 <div class="invoice-page">
   <div class="invoice-wrap" id="invoiceView">
     <div class="not-found" id="notFound">
-      <p>Invoice not found.</p>
+      <p>Loading invoice...</p>
     </div>
   </div>
 </div>
@@ -393,42 +273,47 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const STORAGE_KEY = 'sv_invoices';
+const SUPABASE_URL = 'https://yjmyqmfvtudhkkxarttw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqbXlxbWZ2dHVkaGtreGFydHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzAxMjQsImV4cCI6MjA5MDE0NjEyNH0.kOctH25mfqGAqnd3OCMmGiLto2TuSPt8IoFpKdjn-So';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let currentInvoice = null;
 
-(function() {
+(async function() {
   const params = new URLSearchParams(window.location.search);
   const invoiceId = params.get('id');
-
-  if (!invoiceId) return;
-
-  // Try localStorage first (same origin = synced with admin)
-  let invoice = null;
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    const invoices = JSON.parse(stored);
-    invoice = invoices.find(i => i.id === invoiceId);
+  if (!invoiceId) {
+    document.getElementById('notFound').innerHTML = '<p>Invoice not found.</p>';
+    return;
   }
 
-  // Fallback to URL-encoded data
-  const data = params.get('d');
-  if (!invoice && data) {
-    try {
-      invoice = JSON.parse(atob(data));
-      // Store it locally so status changes persist and sync
-      saveInvoiceToStorage(invoice);
-    } catch(e) {}
+  // Fetch from Supabase
+  const { data, error } = await sb.from('invoices').select('*').eq('id', invoiceId).single();
+
+  if (error || !data) {
+    document.getElementById('notFound').innerHTML = '<p>Invoice not found.</p>';
+    return;
   }
 
-  if (!invoice) return;
+  const invoice = {
+    id: data.id,
+    number: data.number,
+    date: data.date ? new Date(data.date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '',
+    rawDate: data.date,
+    status: data.status,
+    companyName: data.company_name,
+    clientName: data.client_name,
+    clientEmail: data.client_email,
+    period: data.period,
+    items: data.items || [],
+    notes: data.notes
+  };
 
   currentInvoice = invoice;
   document.title = `Invoice #${invoice.number} — Socia Visual`;
 
-  // Show action bar
   document.getElementById('actionBar').style.display = 'flex';
 
-  // Set toggle state
   const toggle = document.getElementById('statusToggle');
   const label = document.getElementById('statusLabel');
   if (invoice.status === 'paid') {
@@ -555,43 +440,35 @@ function renderInvoice(invoice) {
   `;
 }
 
-function saveInvoiceToStorage(invoice) {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  let invoices = stored ? JSON.parse(stored) : [];
-  const idx = invoices.findIndex(i => i.id === invoice.id);
-  if (idx >= 0) {
-    invoices[idx] = { ...invoices[idx], ...invoice };
-  } else {
-    invoices.push(invoice);
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(invoices));
-}
-
-function toggleStatus() {
+async function toggleStatus() {
   if (!currentInvoice) return;
   const toggle = document.getElementById('statusToggle');
   const label = document.getElementById('statusLabel');
 
+  const newStatus = toggle.checked ? 'paid' : 'unpaid';
+  currentInvoice.status = newStatus;
+
   if (toggle.checked) {
-    currentInvoice.status = 'paid';
     label.textContent = 'Paid';
     label.className = 'toggle-label paid-label';
-    toast('Marked as paid');
   } else {
-    currentInvoice.status = 'unpaid';
     label.textContent = 'Unpaid';
     label.className = 'toggle-label unpaid-label';
-    toast('Marked as unpaid');
   }
 
-  // Save to localStorage so admin sees the change
-  const stored = localStorage.getItem(STORAGE_KEY);
-  let invoices = stored ? JSON.parse(stored) : [];
-  const idx = invoices.findIndex(i => i.id === currentInvoice.id);
-  if (idx >= 0) {
-    invoices[idx].status = currentInvoice.status;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(invoices));
+  // Write to Supabase — syncs to admin in real-time
+  const { error } = await sb.from('invoices').update({
+    status: newStatus,
+    updated_at: new Date().toISOString()
+  }).eq('id', currentInvoice.id);
+
+  if (error) {
+    console.error(error);
+    toast('Error updating status');
+    return;
   }
+
+  toast(toggle.checked ? 'Marked as paid' : 'Marked as unpaid');
 }
 
 function downloadPDF() {

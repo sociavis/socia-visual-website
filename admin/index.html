@@ -579,6 +579,45 @@
   .status-dot.unpaid { background: var(--yellow); }
   .status-dot.overdue { background: var(--red); }
 
+  /* ═══ SETTINGS PAGE ═══ */
+  .settings-content {
+    padding: 28px;
+    max-width: 520px;
+  }
+  .settings-section {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .settings-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .settings-section .section-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .settings-section .form-row { margin-bottom: 14px; }
+  .settings-section .form-row:last-of-type { margin-bottom: 18px; }
+  .pass-success {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--green);
+    min-height: 18px;
+    margin-top: 8px;
+  }
+  .pass-error {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--red);
+    min-height: 18px;
+    margin-top: 8px;
+  }
+
   /* ═══ RESPONSIVE ═══ */
   @media (max-width: 900px) {
     .sidebar { width: 56px; min-width: 56px; }
@@ -651,6 +690,12 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <span>Invoices</span>
         <span class="nav-badge" id="invoiceCount">0</span>
+      </div>
+
+      <div class="nav-section-label">System</div>
+      <div class="nav-item" onclick="navigate('settings')" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <span>Settings</span>
       </div>
     </div>
 
@@ -735,6 +780,36 @@
         </div>
       </div>
 
+      <!-- ── SETTINGS ── -->
+      <div class="page" id="page-settings">
+        <div class="settings-content">
+          <div class="settings-section">
+            <h3>Change Password</h3>
+            <p class="section-desc">Update your admin dashboard password.</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" id="sCurrentPass" placeholder="Enter current password">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" id="sNewPass" placeholder="Enter new password">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="sConfirmPass" placeholder="Confirm new password">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+            <div id="passMsg"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -750,15 +825,25 @@ const SUPABASE_URL = 'https://yjmyqmfvtudhkkxarttw.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqbXlxbWZ2dHVkaGtreGFydHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzAxMjQsImV4cCI6MjA5MDE0NjEyNH0.kOctH25mfqGAqnd3OCMmGiLto2TuSPt8IoFpKdjn-So';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const AUTH_KEY = 'sv_admin_auth';
-const PASS_HASH = '5v!s2026';
 
+let adminPassword = null; // fetched from Supabase
 let invoices = [];
 let activeId = null;
 let currentPage = 'dashboard';
 
 // ═══ AUTH ═══
-function authenticate() {
-  if (document.getElementById('authPass').value === PASS_HASH) {
+async function fetchPassword() {
+  const { data, error } = await sb.from('admin_settings').select('value').eq('key', 'admin_password').single();
+  if (!error && data) adminPassword = data.value;
+}
+
+async function authenticate() {
+  const btn = document.querySelector('.auth-input-wrap button');
+  btn.textContent = '...';
+  if (!adminPassword) await fetchPassword();
+  btn.textContent = 'Enter';
+
+  if (document.getElementById('authPass').value === adminPassword) {
     sessionStorage.setItem(AUTH_KEY, '1');
     document.getElementById('authGate').classList.add('hidden');
     document.getElementById('app').classList.add('visible');
@@ -798,7 +883,7 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', invoices: 'Invoices' };
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') renderDashboard();
@@ -1045,6 +1130,53 @@ async function copyLink() {
 async function openPreview() {
   const inv = await getCurrentInvoice(); if (!inv) return;
   window.open(`../invoice.html?id=${inv.id}`, '_blank');
+}
+
+// ═══ CHANGE PASSWORD ═══
+async function changePassword() {
+  const current = document.getElementById('sCurrentPass').value;
+  const newPass = document.getElementById('sNewPass').value;
+  const confirm = document.getElementById('sConfirmPass').value;
+  const msgEl = document.getElementById('passMsg');
+
+  if (!adminPassword) await fetchPassword();
+
+  if (current !== adminPassword) {
+    msgEl.className = 'pass-error';
+    msgEl.textContent = 'Current password is incorrect';
+    return;
+  }
+  if (!newPass || newPass.length < 4) {
+    msgEl.className = 'pass-error';
+    msgEl.textContent = 'New password must be at least 4 characters';
+    return;
+  }
+  if (newPass !== confirm) {
+    msgEl.className = 'pass-error';
+    msgEl.textContent = 'New passwords do not match';
+    return;
+  }
+
+  const { error } = await sb.from('admin_settings').update({
+    value: newPass,
+    updated_at: new Date().toISOString()
+  }).eq('key', 'admin_password');
+
+  if (error) {
+    msgEl.className = 'pass-error';
+    msgEl.textContent = 'Error updating password';
+    console.error(error);
+    return;
+  }
+
+  adminPassword = newPass;
+  document.getElementById('sCurrentPass').value = '';
+  document.getElementById('sNewPass').value = '';
+  document.getElementById('sConfirmPass').value = '';
+  msgEl.className = 'pass-success';
+  msgEl.textContent = 'Password updated successfully';
+  toast('Password changed');
+  setTimeout(() => { msgEl.textContent = ''; }, 4000);
 }
 
 function toast(msg) {

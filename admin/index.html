@@ -1370,8 +1370,11 @@ function buildInvoiceHTML(inv) {
 }
 
 async function exportPDF() {
-  const inv = await getCurrentInvoice(); if (!inv) return;
+  if (!activeId) return;
   const w = window.open('', '_blank');
+  await saveInvoice();
+  const inv = invoices.find(i => i.id === activeId);
+  if (!inv || !w) { toast('Could not open invoice'); return; }
   w.document.write(`<!DOCTYPE html><html><head><title>Invoice #${inv.number}</title>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap');
@@ -1391,16 +1394,26 @@ async function exportPDF() {
 }
 
 async function copyLink() {
-  const inv = await getCurrentInvoice(); if (!inv) return;
+  if (!activeId) return;
+  await saveInvoice();
+  const inv = invoices.find(i => i.id === activeId);
+  if (!inv) return;
   const link = `${window.location.origin}/invoice.html?id=${inv.id}`;
-  navigator.clipboard.writeText(link).then(() => toast('Invoice link copied')).catch(() => {
-    const ta = document.createElement('textarea'); ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Invoice link copied');
-  });
+  try {
+    await navigator.clipboard.writeText(link);
+    toast('Invoice link copied');
+  } catch {
+    const ta = document.createElement('textarea'); ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Invoice link copied');
+  }
 }
 
 async function openPreview() {
-  const inv = await getCurrentInvoice(); if (!inv) return;
-  window.open(`../invoice.html?id=${inv.id}`, '_blank');
+  if (!activeId) return;
+  const w = window.open('', '_blank');
+  await saveInvoice();
+  const inv = invoices.find(i => i.id === activeId);
+  if (!inv || !w) { toast('Could not open preview'); return; }
+  w.location = `../invoice.html?id=${inv.id}`;
 }
 
 // ═══ CONTRACTS DB ═══
@@ -1567,22 +1580,36 @@ async function getCurrentContract() {
 }
 
 async function exportContractPDF() {
-  const con = await getCurrentContract(); if (!con) return;
-  window.open(`../contract.html?id=${con.id}`, '_blank');
+  if (!activeConId) return;
+  const w = window.open('', '_blank');
+  await saveContract();
+  const con = contracts.find(c => c.id === activeConId);
+  if (!con || !w) { toast('Could not open contract'); return; }
+  w.location = `../contract.html?id=${con.id}`;
   toast('Contract opened — use browser print to save as PDF');
 }
 
 async function copyContractLink() {
-  const con = await getCurrentContract(); if (!con) return;
+  if (!activeConId) return;
+  await saveContract();
+  const con = contracts.find(c => c.id === activeConId);
+  if (!con) return;
   const link = `${window.location.origin}/contract.html?id=${con.id}`;
-  navigator.clipboard.writeText(link).then(() => toast('Contract link copied')).catch(() => {
-    const ta = document.createElement('textarea'); ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Contract link copied');
-  });
+  try {
+    await navigator.clipboard.writeText(link);
+    toast('Contract link copied');
+  } catch {
+    const ta = document.createElement('textarea'); ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Contract link copied');
+  }
 }
 
 async function openContractPreview() {
-  const con = await getCurrentContract(); if (!con) return;
-  window.open(`../contract.html?id=${con.id}`, '_blank');
+  if (!activeConId) return;
+  const w = window.open('', '_blank');
+  await saveContract();
+  const con = contracts.find(c => c.id === activeConId);
+  if (!con || !w) { toast('Could not open preview'); return; }
+  w.location = `../contract.html?id=${con.id}`;
 }
 
 // ═══ CHANGE PASSWORD ═══

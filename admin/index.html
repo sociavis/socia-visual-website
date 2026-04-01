@@ -990,6 +990,9 @@
                 <div class="form-group"><label>End Date</label><input type="date" id="cEndDate"></div>
               </div>
               <div class="form-row">
+                <div class="form-group"><label>Proposal URL</label><input type="url" id="cProposalUrl" placeholder="https://sociavisual.com/proposal.html"></div>
+              </div>
+              <div class="form-row">
                 <div class="form-group"><label>Scope of Work</label><textarea id="cScope" style="min-height:100px;" placeholder="Describe the services to be provided..."></textarea></div>
               </div>
               <div class="line-items-header">Deliverables</div>
@@ -1400,10 +1403,10 @@ async function openPreview() {
 
 // ═══ CONTRACTS DB ═══
 function rowToCon(r) {
-  return { id: r.id, number: r.number, title: r.title, date: r.date, status: r.status, companyName: r.company_name, clientName: r.client_name, clientEmail: r.client_email, scope: r.scope, deliverables: r.deliverables || [], timeline: r.timeline, paymentTotal: r.payment_total, paymentTerms: r.payment_terms, terms: r.terms, startDate: r.start_date, endDate: r.end_date, notes: r.notes };
+  return { id: r.id, number: r.number, title: r.title, date: r.date, status: r.status, companyName: r.company_name, clientName: r.client_name, clientEmail: r.client_email, scope: r.scope, deliverables: r.deliverables || [], timeline: r.timeline, paymentTotal: r.payment_total, paymentTerms: r.payment_terms, terms: r.terms, startDate: r.start_date, endDate: r.end_date, proposalUrl: r.proposal_url, notes: r.notes };
 }
 function conToRow(c) {
-  return { id: c.id, number: c.number, title: c.title || null, date: c.date || null, status: c.status || 'draft', company_name: c.companyName || null, client_name: c.clientName || null, client_email: c.clientEmail || null, scope: c.scope || null, deliverables: c.deliverables || [], timeline: c.timeline || null, payment_total: c.paymentTotal || 0, payment_terms: c.paymentTerms || null, terms: c.terms || null, start_date: c.startDate || null, end_date: c.endDate || null, notes: c.notes || null, updated_at: new Date().toISOString() };
+  return { id: c.id, number: c.number, title: c.title || null, date: c.date || null, status: c.status || 'draft', company_name: c.companyName || null, client_name: c.clientName || null, client_email: c.clientEmail || null, scope: c.scope || null, deliverables: c.deliverables || [], timeline: c.timeline || null, payment_total: c.paymentTotal || 0, payment_terms: c.paymentTerms || null, terms: c.terms || null, start_date: c.startDate || null, end_date: c.endDate || null, proposal_url: c.proposalUrl || null, notes: c.notes || null, updated_at: new Date().toISOString() };
 }
 
 async function loadContracts() {
@@ -1446,6 +1449,7 @@ function selectContract(id) {
   document.getElementById('cClientEmail').value = con.clientEmail || '';
   document.getElementById('cStartDate').value = con.startDate || '';
   document.getElementById('cEndDate').value = con.endDate || '';
+  document.getElementById('cProposalUrl').value = con.proposalUrl || '';
   document.getElementById('cScope').value = con.scope || '';
   document.getElementById('cTimeline').value = con.timeline || '';
   document.getElementById('cPaymentTerms').value = con.paymentTerms || '';
@@ -1470,7 +1474,7 @@ async function newContract() {
     companyName: '', clientName: '', clientEmail: '',
     scope: '', deliverables: [{ description: '', price: 0 }],
     timeline: '', paymentTotal: 0, paymentTerms: '',
-    terms: '', startDate: '', endDate: '', notes: ''
+    terms: '', startDate: '', endDate: '', proposalUrl: '', notes: ''
   };
   const { error } = await sb.from('contracts').insert(conToRow(con));
   if (error) { console.error(error); toast('Error creating contract'); return; }
@@ -1512,6 +1516,7 @@ async function saveContract() {
   con.clientEmail = document.getElementById('cClientEmail').value;
   con.startDate = document.getElementById('cStartDate').value;
   con.endDate = document.getElementById('cEndDate').value;
+  con.proposalUrl = document.getElementById('cProposalUrl').value;
   con.scope = document.getElementById('cScope').value;
   con.timeline = document.getElementById('cTimeline').value;
   con.paymentTerms = document.getElementById('cPaymentTerms').value;

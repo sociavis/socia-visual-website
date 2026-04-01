@@ -575,12 +575,16 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label>Client Name</label>
-            <input type="text" id="fClient" placeholder="TRISTAR MX">
+            <label>Company Name</label>
+            <input type="text" id="fCompany" placeholder="TRISTAR MX">
           </div>
           <div class="form-group">
-            <label>Client Address (optional)</label>
-            <input type="text" id="fClientAddr" placeholder="123 Main St, City, ST 12345">
+            <label>Client Name</label>
+            <input type="text" id="fClient" placeholder="John Smith">
+          </div>
+          <div class="form-group">
+            <label>Client Email</label>
+            <input type="email" id="fClientEmail" placeholder="john@tristarmx.com">
           </div>
         </div>
 
@@ -630,7 +634,6 @@
 // ── Config ──
 const STORAGE_KEY = 'sv_invoices';
 const AUTH_KEY = 'sv_admin_auth';
-// Simple hash - not military-grade, but keeps randos out
 const PASS_HASH = '5v!s2026';
 
 let invoices = [];
@@ -659,7 +662,6 @@ function logout() {
   location.reload();
 }
 
-// Auto-login if session active
 if (sessionStorage.getItem(AUTH_KEY)) {
   document.getElementById('authGate').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
@@ -688,24 +690,27 @@ function saveToStorage() {
 
 // ── Render List ──
 function renderList() {
+  // Re-read storage to pick up client-side status changes
+  loadInvoices();
+
   const el = document.getElementById('invoiceList');
   if (!invoices.length) {
     el.innerHTML = '<div class="empty-state">No invoices yet.<br>Click + New to create one.</div>';
     return;
   }
 
-  // Sort newest first
   const sorted = [...invoices].sort((a, b) => (b.number || '').localeCompare(a.number || ''));
 
   el.innerHTML = sorted.map(inv => {
     const total = (inv.items || []).reduce((s, i) => s + (i.qty * i.price), 0);
     const fmt = '$' + total.toLocaleString('en-US');
+    const displayName = inv.companyName || inv.clientName || 'No client';
     return `<div class="invoice-item ${inv.id === activeId ? 'active' : ''}" onclick="selectInvoice('${inv.id}')">
       <div class="invoice-item-top">
         <span class="invoice-item-num"><span class="status-dot ${inv.status || 'unpaid'}"></span>#${inv.number || '—'}</span>
         <span class="invoice-item-amount">${fmt}</span>
       </div>
-      <div class="invoice-item-client">${inv.clientName || 'No client'}</div>
+      <div class="invoice-item-client">${displayName}</div>
       <div class="invoice-item-date">${inv.date || ''}</div>
     </div>`;
   }).join('');
@@ -713,6 +718,9 @@ function renderList() {
 
 // ── Select Invoice ──
 function selectInvoice(id) {
+  // Re-read storage to get latest status (may have been changed by client)
+  loadInvoices();
+
   activeId = id;
   const inv = invoices.find(i => i.id === id);
   if (!inv) return;
@@ -723,13 +731,13 @@ function selectInvoice(id) {
   document.getElementById('fNumber').value = inv.number || '';
   document.getElementById('fDate').value = inv.date || '';
   document.getElementById('fStatus').value = inv.status || 'unpaid';
+  document.getElementById('fCompany').value = inv.companyName || '';
   document.getElementById('fClient').value = inv.clientName || '';
-  document.getElementById('fClientAddr').value = inv.clientAddress || '';
+  document.getElementById('fClientEmail').value = inv.clientEmail || '';
   document.getElementById('fPeriod').value = inv.period || '';
   document.getElementById('fNotes').value = inv.notes || '';
   document.getElementById('editNumber').textContent = '#' + (inv.number || '0000');
 
-  // Render line items
   const container = document.getElementById('lineItems');
   container.innerHTML = '';
   (inv.items || []).forEach((item, idx) => addLineItem(item));
@@ -741,7 +749,7 @@ function selectInvoice(id) {
 
 // ── New Invoice ──
 function newInvoice() {
-  // Auto-increment number
+  loadInvoices();
   const maxNum = invoices.reduce((max, inv) => {
     const n = parseInt(inv.number) || 0;
     return n > max ? n : max;
@@ -758,8 +766,9 @@ function newInvoice() {
     number: nextNum,
     date: today,
     status: 'unpaid',
+    companyName: '',
     clientName: '',
-    clientAddress: '',
+    clientEmail: '',
     period: period,
     items: [{ qty: 1, description: '', price: 0 }],
     notes: ''
@@ -811,14 +820,16 @@ function calcTotal() {
 // ── Save ──
 function saveInvoice() {
   if (!activeId) return;
-  const inv = invoices.find(i => i.id === activeId);
+  loadInvoices();
+  let inv = invoices.find(i => i.id === activeId);
   if (!inv) return;
 
   inv.number = document.getElementById('fNumber').value;
   inv.date = document.getElementById('fDate').value;
   inv.status = document.getElementById('fStatus').value;
+  inv.companyName = document.getElementById('fCompany').value;
   inv.clientName = document.getElementById('fClient').value;
-  inv.clientAddress = document.getElementById('fClientAddr').value;
+  inv.clientEmail = document.getElementById('fClientEmail').value;
   inv.period = document.getElementById('fPeriod').value;
   inv.notes = document.getElementById('fNotes').value;
 
@@ -856,25 +867,15 @@ function deleteInvoice() {
 // ── Get current invoice data ──
 function getCurrentInvoice() {
   if (!activeId) return null;
-  // Save first to capture latest edits
   saveInvoice();
   return invoices.find(i => i.id === activeId);
 }
 
-// ── Export PDF ──
-function exportPDF() {
-  const inv = getCurrentInvoice();
-  if (!inv) return;
-
-  // Build an off-screen invoice that matches the client-facing design
-  const el = document.createElement('div');
-  el.style.width = '800px';
-  el.style.fontFamily = "'Chakra Petch', sans-serif";
-  el.style.background = '#fff';
-  el.style.color = '#1a1a1a';
-
+// ── Build PDF HTML (shared between export and link) ──
+function buildInvoiceHTML(inv) {
   const total = inv.items.reduce((s, i) => s + (i.qty * i.price), 0);
   const fmt = (n) => '$' + Number(n).toLocaleString('en-US');
+  const fmtDate = inv.date ? new Date(inv.date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '';
 
   let rows = inv.items.map(i => `
     <tr>
@@ -892,7 +893,11 @@ function exportPDF() {
     </div>
   ` : '';
 
-  el.innerHTML = `
+  let clientLine = inv.companyName || '';
+  if (inv.clientName) clientLine += (clientLine ? '<br>' : '') + inv.clientName;
+  let emailLine = inv.clientEmail ? `<div style="font-size:13px;color:#666;margin-top:2px;">${inv.clientEmail}</div>` : '';
+
+  return `
     <div style="background:linear-gradient(135deg,#7dd3c0,#5bc4d4,#48b8d0);padding:48px 56px 40px;display:flex;justify-content:space-between;align-items:flex-start;">
       <h1 style="font-size:42px;font-weight:700;color:#1a1a1a;letter-spacing:2px;margin:0;">INVOICE</h1>
       <svg viewBox="0 0 2098.6 515.2" xmlns="http://www.w3.org/2000/svg" style="width:160px;" fill="#1a1a1a" stroke="none">
@@ -913,7 +918,7 @@ function exportPDF() {
       <div style="display:flex;gap:120px;margin-bottom:36px;">
         <div>
           <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;margin-bottom:4px;">Date</div>
-          <div style="font-size:16px;font-weight:600;">${inv.date ? new Date(inv.date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : ''}</div>
+          <div style="font-size:16px;font-weight:600;">${fmtDate}</div>
         </div>
         <div>
           <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;margin-bottom:4px;">Invoice No</div>
@@ -928,7 +933,8 @@ function exportPDF() {
 
       <div style="margin-bottom:28px;">
         <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;margin-bottom:4px;border-bottom:1px solid #1a1a1a;padding-bottom:4px;display:inline-block;">Invoice To:</div>
-        <p style="font-size:15px;line-height:1.6;">${inv.clientName}${inv.clientAddress ? '<br>' + inv.clientAddress : ''}</p>
+        <p style="font-size:15px;line-height:1.6;">${clientLine}</p>
+        ${emailLine}
       </div>
 
       <div style="font-size:18px;font-weight:700;margin-bottom:24px;">${inv.period || ''}</div>
@@ -967,10 +973,19 @@ function exportPDF() {
       ${notesBlock}
     </div>
   `;
+}
 
+// ── Export PDF ──
+function exportPDF() {
+  const inv = getCurrentInvoice();
+  if (!inv) return;
+
+  const el = document.createElement('div');
+  el.style.cssText = 'width:800px;font-family:"Chakra Petch",sans-serif;background:#fff;color:#1a1a1a;position:absolute;left:-9999px;top:0;';
+  el.innerHTML = buildInvoiceHTML(inv);
   document.body.appendChild(el);
 
-  const filename = `Socia_Invoice_${inv.number}_${inv.clientName.replace(/\s+/g,'_') || 'Client'}.pdf`;
+  const filename = `Socia_Invoice_${inv.number}_${(inv.companyName || inv.clientName || 'Client').replace(/\s+/g,'_')}.pdf`;
 
   html2pdf().set({
     margin: 0,
@@ -984,32 +999,34 @@ function exportPDF() {
   });
 }
 
+// ── Build link payload ──
+function buildPayload(inv) {
+  return {
+    id: inv.id,
+    number: inv.number,
+    date: inv.date ? new Date(inv.date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '',
+    status: inv.status,
+    companyName: inv.companyName,
+    clientName: inv.clientName,
+    clientEmail: inv.clientEmail,
+    period: inv.period,
+    items: inv.items,
+    notes: inv.notes
+  };
+}
+
 // ── Copy Link ──
 function copyLink() {
   const inv = getCurrentInvoice();
   if (!inv) return;
 
-  // Encode invoice data in URL for cross-origin access
-  const payload = {
-    id: inv.id,
-    number: inv.number,
-    date: inv.date ? new Date(inv.date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '',
-    status: inv.status,
-    clientName: inv.clientName,
-    clientAddress: inv.clientAddress,
-    period: inv.period,
-    items: inv.items,
-    notes: inv.notes
-  };
-
-  const encoded = btoa(JSON.stringify(payload));
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(buildPayload(inv)))));
   const baseUrl = window.location.origin;
   const link = `${baseUrl}/invoice.html?id=${inv.id}&d=${encoded}`;
 
   navigator.clipboard.writeText(link).then(() => {
     toast('Invoice link copied to clipboard');
   }).catch(() => {
-    // Fallback
     const ta = document.createElement('textarea');
     ta.value = link;
     document.body.appendChild(ta);
@@ -1025,19 +1042,7 @@ function openPreview() {
   const inv = getCurrentInvoice();
   if (!inv) return;
 
-  const payload = {
-    id: inv.id,
-    number: inv.number,
-    date: inv.date ? new Date(inv.date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '',
-    status: inv.status,
-    clientName: inv.clientName,
-    clientAddress: inv.clientAddress,
-    period: inv.period,
-    items: inv.items,
-    notes: inv.notes
-  };
-
-  const encoded = btoa(JSON.stringify(payload));
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(buildPayload(inv)))));
   window.open(`../invoice.html?id=${inv.id}&d=${encoded}`, '_blank');
 }
 

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice — Socia Visual</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Share Tech Mono'; src: url('fonts/share-tech-mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Chakra Petch', sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .invoice-wrap {
+    background: #fff;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  /* Header - teal gradient matching existing invoice */
+  .invoice-header {
+    background: linear-gradient(135deg, #7dd3c0, #5bc4d4, #48b8d0);
+    padding: 48px 56px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .invoice-header h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 2px;
+  }
+
+  .header-logo svg {
+    width: 160px;
+    height: auto;
+  }
+
+  /* Body */
+  .invoice-body {
+    padding: 40px 56px 56px;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 120px;
+    margin-bottom: 36px;
+  }
+
+  .meta-col label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .meta-col span {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 4px;
+    display: inline-block;
+  }
+
+  .from-block, .to-block {
+    margin-bottom: 28px;
+  }
+
+  .from-block p, .to-block p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1a1a1a;
+  }
+
+  .period {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #1a1a1a;
+  }
+
+  /* Table */
+  .invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+  }
+
+  .invoice-table thead th {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 2px solid #1a1a1a;
+    text-align: left;
+    color: #1a1a1a;
+  }
+
+  .invoice-table thead th:nth-child(3),
+  .invoice-table thead th:nth-child(4) {
+    text-align: right;
+  }
+
+  .invoice-table tbody td {
+    font-size: 14px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    color: #333;
+  }
+
+  .invoice-table tbody td:nth-child(3),
+  .invoice-table tbody td:nth-child(4) {
+    text-align: right;
+  }
+
+  .invoice-table tbody td:first-child {
+    width: 80px;
+    text-align: center;
+  }
+
+  /* Total row */
+  .total-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+  }
+
+  .total-row table {
+    border-collapse: collapse;
+  }
+
+  .total-row td {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid #ddd;
+  }
+
+  .total-row td:last-child {
+    text-align: right;
+    min-width: 100px;
+  }
+
+  /* Payment info */
+  .payment-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+  }
+
+  .payment-section p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .payment-section strong {
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* Notes */
+  .notes-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+  }
+
+  .notes-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .notes-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  /* Status badge */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-left: 16px;
+    vertical-align: middle;
+  }
+  .status-badge.unpaid { background: #fff3cd; color: #856404; }
+  .status-badge.paid { background: #d4edda; color: #155724; }
+  .status-badge.overdue { background: #f8d7da; color: #721c24; }
+
+  .not-found {
+    text-align: center;
+    padding: 100px 40px;
+    font-size: 18px;
+    color: #999;
+  }
+
+  @media (max-width: 640px) {
+    .invoice-header { padding: 32px 28px; }
+    .invoice-header h1 { font-size: 28px; }
+    .header-logo svg { width: 110px; }
+    .invoice-body { padding: 28px; }
+    .meta-row { gap: 40px; flex-wrap: wrap; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .invoice-wrap { box-shadow: none; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="invoice-wrap" id="invoiceView">
+  <div class="not-found" id="notFound">
+    <p>Invoice not found.</p>
+  </div>
+</div>
+
+<script>
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const invoiceId = params.get('id');
+
+  if (!invoiceId) return;
+
+  // Try to load from localStorage (same-origin) or from encoded URL data
+  let invoice = null;
+  const stored = localStorage.getItem('sv_invoices');
+  if (stored) {
+    const invoices = JSON.parse(stored);
+    invoice = invoices.find(i => i.id === invoiceId);
+  }
+
+  // Also check URL-encoded data for cross-origin sharing
+  const data = params.get('d');
+  if (!invoice && data) {
+    try {
+      invoice = JSON.parse(atob(data));
+    } catch(e) {}
+  }
+
+  if (!invoice) return;
+
+  document.title = `Invoice #${invoice.number} — Socia Visual`;
+
+  const formatCurrency = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+
+  const statusClass = invoice.status || 'unpaid';
+  const statusLabel = statusClass.charAt(0).toUpperCase() + statusClass.slice(1);
+
+  let itemsHTML = '';
+  let total = 0;
+  (invoice.items || []).forEach(item => {
+    const lineTotal = item.qty * item.price;
+    total += lineTotal;
+    itemsHTML += `<tr>
+      <td>${item.qty}</td>
+      <td>${item.description}</td>
+      <td>${formatCurrency(item.price)}</td>
+      <td>${formatCurrency(lineTotal)}</td>
+    </tr>`;
+  });
+
+  let notesHTML = '';
+  if (invoice.notes) {
+    notesHTML = `<div class="notes-section">
+      <h3>Notes</h3>
+      <p>${invoice.notes.replace(/\n/g, '<br>')}</p>
+    </div>`;
+  }
+
+  document.getElementById('invoiceView').innerHTML = `
+    <div class="invoice-header">
+      <h1>INVOICE</h1>
+      <div class="header-logo">
+        <svg viewBox="0 0 2098.6 515.2" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="633.2 164 567 236.2 546.5 258.5 480.3 330.8 100.9 330.8 167.1 258.5 452.9 258.5 473.4 236.2 187.6 236.2 253.8 164 633.2 164"/>
+          <g>
+            <polygon points="1059 69.5 992.8 141.7 907.3 234.9 813.7 234.9 899.2 141.7 274.3 141.7 340.5 69.5 1059 69.5"/>
+            <polygon points="735.7 258.5 1190.5 258.5 1124.3 330.8 505.5 330.8 658.4 164 752.1 164 665.4 258.5 735.7 258.5"/>
+            <polygon points="1997.7 330.8 1562 330.8 1628.2 258.6 1837.9 258.6 1731.9 143 1707.6 143 1535.4 330.8 1146.8 330.8 1213 258.6 1279.3 258.6 1386.4 141.7 1111.7 141.7 1026.3 234.9 932.6 234.9 1084.3 69.5 1658.7 69.5 1592.4 141.7 1480.1 141.7 1478.9 143 1372.9 258.6 1508 258.6 1681.4 69.5 1758.1 69.5 1997.7 330.8"/>
+          </g>
+          <g>
+            <path d="M100.9,382.6h35.7l1.9,29.1,25.6-29.1h45.7l-61.1,63.8h-40.7l-7.1-63.8Z"/>
+            <path d="M495,446.4h-41.2l27-63.8h41.2l-27,63.8Z"/>
+            <path d="M767.2,446.4l5.5-12.9h47.7c.3,0,.5-.3.8-.8l.4-1.1c0-.1,0-.3,0-.5l-32.2-21.7c-.8-.6-1.4-1.3-1.7-2.2s-.5-2-.5-3.2c0-2,.3-4.2,1-6.5.7-2.3,1.4-4.3,2.2-5.9l1.7-3.9c.6-1.4,1.5-2.6,2.8-3.5,1.3-1,2.6-1.5,3.9-1.5h94l-5.5,12.9h-54.9c-.7,0-1.2.5-1.6,1.6-.1,1,0,1.6.4,1.6l38.3,26.1c.8.6,1.4,1.3,1.7,2.2s.5,1.9.5,3c0,1.6-.3,3.1-1,4.6l-3.2,7.7c-1.2,2.8-3.2,4.3-5.9,4.3h-94.7Z"/>
+            <path d="M1245.9,446.4h-97.3c-1.7,0-3.1-.4-4.1-1.2-1-.8-1.7-1.8-2.1-2.9-.4-1.1-.5-2.4-.4-3.7.1-1.4.4-2.6.9-3.8l22.1-52.1h41.2l-20.6,48.6c-.2.6-.3,1.1-.2,1.6.1.5.5.7,1.1.7h23.3l21.6-50.9h41.3l-27,63.8Z"/>
+            <path d="M1626,446.4h-41.3l9.3-21.8h-25.3l-9.3,21.8h-41.2l22-52c.5-1.1,1.3-2.4,2.3-3.7,1-1.4,2.2-2.7,3.6-3.8,1.4-1.2,2.9-2.2,4.6-3,1.7-.8,3.4-1.2,5.1-1.2h97.3l-27,63.8ZM1574,411.7h25.3l6.9-16.2h-23.3c-.7,0-1.2.2-1.7.7-.5.5-.9,1-1.2,1.6l-5.9,13.9Z"/>
+            <path d="M1898.1,446.4l27-63.8h41.2l-21.6,50.9h52.9l-5.5,12.9h-94.1Z"/>
+          </g>
+          <polyline points="642.7 141 368 141 282.6 234.2 187.6 236.2 340.6 68.8 610.3 68.8"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="invoice-body">
+      <div class="meta-row">
+        <div class="meta-col">
+          <label>Date</label>
+          <span>${invoice.date}</span>
+        </div>
+        <div class="meta-col">
+          <label>Invoice No</label>
+          <span>${invoice.number} <span class="status-badge ${statusClass}">${statusLabel}</span></span>
+        </div>
+      </div>
+
+      <div class="from-block">
+        <div class="section-label">Invoice From:</div>
+        <p>Phillip Scott Socia<br>910 Hamilton Park Dr Unit A<br>Whitehouse, TX 75791</p>
+      </div>
+
+      <div class="to-block">
+        <div class="section-label">Invoice To:</div>
+        <p>${(invoice.clientName || '').replace(/\n/g, '<br>')}</p>
+        ${invoice.clientAddress ? `<p>${invoice.clientAddress.replace(/\n/g, '<br>')}</p>` : ''}
+      </div>
+
+      <div class="period">${invoice.period || ''}</div>
+
+      <table class="invoice-table">
+        <thead>
+          <tr><th>Quantity</th><th>Description</th><th>Unit Price</th><th>Line Total</th></tr>
+        </thead>
+        <tbody>${itemsHTML}</tbody>
+      </table>
+
+      <div class="total-row">
+        <table>
+          <tr><td><strong>Total</strong></td><td><strong>${formatCurrency(total)}</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="payment-section">
+        <h3>Electronic Payment Info:</h3>
+        <p>
+          <strong>ACH:</strong> Routing – 041215663 / Account – 2079194039345<br>
+          <strong>CashApp:</strong> $sociavisual<br>
+          <strong>Venmo:</strong> @socia739<br>
+          <strong>PayPal:</strong> paypal.me/sociavis
+        </p>
+      </div>
+
+      ${notesHTML}
+    </div>
+  `;
+})();
+</script>
+</body>
+</html>

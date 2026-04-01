@@ -8,7 +8,7 @@
 
   /* ── Renderer ── */
   var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, navigator.hardwareConcurrency >= 6 ? 2 : 1));
   renderer.setClearColor(0x000000, 0);
   container.appendChild(renderer.domElement);
   var cvs = renderer.domElement;
@@ -235,8 +235,18 @@
   window.addEventListener("resize", resize);
   resize();
 
+  /* ── Visibility pause ── */
+  var _paused = false;
+  document.addEventListener("visibilitychange", function () {
+    _paused = document.hidden;
+  });
+
   /* ── Render ── */
   function tick() {
+    if (_paused || (heroPanel && !heroPanel.classList.contains("active"))) {
+      requestAnimationFrame(tick);
+      return;
+    }
     var now = performance.now();
     time = now * 0.001;
 

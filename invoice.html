@@ -480,7 +480,7 @@ function downloadPDF() {
     margin: 0,
     filename: filename,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowHeight: el.scrollHeight },
     jsPDF: { unit: 'px', format: [800, el.scrollHeight], hotfixes: ['px_scaling'] }
   }).from(el).save().then(() => {
     toast('PDF downloaded');

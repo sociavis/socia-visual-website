@@ -636,6 +636,85 @@
     font-family: var(--mono);
   }
 
+  /* ═══ PROJECTS PAGE ═══ */
+  .projects-layout { display: flex; flex: 1; min-height: 0; height: 100%; }
+  .proj-sidebar { width: 280px; min-width: 280px; border-right: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column; }
+  .proj-sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .proj-sidebar-header h3 { font-size: 13px; font-weight: 600; color: var(--text-dim); }
+  .proj-list { flex: 1; overflow-y: auto; padding: 6px; }
+  .proj-item { padding: 12px 14px; border-radius: 6px; cursor: pointer; transition: background .12s; border: 1px solid transparent; margin-bottom: 2px; }
+  .proj-item:hover { background: var(--surface-2); }
+  .proj-item.active { background: var(--surface-2); border-color: var(--accent); }
+  .proj-item-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .proj-item-partner { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+
+  .proj-feed-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .proj-feed-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .proj-feed-name { font-size: 15px; font-weight: 700; }
+  .proj-feed-status { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 1px; background: var(--accent-dim); padding: 3px 10px; border-radius: 10px; text-transform: uppercase; }
+
+  .feed-stream { flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 16px; }
+  .feed-item { display: flex; gap: 12px; }
+  .feed-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--surface-3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-dim); flex-shrink: 0; }
+  .feed-avatar.admin { background: var(--accent-dim); border-color: rgba(168,255,0,.2); color: var(--accent); }
+  .feed-avatar.client { background: rgba(78,168,222,.1); border-color: rgba(78,168,222,.2); color: #4ea8de; }
+  .feed-content { flex: 1; min-width: 0; }
+  .feed-author { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .feed-author span { font-family: var(--mono); font-size: 10px; color: var(--text-muted); font-weight: 400; margin-left: 8px; }
+  .feed-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+
+  .feed-attachment { margin-top: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-dim); cursor: pointer; transition: border-color .15s; margin-right: 6px; }
+  .feed-attachment:hover { border-color: var(--accent); color: var(--accent); }
+  .feed-attachment svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .feed-task-embed { margin-top: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; }
+  .feed-task-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 12px; color: var(--text-dim); }
+  .feed-task-check { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--border-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feed-task-check.done { background: var(--accent); border-color: var(--accent); }
+  .feed-task-check.done::after { content: '✓'; font-size: 9px; color: #050505; font-weight: 700; }
+
+  .feed-input-area { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: flex-end; }
+  .feed-input { flex: 1; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 13px; padding: 10px 14px; border-radius: 6px; outline: none; resize: none; min-height: 40px; max-height: 120px; transition: border-color .2s; }
+  .feed-input:focus { border-color: var(--accent); }
+
+  .feed-staged-files { padding: 4px 16px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .staged-file { font-size: 11px; font-family: var(--mono); background: var(--surface-2); border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px; color: var(--text-dim); display: inline-flex; align-items: center; gap: 6px; }
+  .staged-file .remove { cursor: pointer; color: var(--text-muted); font-size: 14px; }
+  .staged-file .remove:hover { color: var(--red); }
+
+  .proj-tasks-sidebar { width: 260px; min-width: 260px; border-left: 1px solid var(--border); padding: 16px; overflow-y: auto; }
+  .task-sb-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .task-sb-item { display: flex; align-items: center; gap: 8px; padding: 6px 4px; font-size: 12px; color: var(--text-dim); cursor: pointer; border-radius: 4px; transition: background .1s; }
+  .task-sb-item:hover { background: var(--surface-2); }
+  .task-sb-check { width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid var(--border-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all .15s; }
+  .task-sb-check.done { background: var(--accent); border-color: var(--accent); }
+  .task-sb-check.done::after { content: '✓'; font-size: 9px; color: #050505; font-weight: 700; }
+  .task-sb-check.in_progress { border-color: var(--yellow); }
+  .task-sb-check.review { border-color: #4ea8de; }
+  .task-sb-title { flex: 1; }
+  .task-sb-title.done { color: var(--text-muted); text-decoration: line-through; }
+  .task-sb-due { font-family: var(--mono); font-size: 9px; color: var(--text-muted); }
+  .task-progress { margin-top: 16px; }
+  .task-progress-label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+  .task-progress-bar { height: 4px; background: var(--surface-3); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .task-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 2px; transition: width .3s; }
+  .task-progress-text { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  .new-task-form { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .new-task-form input, .new-task-form select { width: 100%; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 12px; padding: 7px 10px; border-radius: 4px; outline: none; margin-bottom: 6px; }
+  .new-task-form input:focus, .new-task-form select:focus { border-color: var(--accent); }
+
+  .task-embed-panel { padding: 8px 16px; border-top: 1px solid var(--border); background: var(--surface); max-height: 150px; overflow-y: auto; }
+  .task-embed-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 12px; color: var(--text-dim); cursor: pointer; }
+  .task-embed-item input[type="checkbox"] { accent-color: var(--accent); }
+
+  /* New project modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 500; display: flex; align-items: center; justify-content: center; }
+  .modal-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 28px; width: 400px; max-width: 90vw; }
+  .modal-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 18px; }
+  .modal-box .form-group { margin-bottom: 14px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+
   /* ═══ SETTINGS PAGE ═══ */
   .settings-content {
     padding: 28px;
@@ -756,6 +835,11 @@
       </div>
 
       <div class="nav-section-label">Clients</div>
+      <div class="nav-item" onclick="navigate('projects')" data-page="projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        <span>Projects</span>
+        <span class="nav-badge" id="projectCount">0</span>
+      </div>
       <div class="nav-item" onclick="navigate('partners')" data-page="partners">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
         <span>Partners</span>
@@ -898,6 +982,49 @@
         </div>
       </div>
 
+      <!-- ── PROJECTS ── -->
+      <div class="page" id="page-projects">
+        <div class="projects-layout">
+          <div class="proj-sidebar">
+            <div class="proj-sidebar-header">
+              <h3>Projects</h3>
+              <button class="btn btn-primary btn-sm" onclick="showNewProjectModal()">+ New</button>
+            </div>
+            <div class="proj-list" id="projList"></div>
+          </div>
+          <div class="proj-feed-area" id="projFeedArea">
+            <div class="empty-state" id="projEmpty"><p style="margin-bottom:6px;">No project selected</p><p>Create a new project or select one from the list.</p></div>
+            <div id="projFeedWrap" style="display:none;flex:1;display:none;flex-direction:column;overflow:hidden;">
+              <div class="proj-feed-header">
+                <span class="proj-feed-name" id="feedProjName"></span>
+                <span class="proj-feed-status" id="feedProjStatus"></span>
+              </div>
+              <div class="feed-stream" id="feedStream"></div>
+              <div class="feed-staged-files" id="stagedFiles"></div>
+              <div class="task-embed-panel" id="taskEmbedPanel" style="display:none;"></div>
+              <div class="feed-input-area">
+                <input type="file" id="feedFileInput" style="display:none" multiple>
+                <button class="btn btn-ghost btn-sm" onclick="document.getElementById('feedFileInput').click()" title="Attach files">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.49"/></svg>
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="toggleTaskEmbed()" title="Embed tasks">Tasks</button>
+                <textarea class="feed-input" id="feedInput" placeholder="Write an update..." rows="1"></textarea>
+                <button class="btn btn-primary btn-sm" onclick="postFeedItem()">Send</button>
+              </div>
+            </div>
+          </div>
+          <div class="proj-tasks-sidebar" id="projTasksSidebar" style="display:none;">
+            <div class="task-sb-label">Tasks</div>
+            <div id="taskList"></div>
+            <button class="btn btn-sm" onclick="toggleNewTaskForm()" style="margin-top:10px;width:100%;">+ Add Task</button>
+            <div id="newTaskFormWrap"></div>
+            <div class="task-progress" id="taskProgress"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="modalContainer"></div>
+
       <!-- ── PARTNERS ── -->
       <div class="page" id="page-partners">
         <div class="invoices-layout">
@@ -1030,11 +1157,12 @@ if (sessionStorage.getItem(AUTH_KEY)) {
 
 // ═══ INIT ═══
 async function init() {
-  await Promise.all([loadInvoices(), loadContracts(), loadPartners()]);
+  await Promise.all([loadInvoices(), loadContracts(), loadPartners(), loadProjects()]);
   renderDashboard();
   renderInvList();
   renderConList();
   renderPartnerList();
+  renderProjectList();
   subscribeToChanges();
   if (window.location.hash) navigate(window.location.hash.slice(1));
 }
@@ -1048,7 +1176,7 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', partners: 'Partners', settings: 'Settings' };
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', projects: 'Projects', partners: 'Partners', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') renderDashboard();
@@ -1078,6 +1206,10 @@ function subscribeToChanges() {
     .on('postgres_changes', { event: '*', schema: 'public', table: 'partners' }, async () => {
       await loadPartners();
       renderPartnerList();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, async () => {
+      await loadProjects();
+      renderProjectList();
     })
     .subscribe();
 }
@@ -1540,6 +1672,333 @@ function loadDMETemplate() {
     { title: 'Governing Law', body: `<p>This agreement shall be governed by and construed in accordance with the laws of the State of Texas. Any disputes arising under this agreement shall be resolved in the courts of Smith County, Texas.</p>` }
   ];
   return sections;
+}
+
+// ═══ PROJECTS ═══
+let allProjects = [];
+let activeProjectId = null;
+let projectFeed = [];
+let projectTasks = [];
+let pendingFiles = [];
+let projectChannel = null;
+
+async function loadProjects() {
+  const { data } = await sb.from('projects').select('*').order('updated_at', { ascending: false });
+  allProjects = data || [];
+  document.getElementById('projectCount').textContent = allProjects.length;
+}
+
+function renderProjectList() {
+  const el = document.getElementById('projList');
+  if (!allProjects.length) { el.innerHTML = '<div class="empty-state">No projects yet.</div>'; return; }
+  // Get partner names
+  const partnerMap = {};
+  partners.forEach(p => { partnerMap[p.id] = p.company_name; });
+
+  el.innerHTML = allProjects.map(p => {
+    const partnerName = partnerMap[p.partner_id] || 'Unknown';
+    const statusBadge = p.status === 'active' ? 'paid' : p.status === 'paused' ? 'unpaid' : p.status === 'complete' ? 'paid' : 'unpaid';
+    return `<div class="proj-item ${p.id === activeProjectId ? 'active' : ''}" onclick="selectProject('${p.id}')">
+      <div class="proj-item-name">${p.name}</div>
+      <div class="proj-item-partner"><span class="status-dot ${statusBadge}"></span>${partnerName}</div>
+    </div>`;
+  }).join('');
+}
+
+async function selectProject(id) {
+  activeProjectId = id;
+  const proj = allProjects.find(p => p.id === id);
+  if (!proj) return;
+
+  document.getElementById('projEmpty').style.display = 'none';
+  const wrap = document.getElementById('projFeedWrap');
+  wrap.style.display = 'flex';
+  wrap.style.flexDirection = 'column';
+  wrap.style.flex = '1';
+  wrap.style.overflow = 'hidden';
+  document.getElementById('projTasksSidebar').style.display = 'block';
+
+  const partnerName = partners.find(p => p.id === proj.partner_id)?.company_name || '';
+  document.getElementById('feedProjName').textContent = `${proj.name} — ${partnerName}`;
+  document.getElementById('feedProjStatus').textContent = proj.status.toUpperCase();
+
+  await Promise.all([loadProjectFeed(id), loadProjectTasks(id)]);
+  renderFeed();
+  renderTasksSidebar();
+  renderProjectList();
+  subscribeToProject(id);
+
+  // Setup file input
+  document.getElementById('feedFileInput').onchange = handleFileSelect;
+}
+
+function subscribeToProject(projectId) {
+  if (projectChannel) { sb.removeChannel(projectChannel); }
+  projectChannel = sb.channel(`proj-${projectId}`)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'feed_items', filter: `project_id=eq.${projectId}` }, async () => {
+      await loadProjectFeed(projectId);
+      renderFeed();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks', filter: `project_id=eq.${projectId}` }, async () => {
+      await loadProjectTasks(projectId);
+      renderTasksSidebar();
+    })
+    .subscribe();
+}
+
+async function loadProjectFeed(projectId) {
+  const { data } = await sb.from('feed_items').select('*, feed_attachments(*)').eq('project_id', projectId).order('created_at', { ascending: true });
+  projectFeed = data || [];
+}
+
+async function loadProjectTasks(projectId) {
+  const { data } = await sb.from('tasks').select('*').eq('project_id', projectId).order('created_at', { ascending: true });
+  projectTasks = data || [];
+}
+
+function renderFeed() {
+  const el = document.getElementById('feedStream');
+  if (!projectFeed.length) { el.innerHTML = '<div class="empty-state" style="padding:40px;">No updates yet. Post the first one.</div>'; return; }
+
+  el.innerHTML = projectFeed.map(item => {
+    const isAdmin = item.author_type === 'admin';
+    const avatarClass = isAdmin ? 'admin' : 'client';
+    const initials = item.author_name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    const time = new Date(item.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+
+    let attachHTML = '';
+    if (item.feed_attachments && item.feed_attachments.length) {
+      attachHTML = '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">' + item.feed_attachments.map(a =>
+        `<div class="feed-attachment" onclick="downloadAttachment('${a.file_path}','${a.file_name}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          ${a.file_name}
+        </div>`
+      ).join('') + '</div>';
+    }
+
+    let taskHTML = '';
+    if (item.task_ids && item.task_ids.length) {
+      const tasks = item.task_ids.map(tid => projectTasks.find(t => t.id === tid)).filter(Boolean);
+      if (tasks.length) {
+        taskHTML = '<div class="feed-task-embed">' + tasks.map(t =>
+          `<div class="feed-task-row"><div class="feed-task-check ${t.status === 'done' ? 'done' : ''}"></div> ${t.title}</div>`
+        ).join('') + '</div>';
+      }
+    }
+
+    return `<div class="feed-item">
+      <div class="feed-avatar ${avatarClass}">${initials}</div>
+      <div class="feed-content">
+        <div class="feed-author">${item.author_name} <span>${time}</span></div>
+        <div class="feed-text">${item.content || ''}</div>
+        ${attachHTML}
+        ${taskHTML}
+      </div>
+    </div>`;
+  }).join('');
+
+  el.scrollTop = el.scrollHeight;
+}
+
+function handleFileSelect(e) {
+  const files = Array.from(e.target.files);
+  pendingFiles.push(...files);
+  renderStagedFiles();
+  e.target.value = '';
+}
+
+function renderStagedFiles() {
+  const el = document.getElementById('stagedFiles');
+  el.innerHTML = pendingFiles.map((f, i) =>
+    `<div class="staged-file">${f.name} <span class="remove" onclick="removeStagedFile(${i})">&times;</span></div>`
+  ).join('');
+}
+
+function removeStagedFile(i) {
+  pendingFiles.splice(i, 1);
+  renderStagedFiles();
+}
+
+async function postFeedItem() {
+  if (!activeProjectId) return;
+  const input = document.getElementById('feedInput');
+  const content = input.value.trim();
+  if (!content && !pendingFiles.length) return;
+
+  const feedId = 'feed_' + Date.now();
+
+  // Get embedded task IDs
+  const taskIds = [];
+  document.querySelectorAll('#taskEmbedPanel input[type="checkbox"]:checked').forEach(cb => {
+    taskIds.push(cb.value);
+  });
+
+  // Upload files
+  const attachments = [];
+  for (const file of pendingFiles) {
+    const path = `${activeProjectId}/${crypto.randomUUID()}_${file.name}`;
+    const { error } = await sb.storage.from('project-files').upload(path, file);
+    if (!error) {
+      attachments.push({ id: 'att_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), feed_item_id: feedId, file_name: file.name, file_path: path, file_size: file.size, mime_type: file.type });
+    }
+  }
+
+  // Insert feed item
+  const { error } = await sb.from('feed_items').insert({
+    id: feedId,
+    project_id: activeProjectId,
+    author_type: 'admin',
+    author_name: 'Scott Socia',
+    content: content,
+    task_ids: taskIds
+  });
+
+  if (error) { console.error(error); toast('Error posting update'); return; }
+
+  // Insert attachments
+  if (attachments.length) {
+    await sb.from('feed_attachments').insert(attachments);
+  }
+
+  input.value = '';
+  pendingFiles = [];
+  renderStagedFiles();
+  document.getElementById('taskEmbedPanel').style.display = 'none';
+
+  await loadProjectFeed(activeProjectId);
+  renderFeed();
+  toast('Update posted');
+}
+
+async function downloadAttachment(filePath, fileName) {
+  const { data, error } = await sb.storage.from('project-files').createSignedUrl(filePath, 3600);
+  if (error || !data) { toast('Error getting download link'); return; }
+  const a = document.createElement('a');
+  a.href = data.signedUrl;
+  a.download = fileName;
+  a.target = '_blank';
+  a.click();
+}
+
+function toggleTaskEmbed() {
+  const panel = document.getElementById('taskEmbedPanel');
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    panel.innerHTML = projectTasks.length ? projectTasks.map(t =>
+      `<label class="task-embed-item"><input type="checkbox" value="${t.id}"> ${t.title} <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-muted);">${t.status}</span></label>`
+    ).join('') : '<div style="font-size:12px;color:var(--text-muted);padding:4px;">No tasks yet.</div>';
+  } else {
+    panel.style.display = 'none';
+  }
+}
+
+// ── Tasks Sidebar ──
+function renderTasksSidebar() {
+  const el = document.getElementById('taskList');
+  if (!projectTasks.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px 0;">No tasks yet.</div>'; renderProgress(); return; }
+
+  const statusOrder = { in_progress: 0, review: 1, queued: 2, done: 3 };
+  const sorted = [...projectTasks].sort((a, b) => (statusOrder[a.status] ?? 2) - (statusOrder[b.status] ?? 2));
+
+  el.innerHTML = sorted.map(t => {
+    const checkClass = t.status === 'done' ? 'done' : t.status === 'in_progress' ? 'in_progress' : t.status === 'review' ? 'review' : '';
+    const titleClass = t.status === 'done' ? 'done' : '';
+    const due = t.due_date ? new Date(t.due_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+    return `<div class="task-sb-item" onclick="cycleTaskStatus('${t.id}')">
+      <div class="task-sb-check ${checkClass}"></div>
+      <span class="task-sb-title ${titleClass}">${t.title}</span>
+      ${due ? `<span class="task-sb-due">${due}</span>` : ''}
+    </div>`;
+  }).join('');
+
+  renderProgress();
+}
+
+function renderProgress() {
+  const done = projectTasks.filter(t => t.status === 'done').length;
+  const total = projectTasks.length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById('taskProgress').innerHTML = `
+    <div class="task-progress-label">Progress</div>
+    <div class="task-progress-bar"><div class="task-progress-fill" style="width:${pct}%;"></div></div>
+    <div class="task-progress-text">${done} of ${total} complete · ${pct}%</div>
+  `;
+}
+
+async function cycleTaskStatus(taskId) {
+  const t = projectTasks.find(x => x.id === taskId);
+  if (!t) return;
+  const cycle = { queued: 'in_progress', in_progress: 'review', review: 'done', done: 'queued' };
+  const next = cycle[t.status] || 'queued';
+  t.status = next;
+  renderTasksSidebar();
+  await sb.from('tasks').update({ status: next, updated_at: new Date().toISOString() }).eq('id', taskId);
+}
+
+function toggleNewTaskForm() {
+  const el = document.getElementById('newTaskFormWrap');
+  if (el.innerHTML) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="new-task-form">
+    <input type="text" id="ntTitle" placeholder="Task title...">
+    <select id="ntStatus"><option value="queued">Queued</option><option value="in_progress">In Progress</option><option value="review">Review</option><option value="done">Done</option></select>
+    <input type="text" id="ntAssignee" placeholder="Assignee (optional)">
+    <input type="date" id="ntDue">
+    <button class="btn btn-primary btn-sm" onclick="createTask()" style="width:100%;">Create Task</button>
+  </div>`;
+}
+
+async function createTask() {
+  if (!activeProjectId) return;
+  const title = document.getElementById('ntTitle').value.trim();
+  if (!title) return;
+  const task = {
+    id: 'task_' + Date.now(),
+    project_id: activeProjectId,
+    title: title,
+    status: document.getElementById('ntStatus').value,
+    assignee: document.getElementById('ntAssignee').value || null,
+    due_date: document.getElementById('ntDue').value || null,
+    created_by: 'admin'
+  };
+  const { error } = await sb.from('tasks').insert(task);
+  if (error) { console.error(error); toast('Error creating task'); return; }
+  projectTasks.push(task);
+  renderTasksSidebar();
+  document.getElementById('newTaskFormWrap').innerHTML = '';
+  toast('Task created');
+}
+
+// ── New Project Modal ──
+function showNewProjectModal() {
+  const partnerOpts = partners.map(p => `<option value="${p.id}">${p.company_name}</option>`).join('');
+  document.getElementById('modalContainer').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal-box">
+      <h3>New Project</h3>
+      <div class="form-group"><label>Partner</label><select id="npPartner">${partnerOpts}</select></div>
+      <div class="form-group"><label>Project Name</label><input type="text" id="npName" placeholder="Website Overhaul"></div>
+      <div class="modal-actions">
+        <button class="btn btn-sm" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="createProject()">Create</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
+
+async function createProject() {
+  const name = document.getElementById('npName').value.trim();
+  const partnerId = document.getElementById('npPartner').value;
+  if (!name || !partnerId) return;
+  const proj = { id: 'proj_' + Date.now(), partner_id: partnerId, name: name, status: 'active' };
+  const { error } = await sb.from('projects').insert(proj);
+  if (error) { console.error(error); toast('Error creating project'); return; }
+  allProjects.unshift(proj);
+  document.getElementById('projectCount').textContent = allProjects.length;
+  renderProjectList();
+  closeModal();
+  selectProject(proj.id);
+  toast('Project created');
 }
 
 // ═══ PARTNERS ═══

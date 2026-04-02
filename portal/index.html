@@ -97,6 +97,7 @@
   .page-area { flex: 1; overflow-y: auto; overflow-x: hidden; }
   .page { display: none; }
   .page.active { display: block; }
+  #page-projects.active { display: flex; }
 
   /* ═══ DASHBOARD ═══ */
   .welcome { padding: 28px 28px 0; }
@@ -285,7 +286,7 @@
       </div>
 
       <!-- Projects -->
-      <div class="page" id="page-projects" style="height:100%;display:none;flex-direction:column;">
+      <div class="page" id="page-projects" style="height:100%;flex-direction:column;">
         <div id="projSelectorBar" style="display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;">
           <select id="projSelector" onchange="onProjectSelect()" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:13px;padding:7px 12px;border-radius:5px;outline:none;flex:1;max-width:300px;">
             <option value="">Select a project...</option>

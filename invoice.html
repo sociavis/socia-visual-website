@@ -6,6 +6,7 @@
 <title>Invoice — Socia Visual</title>
 <meta name="robots" content="noindex, nofollow">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
   @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
@@ -473,8 +474,18 @@ async function toggleStatus() {
 
 function downloadPDF() {
   if (!currentInvoice) return;
-  window.print();
-  toast('Print dialog opened — save as PDF');
+  const el = document.getElementById('invoiceView');
+  const filename = `Socia_Invoice_${currentInvoice.number}.pdf`;
+
+  html2pdf().set({
+    margin: 0,
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: -window.scrollY },
+    jsPDF: { unit: 'px', format: [800, el.scrollHeight], hotfixes: ['px_scaling'] }
+  }).from(el).save().then(() => {
+    toast('PDF downloaded');
+  });
 }
 
 function toast(msg) {

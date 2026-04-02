@@ -1253,9 +1253,8 @@ async function exportPDF() {
 async function copyLink() {
   const inv = await getCurrentInvoice(); if (!inv) return;
   const link = `${window.location.origin}/invoice.html?id=${inv.id}`;
-  navigator.clipboard.writeText(link).then(() => toast('Invoice link copied')).catch(() => {
-    const ta = document.createElement('textarea'); ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Invoice link copied');
-  });
+  copyToClipboard(link);
+  toast('Invoice link copied');
 }
 
 async function openPreview() {
@@ -1410,20 +1409,20 @@ async function copyConLink() {
   if (!activeConId) return;
   await saveContract();
   const link = `${window.location.origin}/contract.html?id=${activeConId}`;
-  try {
-    await navigator.clipboard.writeText(link);
-    toast('Contract link copied');
-  } catch(e) {
-    const ta = document.createElement('textarea');
-    ta.value = link;
-    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    toast('Contract link copied');
-  }
+  copyToClipboard(link);
+  toast('Contract link copied');
+}
+
+function copyToClipboard(text) {
+  const input = document.createElement('input');
+  input.value = text;
+  input.style.cssText = 'position:fixed;top:-100px;left:-100px;';
+  document.body.appendChild(input);
+  input.focus();
+  input.select();
+  input.setSelectionRange(0, text.length);
+  document.execCommand('copy');
+  document.body.removeChild(input);
 }
 
 async function previewContract() {

@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Management Concepts — Socia Visual</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  @font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Share Tech Mono'; src: url('../fonts/share-tech-mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050505;
+    --surface: #0a0a0a;
+    --surface-2: #111;
+    --surface-3: #1a1a1a;
+    --border: #222;
+    --border-light: #2a2a2a;
+    --text: #e8e8e8;
+    --text-dim: #777;
+    --text-muted: #555;
+    --accent: #a8ff00;
+    --accent-2: #d4ff00;
+    --accent-dim: rgba(168,255,0,.1);
+    --green: #4caf50;
+    --yellow: #ffb428;
+    --red: #ff4444;
+    --blue: #4ea8de;
+    --font: 'Chakra Petch', sans-serif;
+    --mono: 'Share Tech Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  .page-header {
+    text-align: center;
+    padding: 60px 24px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .page-header h1 span { color: var(--accent); }
+  .page-header p { font-size: 14px; color: var(--text-dim); max-width: 500px; margin: 0 auto; }
+
+  /* ═══ CONCEPT SECTION ═══ */
+  .concept {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    border-bottom: 1px solid var(--border);
+  }
+  .concept:last-of-type { border-bottom: none; }
+
+  .concept-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .concept-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .concept-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  .demo-frame {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .demo-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  .demo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border-light); }
+  .demo-dot:first-child { background: var(--red); }
+  .demo-dot:nth-child(2) { background: var(--yellow); }
+  .demo-dot:nth-child(3) { background: var(--green); }
+  .demo-toolbar-title { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-left: 12px; letter-spacing: 1px; }
+
+  .demo-body { padding: 0; }
+
+  /* ═══════════════════════════════════
+     CONCEPT 1: MISSION CONTROL
+     ═══════════════════════════════════ */
+
+  .mc-hud {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .mc-hud-block { display: flex; flex-direction: column; gap: 2px; }
+  .mc-hud-label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+  .mc-hud-value { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--accent); }
+  .mc-hud-value.dim { color: var(--text-dim); font-size: 16px; }
+
+  .mc-progress-wrap {
+    flex: 1;
+    min-width: 200px;
+  }
+  .mc-progress-bar {
+    height: 6px;
+    background: var(--surface-3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .mc-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 3px;
+    transition: width .5s ease;
+  }
+
+  .mc-phases { padding: 20px 28px; }
+
+  .mc-phase {
+    position: relative;
+    padding-left: 36px;
+    margin-bottom: 4px;
+  }
+
+  /* Timeline line */
+  .mc-phase::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 28px;
+    bottom: -4px;
+    width: 1px;
+    background: var(--border);
+  }
+  .mc-phase:last-child::before { display: none; }
+
+  /* Timeline dot */
+  .mc-phase::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 11px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 2px solid var(--border-light);
+    background: var(--bg);
+  }
+  .mc-phase.complete::after { background: var(--accent); border-color: var(--accent); }
+  .mc-phase.active::after { background: var(--bg); border-color: var(--accent); box-shadow: 0 0 8px rgba(168,255,0,.4); }
+  .mc-phase.active::before { background: linear-gradient(to bottom, var(--accent), var(--border)); }
+
+  .mc-phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .mc-phase-header:hover { background: var(--surface-2); }
+
+  .mc-phase-name { font-size: 14px; font-weight: 600; }
+  .mc-phase.complete .mc-phase-name { color: var(--text-dim); }
+  .mc-phase.active .mc-phase-name { color: var(--accent); }
+  .mc-phase.pending .mc-phase-name { color: var(--text-muted); }
+
+  .mc-phase-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mc-phase-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .mc-phase-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .mc-phase.complete .mc-phase-badge { background: rgba(76,175,80,.15); color: var(--green); }
+  .mc-phase.active .mc-phase-badge { background: var(--accent-dim); color: var(--accent); }
+  .mc-phase.pending .mc-phase-badge { background: rgba(255,255,255,.04); color: var(--text-muted); }
+
+  .mc-tasks {
+    padding: 4px 0 12px 14px;
+  }
+  .mc-task {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: background .12s;
+    cursor: pointer;
+  }
+  .mc-task:hover { background: var(--surface-2); }
+
+  .mc-check {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1.5px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all .15s;
+  }
+  .mc-task.done .mc-check { background: var(--accent); border-color: var(--accent); }
+  .mc-task.done .mc-check::after { content: '✓'; font-size: 10px; color: #050505; font-weight: 700; }
+  .mc-task.done .mc-task-name { color: var(--text-muted); text-decoration: line-through; }
+  .mc-task-name { color: var(--text-dim); }
+  .mc-task.done .mc-task-name { color: var(--text-muted); }
+
+  .mc-task-tag {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.04);
+    color: var(--text-muted);
+  }
+
+  /* ═══════════════════════════════════
+     CONCEPT 2: LINEAR-STYLE LIST
+     ═══════════════════════════════════ */
+
+  .ln-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ln-filter {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .ln-filter:hover { border-color: var(--border-light); color: var(--text-dim); }
+  .ln-filter.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .ln-count { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-left: auto; }
+
+  .ln-list { padding: 0; }
+
+  .ln-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.03);
+    cursor: pointer;
+    transition: background .1s;
+  }
+  .ln-item:hover { background: var(--surface-2); }
+
+  .ln-status {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ln-status.queued { border-color: var(--text-muted); }
+  .ln-status.progress { border-color: var(--yellow); background: rgba(255,180,40,.15); }
+  .ln-status.progress::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); }
+  .ln-status.review { border-color: var(--blue); background: rgba(78,168,222,.15); }
+  .ln-status.review::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+  .ln-status.done { border-color: var(--accent); background: var(--accent); }
+  .ln-status.done::after { content: '✓'; font-size: 9px; color: #050505; font-weight: 700; }
+
+  .ln-title { font-size: 13px; flex: 1; }
+  .ln-title.struck { color: var(--text-muted); text-decoration: line-through; }
+
+  .ln-priority {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .5px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    text-transform: uppercase;
+  }
+  .ln-priority.urgent { background: rgba(255,68,68,.15); color: var(--red); }
+  .ln-priority.high { background: rgba(255,180,40,.15); color: var(--yellow); }
+  .ln-priority.med { background: rgba(78,168,222,.12); color: var(--blue); }
+  .ln-priority.low { background: rgba(255,255,255,.04); color: var(--text-muted); }
+
+  .ln-assignee {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+  }
+  .ln-assignee.you { background: var(--accent-dim); border-color: rgba(168,255,0,.3); color: var(--accent); }
+
+  .ln-date { font-family: var(--mono); font-size: 10px; color: var(--text-muted); min-width: 55px; text-align: right; }
+
+  /* ═══════════════════════════════════
+     CONCEPT 3: ACTIVITY FEED
+     ═══════════════════════════════════ */
+
+  .feed-layout { display: flex; min-height: 500px; }
+
+  .feed-main { flex: 1; border-right: 1px solid var(--border); }
+  .feed-sidebar-r { width: 240px; padding: 16px; }
+
+  .feed-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .feed-project-name { font-size: 15px; font-weight: 700; }
+  .feed-phase-tag { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 1px; background: var(--accent-dim); padding: 3px 10px; border-radius: 10px; }
+
+  .feed-stream { padding: 16px 20px; display: flex; flex-direction: column; gap: 16px; }
+
+  .feed-item {
+    display: flex;
+    gap: 12px;
+  }
+  .feed-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .feed-avatar.sv { background: var(--accent-dim); border-color: rgba(168,255,0,.2); color: var(--accent); }
+  .feed-avatar.client { background: rgba(78,168,222,.1); border-color: rgba(78,168,222,.2); color: var(--blue); }
+
+  .feed-content { flex: 1; }
+  .feed-author { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .feed-author span { font-family: var(--mono); font-size: 10px; color: var(--text-muted); font-weight: 400; margin-left: 8px; }
+  .feed-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+  .feed-attachment {
+    margin-top: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .feed-attachment:hover { border-color: var(--accent); }
+  .feed-attachment svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+
+  .feed-task-embed {
+    margin-top: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .feed-task-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .feed-task-check {
+    width: 14px; height: 14px; border-radius: 3px;
+    border: 1.5px solid var(--border-light);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .feed-task-check.done { background: var(--accent); border-color: var(--accent); }
+  .feed-task-check.done::after { content: '✓'; font-size: 9px; color: #050505; font-weight: 700; }
+
+  .feed-input-area {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+  }
+  .feed-input {
+    flex: 1;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    outline: none;
+  }
+  .feed-input::placeholder { color: var(--text-muted); }
+  .feed-send {
+    background: var(--accent);
+    border: none;
+    color: #050505;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* Feed sidebar tasks */
+  .feed-sb-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .feed-sb-task {
+    display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12px; color: var(--text-dim); cursor: pointer;
+  }
+  .feed-sb-task:hover { color: var(--text); }
+  .feed-sb-progress { margin-top: 16px; }
+  .feed-sb-bar { height: 4px; background: var(--surface-3); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .feed-sb-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+
+  @media (max-width: 700px) {
+    .concept { padding: 40px 16px 60px; }
+    .mc-hud { flex-direction: column; align-items: flex-start; }
+    .feed-layout { flex-direction: column; }
+    .feed-sidebar-r { width: 100%; border-top: 1px solid var(--border); }
+    .ln-item { padding: 10px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Project Management <span>Concepts</span></h1>
+  <p>Three approaches for the Socia Visual admin + client portal task system. All demos use live mock data.</p>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CONCEPT 1: MISSION CONTROL
+     ═══════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-label">Concept 01</div>
+  <div class="concept-title">Mission Control</div>
+  <div class="concept-desc">Phase-based vertical timeline with a HUD progress readout. Each phase contains nested tasks. Feels like tracking a launch sequence — clear sense of where the project is and what's next.</div>
+
+  <div class="demo-frame">
+    <div class="demo-toolbar">
+      <div class="demo-dot"></div><div class="demo-dot"></div><div class="demo-dot"></div>
+      <span class="demo-toolbar-title">DME Academy — Website Overhaul</span>
+    </div>
+    <div class="demo-body">
+
+      <div class="mc-hud">
+        <div class="mc-hud-block">
+          <div class="mc-hud-label">Overall</div>
+          <div class="mc-hud-value">62%</div>
+        </div>
+        <div class="mc-progress-wrap">
+          <div class="mc-hud-label">Mission Progress</div>
+          <div class="mc-progress-bar"><div class="mc-progress-fill" style="width:62%;"></div></div>
+        </div>
+        <div class="mc-hud-block">
+          <div class="mc-hud-label">Phase</div>
+          <div class="mc-hud-value dim">3 of 5</div>
+        </div>
+        <div class="mc-hud-block">
+          <div class="mc-hud-label">Tasks</div>
+          <div class="mc-hud-value dim">13/21</div>
+        </div>
+      </div>
+
+      <div class="mc-phases">
+
+        <div class="mc-phase complete">
+          <div class="mc-phase-header">
+            <div class="mc-phase-name">01 — Discovery & Audit</div>
+            <div class="mc-phase-meta">
+              <span class="mc-phase-count">4/4</span>
+              <span class="mc-phase-badge">Complete</span>
+            </div>
+          </div>
+          <div class="mc-tasks">
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Performance audit (Lighthouse)</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Accessibility audit (WCAG 2.1)</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Security scan & threat assessment</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Competitive analysis & recommendations</span></div>
+          </div>
+        </div>
+
+        <div class="mc-phase complete">
+          <div class="mc-phase-header">
+            <div class="mc-phase-name">02 — Security & Cleanup</div>
+            <div class="mc-phase-meta">
+              <span class="mc-phase-count">5/5</span>
+              <span class="mc-phase-badge">Complete</span>
+            </div>
+          </div>
+          <div class="mc-tasks">
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Remove injected third-party code</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Eliminate deprecated browser APIs</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Remove third-party cookie dependencies</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Resolve Chrome DevTools warnings</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">CSS consolidation & cleanup</span></div>
+          </div>
+        </div>
+
+        <div class="mc-phase active">
+          <div class="mc-phase-header">
+            <div class="mc-phase-name">03 — Performance Optimization</div>
+            <div class="mc-phase-meta">
+              <span class="mc-phase-count">2/5</span>
+              <span class="mc-phase-badge">In Progress</span>
+            </div>
+          </div>
+          <div class="mc-tasks">
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Image optimization & WebP conversion</span></div>
+            <div class="mc-task done"><div class="mc-check"></div><span class="mc-task-name">Implement lazy loading</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Render-blocking resource cleanup</span><span class="mc-task-tag">in progress</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Page weight reduction</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Core Web Vitals optimization</span></div>
+          </div>
+        </div>
+
+        <div class="mc-phase pending">
+          <div class="mc-phase-header">
+            <div class="mc-phase-name">04 — Accessibility & Compliance</div>
+            <div class="mc-phase-meta">
+              <span class="mc-phase-count">0/4</span>
+              <span class="mc-phase-badge">Queued</span>
+            </div>
+          </div>
+          <div class="mc-tasks">
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Color contrast fixes (WCAG AA)</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Alt text on all images</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Landmark structure for screen readers</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Full keyboard navigation support</span></div>
+          </div>
+        </div>
+
+        <div class="mc-phase pending">
+          <div class="mc-phase-header">
+            <div class="mc-phase-name">05 — Design Refresh & Launch</div>
+            <div class="mc-phase-meta">
+              <span class="mc-phase-count">0/3</span>
+              <span class="mc-phase-badge">Queued</span>
+            </div>
+          </div>
+          <div class="mc-tasks">
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Visual identity refresh</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Mobile responsive overhaul</span></div>
+            <div class="mc-task"><div class="mc-check"></div><span class="mc-task-name">Final QA & launch</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CONCEPT 2: LINEAR-STYLE LIST
+     ═══════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-label">Concept 02</div>
+  <div class="concept-title">Linear-Style List</div>
+  <div class="concept-desc">Minimal flat task list with inline status, priority, assignee, and due dates. No columns, no dragging — just a tight, filterable list. Fast, dense, modern.</div>
+
+  <div class="demo-frame">
+    <div class="demo-toolbar">
+      <div class="demo-dot"></div><div class="demo-dot"></div><div class="demo-dot"></div>
+      <span class="demo-toolbar-title">DME Academy — All Tasks</span>
+    </div>
+    <div class="demo-body">
+
+      <div class="ln-toolbar">
+        <span class="ln-filter active">All</span>
+        <span class="ln-filter">In Progress</span>
+        <span class="ln-filter">Review</span>
+        <span class="ln-filter">Done</span>
+        <span class="ln-count">21 tasks</span>
+      </div>
+
+      <div class="ln-list">
+        <div class="ln-item">
+          <div class="ln-status progress"></div>
+          <span class="ln-title">Render-blocking resource cleanup</span>
+          <span class="ln-priority urgent">Urgent</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 3</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status progress"></div>
+          <span class="ln-title">Page weight reduction — target &lt;2MB</span>
+          <span class="ln-priority high">High</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 5</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status review"></div>
+          <span class="ln-title">Homepage hero section redesign</span>
+          <span class="ln-priority high">High</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 2</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status review"></div>
+          <span class="ln-title">Image optimization — batch 2 (gallery pages)</span>
+          <span class="ln-priority med">Med</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 4</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status queued"></div>
+          <span class="ln-title">Color contrast audit — fix all AA failures</span>
+          <span class="ln-priority high">High</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 8</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status queued"></div>
+          <span class="ln-title">Add alt text to all images (47 remaining)</span>
+          <span class="ln-priority med">Med</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 10</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status queued"></div>
+          <span class="ln-title">Keyboard navigation — tab order & focus states</span>
+          <span class="ln-priority med">Med</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 12</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status queued"></div>
+          <span class="ln-title">Core Web Vitals — LCP under 2.5s</span>
+          <span class="ln-priority high">High</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 7</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status done"></div>
+          <span class="ln-title struck">Remove injected steroid marketplace code</span>
+          <span class="ln-priority urgent">Urgent</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Mar 28</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status done"></div>
+          <span class="ln-title struck">Lighthouse performance audit</span>
+          <span class="ln-priority low">Low</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Mar 25</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status done"></div>
+          <span class="ln-title struck">Image optimization — batch 1 (homepage)</span>
+          <span class="ln-priority med">Med</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Mar 30</span>
+        </div>
+        <div class="ln-item">
+          <div class="ln-status done"></div>
+          <span class="ln-title struck">Implement lazy loading across all pages</span>
+          <span class="ln-priority med">Med</span>
+          <div class="ln-assignee you">SS</div>
+          <span class="ln-date">Apr 1</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CONCEPT 3: ACTIVITY FEED + TASKS
+     ═══════════════════════════════════════ -->
+<div class="concept">
+  <div class="concept-label">Concept 03</div>
+  <div class="concept-title">Activity Feed + Tasks</div>
+  <div class="concept-desc">A shared project thread with structured updates, embedded tasks, and file attachments. Collaborative without being a spreadsheet. Client and provider communicate in context.</div>
+
+  <div class="demo-frame">
+    <div class="demo-toolbar">
+      <div class="demo-dot"></div><div class="demo-dot"></div><div class="demo-dot"></div>
+      <span class="demo-toolbar-title">DME Academy — Project Feed</span>
+    </div>
+    <div class="demo-body">
+      <div class="feed-layout">
+
+        <div class="feed-main">
+          <div class="feed-header">
+            <span class="feed-project-name">Website Overhaul</span>
+            <span class="feed-phase-tag">Phase 3 — Performance</span>
+          </div>
+
+          <div class="feed-stream">
+
+            <div class="feed-item">
+              <div class="feed-avatar sv">SV</div>
+              <div class="feed-content">
+                <div class="feed-author">Scott Socia <span>Mar 28 · 2:14 PM</span></div>
+                <div class="feed-text">Security cleanup complete. Removed all injected third-party code, eliminated deprecated APIs, and resolved every Chrome DevTools warning. Site is clean.</div>
+                <div class="feed-task-embed">
+                  <div class="feed-task-row"><div class="feed-task-check done"></div> Remove injected third-party code</div>
+                  <div class="feed-task-row"><div class="feed-task-check done"></div> Eliminate deprecated browser APIs</div>
+                  <div class="feed-task-row"><div class="feed-task-check done"></div> Resolve Chrome DevTools warnings</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="feed-item">
+              <div class="feed-avatar client">GB</div>
+              <div class="feed-content">
+                <div class="feed-author">Greg Birgfeld <span>Mar 28 · 4:30 PM</span></div>
+                <div class="feed-text">This is great — can you confirm the steroid links are completely gone? We had a board meeting about it last week and they're very concerned about the SEO impact.</div>
+              </div>
+            </div>
+
+            <div class="feed-item">
+              <div class="feed-avatar sv">SV</div>
+              <div class="feed-content">
+                <div class="feed-author">Scott Socia <span>Mar 28 · 5:02 PM</span></div>
+                <div class="feed-text">100% gone. Ran a full source scan — zero traces. I'd recommend submitting a reconsideration request to Google Search Console to speed up recovery. Happy to handle that if you want.</div>
+              </div>
+            </div>
+
+            <div class="feed-item">
+              <div class="feed-avatar sv">SV</div>
+              <div class="feed-content">
+                <div class="feed-author">Scott Socia <span>Apr 1 · 11:20 AM</span></div>
+                <div class="feed-text">Starting performance optimization. Knocked out image compression and lazy loading. Homepage went from 30s load to under 4s. Here's the before/after report.</div>
+                <div class="feed-attachment">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  DME_Performance_Report_Apr2026.pdf
+                </div>
+                <div class="feed-task-embed">
+                  <div class="feed-task-row"><div class="feed-task-check done"></div> Image optimization & WebP conversion</div>
+                  <div class="feed-task-row"><div class="feed-task-check done"></div> Implement lazy loading</div>
+                  <div class="feed-task-row"><div class="feed-task-check"></div> Render-blocking resource cleanup</div>
+                  <div class="feed-task-row"><div class="feed-task-check"></div> Page weight reduction</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="feed-item">
+              <div class="feed-avatar client">GB</div>
+              <div class="feed-content">
+                <div class="feed-author">Greg Birgfeld <span>Apr 1 · 1:45 PM</span></div>
+                <div class="feed-text">30 seconds to 4 seconds — that's incredible. The team is going to be thrilled. Keep going!</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="feed-input-area">
+            <input class="feed-input" placeholder="Write an update..." disabled>
+            <button class="feed-send">Send</button>
+          </div>
+        </div>
+
+        <div class="feed-sidebar-r">
+          <div class="feed-sb-label">Current Tasks</div>
+          <div class="feed-sb-task"><div class="feed-task-check"></div> Render-blocking cleanup</div>
+          <div class="feed-sb-task"><div class="feed-task-check"></div> Page weight reduction</div>
+          <div class="feed-sb-task"><div class="feed-task-check"></div> Core Web Vitals</div>
+          <div class="feed-sb-task"><div class="feed-task-check"></div> Color contrast fixes</div>
+
+          <div class="feed-sb-progress">
+            <div class="feed-sb-label">Overall Progress</div>
+            <div class="feed-sb-bar"><div class="feed-sb-bar-fill" style="width:62%;"></div></div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:4px;">13 of 21 complete</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

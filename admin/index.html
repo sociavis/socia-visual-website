@@ -579,6 +579,63 @@
   .status-dot.unpaid { background: var(--yellow); }
   .status-dot.overdue { background: var(--red); }
 
+  /* ═══ CONTRACT SECTIONS ═══ */
+  .con-section {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 10px;
+    animation: fadeIn .15s ease;
+  }
+  .con-section-header {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .con-section-header input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 4px;
+    outline: none;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .con-section-header input:focus { border-color: var(--accent); }
+  .con-section-header .btn-remove {
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 16px; transition: color .15s; padding: 4px;
+  }
+  .con-section-header .btn-remove:hover { color: var(--red); }
+  .con-section textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+  }
+  .con-section textarea:focus { border-color: var(--accent); }
+  .con-section .section-hint {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-family: var(--mono);
+  }
+
   /* ═══ SETTINGS PAGE ═══ */
   .settings-content {
     padding: 28px;
@@ -692,6 +749,12 @@
         <span class="nav-badge" id="invoiceCount">0</span>
       </div>
 
+      <div class="nav-item" onclick="navigate('contracts')" data-page="contracts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Contracts</span>
+        <span class="nav-badge" id="contractCount">0</span>
+      </div>
+
       <div class="nav-section-label">System</div>
       <div class="nav-item" onclick="navigate('settings')" data-page="settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -774,6 +837,54 @@
                 <button class="btn" onclick="copyLink()">Copy Client Link</button>
                 <button class="btn" onclick="openPreview()">Preview</button>
                 <button class="btn btn-danger" onclick="deleteInvoice()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CONTRACTS ── -->
+      <div class="page" id="page-contracts">
+        <div class="invoices-layout">
+          <div class="inv-sidebar">
+            <div class="inv-sidebar-header">
+              <h3>All Contracts</h3>
+              <button class="btn btn-primary btn-sm" onclick="newContract()">+ New</button>
+            </div>
+            <div class="inv-list" id="conList"></div>
+          </div>
+          <div class="inv-editor" id="conEditor">
+            <div class="empty-state" id="conEmpty">
+              <p style="margin-bottom:6px;">No contract selected</p>
+              <p>Create a new contract or select one from the list.</p>
+            </div>
+            <div id="conForm" style="display:none;">
+              <div class="inv-editor-title">Contract <span id="conEditNumber" class="tag">#0000</span></div>
+              <div class="form-row">
+                <div class="form-group"><label>Contract Number</label><input type="text" id="cNumber" placeholder="001"></div>
+                <div class="form-group"><label>Effective Date</label><input type="date" id="cDate"></div>
+                <div class="form-group"><label>Status</label>
+                  <select id="cStatus"><option value="draft">Draft</option><option value="sent">Sent</option><option value="signed">Signed</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Agreement Title</label><input type="text" id="cTitle" placeholder="Web Design & Development Services"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Client Company</label><input type="text" id="cCompany" placeholder="DME Academy"></div>
+                <div class="form-group"><label>Client Name</label><input type="text" id="cClient" placeholder="Greg Birgfeld"></div>
+                <div class="form-group"><label>Client Email</label><input type="email" id="cClientEmail" placeholder="greg@dmeacademy.com"></div>
+              </div>
+
+              <div class="line-items-header">Contract Sections</div>
+              <div id="conSections"></div>
+              <button class="add-line-btn" onclick="addConSection()">+ Add Section</button>
+
+              <div class="inv-actions">
+                <button class="btn btn-primary" onclick="saveContract()">Save</button>
+                <button class="btn" onclick="copyConLink()">Copy Client Link</button>
+                <button class="btn" onclick="previewContract()">Preview</button>
+                <button class="btn btn-danger" onclick="deleteContract()">Delete</button>
               </div>
             </div>
           </div>
@@ -865,11 +976,11 @@ if (sessionStorage.getItem(AUTH_KEY)) {
 
 // ═══ INIT ═══
 async function init() {
-  await loadInvoices();
+  await Promise.all([loadInvoices(), loadContracts()]);
   renderDashboard();
   renderInvList();
+  renderConList();
   subscribeToChanges();
-  // Check hash for direct page nav
   if (window.location.hash) navigate(window.location.hash.slice(1));
 }
 
@@ -882,15 +993,16 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', settings: 'Settings' };
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') renderDashboard();
+  if (page === 'contracts') renderConList();
 }
 
 // ═══ REALTIME ═══
 function subscribeToChanges() {
-  sb.channel('invoices-admin')
+  sb.channel('admin-realtime')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'invoices' }, async () => {
       await loadInvoices();
       renderDashboard();
@@ -898,6 +1010,14 @@ function subscribeToChanges() {
       if (activeId) {
         const inv = invoices.find(i => i.id === activeId);
         if (inv) document.getElementById('fStatus').value = inv.status || 'unpaid';
+      }
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'contracts' }, async () => {
+      await loadContracts();
+      renderConList();
+      if (activeConId) {
+        const c = contracts.find(x => x.id === activeConId);
+        if (c) document.getElementById('cStatus').value = c.status || 'draft';
       }
     })
     .subscribe();
@@ -1141,6 +1261,202 @@ async function copyLink() {
 async function openPreview() {
   const inv = await getCurrentInvoice(); if (!inv) return;
   window.open(`../invoice.html?id=${inv.id}`, '_blank');
+}
+
+// ═══ CONTRACTS ═══
+let contracts = [];
+let activeConId = null;
+
+async function loadContracts() {
+  const { data, error } = await sb.from('contracts').select('*').order('number', { ascending: false });
+  if (error) { console.error(error); return; }
+  contracts = data || [];
+  document.getElementById('contractCount').textContent = contracts.length;
+}
+
+function renderConList() {
+  const el = document.getElementById('conList');
+  if (!contracts.length) { el.innerHTML = '<div class="empty-state">No contracts yet.</div>'; return; }
+  el.innerHTML = contracts.map(c => {
+    const statusColors = { draft: 'unpaid', sent: 'unpaid', signed: 'paid' };
+    return `<div class="inv-item ${c.id === activeConId ? 'active' : ''}" onclick="selectContract('${c.id}')">
+      <div class="inv-item-top">
+        <span class="inv-item-num"><span class="status-dot ${statusColors[c.status] || 'unpaid'}"></span>#${c.number || '—'}</span>
+        <span class="inv-item-amount" style="font-size:11px;font-family:var(--mono);color:var(--text-dim);">${(c.status || 'draft').toUpperCase()}</span>
+      </div>
+      <div class="inv-item-client">${c.client_company || c.client_name || 'No client'}</div>
+      <div class="inv-item-date">${c.title || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectContract(id) {
+  activeConId = id;
+  const c = contracts.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('conEmpty').style.display = 'none';
+  document.getElementById('conForm').style.display = 'block';
+  document.getElementById('cNumber').value = c.number || '';
+  document.getElementById('cDate').value = c.date || '';
+  document.getElementById('cStatus').value = c.status || 'draft';
+  document.getElementById('cTitle').value = c.title || '';
+  document.getElementById('cCompany').value = c.client_company || '';
+  document.getElementById('cClient').value = c.client_name || '';
+  document.getElementById('cClientEmail').value = c.client_email || '';
+  document.getElementById('conEditNumber').textContent = '#' + (c.number || '000');
+
+  const container = document.getElementById('conSections');
+  container.innerHTML = '';
+  (c.sections || []).forEach(s => addConSection(s));
+  if (!c.sections || !c.sections.length) addConSection();
+  renderConList();
+}
+
+async function newContract() {
+  const maxNum = contracts.reduce((m, c) => { const n = parseInt(c.number) || 0; return n > m ? n : m; }, 0);
+  const c = {
+    id: 'con_' + Date.now(),
+    number: String(maxNum + 1).padStart(3, '0'),
+    date: new Date().toISOString().split('T')[0],
+    status: 'draft',
+    title: '',
+    client_company: '',
+    client_name: '',
+    client_email: '',
+    sections: [],
+    signature_client: null,
+    signature_date: null
+  };
+  const { error } = await sb.from('contracts').insert(c);
+  if (error) { console.error(error); toast('Error creating contract'); return; }
+  contracts.unshift(c);
+  document.getElementById('contractCount').textContent = contracts.length;
+  selectContract(c.id);
+}
+
+function addConSection(data) {
+  const container = document.getElementById('conSections');
+  const div = document.createElement('div');
+  div.className = 'con-section';
+  div.innerHTML = `
+    <div class="con-section-header">
+      <input type="text" value="${data ? data.title : ''}" placeholder="Section Title">
+      <button class="btn-remove" onclick="this.closest('.con-section').remove();">&times;</button>
+    </div>
+    <textarea placeholder="Section content... Use <p>, <ul><li>, <strong> for formatting.">${data ? data.body : ''}</textarea>
+    <div class="section-hint">HTML supported: &lt;p&gt;, &lt;ul&gt;&lt;li&gt;, &lt;strong&gt;, &lt;br&gt;</div>
+  `;
+  container.appendChild(div);
+}
+
+async function saveContract() {
+  if (!activeConId) return;
+  let c = contracts.find(x => x.id === activeConId);
+  if (!c) return;
+  c.number = document.getElementById('cNumber').value;
+  c.date = document.getElementById('cDate').value;
+  c.status = document.getElementById('cStatus').value;
+  c.title = document.getElementById('cTitle').value;
+  c.client_company = document.getElementById('cCompany').value;
+  c.client_name = document.getElementById('cClient').value;
+  c.client_email = document.getElementById('cClientEmail').value;
+  c.sections = [];
+  document.querySelectorAll('.con-section').forEach(sec => {
+    c.sections.push({
+      title: sec.querySelector('input').value,
+      body: sec.querySelector('textarea').value
+    });
+  });
+  c.updated_at = new Date().toISOString();
+  document.getElementById('conEditNumber').textContent = '#' + c.number;
+  const { error } = await sb.from('contracts').upsert(c);
+  if (error) { console.error(error); toast('Error saving'); return; }
+  renderConList();
+  toast('Contract saved');
+}
+
+async function deleteContract() {
+  if (!activeConId || !confirm('Delete this contract?')) return;
+  const { error } = await sb.from('contracts').delete().eq('id', activeConId);
+  if (error) { console.error(error); toast('Error deleting'); return; }
+  contracts = contracts.filter(x => x.id !== activeConId);
+  activeConId = null;
+  document.getElementById('contractCount').textContent = contracts.length;
+  renderConList();
+  document.getElementById('conForm').style.display = 'none';
+  document.getElementById('conEmpty').style.display = 'block';
+  toast('Contract deleted');
+}
+
+async function getActiveContract() {
+  if (!activeConId) return null;
+  await saveContract();
+  return contracts.find(x => x.id === activeConId);
+}
+
+async function copyConLink() {
+  const c = await getActiveContract(); if (!c) return;
+  const link = `${window.location.origin}/contract.html?id=${c.id}`;
+  navigator.clipboard.writeText(link).then(() => toast('Contract link copied')).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Contract link copied');
+  });
+}
+
+async function previewContract() {
+  const c = await getActiveContract(); if (!c) return;
+  window.open(`../contract.html?id=${c.id}`, '_blank');
+}
+
+// DME Academy template
+function loadDMETemplate() {
+  const sections = [
+    { title: 'Scope of Services', body: `<p>Socia Visual ("Provider") will provide the following web design, development, and maintenance services to DME Academy ("Client"):</p>
+<ul>
+<li>Website performance optimization — image optimization, lazy loading, render-blocking resource cleanup, page weight reduction</li>
+<li>Accessibility & compliance improvements — WCAG 2.1 AA color contrast, alt text, landmark structure, keyboard navigation</li>
+<li>Security audit & remediation — removal of unauthorized third-party code, elimination of deprecated browser APIs and third-party cookie dependencies</li>
+<li>Code cleanup & best practices — resolution of Chrome DevTools warnings, CSS consolidation</li>
+<li>Design improvements & new page development</li>
+<li>Mobile responsiveness & cross-browser testing</li>
+<li>Ongoing maintenance, content updates, and support</li>
+</ul>` },
+    { title: 'Compensation', body: `<p><strong>Standard Rate:</strong> $65.00 per hour for all scheduled, planned work including:</p>
+<ul>
+<li>Site updates, fixes & content changes</li>
+<li>Performance & speed optimization</li>
+<li>Security audits & cleanup</li>
+<li>Design improvements & new pages</li>
+<li>Browser & device testing</li>
+<li>Ongoing maintenance & support</li>
+</ul>
+<p><strong>Rush Rate:</strong> $85.00 per hour for urgent and time-sensitive work, defined as:</p>
+<ul>
+<li>Any request requiring turnaround within 48 hours</li>
+<li>Same-day or next-day delivery</li>
+<li>Emergency fixes & hotfixes</li>
+<li>Work performed outside standard business hours (evenings, weekends, holidays)</li>
+<li>Event-driven deadlines</li>
+</ul>` },
+    { title: 'Billing & Payment', body: `<p>Invoices will be issued <strong>bi-weekly or monthly</strong>, per Client's preference. Each invoice will include a detailed breakdown of hours worked and tasks completed.</p>
+<p>Payment is due within <strong>14 days</strong> of invoice date. All work will be scoped and estimated upfront — no hidden fees or surprise invoices.</p>
+<p>If payment is not received within 30 days of the invoice date, Provider reserves the right to pause all work until the outstanding balance is resolved.</p>` },
+    { title: 'Communication & Availability', body: `<p>Provider will be available via email, text, or Client's preferred communication channel. Same-day responses are guaranteed during standard business hours.</p>
+<p>Provider is available for urgent and time-sensitive work around the clock, billed at the Rush Rate.</p>
+<p>All work will be discussed and aligned upon before implementation. If priorities shift or new requests arise, Provider and Client will align before changes are made.</p>` },
+    { title: 'Intellectual Property & Ownership', body: `<p>Upon full payment of all invoices, all deliverables, source files, and custom code produced under this agreement become the <strong>sole property of the Client</strong>. Provider retains no licensing rights or restrictions.</p>
+<p>Provider may reference the work in portfolio and marketing materials unless Client requests otherwise in writing.</p>` },
+    { title: 'Confidentiality', body: `<p>Both parties agree to keep confidential any proprietary information, business strategies, technical data, or other sensitive information shared during the course of this engagement. This obligation survives termination of this agreement.</p>` },
+    { title: 'Termination', body: `<p>Either party may terminate this agreement with <strong>14 days written notice</strong>. Upon termination:</p>
+<ul>
+<li>Client will pay for all work completed up to the termination date</li>
+<li>Provider will deliver all completed work and source files</li>
+<li>Any work in progress will be delivered in its current state</li>
+</ul>
+<p>There are no long-term contracts or commitment lock-ins. This is a flexible, ongoing working relationship.</p>` },
+    { title: 'Limitation of Liability', body: `<p>Provider's total liability under this agreement shall not exceed the total fees paid by Client in the three (3) months preceding the claim. Provider is not liable for any indirect, incidental, or consequential damages, including lost revenue or data.</p>` },
+    { title: 'Governing Law', body: `<p>This agreement shall be governed by and construed in accordance with the laws of the State of Texas. Any disputes arising under this agreement shall be resolved in the courts of Smith County, Texas.</p>` }
+  ];
+  return sections;
 }
 
 // ═══ CHANGE PASSWORD ═══

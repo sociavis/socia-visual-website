@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Agreement — Socia Visual</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Share Tech Mono'; src: url('fonts/share-tech-mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Chakra Petch', sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
+
+  .action-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .ab-btn {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    transition: all .2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ab-btn:hover { border-color: #333; }
+  .ab-btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .ab-btn-primary:hover { background: #333; }
+  .ab-btn-green { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .ab-btn-green:hover { background: #43a047; }
+
+  .signed-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: #4caf50;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .signed-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4caf50;
+  }
+
+  .contract-page {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 80px;
+  }
+
+  .contract-wrap {
+    background: #fff;
+    width: 100%;
+    max-width: 820px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .contract-header {
+    background: linear-gradient(135deg, #7dd3c0, #5bc4d4, #48b8d0);
+    padding: 48px 56px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .contract-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 1px;
+  }
+  .contract-header .subtitle {
+    font-size: 14px;
+    color: rgba(26,26,26,.7);
+    margin-top: 4px;
+  }
+  .header-logo svg { width: 140px; height: auto; }
+
+  .contract-body { padding: 40px 56px 48px; }
+
+  .contract-meta {
+    display: flex;
+    gap: 80px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .meta-item label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #999;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .meta-item span { font-size: 15px; font-weight: 600; }
+
+  .parties {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #eee;
+  }
+  .party-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .party-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+  .party-detail { font-size: 13px; color: #666; line-height: 1.5; }
+
+  .contract-section { margin-bottom: 32px; }
+  .contract-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .contract-section .section-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+  }
+  .contract-section .section-body p { margin-bottom: 12px; }
+  .contract-section .section-body ul {
+    margin: 8px 0 12px 20px;
+    list-style: disc;
+  }
+  .contract-section .section-body li {
+    margin-bottom: 4px;
+    line-height: 1.7;
+  }
+  .contract-section .section-body strong { color: #1a1a1a; }
+
+  /* Signature area */
+  .signature-area {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 2px solid #1a1a1a;
+  }
+  .signature-area h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+
+  .sig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .sig-block label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #999;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .sig-provider {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    padding: 12px 0;
+    border-bottom: 2px solid #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .sig-date {
+    font-size: 12px;
+    color: #999;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* Canvas signature */
+  .sig-canvas-wrap {
+    position: relative;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    background: #fafafa;
+    transition: border-color .2s;
+  }
+  .sig-canvas-wrap.active { border-color: #1a1a1a; }
+  .sig-canvas-wrap.signed { border-color: #4caf50; }
+  canvas#sigCanvas {
+    display: block;
+    width: 100%;
+    height: 100px;
+    cursor: crosshair;
+  }
+  .sig-canvas-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #bbb;
+    pointer-events: none;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .sig-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .sig-actions button {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    transition: all .15s;
+  }
+  .sig-actions button:hover { border-color: #333; }
+  .sig-actions .sign-btn { background: #4caf50; color: #fff; border-color: #4caf50; }
+  .sig-actions .sign-btn:hover { background: #43a047; }
+
+  /* Signed signature display */
+  .sig-display {
+    padding: 12px 0;
+    border-bottom: 2px solid #4caf50;
+    margin-bottom: 6px;
+  }
+  .sig-display img {
+    max-height: 80px;
+    display: block;
+  }
+
+  .not-found { text-align: center; padding: 100px 40px; font-size: 18px; color: #999; }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #1a1a1a; color: #fff;
+    font-family: 'Chakra Petch', sans-serif; font-size: 13px;
+    padding: 12px 20px; border-radius: 6px; z-index: 2000;
+    opacity: 0; transform: translateY(10px);
+    transition: all .25s ease; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    .contract-header { padding: 32px 24px; }
+    .contract-header h1 { font-size: 26px; }
+    .contract-body { padding: 24px; }
+    .parties { grid-template-columns: 1fr; }
+    .sig-grid { grid-template-columns: 1fr; }
+    .contract-meta { gap: 32px; }
+  }
+
+  @media print {
+    .action-bar { display: none; }
+    body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .contract-page { padding: 0; }
+    .contract-wrap { box-shadow: none; }
+    .contract-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .sig-actions { display: none; }
+    .sig-canvas-placeholder { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="action-bar" id="actionBar" style="display:none;">
+  <button class="ab-btn ab-btn-primary" onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download PDF
+  </button>
+  <span class="signed-badge" id="signedBadge" style="display:none;">SIGNED</span>
+</div>
+
+<div class="contract-page">
+  <div class="contract-wrap" id="contractView">
+    <div class="not-found" id="notFound"><p>Loading agreement...</p></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://yjmyqmfvtudhkkxarttw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqbXlxbWZ2dHVkaGtreGFydHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzAxMjQsImV4cCI6MjA5MDE0NjEyNH0.kOctH25mfqGAqnd3OCMmGiLto2TuSPt8IoFpKdjn-So';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentContract = null;
+let sigCanvas, sigCtx, drawing = false, hasSignature = false;
+
+(async function() {
+  const id = new URLSearchParams(window.location.search).get('id');
+  if (!id) { document.getElementById('notFound').innerHTML = '<p>Agreement not found.</p>'; return; }
+
+  const { data, error } = await sb.from('contracts').select('*').eq('id', id).single();
+  if (error || !data) { document.getElementById('notFound').innerHTML = '<p>Agreement not found.</p>'; return; }
+
+  currentContract = data;
+  document.title = `${data.title || 'Service Agreement'} — Socia Visual`;
+  document.getElementById('actionBar').style.display = 'flex';
+
+  if (data.status === 'signed') {
+    document.getElementById('signedBadge').style.display = 'flex';
+  }
+
+  renderContract(data);
+  if (data.status !== 'signed') initSignaturePad();
+})();
+
+function renderContract(c) {
+  const sections = (c.sections || []).map(s => `
+    <div class="contract-section">
+      <h2>${s.title}</h2>
+      <div class="section-body">${s.body}</div>
+    </div>
+  `).join('');
+
+  const isSigned = c.status === 'signed' && c.signature_client;
+
+  const clientSigHTML = isSigned
+    ? `<div class="sig-display"><img src="${c.signature_client}" alt="Client signature"></div>
+       <div class="sig-date">${c.signature_date || ''}</div>`
+    : `<div class="sig-canvas-wrap" id="sigWrap">
+         <canvas id="sigCanvas"></canvas>
+         <div class="sig-canvas-placeholder" id="sigPlaceholder">Sign here</div>
+       </div>
+       <div class="sig-actions">
+         <button onclick="clearSig()">Clear</button>
+         <button class="sign-btn" onclick="submitSignature()">Sign & Accept Agreement</button>
+       </div>`;
+
+  const fmtDate = c.date || '';
+
+  document.getElementById('contractView').innerHTML = `
+    <div class="contract-header">
+      <div>
+        <h1>SERVICE AGREEMENT</h1>
+        <div class="subtitle">${c.title || ''}</div>
+      </div>
+      <div class="header-logo">
+        <svg viewBox="0 0 2098.6 515.2" xmlns="http://www.w3.org/2000/svg" fill="#1a1a1a" stroke="none">
+          <polygon points="633.2 164 567 236.2 546.5 258.5 480.3 330.8 100.9 330.8 167.1 258.5 452.9 258.5 473.4 236.2 187.6 236.2 253.8 164 633.2 164"/>
+          <g><polygon points="1059 69.5 992.8 141.7 907.3 234.9 813.7 234.9 899.2 141.7 274.3 141.7 340.5 69.5 1059 69.5"/>
+          <polygon points="735.7 258.5 1190.5 258.5 1124.3 330.8 505.5 330.8 658.4 164 752.1 164 665.4 258.5 735.7 258.5"/>
+          <polygon points="1997.7 330.8 1562 330.8 1628.2 258.6 1837.9 258.6 1731.9 143 1707.6 143 1535.4 330.8 1146.8 330.8 1213 258.6 1279.3 258.6 1386.4 141.7 1111.7 141.7 1026.3 234.9 932.6 234.9 1084.3 69.5 1658.7 69.5 1592.4 141.7 1480.1 141.7 1478.9 143 1372.9 258.6 1508 258.6 1681.4 69.5 1758.1 69.5 1997.7 330.8"/></g>
+          <g><path d="M100.9,382.6h35.7l1.9,29.1,25.6-29.1h45.7l-61.1,63.8h-40.7l-7.1-63.8Z"/>
+          <path d="M495,446.4h-41.2l27-63.8h41.2l-27,63.8Z"/>
+          <path d="M767.2,446.4l5.5-12.9h47.7c.3,0,.5-.3.8-.8l.4-1.1c0-.1,0-.3,0-.5l-32.2-21.7c-.8-.6-1.4-1.3-1.7-2.2s-.5-2-.5-3.2c0-2,.3-4.2,1-6.5.7-2.3,1.4-4.3,2.2-5.9l1.7-3.9c.6-1.4,1.5-2.6,2.8-3.5,1.3-1,2.6-1.5,3.9-1.5h94l-5.5,12.9h-54.9c-.7,0-1.2.5-1.6,1.6-.1,1,0,1.6.4,1.6l38.3,26.1c.8.6,1.4,1.3,1.7,2.2s.5,1.9.5,3c0,1.6-.3,3.1-1,4.6l-3.2,7.7c-1.2,2.8-3.2,4.3-5.9,4.3h-94.7Z"/>
+          <path d="M1245.9,446.4h-97.3c-1.7,0-3.1-.4-4.1-1.2-1-.8-1.7-1.8-2.1-2.9-.4-1.1-.5-2.4-.4-3.7.1-1.4.4-2.6.9-3.8l22.1-52.1h41.2l-20.6,48.6c-.2.6-.3,1.1-.2,1.6.1.5.5.7,1.1.7h23.3l21.6-50.9h41.3l-27,63.8Z"/>
+          <path d="M1626,446.4h-41.3l9.3-21.8h-25.3l-9.3,21.8h-41.2l22-52c.5-1.1,1.3-2.4,2.3-3.7,1-1.4,2.2-2.7,3.6-3.8,1.4-1.2,2.9-2.2,4.6-3,1.7-.8,3.4-1.2,5.1-1.2h97.3l-27,63.8ZM1574,411.7h25.3l6.9-16.2h-23.3c-.7,0-1.2.2-1.7.7-.5.5-.9,1-1.2,1.6l-5.9,13.9Z"/>
+          <path d="M1898.1,446.4l27-63.8h41.2l-21.6,50.9h52.9l-5.5,12.9h-94.1Z"/></g>
+          <polyline points="642.7 141 368 141 282.6 234.2 187.6 236.2 340.6 68.8 610.3 68.8"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="contract-body">
+      <div class="contract-meta">
+        <div class="meta-item"><label>Agreement No</label><span>${c.number || ''}</span></div>
+        <div class="meta-item"><label>Effective Date</label><span>${fmtDate}</span></div>
+        <div class="meta-item"><label>Status</label><span>${(c.status || 'draft').toUpperCase()}</span></div>
+      </div>
+
+      <div class="parties">
+        <div>
+          <div class="party-label">Service Provider</div>
+          <div class="party-name">Socia Visual</div>
+          <div class="party-detail">Phillip Scott Socia<br>910 Hamilton Park Dr Unit A<br>Whitehouse, TX 75791<br>wwwsociaio@gmail.com</div>
+        </div>
+        <div>
+          <div class="party-label">Client</div>
+          <div class="party-name">${c.client_company || ''}</div>
+          <div class="party-detail">${c.client_name || ''}<br>${c.client_email || ''}</div>
+        </div>
+      </div>
+
+      ${sections}
+
+      <div class="signature-area">
+        <h2>Acceptance & Signature</h2>
+        <p style="font-size:13px;color:#666;margin-bottom:24px;line-height:1.7;">By signing below, both parties agree to the terms and conditions outlined in this Service Agreement. This agreement is binding upon execution by both parties.</p>
+        <div class="sig-grid">
+          <div class="sig-block">
+            <label>Service Provider</label>
+            <div class="sig-provider">Phillip Scott Socia</div>
+            <div class="sig-date">Socia Visual — ${fmtDate}</div>
+          </div>
+          <div class="sig-block">
+            <label>Client — ${c.client_name || c.client_company || ''}</label>
+            ${clientSigHTML}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Signature Pad ──
+function initSignaturePad() {
+  sigCanvas = document.getElementById('sigCanvas');
+  if (!sigCanvas) return;
+  sigCtx = sigCanvas.getContext('2d');
+
+  const rect = sigCanvas.getBoundingClientRect();
+  sigCanvas.width = rect.width * 2;
+  sigCanvas.height = rect.height * 2;
+  sigCtx.scale(2, 2);
+  sigCtx.strokeStyle = '#1a1a1a';
+  sigCtx.lineWidth = 2;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+
+  const getPos = (e) => {
+    const r = sigCanvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: t.clientX - r.left, y: t.clientY - r.top };
+  };
+
+  const start = (e) => { e.preventDefault(); drawing = true; const p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); };
+  const move = (e) => { if (!drawing) return; e.preventDefault(); const p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); hasSignature = true; document.getElementById('sigPlaceholder').style.display = 'none'; document.getElementById('sigWrap').classList.add('active'); };
+  const end = () => { drawing = false; };
+
+  sigCanvas.addEventListener('mousedown', start);
+  sigCanvas.addEventListener('mousemove', move);
+  sigCanvas.addEventListener('mouseup', end);
+  sigCanvas.addEventListener('mouseleave', end);
+  sigCanvas.addEventListener('touchstart', start, { passive: false });
+  sigCanvas.addEventListener('touchmove', move, { passive: false });
+  sigCanvas.addEventListener('touchend', end);
+}
+
+function clearSig() {
+  if (!sigCanvas) return;
+  sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+  hasSignature = false;
+  document.getElementById('sigPlaceholder').style.display = 'flex';
+  document.getElementById('sigWrap').classList.remove('active');
+}
+
+async function submitSignature() {
+  if (!hasSignature) { toast('Please sign above before submitting'); return; }
+  if (!currentContract) return;
+  if (!confirm('By clicking OK you confirm that you have read, understand, and agree to the terms of this Service Agreement.')) return;
+
+  const sigData = sigCanvas.toDataURL('image/png');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+
+  const { error } = await sb.from('contracts').update({
+    status: 'signed',
+    signature_client: sigData,
+    signature_date: dateStr,
+    signed_at: now.toISOString(),
+    updated_at: now.toISOString()
+  }).eq('id', currentContract.id);
+
+  if (error) { console.error(error); toast('Error saving signature'); return; }
+
+  currentContract.status = 'signed';
+  currentContract.signature_client = sigData;
+  currentContract.signature_date = dateStr;
+
+  document.getElementById('signedBadge').style.display = 'flex';
+  renderContract(currentContract);
+  toast('Agreement signed successfully');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

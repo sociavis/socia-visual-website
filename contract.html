@@ -125,13 +125,8 @@
   }
   .meta-item span { font-size: 15px; font-weight: 600; }
 
-  .parties {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    margin-bottom: 40px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid #eee;
+  .party-block {
+    margin-bottom: 28px;
   }
   .party-label {
     font-size: 10px;
@@ -291,7 +286,6 @@
     .contract-header { padding: 32px 24px; }
     .contract-header h1 { font-size: 26px; }
     .contract-body { padding: 24px; }
-    .parties { grid-template-columns: 1fr; }
     .sig-grid { grid-template-columns: 1fr; }
     .contract-meta { gap: 32px; }
     canvas#sigCanvas { height: 140px; }
@@ -407,17 +401,16 @@ function renderContract(c) {
         <div class="meta-item"><label>Status</label><span>${(c.status || 'draft').toUpperCase()}</span></div>
       </div>
 
-      <div class="parties">
-        <div>
-          <div class="party-label">Service Provider</div>
-          <div class="party-name">Socia Visual</div>
-          <div class="party-detail">Scott Socia<br>903-617-1527<br>scott@sociavisual.com</div>
-        </div>
-        <div>
-          <div class="party-label">Client</div>
-          <div class="party-name">${c.client_company || ''}</div>
-          <div class="party-detail">${c.client_name || ''}<br>${c.client_email || ''}</div>
-        </div>
+      <div class="party-block">
+        <div class="party-label">Service Provider</div>
+        <div class="party-name">Socia Visual</div>
+        <div class="party-detail">Scott Socia<br>903-617-1527<br>scott@sociavisual.com</div>
+      </div>
+
+      <div class="party-block" style="margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid #eee;">
+        <div class="party-label">Client</div>
+        <div class="party-name">${c.client_company || ''}</div>
+        <div class="party-detail">${c.client_name || ''}<br>${c.client_email || ''}</div>
       </div>
 
       ${sections}

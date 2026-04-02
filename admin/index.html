@@ -1314,24 +1314,25 @@ function selectContract(id) {
 
 async function newContract() {
   const maxNum = contracts.reduce((m, c) => { const n = parseInt(c.number) || 0; return n > m ? n : m; }, 0);
-  const c = {
-    id: 'con_' + Date.now(),
-    number: String(maxNum + 1).padStart(3, '0'),
-    date: new Date().toISOString().split('T')[0],
+  const id = 'con_' + Date.now();
+  const num = String(maxNum + 1).padStart(3, '0');
+  const today = new Date().toISOString().split('T')[0];
+  const row = {
+    id: id,
+    number: num,
+    date: today,
     status: 'draft',
     title: '',
     client_company: '',
     client_name: '',
     client_email: '',
-    sections: [],
-    signature_client: null,
-    signature_date: null
+    sections: '[]'
   };
-  const { error } = await sb.from('contracts').insert(c);
+  const { error } = await sb.from('contracts').insert(row);
   if (error) { console.error(error); toast('Error creating contract'); return; }
-  contracts.unshift(c);
+  contracts.unshift({ ...row, sections: [] });
   document.getElementById('contractCount').textContent = contracts.length;
-  selectContract(c.id);
+  selectContract(id);
 }
 
 function addConSection(data) {
@@ -1367,9 +1368,20 @@ async function saveContract() {
       body: sec.querySelector('textarea').value
     });
   });
-  c.updated_at = new Date().toISOString();
   document.getElementById('conEditNumber').textContent = '#' + c.number;
-  const { error } = await sb.from('contracts').upsert(c);
+  const row = {
+    id: c.id,
+    number: c.number,
+    title: c.title,
+    status: c.status,
+    date: c.date,
+    client_company: c.client_company,
+    client_name: c.client_name,
+    client_email: c.client_email,
+    sections: c.sections,
+    updated_at: new Date().toISOString()
+  };
+  const { error } = await sb.from('contracts').upsert(row);
   if (error) { console.error(error); toast('Error saving'); return; }
   renderConList();
   toast('Contract saved');

@@ -1407,11 +1407,23 @@ async function getActiveContract() {
 }
 
 async function copyConLink() {
-  const c = await getActiveContract(); if (!c) return;
-  const link = `${window.location.origin}/contract.html?id=${c.id}`;
-  navigator.clipboard.writeText(link).then(() => toast('Contract link copied')).catch(() => {
-    const ta = document.createElement('textarea'); ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('Contract link copied');
-  });
+  if (!activeConId) return;
+  await saveContract();
+  const link = `${window.location.origin}/contract.html?id=${activeConId}`;
+  try {
+    await navigator.clipboard.writeText(link);
+    toast('Contract link copied');
+  } catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = link;
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Contract link copied');
+  }
 }
 
 async function previewContract() {

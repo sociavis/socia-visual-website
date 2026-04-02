@@ -229,6 +229,7 @@
     width: 100%;
     height: 100px;
     cursor: crosshair;
+    touch-action: none;
   }
   .sig-canvas-placeholder {
     position: absolute;
@@ -293,6 +294,7 @@
     .parties { grid-template-columns: 1fr; }
     .sig-grid { grid-template-columns: 1fr; }
     .contract-meta { gap: 32px; }
+    canvas#sigCanvas { height: 140px; }
   }
 
   @media print {
@@ -426,11 +428,12 @@ function renderContract(c) {
         <div class="sig-grid">
           <div class="sig-block">
             <label>Service Provider</label>
-            <div class="sig-provider">Scott Socia</div>
+            <div class="sig-display"><img src="proposals/sociasig.png" alt="Scott Socia signature" style="max-height:70px;"></div>
+            <div style="font-size:14px;font-weight:600;margin-top:4px;">Scott Socia</div>
             <div class="sig-date">Socia Visual — ${fmtDate}</div>
           </div>
           <div class="sig-block">
-            <label>Client — ${c.client_name || c.client_company || ''}</label>
+            <label>Client — ${c.client_company || ''}</label>
             ${clientSigHTML}
           </div>
         </div>

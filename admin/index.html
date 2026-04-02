@@ -755,6 +755,13 @@
         <span class="nav-badge" id="contractCount">0</span>
       </div>
 
+      <div class="nav-section-label">Clients</div>
+      <div class="nav-item" onclick="navigate('partners')" data-page="partners">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>Partners</span>
+        <span class="nav-badge" id="partnerCount">0</span>
+      </div>
+
       <div class="nav-section-label">System</div>
       <div class="nav-item" onclick="navigate('settings')" data-page="settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -891,6 +898,53 @@
         </div>
       </div>
 
+      <!-- ── PARTNERS ── -->
+      <div class="page" id="page-partners">
+        <div class="invoices-layout">
+          <div class="inv-sidebar">
+            <div class="inv-sidebar-header">
+              <h3>All Partners</h3>
+              <button class="btn btn-primary btn-sm" onclick="newPartner()">+ New</button>
+            </div>
+            <div class="inv-list" id="partnerList"></div>
+          </div>
+          <div class="inv-editor" id="partnerEditor">
+            <div class="empty-state" id="partnerEmpty">
+              <p style="margin-bottom:6px;">No partner selected</p>
+              <p>Create a new partner or select one from the list.</p>
+            </div>
+            <div id="partnerForm" style="display:none;">
+              <div class="inv-editor-title">Partner <span id="partnerEditName" class="tag"></span></div>
+              <div class="form-row">
+                <div class="form-group"><label>Company Name</label><input type="text" id="pCompany" placeholder="DME Academy"></div>
+                <div class="form-group"><label>Slug</label><input type="text" id="pSlug" placeholder="dme-academy" style="font-family:var(--mono);"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Contact Name</label><input type="text" id="pContact" placeholder="Greg Birgfeld"></div>
+                <div class="form-group"><label>Contact Email</label><input type="email" id="pEmail" placeholder="greg@dmeacademy.com"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Portal Password</label><input type="text" id="pPassword" placeholder="Set client password"></div>
+                <div class="form-group"><label>Status</label>
+                  <select id="pStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Proposal URL</label><input type="text" id="pProposal" placeholder="https://dme.sociavisual.com/proposal"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Notes</label><textarea id="pNotes" placeholder="Internal notes about this client..."></textarea></div>
+              </div>
+              <div class="inv-actions">
+                <button class="btn btn-primary" onclick="savePartner()">Save</button>
+                <button class="btn" onclick="copyPortalLink()">Copy Portal Link</button>
+                <button class="btn btn-danger" onclick="deletePartner()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── SETTINGS ── -->
       <div class="page" id="page-settings">
         <div class="settings-content">
@@ -976,10 +1030,11 @@ if (sessionStorage.getItem(AUTH_KEY)) {
 
 // ═══ INIT ═══
 async function init() {
-  await Promise.all([loadInvoices(), loadContracts()]);
+  await Promise.all([loadInvoices(), loadContracts(), loadPartners()]);
   renderDashboard();
   renderInvList();
   renderConList();
+  renderPartnerList();
   subscribeToChanges();
   if (window.location.hash) navigate(window.location.hash.slice(1));
 }
@@ -993,7 +1048,7 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', settings: 'Settings' };
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', partners: 'Partners', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') renderDashboard();
@@ -1019,6 +1074,10 @@ function subscribeToChanges() {
         const c = contracts.find(x => x.id === activeConId);
         if (c) document.getElementById('cStatus').value = c.status || 'draft';
       }
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'partners' }, async () => {
+      await loadPartners();
+      renderPartnerList();
     })
     .subscribe();
 }
@@ -1481,6 +1540,129 @@ function loadDMETemplate() {
     { title: 'Governing Law', body: `<p>This agreement shall be governed by and construed in accordance with the laws of the State of Texas. Any disputes arising under this agreement shall be resolved in the courts of Smith County, Texas.</p>` }
   ];
   return sections;
+}
+
+// ═══ PARTNERS ═══
+let partners = [];
+let activePartnerId = null;
+
+async function loadPartners() {
+  const { data, error } = await sb.from('partners').select('*').order('company_name');
+  if (error) { console.error(error); return; }
+  partners = data || [];
+  document.getElementById('partnerCount').textContent = partners.length;
+}
+
+function renderPartnerList() {
+  const el = document.getElementById('partnerList');
+  if (!partners.length) { el.innerHTML = '<div class="empty-state">No partners yet.</div>'; return; }
+  el.innerHTML = partners.map(p => {
+    const statusDot = p.status === 'active' ? 'paid' : 'unpaid';
+    return `<div class="inv-item ${p.id === activePartnerId ? 'active' : ''}" onclick="selectPartner('${p.id}')">
+      <div class="inv-item-top">
+        <span class="inv-item-num"><span class="status-dot ${statusDot}"></span>${p.company_name || '—'}</span>
+      </div>
+      <div class="inv-item-client">${p.contact_name || ''}</div>
+      <div class="inv-item-date">${p.slug || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectPartner(id) {
+  activePartnerId = id;
+  const p = partners.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('partnerEmpty').style.display = 'none';
+  document.getElementById('partnerForm').style.display = 'block';
+  document.getElementById('pCompany').value = p.company_name || '';
+  document.getElementById('pSlug').value = p.slug || '';
+  document.getElementById('pContact').value = p.contact_name || '';
+  document.getElementById('pEmail').value = p.contact_email || '';
+  document.getElementById('pPassword').value = p.portal_password || '';
+  document.getElementById('pStatus').value = p.status || 'active';
+  document.getElementById('pProposal').value = p.proposal_url || '';
+  document.getElementById('pNotes').value = p.notes || '';
+  document.getElementById('partnerEditName').textContent = p.company_name || '';
+  renderPartnerList();
+}
+
+function generateSlug(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Auto-generate slug when company name changes
+document.addEventListener('DOMContentLoaded', () => {
+  const companyInput = document.getElementById('pCompany');
+  if (companyInput) {
+    companyInput.addEventListener('input', () => {
+      const slugInput = document.getElementById('pSlug');
+      if (!slugInput.dataset.manual) slugInput.value = generateSlug(companyInput.value);
+    });
+    document.getElementById('pSlug').addEventListener('input', function() { this.dataset.manual = '1'; });
+  }
+});
+
+async function newPartner() {
+  const p = {
+    id: 'partner_' + Date.now(),
+    slug: '',
+    company_name: '',
+    contact_name: '',
+    contact_email: '',
+    portal_password: '',
+    proposal_url: '',
+    status: 'active',
+    notes: ''
+  };
+  const { error } = await sb.from('partners').insert(p);
+  if (error) { console.error(error); toast('Error creating partner'); return; }
+  partners.push(p);
+  document.getElementById('partnerCount').textContent = partners.length;
+  selectPartner(p.id);
+}
+
+async function savePartner() {
+  if (!activePartnerId) return;
+  let p = partners.find(x => x.id === activePartnerId);
+  if (!p) return;
+  p.company_name = document.getElementById('pCompany').value;
+  p.slug = document.getElementById('pSlug').value;
+  p.contact_name = document.getElementById('pContact').value;
+  p.contact_email = document.getElementById('pEmail').value;
+  p.portal_password = document.getElementById('pPassword').value;
+  p.status = document.getElementById('pStatus').value;
+  p.proposal_url = document.getElementById('pProposal').value;
+  p.notes = document.getElementById('pNotes').value;
+  document.getElementById('partnerEditName').textContent = p.company_name;
+
+  const row = {
+    id: p.id, slug: p.slug, company_name: p.company_name, contact_name: p.contact_name,
+    contact_email: p.contact_email, portal_password: p.portal_password, proposal_url: p.proposal_url,
+    status: p.status, notes: p.notes, updated_at: new Date().toISOString()
+  };
+  const { error } = await sb.from('partners').upsert(row);
+  if (error) { console.error(error); toast('Error saving'); return; }
+  renderPartnerList();
+  toast('Partner saved');
+}
+
+async function deletePartner() {
+  if (!activePartnerId || !confirm('Delete this partner?')) return;
+  const { error } = await sb.from('partners').delete().eq('id', activePartnerId);
+  if (error) { console.error(error); toast('Error deleting'); return; }
+  partners = partners.filter(x => x.id !== activePartnerId);
+  activePartnerId = null;
+  document.getElementById('partnerCount').textContent = partners.length;
+  renderPartnerList();
+  document.getElementById('partnerForm').style.display = 'none';
+  document.getElementById('partnerEmpty').style.display = 'block';
+  toast('Partner deleted');
+}
+
+function copyPortalLink() {
+  const link = `${window.location.origin}/portal/`;
+  copyToClipboard(link);
+  toast('Portal link copied');
 }
 
 // ═══ CHANGE PASSWORD ═══

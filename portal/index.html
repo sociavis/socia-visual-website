@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — Socia Visual</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  @font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Share Tech Mono'; src: url('../fonts/share-tech-mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050505;
+    --surface: #0a0a0a;
+    --surface-2: #111;
+    --surface-3: #1a1a1a;
+    --border: #222;
+    --border-light: #2a2a2a;
+    --text: #e8e8e8;
+    --text-dim: #777;
+    --text-muted: #555;
+    --accent: #a8ff00;
+    --accent-2: #d4ff00;
+    --accent-dim: rgba(168,255,0,.1);
+    --green: #4caf50;
+    --yellow: #ffb428;
+    --red: #ff4444;
+    --font: 'Chakra Petch', sans-serif;
+    --mono: 'Share Tech Mono', monospace;
+  }
+
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; overflow: hidden; }
+
+  /* ═══ AUTH ═══ */
+  .auth-gate {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; flex-direction: column; gap: 24px;
+  }
+  .auth-gate.hidden { display: none; }
+  .auth-logo svg { width: 180px; height: auto; margin-bottom: 8px; }
+  .auth-gate h1 { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); font-family: var(--mono); }
+  .auth-input-wrap { display: flex; gap: 8px; }
+  .auth-input-wrap input {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+    font-family: var(--mono); font-size: 16px; padding: 12px 20px; border-radius: 6px;
+    width: 280px; outline: none; transition: border-color .2s;
+  }
+  .auth-input-wrap input:focus { border-color: var(--accent); }
+  .auth-input-wrap button {
+    background: var(--accent); color: #050505; border: none; font-family: var(--font);
+    font-weight: 700; font-size: 14px; padding: 12px 28px; border-radius: 6px;
+    cursor: pointer; letter-spacing: 1px; transition: background .2s;
+  }
+  .auth-input-wrap button:hover { background: var(--accent-2); }
+  .auth-error { color: var(--red); font-size: 13px; font-family: var(--mono); min-height: 18px; }
+
+  /* ═══ APP ═══ */
+  .app { display: none; height: 100vh; }
+  .app.visible { display: flex; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px; min-width: 240px; background: var(--surface);
+    border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh;
+  }
+  .sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-brand svg { width: 110px; height: auto; }
+  .sidebar-brand .brand-sub { font-size: 10px; font-family: var(--mono); color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; margin-top: 6px; }
+
+  .sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+  .nav-section-label { font-size: 10px; font-family: var(--mono); color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; padding: 12px 12px 6px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px;
+    cursor: pointer; transition: all .15s; font-size: 13px; font-weight: 500;
+    color: var(--text-dim); border: 1px solid transparent; margin-bottom: 2px;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .nav-item.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(168,255,0,.15); }
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .nav-badge { margin-left: auto; font-size: 10px; font-family: var(--mono); background: var(--surface-3); color: var(--text-dim); padding: 2px 7px; border-radius: 10px; min-width: 22px; text-align: center; }
+  .nav-item.active .nav-badge { background: rgba(168,255,0,.15); color: var(--accent); }
+
+  .sidebar-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .sidebar-footer .user-name { font-size: 12px; font-family: var(--mono); color: var(--text-dim); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sidebar-footer button { background: none; border: none; color: var(--text-muted); font-family: var(--mono); font-size: 11px; cursor: pointer; transition: color .15s; letter-spacing: 1px; }
+  .sidebar-footer button:hover { color: var(--red); }
+
+  /* Main */
+  .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; border-bottom: 1px solid var(--border); background: var(--surface); min-height: 52px; }
+  .topbar-title { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
+  .page-area { flex: 1; overflow-y: auto; overflow-x: hidden; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ═══ DASHBOARD ═══ */
+  .welcome { padding: 28px 28px 0; }
+  .welcome h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .welcome p { font-size: 13px; color: var(--text-dim); }
+
+  .dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; padding: 20px 28px; }
+  .stat-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; transition: border-color .2s; }
+  .stat-card:hover { border-color: var(--border-light); }
+  .stat-card .stat-label { font-size: 10px; font-family: var(--mono); color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .stat-card .stat-value { font-size: 28px; font-weight: 700; font-family: var(--mono); line-height: 1; }
+  .stat-card .stat-value.accent { color: var(--accent); }
+  .stat-card .stat-value.green { color: var(--green); }
+  .stat-card .stat-value.yellow { color: var(--yellow); }
+  .stat-card .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 5px; font-family: var(--mono); }
+
+  .section-heading { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); padding: 8px 28px 12px; }
+
+  .data-table { width: calc(100% - 56px); margin: 0 28px 28px; border-collapse: collapse; background: var(--surface-2); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .data-table th { font-size: 10px; font-family: var(--mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; padding: 11px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { font-size: 13px; padding: 11px 16px; border-bottom: 1px solid var(--border); color: var(--text-dim); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface-3); }
+  .data-table .mono { font-family: var(--mono); }
+  .data-table .accent { color: var(--accent); }
+  .data-table tr { cursor: pointer; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; font-family: var(--mono); letter-spacing: .5px; text-transform: uppercase; }
+  .badge-paid { background: rgba(76,175,80,.15); color: var(--green); }
+  .badge-unpaid { background: rgba(255,180,40,.15); color: var(--yellow); }
+  .badge-overdue { background: rgba(255,68,68,.15); color: var(--red); }
+  .badge-signed { background: rgba(76,175,80,.15); color: var(--green); }
+  .badge-draft { background: rgba(255,255,255,.06); color: var(--text-muted); }
+  .badge-sent { background: rgba(255,180,40,.15); color: var(--yellow); }
+
+  /* ═══ LIST PAGES ═══ */
+  .list-page { padding: 24px 28px; }
+  .list-card {
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 8px; cursor: pointer; transition: all .15s;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .list-card:hover { border-color: var(--border-light); background: var(--surface-3); }
+  .list-card-left { display: flex; flex-direction: column; gap: 3px; }
+  .list-card-title { font-size: 14px; font-weight: 600; }
+  .list-card-title .num { font-family: var(--mono); color: var(--accent); margin-right: 8px; }
+  .list-card-sub { font-size: 12px; color: var(--text-muted); font-family: var(--mono); }
+  .list-card-right { display: flex; align-items: center; gap: 14px; }
+  .list-card-amount { font-family: var(--mono); font-size: 15px; font-weight: 700; }
+
+  /* ═══ PROPOSAL PAGE ═══ */
+  .proposal-card {
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 32px; margin: 24px 28px; max-width: 500px;
+  }
+  .proposal-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .proposal-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; line-height: 1.6; }
+  .proposal-card .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent); color: #050505; border: none; font-family: var(--font);
+    font-weight: 700; font-size: 13px; padding: 10px 22px; border-radius: 5px;
+    cursor: pointer; letter-spacing: .5px; transition: background .2s; text-decoration: none;
+  }
+  .proposal-card .btn:hover { background: var(--accent-2); }
+
+  .empty-state { padding: 60px 28px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface-3); border: 1px solid var(--accent); color: var(--text); font-family: var(--font); font-size: 13px; padding: 12px 20px; border-radius: 6px; z-index: 2000; opacity: 0; transform: translateY(10px); transition: all .25s ease; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    .sidebar { width: 56px; min-width: 56px; }
+    .sidebar-brand .brand-sub, .nav-item span, .nav-badge, .sidebar-footer .user-name { display: none; }
+    .sidebar-brand { padding: 16px; text-align: center; }
+    .sidebar-brand svg { width: 24px; }
+    .nav-item { justify-content: center; padding: 10px; }
+  }
+
+  @media (max-width: 700px) {
+    .dash-grid { grid-template-columns: repeat(2, 1fr); padding: 16px; }
+    .data-table { width: calc(100% - 32px); margin: 0 16px 16px; }
+    .list-page { padding: 16px; }
+    .list-card { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .list-card-right { width: 100%; justify-content: space-between; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Auth -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-logo">
+    <svg viewBox="0 0 2098.6 515.2" xmlns="http://www.w3.org/2000/svg" fill="#a8ff00" stroke="none">
+      <polygon points="633.2 164 567 236.2 546.5 258.5 480.3 330.8 100.9 330.8 167.1 258.5 452.9 258.5 473.4 236.2 187.6 236.2 253.8 164 633.2 164"/>
+      <g><polygon points="1059 69.5 992.8 141.7 907.3 234.9 813.7 234.9 899.2 141.7 274.3 141.7 340.5 69.5 1059 69.5"/><polygon points="735.7 258.5 1190.5 258.5 1124.3 330.8 505.5 330.8 658.4 164 752.1 164 665.4 258.5 735.7 258.5"/><polygon points="1997.7 330.8 1562 330.8 1628.2 258.6 1837.9 258.6 1731.9 143 1707.6 143 1535.4 330.8 1146.8 330.8 1213 258.6 1279.3 258.6 1386.4 141.7 1111.7 141.7 1026.3 234.9 932.6 234.9 1084.3 69.5 1658.7 69.5 1592.4 141.7 1480.1 141.7 1478.9 143 1372.9 258.6 1508 258.6 1681.4 69.5 1758.1 69.5 1997.7 330.8"/></g>
+      <g><path d="M100.9,382.6h35.7l1.9,29.1,25.6-29.1h45.7l-61.1,63.8h-40.7l-7.1-63.8Z"/><path d="M495,446.4h-41.2l27-63.8h41.2l-27,63.8Z"/><path d="M767.2,446.4l5.5-12.9h47.7c.3,0,.5-.3.8-.8l.4-1.1c0-.1,0-.3,0-.5l-32.2-21.7c-.8-.6-1.4-1.3-1.7-2.2s-.5-2-.5-3.2c0-2,.3-4.2,1-6.5.7-2.3,1.4-4.3,2.2-5.9l1.7-3.9c.6-1.4,1.5-2.6,2.8-3.5,1.3-1,2.6-1.5,3.9-1.5h94l-5.5,12.9h-54.9c-.7,0-1.2.5-1.6,1.6-.1,1,0,1.6.4,1.6l38.3,26.1c.8.6,1.4,1.3,1.7,2.2s.5,1.9.5,3c0,1.6-.3,3.1-1,4.6l-3.2,7.7c-1.2,2.8-3.2,4.3-5.9,4.3h-94.7Z"/><path d="M1245.9,446.4h-97.3c-1.7,0-3.1-.4-4.1-1.2-1-.8-1.7-1.8-2.1-2.9-.4-1.1-.5-2.4-.4-3.7.1-1.4.4-2.6.9-3.8l22.1-52.1h41.2l-20.6,48.6c-.2.6-.3,1.1-.2,1.6.1.5.5.7,1.1.7h23.3l21.6-50.9h41.3l-27,63.8Z"/><path d="M1626,446.4h-41.3l9.3-21.8h-25.3l-9.3,21.8h-41.2l22-52c.5-1.1,1.3-2.4,2.3-3.7,1-1.4,2.2-2.7,3.6-3.8,1.4-1.2,2.9-2.2,4.6-3,1.7-.8,3.4-1.2,5.1-1.2h97.3l-27,63.8ZM1574,411.7h25.3l6.9-16.2h-23.3c-.7,0-1.2.2-1.7.7-.5.5-.9,1-1.2,1.6l-5.9,13.9Z"/><path d="M1898.1,446.4l27-63.8h41.2l-21.6,50.9h52.9l-5.5,12.9h-94.1Z"/></g>
+      <polyline points="642.7 141 368 141 282.6 234.2 187.6 236.2 340.6 68.8 610.3 68.8"/>
+    </svg>
+  </div>
+  <h1>Client Portal</h1>
+  <div class="auth-input-wrap">
+    <input type="password" id="authPass" placeholder="Password" autofocus>
+    <button onclick="authenticate()">Enter</button>
+  </div>
+  <div class="auth-error" id="authError"></div>
+</div>
+
+<!-- App -->
+<div class="app" id="app">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg" fill="#a8ff00" stroke="none">
+        <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+        <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+        <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+      </svg>
+      <div class="brand-sub">Client Portal</div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" onclick="navigate('dashboard')" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboard</span>
+      </div>
+
+      <div class="nav-section-label">Documents</div>
+      <div class="nav-item" onclick="navigate('invoices')" data-page="invoices">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Invoices</span>
+        <span class="nav-badge" id="invCount">0</span>
+      </div>
+      <div class="nav-item" onclick="navigate('contracts')" data-page="contracts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Contracts</span>
+        <span class="nav-badge" id="conCount">0</span>
+      </div>
+      <div class="nav-item" onclick="navigate('proposal')" data-page="proposal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        <span>Proposal</span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <span class="user-name" id="footerName"></span>
+      <button onclick="logout()">LOGOUT</button>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title" id="pageTitle">Dashboard</div>
+    </div>
+
+    <div class="page-area">
+
+      <!-- Dashboard -->
+      <div class="page active" id="page-dashboard">
+        <div class="welcome" id="welcome"></div>
+        <div class="dash-grid" id="dashStats"></div>
+        <div class="section-heading">Recent Invoices</div>
+        <table class="data-table" id="recentTable">
+          <thead><tr><th>Invoice</th><th>Period</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody id="recentBody"></tbody>
+        </table>
+        <div class="section-heading">Contracts</div>
+        <table class="data-table" id="conTable">
+          <thead><tr><th>Contract</th><th>Title</th><th>Status</th></tr></thead>
+          <tbody id="conBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Invoices -->
+      <div class="page" id="page-invoices">
+        <div class="list-page" id="invListPage"></div>
+      </div>
+
+      <!-- Contracts -->
+      <div class="page" id="page-contracts">
+        <div class="list-page" id="conListPage"></div>
+      </div>
+
+      <!-- Proposal -->
+      <div class="page" id="page-proposal">
+        <div id="proposalContent"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://yjmyqmfvtudhkkxarttw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqbXlxbWZ2dHVkaGtreGFydHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzAxMjQsImV4cCI6MjA5MDE0NjEyNH0.kOctH25mfqGAqnd3OCMmGiLto2TuSPt8IoFpKdjn-So';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SESSION_KEY = 'sv_portal_auth';
+
+let currentClient = null;
+let invoices = [];
+let contracts = [];
+
+// ═══ AUTH ═══
+async function authenticate() {
+  const btn = document.querySelector('.auth-input-wrap button');
+  const pass = document.getElementById('authPass').value;
+  if (!pass) return;
+
+  btn.textContent = '...';
+  const { data, error } = await sb.from('partners').select('*').eq('portal_password', pass).eq('status', 'active').single();
+  btn.textContent = 'Enter';
+
+  if (error || !data) {
+    document.getElementById('authError').textContent = 'Invalid password';
+    document.getElementById('authPass').value = '';
+    return;
+  }
+
+  currentClient = data;
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify({ id: data.id, company_name: data.company_name, contact_name: data.contact_name, proposal_url: data.proposal_url }));
+  document.getElementById('authGate').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+  init();
+}
+
+document.getElementById('authPass').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
+
+function logout() { sessionStorage.removeItem(SESSION_KEY); location.reload(); }
+
+// Auto-login
+const saved = sessionStorage.getItem(SESSION_KEY);
+if (saved) {
+  try {
+    currentClient = JSON.parse(saved);
+    document.getElementById('authGate').classList.add('hidden');
+    document.getElementById('app').classList.add('visible');
+    document.addEventListener('DOMContentLoaded', init);
+  } catch(e) { sessionStorage.removeItem(SESSION_KEY); }
+} else {
+  document.addEventListener('DOMContentLoaded', () => document.getElementById('authPass').focus());
+}
+
+// ═══ INIT ═══
+async function init() {
+  document.getElementById('footerName').textContent = currentClient.company_name || '';
+  document.title = `${currentClient.company_name} — Socia Visual Portal`;
+
+  await Promise.all([loadInvoices(), loadContracts()]);
+  renderDashboard();
+  renderInvoices();
+  renderContracts();
+  renderProposal();
+  subscribeToChanges();
+
+  if (window.location.hash) navigate(window.location.hash.slice(1));
+}
+
+// ═══ NAV ═══
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  const nav = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (target) target.classList.add('active');
+  if (nav) nav.classList.add('active');
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', proposal: 'Proposal' };
+  document.getElementById('pageTitle').textContent = titles[page] || page;
+  window.location.hash = page;
+}
+
+// ═══ DATA ═══
+async function loadInvoices() {
+  const { data } = await sb.from('invoices').select('*').eq('company_name', currentClient.company_name).order('number', { ascending: false });
+  invoices = data || [];
+  document.getElementById('invCount').textContent = invoices.length;
+}
+
+async function loadContracts() {
+  const { data } = await sb.from('contracts').select('*').eq('client_company', currentClient.company_name).order('number', { ascending: false });
+  contracts = data || [];
+  document.getElementById('conCount').textContent = contracts.length;
+}
+
+function subscribeToChanges() {
+  sb.channel('portal-realtime')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'invoices' }, async () => { await loadInvoices(); renderDashboard(); renderInvoices(); })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'contracts' }, async () => { await loadContracts(); renderDashboard(); renderContracts(); })
+    .subscribe();
+}
+
+// ═══ HELPERS ═══
+const fmt = n => '$' + Number(n).toLocaleString('en-US');
+function invTotal(inv) { return (inv.items || []).reduce((s, i) => s + (i.qty || 0) * (i.price || 0), 0); }
+
+// ═══ DASHBOARD ═══
+function renderDashboard() {
+  const name = currentClient.contact_name || currentClient.company_name || 'there';
+  document.getElementById('welcome').innerHTML = `<h2>Welcome, ${name}</h2><p>Here's an overview of your account with Socia Visual.</p>`;
+
+  const totalBilled = invoices.reduce((s, i) => s + invTotal(i), 0);
+  const paid = invoices.filter(i => i.status === 'paid');
+  const paidTotal = paid.reduce((s, i) => s + invTotal(i), 0);
+  const unpaid = invoices.filter(i => i.status !== 'paid');
+  const unpaidTotal = unpaid.reduce((s, i) => s + invTotal(i), 0);
+  const signedCons = contracts.filter(c => c.status === 'signed').length;
+
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total Billed</div><div class="stat-value accent">${fmt(totalBilled)}</div><div class="stat-sub">${invoices.length} invoice${invoices.length !== 1 ? 's' : ''}</div></div>
+    <div class="stat-card"><div class="stat-label">Paid</div><div class="stat-value green">${fmt(paidTotal)}</div><div class="stat-sub">${paid.length} paid</div></div>
+    <div class="stat-card"><div class="stat-label">Outstanding</div><div class="stat-value yellow">${fmt(unpaidTotal)}</div><div class="stat-sub">${unpaid.length} remaining</div></div>
+    <div class="stat-card"><div class="stat-label">Contracts</div><div class="stat-value">${contracts.length}</div><div class="stat-sub">${signedCons} signed</div></div>
+  `;
+
+  // Recent invoices
+  const recent = invoices.slice(0, 5);
+  document.getElementById('recentBody').innerHTML = recent.length ? recent.map(inv => {
+    const badge = `<span class="badge badge-${inv.status || 'unpaid'}">${inv.status || 'unpaid'}</span>`;
+    return `<tr onclick="window.open('/invoice.html?id=${inv.id}','_blank')"><td class="mono accent">#${inv.number}</td><td>${inv.period || ''}</td><td class="mono">${fmt(invTotal(inv))}</td><td>${badge}</td></tr>`;
+  }).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px;">No invoices yet</td></tr>';
+
+  // Contracts
+  document.getElementById('conBody').innerHTML = contracts.length ? contracts.map(c => {
+    const badge = `<span class="badge badge-${c.status || 'draft'}">${c.status || 'draft'}</span>`;
+    return `<tr onclick="window.open('/contract.html?id=${c.id}','_blank')"><td class="mono accent">#${c.number}</td><td>${c.title || ''}</td><td>${badge}</td></tr>`;
+  }).join('') : '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px;">No contracts yet</td></tr>';
+}
+
+// ═══ INVOICES LIST ═══
+function renderInvoices() {
+  const el = document.getElementById('invListPage');
+  if (!invoices.length) { el.innerHTML = '<div class="empty-state">No invoices yet.</div>'; return; }
+  el.innerHTML = invoices.map(inv => {
+    const badge = `<span class="badge badge-${inv.status || 'unpaid'}">${inv.status || 'unpaid'}</span>`;
+    const total = invTotal(inv);
+    return `<div class="list-card" onclick="window.open('/invoice.html?id=${inv.id}','_blank')">
+      <div class="list-card-left">
+        <div class="list-card-title"><span class="num">#${inv.number}</span>${inv.period || ''}</div>
+        <div class="list-card-sub">${inv.date || ''}</div>
+      </div>
+      <div class="list-card-right">
+        <div class="list-card-amount">${fmt(total)}</div>
+        ${badge}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ CONTRACTS LIST ═══
+function renderContracts() {
+  const el = document.getElementById('conListPage');
+  if (!contracts.length) { el.innerHTML = '<div class="empty-state">No contracts yet.</div>'; return; }
+  el.innerHTML = contracts.map(c => {
+    const badge = `<span class="badge badge-${c.status || 'draft'}">${c.status || 'draft'}</span>`;
+    return `<div class="list-card" onclick="window.open('/contract.html?id=${c.id}','_blank')">
+      <div class="list-card-left">
+        <div class="list-card-title"><span class="num">#${c.number}</span>${c.title || ''}</div>
+        <div class="list-card-sub">${c.date || ''}</div>
+      </div>
+      <div class="list-card-right">
+        ${badge}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ PROPOSAL ═══
+function renderProposal() {
+  const url = currentClient.proposal_url;
+  const el = document.getElementById('proposalContent');
+  if (!url) {
+    el.innerHTML = '<div class="empty-state">No proposal available yet.</div>';
+    return;
+  }
+  el.innerHTML = `<div class="proposal-card">
+    <h3>Your Proposal</h3>
+    <p>Review the full project proposal, scope of work, and deliverables outlined for ${currentClient.company_name}.</p>
+    <a href="${url}" target="_blank" class="btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      View Proposal
+    </a>
+  </div>`;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2400);
+}
+</script>
+</body>
+</html>

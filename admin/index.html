@@ -1239,11 +1239,15 @@ function renderDashboard() {
   const unpaidTotal = [...unpaid, ...overdue].reduce((s, inv) => s + (inv.items || []).reduce((a, i) => a + i.qty * i.price, 0), 0);
   const fmt = n => '$' + n.toLocaleString('en-US');
 
+  const activeProj = allProjects.filter(p => p.status === 'active').length;
+  const totalProj = allProjects.length;
+
   document.getElementById('dashStats').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Total Invoices</div><div class="stat-value">${invoices.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Total Billed</div><div class="stat-value accent">${fmt(total)}</div></div>
+    <div class="stat-card"><div class="stat-label">Total Billed</div><div class="stat-value accent">${fmt(total)}</div><div class="stat-sub">${invoices.length} invoices</div></div>
     <div class="stat-card"><div class="stat-label">Collected</div><div class="stat-value green">${fmt(paidTotal)}</div><div class="stat-sub">${paid.length} paid</div></div>
     <div class="stat-card"><div class="stat-label">Outstanding</div><div class="stat-value yellow">${fmt(unpaidTotal)}</div><div class="stat-sub">${unpaid.length + overdue.length} remaining</div></div>
+    <div class="stat-card"><div class="stat-label">Active Projects</div><div class="stat-value">${activeProj}</div><div class="stat-sub">${totalProj} total</div></div>
+    <div class="stat-card"><div class="stat-label">Partners</div><div class="stat-value">${partners.length}</div></div>
     ${overdue.length ? `<div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-value red">${overdue.length}</div></div>` : ''}
   `;
 
@@ -1904,9 +1908,13 @@ function renderTasksSidebar() {
     const checkClass = t.status === 'done' ? 'done' : t.status === 'in_progress' ? 'in_progress' : t.status === 'review' ? 'review' : '';
     const titleClass = t.status === 'done' ? 'done' : '';
     const due = t.due_date ? new Date(t.due_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+    const priColors = { urgent: 'background:rgba(255,68,68,.15);color:var(--red);', high: 'background:rgba(255,180,40,.15);color:var(--yellow);', med: 'background:rgba(78,168,222,.12);color:#4ea8de;', low: 'background:rgba(255,255,255,.04);color:var(--text-muted);' };
+    const priStyle = priColors[t.priority] || priColors.med;
+    const priLabel = t.priority ? t.priority.toUpperCase() : '';
     return `<div class="task-sb-item" onclick="cycleTaskStatus('${t.id}')">
       <div class="task-sb-check ${checkClass}"></div>
       <span class="task-sb-title ${titleClass}">${t.title}</span>
+      ${priLabel ? `<span style="font-family:var(--mono);font-size:8px;letter-spacing:.5px;padding:1px 5px;border-radius:6px;${priStyle}">${priLabel}</span>` : ''}
       ${due ? `<span class="task-sb-due">${due}</span>` : ''}
     </div>`;
   }).join('');
@@ -1940,7 +1948,10 @@ function toggleNewTaskForm() {
   if (el.innerHTML) { el.innerHTML = ''; return; }
   el.innerHTML = `<div class="new-task-form">
     <input type="text" id="ntTitle" placeholder="Task title...">
-    <select id="ntStatus"><option value="queued">Queued</option><option value="in_progress">In Progress</option><option value="review">Review</option><option value="done">Done</option></select>
+    <div style="display:flex;gap:6px;">
+      <select id="ntStatus" style="flex:1;"><option value="queued">Queued</option><option value="in_progress">In Progress</option><option value="review">Review</option><option value="done">Done</option></select>
+      <select id="ntPriority" style="flex:1;"><option value="low">Low</option><option value="med" selected>Medium</option><option value="high">High</option><option value="urgent">Urgent</option></select>
+    </div>
     <input type="text" id="ntAssignee" placeholder="Assignee (optional)">
     <input type="date" id="ntDue">
     <button class="btn btn-primary btn-sm" onclick="createTask()" style="width:100%;">Create Task</button>
@@ -1956,6 +1967,7 @@ async function createTask() {
     project_id: activeProjectId,
     title: title,
     status: document.getElementById('ntStatus').value,
+    priority: document.getElementById('ntPriority').value,
     assignee: document.getElementById('ntAssignee').value || null,
     due_date: document.getElementById('ntDue').value || null,
     created_by: 'admin'

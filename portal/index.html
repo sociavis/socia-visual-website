@@ -609,8 +609,15 @@ function subscribeClientProject(projectId) {
 }
 
 async function loadClientFeed(projectId) {
-  const { data } = await sb.from('feed_items').select('*, feed_attachments(*)').eq('project_id', projectId).order('created_at', { ascending: true });
-  clientFeed = data || [];
+  const { data: items } = await sb.from('feed_items').select('*').eq('project_id', projectId).order('created_at', { ascending: true });
+  clientFeed = items || [];
+  if (clientFeed.length) {
+    const feedIds = clientFeed.map(f => f.id);
+    const { data: attachments } = await sb.from('feed_attachments').select('*').in('feed_item_id', feedIds);
+    const attachMap = {};
+    (attachments || []).forEach(a => { if (!attachMap[a.feed_item_id]) attachMap[a.feed_item_id] = []; attachMap[a.feed_item_id].push(a); });
+    clientFeed.forEach(f => { f.feed_attachments = attachMap[f.id] || []; });
+  }
 }
 
 async function loadClientTasks(projectId) {

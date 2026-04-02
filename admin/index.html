@@ -994,7 +994,7 @@
           </div>
           <div class="proj-feed-area" id="projFeedArea">
             <div class="empty-state" id="projEmpty"><p style="margin-bottom:6px;">No project selected</p><p>Create a new project or select one from the list.</p></div>
-            <div id="projFeedWrap" style="display:none;flex:1;display:none;flex-direction:column;overflow:hidden;">
+            <div id="projFeedWrap" style="display:none;">
               <div class="proj-feed-header">
                 <span class="proj-feed-name" id="feedProjName"></span>
                 <span class="proj-feed-status" id="feedProjStatus"></span>
@@ -1751,8 +1751,16 @@ function subscribeToProject(projectId) {
 }
 
 async function loadProjectFeed(projectId) {
-  const { data } = await sb.from('feed_items').select('*, feed_attachments(*)').eq('project_id', projectId).order('created_at', { ascending: true });
-  projectFeed = data || [];
+  const { data: items } = await sb.from('feed_items').select('*').eq('project_id', projectId).order('created_at', { ascending: true });
+  projectFeed = items || [];
+  // Load attachments separately (no FK join needed)
+  if (projectFeed.length) {
+    const feedIds = projectFeed.map(f => f.id);
+    const { data: attachments } = await sb.from('feed_attachments').select('*').in('feed_item_id', feedIds);
+    const attachMap = {};
+    (attachments || []).forEach(a => { if (!attachMap[a.feed_item_id]) attachMap[a.feed_item_id] = []; attachMap[a.feed_item_id].push(a); });
+    projectFeed.forEach(f => { f.feed_attachments = attachMap[f.id] || []; });
+  }
 }
 
 async function loadProjectTasks(projectId) {

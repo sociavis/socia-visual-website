@@ -1250,11 +1250,12 @@ async function exportPDF() {
   toast('Print dialog opened — save as PDF');
 }
 
-async function copyLink() {
-  const inv = await getCurrentInvoice(); if (!inv) return;
-  const link = `${window.location.origin}/invoice.html?id=${inv.id}`;
+function copyLink() {
+  if (!activeId) return;
+  const link = `${window.location.origin}/invoice.html?id=${activeId}`;
   copyToClipboard(link);
   toast('Invoice link copied');
+  saveInvoice();
 }
 
 async function openPreview() {
@@ -1405,12 +1406,12 @@ async function getActiveContract() {
   return contracts.find(x => x.id === activeConId);
 }
 
-async function copyConLink() {
+function copyConLink() {
   if (!activeConId) return;
-  await saveContract();
   const link = `${window.location.origin}/contract.html?id=${activeConId}`;
   copyToClipboard(link);
   toast('Contract link copied');
+  saveContract();
 }
 
 function copyToClipboard(text) {

@@ -415,6 +415,14 @@
             <div class="work-card-corner work-card-corner--br"></div>
           </div>
 
+          <div class="work-card reveal" data-category="web,brand,graphics" data-project="tcs">
+            <div class="work-card-img"><picture><source srcset="portfolio/Triple Crown Series/tcs-top.jpg" type="image/jpeg"><img src="portfolio/Triple Crown Series/tcs-top.jpg" alt="Triple Crown Series — Canada's Premier Motocross Racing Series" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Web</span><span>Brand</span><span>Graphics</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Triple Crown Series</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
           <div class="work-card reveal" data-category="graphics,brand" data-project="gouker">
             <div class="work-card-img"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-1.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-1.webp" alt="Nathan Gouker Racing sponsorship proposal cover" loading="lazy"></picture></div>
             <div class="work-card-tags"><span>Graphic Design</span><span>Brand</span></div>
@@ -649,6 +657,33 @@
   .cs-redacted{position:relative}
   .cs-redacted img{filter:blur(6px);-webkit-filter:blur(6px);transition:filter .3s}
   .cs-redacted-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:#a8ff00;background:rgba(5,5,5,.3);z-index:3;pointer-events:none}
+
+  /* Scroll-synced page breakdown (TCS) */
+  .cs-page-tour{display:flex;flex-direction:column;gap:24px;margin-top:24px}
+  .cs-page-tour-screen{position:relative;overflow:hidden;border:1px solid rgba(168,255,0,.08);background:rgba(10,10,10,.5)}
+  .cs-page-tour-screen .cs-browser-bar{position:sticky;top:0;z-index:2}
+  .cs-page-tour-img-wrap{position:relative;overflow:hidden;max-height:500px}
+  .cs-page-tour-img-wrap img{width:100%;display:block;transition:transform .6s cubic-bezier(.25,.1,.25,1)}
+  .cs-page-tour-highlight{position:absolute;inset:0;pointer-events:none;z-index:1;background:rgba(5,5,5,.55);opacity:0;transition:opacity .4s ease}
+  .cs-page-tour-highlight.active{opacity:1}
+  .cs-page-tour-window{position:absolute;left:0;right:0;pointer-events:none;z-index:2;box-shadow:0 0 0 9999px rgba(5,5,5,.6);border:1px solid rgba(168,255,0,.15);transition:top .6s cubic-bezier(.25,.1,.25,1),height .6s cubic-bezier(.25,.1,.25,1),opacity .4s ease;opacity:0}
+  .cs-page-tour-window.active{opacity:1}
+  .cs-page-tour-steps{display:flex;flex-direction:column;gap:0}
+  .cs-page-tour-step{padding:20px;border-left:2px solid rgba(168,255,0,.08);position:relative;transition:border-color .4s ease,background .4s ease;cursor:pointer}
+  .cs-page-tour-step::before{content:"";position:absolute;left:-5px;top:24px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(168,255,0,.15);background:#050505;transition:background .3s,border-color .3s}
+  .cs-page-tour-step.active{border-left-color:#a8ff00;background:rgba(168,255,0,.03)}
+  .cs-page-tour-step.active::before{background:#a8ff00;border-color:#a8ff00}
+  .cs-page-tour-step-title{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:#555;margin-bottom:6px;transition:color .3s}
+  .cs-page-tour-step.active .cs-page-tour-step-title{color:#a8ff00}
+  .cs-page-tour-step-desc{font-size:.72rem;line-height:1.7;color:#666;transition:color .3s}
+  .cs-page-tour-step.active .cs-page-tour-step-desc{color:#aaa}
+  @media(min-width:768px){
+    .cs-page-tour{flex-direction:row;gap:0}
+    .cs-page-tour-screen{flex:0 0 55%;position:sticky;top:0;align-self:flex-start;max-height:100vh}
+    .cs-page-tour-img-wrap{max-height:calc(100vh - 24px)}
+    .cs-page-tour-steps{flex:1;min-width:0;padding-left:24px}
+    .cs-page-tour-step{padding:28px 20px 28px 24px}
+  }
 
   /* Sections that sit on solid dark (no bg image) */
   .cs-header,.cs-section-solid{background:#050505}
@@ -1095,6 +1130,276 @@
           </div>
 
         </div>
+  </template>
+
+  <template id="tpl-tcs">
+        <!-- 00 INTRO -->
+        <div class="cs-section">
+          <p class="cs-intro-text">The Triple Crown Series is <strong>Canada's premier professional motocross championship</strong> — an 8-round, coast-to-coast national series operated by Jetwerx International. We were brought on to build their entire digital presence from the ground up: a <strong>high-performance website</strong> with a <strong>custom-built CMS</strong>, <strong>live championship standings</strong>, and a full admin command center — all hand-coded with zero framework dependencies. Every pixel is built to match the intensity of 450cc machines launching off a gate.</p>
+        </div>
+
+        <!-- 01 BRANDING -->
+        <div class="cs-section">
+          <div class="cs-row">
+            <div>
+              <div class="cs-section-eyebrow">01 Branding</div>
+              <h3 class="cs-section-title">Race-Ready Identity</h3>
+              <p class="cs-section-desc">Integrated and extended the Triple Crown Series brand identity across every digital touchpoint — from the navigation lockup to the crown icon system, schedule graphics, and championship matrices. A dark, high-contrast palette with bold red accents that carries the authority of a national championship.</p>
+            </div>
+            <div class="cs-logos">
+              <div class="cs-logo-frame">
+                <span class="cs-logo-label">Full Logo</span>
+                <picture><source srcset="portfolio/Triple Crown Series/tcs-logo-full.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-logo-full.webp" alt="Triple Crown Series full logo" loading="lazy"></picture>
+              </div>
+              <div class="cs-logo-frame">
+                <span class="cs-logo-label">Horizontal</span>
+                <picture><source srcset="portfolio/Triple Crown Series/tcs-logo-hz.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-logo-hz.webp" alt="Triple Crown Series horizontal logo" loading="lazy"></picture>
+              </div>
+            </div>
+          </div>
+
+          <!-- Brand DNA -->
+          <div class="cs-brand-dna">
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Color Palette</div>
+              <div class="cs-palette">
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#EB2127"></div><div class="cs-swatch-info"><span class="cs-swatch-name">TCS Red</span><span class="cs-swatch-hex">#EB2127</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#050505"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Black</span><span class="cs-swatch-hex">#050505</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#FFFFFF;border-color:rgba(255,255,255,.2)"></div><div class="cs-swatch-info"><span class="cs-swatch-name">White</span><span class="cs-swatch-hex">#FFFFFF</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#29ABE2"></div><div class="cs-swatch-info"><span class="cs-swatch-name">WMX Blue</span><span class="cs-swatch-hex">#29ABE2</span></div></div>
+              </div>
+            </div>
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Typography</div>
+              <div class="cs-type-list">
+                <div class="cs-type-item"><span class="cs-type-role">Headings</span><span class="cs-type-name">Tungsten</span><span class="cs-type-sample">Bold — Race Titles & Hero Text</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name">Rajdhani</span><span class="cs-type-sample">Medium — All Copy & UI</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Data</span><span class="cs-type-name">Space Mono</span><span class="cs-type-sample">Monospace — Countdowns, Points & Stats</span></div>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Brand Attributes</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">National Championship</span>
+                <span class="cs-attr">Coast-to-Coast</span>
+                <span class="cs-attr">High-Performance</span>
+                <span class="cs-attr">Broadcast-Ready</span>
+                <span class="cs-attr">Data-Driven</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Deliverables</div>
+              <div class="cs-deliverables">
+                <div class="cs-del-stat"><span class="cs-del-num">20+</span><span class="cs-del-label">Pages Built</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">15</span><span class="cs-del-label">Admin Modules</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">8</span><span class="cs-del-label">API Endpoints</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">100+</span><span class="cs-del-label">Rider Profiles</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 WEB — THE MAIN EVENT -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">02 Web</div>
+          <h3 class="cs-section-title">A Complete Digital Platform</h3>
+          <p class="cs-section-desc">Not just a website — a full digital ecosystem. Hand-coded from scratch with zero framework dependencies, the TCS platform serves as the central hub for Canada's motocross championship. 20+ pages, a custom admin CMS, live championship data, and automated backend systems — all engineered to feel as fast as the racing itself.</p>
+
+          <div class="cs-page-tour" id="tcsTour">
+            <div class="cs-page-tour-screen">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca</span></div>
+              <div class="cs-page-tour-img-wrap" id="tcsTourImgWrap">
+                <img src="portfolio/Triple Crown Series/tcs-home-full.jpg" alt="Triple Crown Series full homepage" loading="lazy" id="tcsTourImg">
+                <div class="cs-page-tour-window" id="tcsTourWindow"></div>
+              </div>
+            </div>
+            <div class="cs-page-tour-steps" id="tcsTourSteps">
+              <div class="cs-page-tour-step active" data-tour-y="0" data-tour-h="14">
+                <div class="cs-page-tour-step-title">Hero</div>
+                <p class="cs-page-tour-step-desc">Full-bleed cinematic slideshow cycling through high-res race photography on a 6-second interval with smooth crossfade transitions. Dark gradient overlay keeps the headline and CTAs punchy. Navigation features the full series lockup with a red "Watch Live" call-to-action.</p>
+              </div>
+              <div class="cs-page-tour-step" data-tour-y="14" data-tour-h="8">
+                <div class="cs-page-tour-step-title">Next Race Countdown</div>
+                <p class="cs-page-tour-step-desc">Live countdown timer updating every second — days, hours, minutes, seconds — building anticipation for the next gate drop. Featured event card pulls dynamically from the schedule data.</p>
+              </div>
+              <div class="cs-page-tour-step" data-tour-y="22" data-tour-h="22">
+                <div class="cs-page-tour-step-title">Schedule Grid</div>
+                <p class="cs-page-tour-step-desc">All 8 rounds displayed as filterable cards organized by the series' unique 3-stage format. Each card shows the venue, location, date, and stage badge. Stage filter tabs let fans drill into Western, Central, or Eastern rounds.</p>
+              </div>
+              <div class="cs-page-tour-step" data-tour-y="44" data-tour-h="14">
+                <div class="cs-page-tour-step-title">Championship Standings</div>
+                <p class="cs-page-tour-step-desc">Auto-scrolling ticker displaying current championship standings across all classes — 450 Pro, 250 Pro, WMX, and Teams. Rider chips show position, points, manufacturer logo, and champion badges. The ticker pauses on first view, then rolls at variable speed.</p>
+              </div>
+              <div class="cs-page-tour-step" data-tour-y="58" data-tour-h="14">
+                <div class="cs-page-tour-step-title">News Feed</div>
+                <p class="cs-page-tour-step-desc">Latest series news pulled dynamically and displayed in a responsive card grid with featured images, dates, and category tags.</p>
+              </div>
+              <div class="cs-page-tour-step" data-tour-y="72" data-tour-h="10">
+                <div class="cs-page-tour-step-title">Broadcast Partners</div>
+                <p class="cs-page-tour-step-desc">Fox Sports and Ryde TV partner cards with platform descriptions and direct links to watch live — connecting fans to every moto from anywhere.</p>
+              </div>
+              <div class="cs-page-tour-step" data-tour-y="82" data-tour-h="10">
+                <div class="cs-page-tour-step-title">Sponsor Marquee</div>
+                <p class="cs-page-tour-step-desc">Infinite-scrolling logo strip featuring 30+ series sponsors. Grayscale by default, full color on hover — clean presentation that gives every partner visibility without visual clutter.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03 CHAMPIONSHIP MATRIX — the cool stuff -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">03 Championship Engine</div>
+          <h3 class="cs-section-title">Real-Time Standings & Results</h3>
+          <p class="cs-section-desc">The crown jewel of the platform. A custom-built championship matrix that pulls live points, positions, and race results — always up to date, zero manual entry required. The results page features class-specific standings tables with color-coded round results, champion spotlight cards, expandable team breakdowns with nested rider rosters, and round quick-navigation. Fans and teams get a championship-grade data experience that rivals any major series.</p>
+
+          <div class="cs-brand-dna" style="margin-top:16px">
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">What It Does</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Live Standings Updates</span>
+                <span class="cs-attr">450 / 250 / WMX / Teams</span>
+                <span class="cs-attr">Color-Coded Round Results</span>
+                <span class="cs-attr">Champion Spotlight Cards</span>
+                <span class="cs-attr">Sticky Column Headers</span>
+                <span class="cs-attr">Team Championship Breakdowns</span>
+                <span class="cs-attr">Manufacturer Integration</span>
+                <span class="cs-attr">Historical Archive (2018–2025)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 CUSTOM CMS / ADMIN -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">04 Custom CMS</div>
+          <h3 class="cs-section-title">Built-In Command Center</h3>
+          <p class="cs-section-desc">A full-featured admin dashboard built from scratch — no WordPress, no plugins, no off-the-shelf CMS. Role-based access control lets the Jetwerx team manage every aspect of the series' digital presence through 15 dedicated modules. News publishing, rider profiles, championship standings, event configuration, form submissions, media uploads, SEO settings — all controlled from one dark-mode command center that feels as polished as the public site.</p>
+
+          <div class="cs-brand-dna" style="margin-top:16px">
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">What the Team Controls</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Dashboard & Stats</span>
+                <span class="cs-attr">News Publishing</span>
+                <span class="cs-attr">Rider Profiles</span>
+                <span class="cs-attr">Event Configuration</span>
+                <span class="cs-attr">Championship Standings</span>
+                <span class="cs-attr">Live Timing Settings</span>
+                <span class="cs-attr">Form Submissions</span>
+                <span class="cs-attr">Media Library</span>
+                <span class="cs-attr">User Permissions</span>
+                <span class="cs-attr">SEO & Meta Tags</span>
+                <span class="cs-attr">Brand Assets</span>
+                <span class="cs-attr">Q&A Moderation</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Capabilities</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Role-Based Access (Viewer / Editor / Admin)</span>
+                <span class="cs-attr">Automated Email Routing</span>
+                <span class="cs-attr">Real-Time Data Sync</span>
+                <span class="cs-attr">File & Image Uploads</span>
+                <span class="cs-attr">Results Ingestion</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 05 KEY PAGES -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">05 Key Pages</div>
+          <h3 class="cs-section-title">Every Page, Purpose-Built</h3>
+          <p class="cs-section-desc">Each page is designed for its specific job — not templated, not recycled. The events page maps the 8-round coast-to-coast schedule with stage filtering. The results page renders full championship matrices with expandable team rosters. The news system supports featured posts, category filtering, and search. The watch page connects fans to Fox Sports and Ryde TV broadcasts. Every layout is responsive, every interaction is intentional.</p>
+
+          <div class="cs-sub"><span class="cs-sub-label">Events</span></div>
+          <div class="cs-web-grid">
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/events</span></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-events-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-events-viewport.webp" alt="Triple Crown Series events page — 8-round schedule with stage filtering" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+          <div class="cs-sub"><span class="cs-sub-label">Results & Standings</span></div>
+          <div class="cs-web-grid">
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/results</span></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-results-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-results-viewport.webp" alt="Triple Crown Series results page — championship standings matrix" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+          <div class="cs-sub"><span class="cs-sub-label">News</span></div>
+          <div class="cs-web-grid">
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/news</span></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-news-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-news-viewport.webp" alt="Triple Crown Series news page — article feed with search and filtering" loading="lazy"></picture></div>
+            </div>
+          </div>
+
+          <div class="cs-sub"><span class="cs-sub-label">Watch</span></div>
+          <div class="cs-web-grid">
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/watch</span></div>
+              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-watch-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-watch-viewport.webp" alt="Triple Crown Series watch page — broadcast partner links and streaming info" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 06 GRAPHICS -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">06 Graphics</div>
+          <h3 class="cs-section-title">Series Collateral</h3>
+          <p class="cs-section-desc">Schedule graphics, social media templates, Open Graph images, and merchandise mockups — all generated from custom-built internal tools. The OG image generator produces share-ready assets for every page. The thumbnail designer lets the team create social graphics with drag-and-drop composition. Even the merch mockups are AI-generated through a custom Recraft API pipeline.</p>
+
+          <div class="cs-graphics-grid cs-grid-3">
+            <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/TCS_2026-Schedule.webp" type="image/webp"><img src="portfolio/Triple Crown Series/TCS_2026-Schedule.webp" alt="2026 Triple Crown Series schedule graphic" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/triple-crown-social-default.webp" type="image/webp"><img src="portfolio/Triple Crown Series/triple-crown-social-default.webp" alt="Triple Crown Series social media default image" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/crown-tee.webp" type="image/webp"><img src="portfolio/Triple Crown Series/crown-tee.webp" alt="Triple Crown Series merchandise — crown tee mockup" loading="lazy"></picture></div>
+          </div>
+        </div>
+
+        <!-- 07 TECH STACK -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">07 Under the Hood</div>
+          <h3 class="cs-section-title">Zero-Framework Architecture</h3>
+          <p class="cs-section-desc">No React. No Next.js. No WordPress. Every line of HTML, CSS, and JavaScript is hand-written — giving us complete control over performance, accessibility, and the exact user experience we want to deliver. The backend runs on Supabase (PostgreSQL + Auth) with Vercel serverless functions and Blob storage. 120+ SEO redirect rules, structured data markup, and performance-optimized asset delivery round out a stack that's built to last.</p>
+
+          <div class="cs-brand-dna" style="margin-top:16px">
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Frontend</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Vanilla HTML / CSS / JS</span>
+                <span class="cs-attr">Zero Dependencies</span>
+                <span class="cs-attr">CSS Custom Properties</span>
+                <span class="cs-attr">Intersection Observer API</span>
+                <span class="cs-attr">Native Canvas API</span>
+                <span class="cs-attr">Responsive / Mobile-First</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Backend</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Supabase (PostgreSQL + Auth)</span>
+                <span class="cs-attr">Vercel Serverless Functions</span>
+                <span class="cs-attr">Vercel Blob Storage</span>
+                <span class="cs-attr">Recraft AI API (Merch Mockups)</span>
+                <span class="cs-attr">Automated Email Routing</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Infrastructure</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Vercel Edge Network</span>
+                <span class="cs-attr">120+ SEO Redirects</span>
+                <span class="cs-attr">JSON-LD Structured Data</span>
+                <span class="cs-attr">WebP Image Pipeline</span>
+                <span class="cs-attr">Font Preloading</span>
+                <span class="cs-attr">Dynamic Meta Wrapper (PHP)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
   </template>
 
   <template id="tpl-gouker">

@@ -57,8 +57,8 @@
   </style>
 
   <!-- Full stylesheet (minified, 34KB — loads fast with preload hint) -->
-  <link rel="preload" href="styles.css?v=10" as="style" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="preload" href="styles.css?v=11" as="style" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=11">
 
   <!-- Fonts (self-hosted, eliminates render-blocking Google Fonts chain) -->
   <style>
@@ -96,7 +96,7 @@
   <script defer src="three.min.js"></script>
   <script defer src="grid-scene.js"></script>
   <script defer src="logo-scene.js"></script>
-  <script defer src="script.js?v=10"></script>
+  <script defer src="script.js?v=11"></script>
   <noscript><style>
     .boot-overlay{display:none!important}
     .panel{position:static!important;opacity:1!important;visibility:visible!important;height:auto!important}
@@ -557,6 +557,15 @@
             </form>
           </div>
         </div>
+
+        <footer class="contact-legal reveal" role="contentinfo">
+          <p>&copy; 2026 Socia Visual. All rights reserved.</p>
+          <nav class="contact-legal-links" aria-label="Legal">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="accessibility.html">Accessibility</a>
+            <button id="cookieReset" class="contact-legal-btn">Cookies</button>
+          </nav>
+        </footer>
 
       </div>
     </section>
@@ -1737,16 +1746,6 @@
   <!-- Live region for section change announcements -->
   <div id="sectionAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-  <footer class="site-footer" role="contentinfo">
-    <div class="sr-only">
-      <p>&copy; 2026 Socia Visual. All rights reserved.</p>
-    </div>
-    <nav class="footer-legal" aria-label="Legal">
-      <a href="privacy.html" class="footer-link">Privacy Policy</a>
-      <a href="accessibility.html" class="footer-link">Accessibility</a>
-      <button id="cookieReset" class="footer-link footer-btn">Cookies</button>
-    </nav>
-  </footer>
 
   <!-- reCAPTCHA disclosure -->
   <div class="sr-only" id="recaptchaDisclosure">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</div>

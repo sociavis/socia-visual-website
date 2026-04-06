@@ -103,10 +103,12 @@ body.project-open .cursor-dot{z-index:10004}
 .split-line{transform:none!important;opacity:1!important}
 }
 
-/* ── Site Footer ── */
-.site-footer{position:fixed;bottom:0;left:0;right:0;z-index:50;pointer-events:none}
-.footer-legal{display:flex;justify-content:center;gap:24px;padding:10px 24px;pointer-events:auto;font-family:var(--font-mono);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase}
-.footer-link{color:#666;text-decoration:none;transition:color .3s}
-.footer-link:hover{color:var(--accent-1)}
-.footer-btn{background:none;border:none;cursor:pointer;font-family:var(--font-mono);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:0}
-@media(max-width:900px){.site-footer{bottom:56px}.footer-link,.footer-btn{cursor:auto}}
+/* ── Contact Legal Footer ── */
+.contact-legal{margin-top:40px;padding-top:20px;border-top:1px solid rgba(168,255,0,.08);text-align:center}
+.contact-legal p{font-family:var(--font-mono);font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:#444;margin-bottom:10px}
+.contact-legal-links{display:flex;justify-content:center;gap:24px;font-family:var(--font-mono);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase}
+.contact-legal-links a{color:#666;text-decoration:none;transition:color .3s}
+.contact-legal-links a:hover{color:var(--accent-1)}
+.contact-legal-btn{background:none;border:none;cursor:none;font-family:var(--font-mono);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:#666;padding:0;transition:color .3s}
+.contact-legal-btn:hover{color:var(--accent-1)}
+@media(max-width:900px){.contact-legal-links a,.contact-legal-btn{cursor:auto}}

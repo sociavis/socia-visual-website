@@ -6,7 +6,7 @@
 
   <!-- SEO -->
   <title>Socia Visual — Web Design, Graphics & Brand Identity Studio</title>
-  <meta name="description" content="Socia Visual is a design and development studio building websites, graphics, and visual identities for powersports brands and beyond. Sharp design, clean code, visuals that hit different.">
+  <meta name="description" content="Socia Visual is a motorsport web design and brand identity studio. We build websites, graphics, and visual identities for racing teams, series, and powersports brands. Sharp design, clean code.">
   <link rel="canonical" href="https://sociavisual.com/">
 
   <!-- Favicons -->
@@ -57,8 +57,8 @@
   </style>
 
   <!-- Full stylesheet (minified, 34KB — loads fast with preload hint) -->
-  <link rel="preload" href="styles.css?v=8" as="style" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="preload" href="styles.css?v=10" as="style" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=10">
 
   <!-- Fonts (self-hosted, eliminates render-blocking Google Fonts chain) -->
   <style>
@@ -76,7 +76,7 @@
     "name": "Socia Visual",
     "url": "https://sociavisual.com",
     "logo": "https://sociavisual.com/favicon.svg",
-    "description": "Design and development studio building websites, graphics, and visual identities for powersports brands and beyond.",
+    "description": "Motorsport web design and brand identity studio. We build websites, graphics, and visual identities for racing teams, series, and powersports brands.",
     "serviceType": ["Web Design", "Web Development", "Graphic Design", "Brand Identity", "Motion Graphics"],
     "sameAs": [
       "https://www.facebook.com/sociavis",
@@ -96,7 +96,7 @@
   <script defer src="three.min.js"></script>
   <script defer src="grid-scene.js"></script>
   <script defer src="logo-scene.js"></script>
-  <script defer src="script.js?v=8"></script>
+  <script defer src="script.js?v=10"></script>
   <noscript><style>
     .boot-overlay{display:none!important}
     .panel{position:static!important;opacity:1!important;visibility:visible!important;height:auto!important}
@@ -156,7 +156,7 @@
     <div class="hud-corner hud-corner--br"></div>
 
     <div class="hud-data hud-data--top-left">
-      <div class="hud-data-item"><span class="hud-label">PROJECT</span><span class="hud-value hud-value--active">SOCIA VISUAL</span></div>
+      <div class="hud-data-item"><span class="hud-label">PROJECT</span><span class="hud-value hud-value--active" style="display:inline-flex;align-items:center;gap:6px"><img src="Socia LogoMark.svg" alt="Socia Visual logo" width="24" height="24" style="vertical-align:middle">SOCIA VISUAL</span></div>
       <div class="hud-data-item"><span class="hud-label">VER</span><span class="hud-value">2.0.26</span></div>
       <div class="hud-data-item"><span class="hud-label">RES</span><span class="hud-value" id="hudRes">1920x1080</span></div>
     </div>
@@ -243,10 +243,9 @@
             <span class="badge-pulse"></span>
             <span class="badge-text">Web Design & Graphics Studio</span>
           </div>
-          <h1 class="hero-title">
-            <span class="reveal hero-line" data-scramble>We build</span>
-            <span class="hero-title--accent reveal hero-line" data-scramble>digital experiences</span>
-            <span class="reveal hero-line" data-scramble>that move</span>
+          <h1 class="hero-title reveal hero-line" data-scramble>
+            <span>Motorsport Web Design</span>
+            <span class="hero-title--accent">& Brand Identity Studio</span>
           </h1>
           <p class="hero-sub reveal">Websites, graphics, and visual identity — crafted for brands that refuse to blend in.</p>
           <div class="hero-actions reveal">
@@ -400,7 +399,7 @@
         <!-- Project grid -->
         <div class="work-grid" id="workGrid">
           <div class="work-card reveal" data-category="web,brand,graphics,motion" data-project="arenacross">
-            <div class="work-card-img"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Slide1.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Slide1.webp" alt="AMA Arenacross Championship" loading="lazy"></picture></div>
+            <div class="work-card-img"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Slide1.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Slide1.webp" alt="AMA Arenacross Championship event poster" loading="lazy"></picture></div>
             <div class="work-card-tags"><span>Web</span><span>Brand</span><span>Graphics</span><span>Motion</span></div>
             <div class="work-card-info"><h3 class="work-card-title">AMA Arenacross Championship</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
@@ -408,31 +407,46 @@
           </div>
 
           <div class="work-card reveal" data-category="web,brand,graphics,motion" data-project="bitd">
-            <div class="work-card-img"><picture><source srcset="portfolio/Best in the Desert/bitdcover1.webp" type="image/webp"><img src="portfolio/Best in the Desert/bitdcover1.webp" alt="Best in the Desert Racing Association" loading="lazy"></picture></div>
+            <div class="work-card-img"><picture><source srcset="portfolio/Best in the Desert/bitdcover1.webp" type="image/webp"><img src="portfolio/Best in the Desert/bitdcover1.webp" alt="Best in the Desert off-road racing cover" loading="lazy"></picture></div>
             <div class="work-card-tags"><span>Web</span><span>Brand</span><span>Graphics</span><span>Motion</span></div>
             <div class="work-card-info"><h3 class="work-card-title">Best in the Desert</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
             <div class="work-card-corner work-card-corner--br"></div>
           </div>
 
-          <div class="work-card reveal" data-category="web,brand,graphics" data-project="tcs">
-            <div class="work-card-img"><picture><source srcset="portfolio/Triple Crown Series/tcs-top.jpg" type="image/jpeg"><img src="portfolio/Triple Crown Series/tcs-top.jpg" alt="Triple Crown Series — Canada's Premier Motocross Racing Series" loading="lazy"></picture></div>
-            <div class="work-card-tags"><span>Web</span><span>Brand</span><span>Graphics</span></div>
+          <div class="work-card reveal" data-category="web,brand" data-project="tcs">
+            <div class="work-card-img"><picture><source srcset="portfolio/Triple Crown Series/tcs-home-dt.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-home-dt.webp" alt="Triple Crown Series website homepage" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Web</span><span>Brand</span></div>
             <div class="work-card-info"><h3 class="work-card-title">Triple Crown Series</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
             <div class="work-card-corner work-card-corner--br"></div>
           </div>
 
           <div class="work-card reveal" data-category="graphics,brand" data-project="gouker">
-            <div class="work-card-img"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-1.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-1.webp" alt="Nathan Gouker Racing sponsorship proposal cover" loading="lazy"></picture></div>
+            <div class="work-card-img"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-1.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-1.webp" alt="Nathan Gouker Racing sponsorship deck" loading="lazy"></picture></div>
             <div class="work-card-tags"><span>Graphic Design</span><span>Brand</span></div>
             <div class="work-card-info"><h3 class="work-card-title">Nathan Gouker Racing</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
             <div class="work-card-corner work-card-corner--br"></div>
           </div>
 
+          <div class="work-card reveal" data-category="graphics,brand" data-project="crockett-myers">
+            <div class="work-card-img"><picture><img src="portfolio/Crockett Myers/cm-slide-cover.webp" alt="Crockett Myers Racing sponsorship deck" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Graphic Design</span><span>Brand</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Crockett Myers Racing</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="graphics,brand" data-project="veterans-mx">
+            <div class="work-card-img"><picture><img src="portfolio/Veterans MX/vmx-slide-cover.webp" alt="Veterans MX Championship race deck" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Graphic Design</span><span>Brand</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Veterans MX Championship</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
         </div>
-        <p class="work-coming-soon reveal" style="text-align:center;font-family:var(--font-mono);font-size:.85rem;letter-spacing:.15em;color:#666;margin-top:40px">ADDING MORE SOON. STAY TUNED.</p>
       </div>
     </section>
 
@@ -511,6 +525,16 @@
                   </label>
                 </div>
               </fieldset>
+              <div class="form-group reveal">
+                <select name="budget" id="budget" required>
+                  <option value="" disabled selected>Select budget range</option>
+                  <option value="Under $5K">Under $5,000</option>
+                  <option value="$5K-$15K">$5,000 – $15,000</option>
+                  <option value="$15K-$50K">$15,000 – $50,000</option>
+                  <option value="$50K+">$50,000+</option>
+                </select>
+                <label for="budget">Project Budget</label>
+              </div>
               <div class="form-group reveal">
                 <textarea id="message" name="message" rows="3" required placeholder=" " aria-describedby="message-error"></textarea><span id="message-error" class="form-field-error" aria-live="polite"></span>
                 <label for="message">Tell us about your project</label>
@@ -658,32 +682,126 @@
   .cs-redacted img{filter:blur(6px);-webkit-filter:blur(6px);transition:filter .3s}
   .cs-redacted-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:#a8ff00;background:rgba(5,5,5,.3);z-index:3;pointer-events:none}
 
-  /* Scroll-synced page breakdown (TCS) */
-  .cs-page-tour{display:flex;flex-direction:column;gap:24px;margin-top:24px}
-  .cs-page-tour-screen{position:relative;overflow:hidden;border:1px solid rgba(168,255,0,.08);background:rgba(10,10,10,.5)}
-  .cs-page-tour-screen .cs-browser-bar{position:sticky;top:0;z-index:2}
-  .cs-page-tour-img-wrap{position:relative;overflow:hidden;max-height:500px}
-  .cs-page-tour-img-wrap img{width:100%;display:block;transition:transform .6s cubic-bezier(.25,.1,.25,1)}
-  .cs-page-tour-highlight{position:absolute;inset:0;pointer-events:none;z-index:1;background:rgba(5,5,5,.55);opacity:0;transition:opacity .4s ease}
-  .cs-page-tour-highlight.active{opacity:1}
-  .cs-page-tour-window{position:absolute;left:0;right:0;pointer-events:none;z-index:2;box-shadow:0 0 0 9999px rgba(5,5,5,.6);border:1px solid rgba(168,255,0,.15);transition:top .6s cubic-bezier(.25,.1,.25,1),height .6s cubic-bezier(.25,.1,.25,1),opacity .4s ease;opacity:0}
-  .cs-page-tour-window.active{opacity:1}
-  .cs-page-tour-steps{display:flex;flex-direction:column;gap:0}
-  .cs-page-tour-step{padding:20px;border-left:2px solid rgba(168,255,0,.08);position:relative;transition:border-color .4s ease,background .4s ease;cursor:pointer}
-  .cs-page-tour-step::before{content:"";position:absolute;left:-5px;top:24px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(168,255,0,.15);background:#050505;transition:background .3s,border-color .3s}
-  .cs-page-tour-step.active{border-left-color:#a8ff00;background:rgba(168,255,0,.03)}
-  .cs-page-tour-step.active::before{background:#a8ff00;border-color:#a8ff00}
-  .cs-page-tour-step-title{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:#555;margin-bottom:6px;transition:color .3s}
-  .cs-page-tour-step.active .cs-page-tour-step-title{color:#a8ff00}
-  .cs-page-tour-step-desc{font-size:.72rem;line-height:1.7;color:#666;transition:color .3s}
-  .cs-page-tour-step.active .cs-page-tour-step-desc{color:#aaa}
+  /* ── Screen gallery ── */
+  .sg-hero{display:flex;align-items:flex-end;justify-content:center;gap:20px;margin-top:20px}
+  .sg-laptop{position:relative;width:100%;max-width:640px}
+  .sg-laptop-bezel{background:#111;border:2px solid #2a2a2a;border-radius:8px 8px 0 0;overflow:hidden}
+  .sg-laptop-bezel img{width:100%;display:block}
+  .sg-laptop-base{height:10px;background:linear-gradient(to bottom,#2a2a2a,#181818);border-radius:0 0 4px 4px;margin:0 -3%}
+  .sg-laptop-base::before{content:"";display:block;width:16%;height:3px;background:#333;border-radius:0 0 3px 3px;margin:0 auto}
+  .sg-phone{width:20%;max-width:120px;flex-shrink:0}
+  .sg-phone-bezel{background:#111;border:2px solid #2a2a2a;border-radius:14px;padding:5px;overflow:hidden}
+  .sg-phone-bezel img{width:100%;display:block;border-radius:9px}
+
+  /* Floating screen cards */
+  .sg-spread{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
+  .sg-card{position:relative;border:1px solid rgba(168,255,0,.06);background:rgba(10,10,10,.6);overflow:hidden;transition:transform .4s cubic-bezier(.25,.1,.25,1),border-color .4s}
+  .sg-card:hover{transform:translateY(-4px);border-color:rgba(168,255,0,.2)}
+  .sg-card img{width:100%;display:block}
+  .sg-card-label{position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(to top,rgba(5,5,5,.95),rgba(5,5,5,.6) 60%,transparent);font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(168,255,0,.6)}
+  .sg-card-url{display:block;font-size:.35rem;color:#555;margin-top:2px}
+
+  /* Wide featured card — spans full width */
+  .sg-card-wide{grid-column:1/-1}
+
+  /* Stats strip */
+  .sg-stats{display:flex;flex-wrap:wrap;gap:1px;background:rgba(168,255,0,.06);margin-top:24px}
+  .sg-stat{background:#050505;padding:18px 20px;flex:1;min-width:90px;display:flex;flex-direction:column;gap:3px}
+  .sg-stat-num{font-family:'Share Tech Mono',monospace;font-size:clamp(.85rem,2.5vw,1.2rem);background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .sg-stat-label{font-family:'Share Tech Mono',monospace;font-size:.36rem;letter-spacing:.15em;text-transform:uppercase;color:#555}
+
   @media(min-width:768px){
-    .cs-page-tour{flex-direction:row;gap:0}
-    .cs-page-tour-screen{flex:0 0 55%;position:sticky;top:0;align-self:flex-start;max-height:100vh}
-    .cs-page-tour-img-wrap{max-height:calc(100vh - 24px)}
-    .cs-page-tour-steps{flex:1;min-width:0;padding-left:24px}
-    .cs-page-tour-step{padding:28px 20px 28px 24px}
+    .sg-spread{grid-template-columns:repeat(3,1fr);gap:12px}
+    .sg-hero{gap:28px}
   }
+  @media(max-width:480px){
+    .sg-hero{flex-direction:column;align-items:center}
+    .sg-phone{width:45%;max-width:160px}
+    .sg-spread{grid-template-columns:1fr}
+  }
+
+  /* ── TCS Font faces ── */
+  @font-face{font-family:'Tungsten';font-weight:700;font-style:normal;font-display:swap;src:url(portfolio/Triple\ Crown\ Series/fonts/tungsten-bold-webfont.woff2) format('woff2')}
+  @font-face{font-family:'VANGO';font-weight:400;font-style:normal;font-display:swap;src:url(portfolio/Triple\ Crown\ Series/fonts/VANGO-Regular.otf) format('opentype')}
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
+
+  /* ── Real TCS Ticker (embedded from triplecrownseries.ca) ── */
+  .cs-tcs-demo{--red:#eb2127;--surface:#111;--surface-light:#f2f0ed;--font-display:'VANGO','Chakra Petch',sans-serif;--font-heading:'Tungsten','Arial Narrow',sans-serif;--font-body:'Rajdhani','Chakra Petch',sans-serif;--text-xs:11px;--text-lg:20px;--space-lg:24px;margin-top:16px}
+  .cs-tcs-demo .tcs-ticker{width:100%;height:72px;position:relative;display:flex;align-items:stretch;transition:background .5s;overflow:hidden;border-radius:4px}
+  .cs-tcs-demo .tcs-ticker.mode-450{background:var(--surface-light)}
+  .cs-tcs-demo .tcs-ticker.mode-250{background:var(--red)}
+  .cs-tcs-demo .tcs-ticker.mode-wmx{background:#29abe2}
+  .cs-tcs-demo .tcs-ticker.mode-team{background:var(--surface)}
+  .cs-tcs-demo .tcs-tk-left{flex-shrink:0;display:flex;align-items:center;padding:0 10px;border-right:1px solid rgba(255,255,255,.2);transition:border-color .5s;z-index:2}
+  .cs-tcs-demo .mode-450 .tcs-tk-left{border-right-color:rgba(0,0,0,.1)}
+  .cs-tcs-demo .tcs-tk-info{display:flex;flex-direction:column;gap:1px}
+  .cs-tcs-demo .tk-year{font-family:var(--font-body);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(0,0,0,.65);transition:color .5s}
+  .cs-tcs-demo .mode-250 .tk-year,.cs-tcs-demo .mode-team .tk-year,.cs-tcs-demo .mode-wmx .tk-year{color:rgba(255,255,255,.8)}
+  .cs-tcs-demo .tk-sub{font-family:var(--font-body);font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,0,0,.55);transition:color .5s}
+  .cs-tcs-demo .mode-250 .tk-sub,.cs-tcs-demo .mode-team .tk-sub,.cs-tcs-demo .mode-wmx .tk-sub{color:rgba(255,255,255,.6)}
+  .cs-tcs-demo .tcs-tk-toggle{display:grid;grid-template-columns:1fr 1fr;flex-shrink:0;border-right:1px solid rgba(255,255,255,.15);transition:border-color .5s;z-index:2}
+  .cs-tcs-demo .tcs-cls-btn{display:flex;align-items:center;justify-content:center;padding:0 10px;cursor:pointer;border:none;transition:all .3s;border-right:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);font-family:var(--font-heading);font-size:11px;letter-spacing:.5px;line-height:1}
+  .cs-tcs-demo .tcs-cls-btn:nth-child(2){border-right:none}.cs-tcs-demo .tcs-cls-btn:nth-child(3){border-bottom:none}.cs-tcs-demo .tcs-cls-btn:nth-child(4){border-right:none;border-bottom:none}
+  .cs-tcs-demo .mode-450 .tcs-cls-btn{background:rgba(0,0,0,.04);color:rgba(0,0,0,.65);border-right-color:rgba(0,0,0,.06);border-bottom-color:rgba(0,0,0,.06)}
+  .cs-tcs-demo .mode-450 .tcs-cls-btn.active{background:#c9191e;color:#fff}
+  .cs-tcs-demo .mode-250 .tcs-cls-btn{background:rgba(0,0,0,.3);color:rgba(255,255,255,.35)}.cs-tcs-demo .mode-250 .tcs-cls-btn.active{background:rgba(0,0,0,.5);color:#fff}
+  .cs-tcs-demo .mode-wmx .tcs-cls-btn{background:rgba(0,0,0,.15);color:rgba(255,255,255,.4)}.cs-tcs-demo .mode-wmx .tcs-cls-btn.active{background:rgba(0,0,0,.35);color:#fff}
+  .cs-tcs-demo .mode-team .tcs-cls-btn{background:rgba(255,255,255,.04);color:rgba(255,255,255,.3)}.cs-tcs-demo .mode-team .tcs-cls-btn.active{background:var(--red);color:#fff}
+  .cs-tcs-demo .tcs-tk-scroll{flex:1;overflow:hidden;display:flex;align-items:center;position:relative}
+  .cs-tcs-demo .tcs-tk-scroll::before,.cs-tcs-demo .tcs-tk-scroll::after{content:'';position:absolute;top:0;bottom:0;width:30px;z-index:3;pointer-events:none}
+  .cs-tcs-demo .tcs-tk-scroll::before{left:0}.cs-tcs-demo .tcs-tk-scroll::after{right:0}
+  .cs-tcs-demo .mode-450 .tcs-tk-scroll::before{background:linear-gradient(to right,#f2f0ed,transparent)}.cs-tcs-demo .mode-450 .tcs-tk-scroll::after{background:linear-gradient(to left,#f2f0ed,transparent)}
+  .cs-tcs-demo .mode-250 .tcs-tk-scroll::before{background:linear-gradient(to right,#eb2127,transparent)}.cs-tcs-demo .mode-250 .tcs-tk-scroll::after{background:linear-gradient(to left,#eb2127,transparent)}
+  .cs-tcs-demo .mode-wmx .tcs-tk-scroll::before{background:linear-gradient(to right,#29abe2,transparent)}.cs-tcs-demo .mode-wmx .tcs-tk-scroll::after{background:linear-gradient(to left,#29abe2,transparent)}
+  .cs-tcs-demo .mode-team .tcs-tk-scroll::before{background:linear-gradient(to right,#111,transparent)}.cs-tcs-demo .mode-team .tcs-tk-scroll::after{background:linear-gradient(to left,#111,transparent)}
+  .cs-tcs-demo .tcs-marquee{display:flex;align-items:center;white-space:nowrap;animation:tcs-mscroll 35s linear infinite}
+  .cs-tcs-demo .tcs-marquee:hover{animation-play-state:paused}
+  @keyframes tcs-mscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .cs-tcs-demo .tcs-chip{display:inline-flex;align-items:center;gap:10px;padding:0 18px;height:72px;flex-shrink:0;transition:background .15s}
+  .cs-tcs-demo .mode-450 .tcs-chip:hover{background:rgba(0,0,0,.04)}.cs-tcs-demo .mode-250 .tcs-chip:hover{background:rgba(255,255,255,.08)}
+  .cs-tcs-demo .tcs-sep{width:1px;height:28px;flex-shrink:0;transition:background .5s}
+  .cs-tcs-demo .mode-450 .tcs-sep{background:rgba(0,0,0,.07)}.cs-tcs-demo .mode-250 .tcs-sep{background:rgba(255,255,255,.15)}.cs-tcs-demo .mode-wmx .tcs-sep{background:rgba(255,255,255,.2)}.cs-tcs-demo .mode-team .tcs-sep{background:rgba(255,255,255,.15)}
+  .cs-tcs-demo .c-pos{display:flex;align-items:baseline;flex-shrink:0;min-width:28px}
+  .cs-tcs-demo .c-pos-num{font-family:var(--font-display);font-size:24px;color:rgba(0,0,0,.15);line-height:1;transition:color .5s}
+  .cs-tcs-demo .mode-250 .c-pos-num{color:rgba(255,255,255,.9)}.cs-tcs-demo .mode-team .c-pos-num{color:rgba(255,255,255,.6)}.cs-tcs-demo .mode-wmx .c-pos-num{color:rgba(255,255,255,.9)}
+  .cs-tcs-demo .mode-450 .leader .c-pos-num{color:var(--red)}.cs-tcs-demo .mode-250 .leader .c-pos-num{color:#fff}
+  .cs-tcs-demo .c-pos-suf{font-family:var(--font-display);font-size:9px;color:rgba(0,0,0,.1);margin-left:1px;transition:color .5s}
+  .cs-tcs-demo .mode-250 .c-pos-suf,.cs-tcs-demo .mode-wmx .c-pos-suf{color:rgba(255,255,255,.5)}.cs-tcs-demo .mode-team .c-pos-suf{color:rgba(255,255,255,.35)}
+  .cs-tcs-demo .c-info{display:flex;flex-direction:column;min-width:0}
+  .cs-tcs-demo .c-name{font-family:var(--font-heading);font-size:12px;letter-spacing:1px;color:#0a0a0a;line-height:1.1;transition:color .5s;text-transform:uppercase;text-decoration:none}
+  .cs-tcs-demo .mode-250 .c-name,.cs-tcs-demo .mode-wmx .c-name{color:#fff}.cs-tcs-demo .mode-team .c-name{color:rgba(255,255,255,.9)}
+  .cs-tcs-demo .c-detail{font-family:var(--font-body);font-size:10px;font-weight:500;letter-spacing:1px;color:rgba(0,0,0,.3);transition:color .5s}
+  .cs-tcs-demo .mode-250 .c-detail,.cs-tcs-demo .mode-wmx .c-detail,.cs-tcs-demo .mode-team .c-detail{color:rgba(255,255,255,.5)}
+  .cs-tcs-demo .c-pts-wrap{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;padding-left:10px}
+  .cs-tcs-demo .c-pts-val{font-family:var(--font-heading);font-size:16px;color:#0a0a0a;line-height:1;transition:color .5s}
+  .cs-tcs-demo .mode-250 .c-pts-val,.cs-tcs-demo .mode-wmx .c-pts-val{color:#fff}.cs-tcs-demo .mode-team .c-pts-val{color:rgba(255,255,255,.9)}
+  .cs-tcs-demo .c-pts-lbl{font-family:var(--font-body);font-size:9px;font-weight:700;letter-spacing:1px;color:rgba(0,0,0,.25);transition:color .5s}
+  .cs-tcs-demo .mode-250 .c-pts-lbl,.cs-tcs-demo .mode-wmx .c-pts-lbl{color:rgba(255,255,255,.5)}.cs-tcs-demo .mode-team .c-pts-lbl{color:rgba(255,255,255,.45)}
+  .cs-tcs-demo .leader{background:rgba(235,33,39,.08);border-right:2px solid var(--red)}
+  .cs-tcs-demo .mode-250 .leader{background:rgba(0,0,0,.2);border-right-color:rgba(255,255,255,.3)}
+  .cs-tcs-demo .mode-wmx .leader{background:rgba(0,0,0,.15);border-right-color:rgba(255,255,255,.3)}
+  .cs-tcs-demo .c-champ-badge{display:inline-block;font-family:var(--font-body);font-size:7px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--red);padding:2px 6px;margin-left:6px;border-radius:2px;vertical-align:middle}
+  .cs-tcs-demo .mode-250 .c-champ-badge,.cs-tcs-demo .mode-wmx .c-champ-badge{background:rgba(0,0,0,.4)}
+  .cs-tcs-demo .tcs-ticker.paused .tcs-tk-scroll::before{opacity:0}
+  @media(max-width:600px){.cs-tcs-demo .tcs-tk-left,.cs-tcs-demo .tcs-tk-toggle{display:none}.cs-tcs-demo .tcs-ticker{height:56px}.cs-tcs-demo .tcs-chip{height:56px;padding:0 12px;gap:8px}.cs-tcs-demo .c-pos-num{font-size:18px}.cs-tcs-demo .c-name{font-size:10px}.cs-tcs-demo .c-pts-val{font-size:13px}}
+
+  /* ── Results matrix (portfolio demo) ── */
+  .pmx-wrap{overflow-x:auto;margin-top:16px;border:1px solid rgba(168,255,0,.06);-webkit-overflow-scrolling:touch}
+  .pmx-table{width:100%;border-collapse:collapse;font-family:'Rajdhani','Chakra Petch',sans-serif;font-size:.5rem;font-weight:500;white-space:nowrap}
+  .pmx-table th{padding:8px 10px;text-align:left;font-family:'Tungsten','Arial Narrow',sans-serif;font-size:.42rem;letter-spacing:.08em;text-transform:uppercase;color:#555;border-bottom:1px solid rgba(168,255,0,.08);background:#0a0a0a;position:sticky;top:0;z-index:1}
+  .pmx-table th.pmx-rnd{text-align:center;min-width:36px}
+  .pmx-table td{padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.03);color:#aaa}
+  .pmx-table tr:hover td{background:rgba(168,255,0,.02)}
+  .pmx-pos{color:#eb2127;font-family:'Tungsten','Arial Narrow',sans-serif;font-size:.55rem;font-weight:700;min-width:20px}
+  .pmx-rider{color:#fff;display:flex;align-items:center;gap:6px;font-family:'Tungsten','Arial Narrow',sans-serif;font-size:.5rem;letter-spacing:.04em;text-transform:uppercase}
+  .pmx-mfr{width:16px;height:16px;max-width:16px;max-height:16px;object-fit:contain;flex-shrink:0;opacity:.7}
+  .pmx-rval{text-align:center;font-size:.42rem}
+  .pmx-rval.pmx-win{color:#eb2127;font-weight:700}
+  .pmx-rval.pmx-pod{color:#fff}
+  .pmx-rval.pmx-dns{color:#333}
+  .pmx-pts{color:#eb2127;font-family:'Tungsten','Arial Narrow',sans-serif;font-size:.55rem;font-weight:700;text-align:right}
+  .pmx-champ td{background:rgba(235,33,39,.04)}
+  .pmx-champ .pmx-rider::after{content:"CHAMPION";font-size:.3rem;letter-spacing:.1em;color:#eb2127;border:1px solid rgba(235,33,39,.3);padding:1px 5px;border-radius:2px;margin-left:6px}
 
   /* Sections that sit on solid dark (no bg image) */
   .cs-header,.cs-section-solid{background:#050505}
@@ -735,6 +853,17 @@
     .cs-grid-3{grid-template-columns:repeat(3,1fr)}
     .cs-mosaic{column-count:3;column-gap:12px}
     .cs-mosaic-3{column-count:3;column-gap:12px}
+  }
+  @media(max-width:480px){
+    .cs-header .section-title{font-size:clamp(1.1rem,5vw,1.6rem)}
+    .cs-stats{flex-direction:column;gap:0}
+    .cs-stat{padding:12px 16px}
+    .cs-bottom-nav{flex-direction:column;align-items:center;gap:10px;padding:30px 0 40px}
+    .cs-bottom-btn{min-height:44px;padding:12px 24px;font-size:.5rem;width:100%;justify-content:center}
+    .cs-intro-text{font-size:.65rem;line-height:1.7}
+    .cs-sub-label{font-size:.5rem}
+    .cs-section-eyebrow{font-size:.45rem}
+    .cs-graphics-grid{grid-template-columns:1fr;gap:8px}
   }
   </style>
   <div class="project-overlay" id="projectOverlay">
@@ -1133,32 +1262,264 @@
   </template>
 
   <template id="tpl-tcs">
-        <!-- 00 INTRO -->
-        <div class="cs-section">
-          <p class="cs-intro-text">The Triple Crown Series is <strong>Canada's premier professional motocross championship</strong> — an 8-round, coast-to-coast national series operated by Jetwerx International. We were brought on to build their entire digital presence from the ground up: a <strong>high-performance website</strong> with a <strong>custom-built CMS</strong>, <strong>live championship standings</strong>, and a full admin command center — all hand-coded with zero framework dependencies. Every pixel is built to match the intensity of 450cc machines launching off a gate.</p>
+
+        <!-- LAUNCH GRAPHIC -->
+        <div class="cs-section" style="padding-top:0;padding-bottom:0;border-bottom:none">
+          <div class="cs-frame" style="padding:0"><img src="portfolio/Triple Crown Series/Full2.webp" alt="Triple Crown Series — Now Launching 2026" loading="lazy"></div>
         </div>
 
-        <!-- 01 BRANDING -->
-        <div class="cs-section">
-          <div class="cs-row">
-            <div>
-              <div class="cs-section-eyebrow">01 Branding</div>
-              <h3 class="cs-section-title">Race-Ready Identity</h3>
-              <p class="cs-section-desc">Integrated and extended the Triple Crown Series brand identity across every digital touchpoint — from the navigation lockup to the crown icon system, schedule graphics, and championship matrices. A dark, high-contrast palette with bold red accents that carries the authority of a national championship.</p>
+        <!-- HERO: Laptop + Phone -->
+        <div class="cs-section" style="padding-top:24px">
+          <div class="cs-section-eyebrow">01 The Platform</div>
+          <h3 class="cs-section-title">Canada's Premier Motocross Racing Series, Digitized.</h3>
+          <p class="cs-section-desc">A 20+ page digital platform for the Triple Crown Series — hand-coded from the ground up with a custom CMS, a 15-module admin dashboard, and real-time data wired directly to the series' live timing and scoring provider. When a rider crosses a finish line, the site knows.</p>
+
+          <div class="sg-hero">
+            <div class="sg-laptop">
+              <div class="sg-laptop-bezel"><img src="portfolio/Triple Crown Series/tcs-home-dt.webp" alt="Triple Crown Series — desktop homepage" loading="lazy"></div>
+              <div class="sg-laptop-base"></div>
             </div>
+            <div class="sg-phone">
+              <div class="sg-phone-bezel"><img src="portfolio/Triple Crown Series/tcs-home-mob.webp" alt="Triple Crown Series — mobile" loading="lazy"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EVENTS: Individual event pages -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">02 Event Pages</div>
+          <h3 class="cs-section-title">8 Rounds. Coast to Coast.</h3>
+          <p class="cs-section-desc">Every round gets its own page — cinematic hero, live countdown to gate drop, tabbed schedule, venue info, and race format details. From Calgary to Walton, each stop is one click away.</p>
+
+          <div class="sg-spread">
+            <div class="sg-card">
+              <img src="portfolio/Triple Crown Series/tcs-event-calgary.webp" alt="Wild Rose MX — Calgary" loading="lazy">
+              <span class="sg-card-label">Wild Rose MX<span class="sg-card-url">/events/calgary</span></span>
+            </div>
+            <div class="sg-card">
+              <img src="portfolio/Triple Crown Series/tcs-event-walton.webp" alt="Walton Raceway — Season Finale" loading="lazy">
+              <span class="sg-card-label">Walton Raceway<span class="sg-card-url">/events/walton</span></span>
+            </div>
+            <div class="sg-card">
+              <img src="portfolio/Triple Crown Series/tcs-event-courtland.webp" alt="Gopher Dunes MX — Courtland" loading="lazy">
+              <span class="sg-card-label">Gopher Dunes MX<span class="sg-card-url">/events/courtland</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- REAL TCS TICKER -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">03 Live Standings</div>
+          <h3 class="cs-section-title">Wired to the Timing System</h3>
+          <p class="cs-section-desc">The homepage ticker pulls championship standings in real time via API from the series' live timing and scoring provider. Points, positions, and manufacturer logos across 450 Pro, 250 Pro, WMX, and Teams — always current, zero manual updates. Click the class buttons. Hover to pause. This is the real component with 2025 final data.</p>
+
+          <div class="cs-tcs-demo">
+            <div class="tcs-ticker mode-450" id="csTicker">
+              <div class="tcs-tk-left">
+                <div class="tcs-tk-info">
+                  <div class="tk-year">2025 Final</div>
+                  <div class="tk-sub">Standings</div>
+                </div>
+              </div>
+              <div class="tcs-tk-toggle" id="csTickerToggle">
+                <button class="tcs-cls-btn active" data-mode="450">450</button>
+                <button class="tcs-cls-btn" data-mode="250">250</button>
+                <button class="tcs-cls-btn" data-mode="wmx">WMX</button>
+                <button class="tcs-cls-btn" data-mode="team">TEAM</button>
+              </div>
+              <div class="tcs-tk-scroll">
+                <div class="tcs-marquee" id="csTickerMarquee"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESULTS MATRIX DEMO -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">04 Results Engine</div>
+          <h3 class="cs-section-title">Every Moto. Every Point. Live.</h3>
+          <p class="cs-section-desc">Race results flow directly from the timing system into a championship matrix — color-coded finishes, champion spotlights, round-by-round breakdowns, and historical archives going back to 2018. No spreadsheets, no delays. Real 2025 450 Pro data below.</p>
+
+          <div class="pmx-wrap">
+            <table class="pmx-table">
+              <thead>
+                <tr>
+                  <th style="width:28px">Pos</th>
+                  <th>Rider</th>
+                  <th class="pmx-rnd">R1</th>
+                  <th class="pmx-rnd">R2</th>
+                  <th class="pmx-rnd">R3</th>
+                  <th class="pmx-rnd">R4</th>
+                  <th class="pmx-rnd">R5</th>
+                  <th class="pmx-rnd">R6</th>
+                  <th class="pmx-rnd">R7</th>
+                  <th class="pmx-rnd">R8</th>
+                  <th style="text-align:right">Pts</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="pmx-champ">
+                  <td class="pmx-pos">1</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/Kawasaki.svg" alt="Kawasaki">Phil Nicoletti <span style="color:#555">#29</span></span></td>
+                  <td class="pmx-rval pmx-pod">3</td><td class="pmx-rval pmx-pod">2</td><td class="pmx-rval pmx-pod">3</td><td class="pmx-rval">6</td><td class="pmx-rval">4</td><td class="pmx-rval pmx-pod">2</td><td class="pmx-rval pmx-pod">2</td><td class="pmx-rval pmx-pod">2</td>
+                  <td class="pmx-pts">315</td>
+                </tr>
+                <tr>
+                  <td class="pmx-pos">2</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/gasgas.svg" alt="GASGAS">Tanner Ward <span style="color:#555">#84</span></span></td>
+                  <td class="pmx-rval">6</td><td class="pmx-rval pmx-pod">3</td><td class="pmx-rval">6</td><td class="pmx-rval pmx-win">1</td><td class="pmx-rval pmx-win">1</td><td class="pmx-rval pmx-pod">3</td><td class="pmx-rval pmx-pod">3</td><td class="pmx-rval">5</td>
+                  <td class="pmx-pts">303</td>
+                </tr>
+                <tr>
+                  <td class="pmx-pos">3</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/Yamaha.svg" alt="Yamaha">Jess Pettis <span style="color:#555">#1</span></span></td>
+                  <td class="pmx-rval pmx-pod">2</td><td class="pmx-rval pmx-win">1</td><td class="pmx-rval pmx-win">1</td><td class="pmx-rval pmx-dns">—</td><td class="pmx-rval pmx-dns">—</td><td class="pmx-rval pmx-win">1</td><td class="pmx-rval pmx-win">1</td><td class="pmx-rval pmx-win">1</td>
+                  <td class="pmx-pts">291</td>
+                </tr>
+                <tr>
+                  <td class="pmx-pos">4</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/KTM.svg" alt="KTM">Quinn Amyotte <span style="color:#555">#14</span></span></td>
+                  <td class="pmx-rval">4</td><td class="pmx-rval">4</td><td class="pmx-rval">5</td><td class="pmx-rval pmx-pod">2</td><td class="pmx-rval pmx-pod">2</td><td class="pmx-rval">4</td><td class="pmx-rval">7</td><td class="pmx-rval">14</td>
+                  <td class="pmx-pts">255</td>
+                </tr>
+                <tr>
+                  <td class="pmx-pos">5</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/Honda.svg" alt="Honda">Lars Van Berkel <span style="color:#555">#107</span></span></td>
+                  <td class="pmx-rval">9</td><td class="pmx-rval">7</td><td class="pmx-rval">7</td><td class="pmx-rval pmx-pod">3</td><td class="pmx-rval">6</td><td class="pmx-rval">7</td><td class="pmx-rval">5</td><td class="pmx-rval">8</td>
+                  <td class="pmx-pts">238</td>
+                </tr>
+                <tr>
+                  <td class="pmx-pos">6</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/Husqvarna.svg" alt="Husqvarna">Daniel Elmore <span style="color:#555">#377</span></span></td>
+                  <td class="pmx-rval">13</td><td class="pmx-rval">6</td><td class="pmx-rval">4</td><td class="pmx-rval">4</td><td class="pmx-rval">5</td><td class="pmx-rval">8</td><td class="pmx-rval">11</td><td class="pmx-rval">19</td>
+                  <td class="pmx-pts">193</td>
+                </tr>
+                <tr>
+                  <td class="pmx-pos">7</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/Honda.svg" alt="Honda">Dylan Wright <span style="color:#555">#9</span></span></td>
+                  <td class="pmx-rval pmx-win">1</td><td class="pmx-rval">9</td><td class="pmx-rval pmx-pod">2</td><td class="pmx-rval">8</td><td class="pmx-rval">16</td><td class="pmx-rval">5</td><td class="pmx-rval pmx-dns">—</td><td class="pmx-rval pmx-dns">—</td>
+                  <td class="pmx-pts">183</td>
+                </tr>
+                <tr>
+                  <td class="pmx-pos">8</td>
+                  <td><span class="pmx-rider"><img class="pmx-mfr" src="portfolio/Triple Crown Series/logos/Honda.svg" alt="Honda">Tanner Scott <span style="color:#555">#27</span></span></td>
+                  <td class="pmx-rval">11</td><td class="pmx-rval">11</td><td class="pmx-rval">9</td><td class="pmx-rval">11</td><td class="pmx-rval">9</td><td class="pmx-rval">9</td><td class="pmx-rval">17</td><td class="pmx-rval">12</td>
+                  <td class="pmx-pts">149</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DATA PAGES: Results, Schedule, Watch -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">05 Pages</div>
+          <h3 class="cs-section-title">More Than a Website</h3>
+          <p class="cs-section-desc">Schedule, broadcast hub, news feed, rider services — every aspect of running a national championship has a page built for it.</p>
+
+          <div class="sg-spread">
+            <div class="sg-card sg-card-wide">
+              <img src="portfolio/Triple Crown Series/tcs-results-dt.webp" alt="Championship standings matrix" loading="lazy">
+              <span class="sg-card-label">Championship Standings<span class="sg-card-url">/results</span></span>
+            </div>
+            <div class="sg-card">
+              <img src="portfolio/Triple Crown Series/tcs-events-dt.webp" alt="2026 Schedule" loading="lazy">
+              <span class="sg-card-label">Schedule<span class="sg-card-url">/events</span></span>
+            </div>
+            <div class="sg-card">
+              <img src="portfolio/Triple Crown Series/tcs-watch-dt.webp" alt="Broadcast hub" loading="lazy">
+              <span class="sg-card-label">Broadcast<span class="sg-card-url">/watch</span></span>
+            </div>
+            <div class="sg-card">
+              <img src="portfolio/Triple Crown Series/tcs-news-dt.webp" alt="News feed" loading="lazy">
+              <span class="sg-card-label">News<span class="sg-card-url">/news</span></span>
+            </div>
+          </div>
+
+          <div class="sg-stats">
+            <div class="sg-stat"><span class="sg-stat-num">20+</span><span class="sg-stat-label">Pages</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">15</span><span class="sg-stat-label">Admin Modules</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">100+</span><span class="sg-stat-label">Rider Profiles</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">Live</span><span class="sg-stat-label">Standings</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">8</span><span class="sg-stat-label">Rounds</span></div>
+          </div>
+        </div>
+
+        <!-- GRAPHIC DESIGN -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">06 Graphic Design</div>
+          <h3 class="cs-section-title">Off the Screen, Into the Wild</h3>
+          <p class="cs-section-desc">Event posters, broadcast thumbnails, championship number plates, schedule graphics — the series identity lives everywhere the racing does.</p>
+
+          <!-- Poster + Schedule -->
+          <div class="cs-sub">
+            <div class="cs-sub-label">Print</div>
+            <div class="cs-mosaic">
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/TCS25_Event-Poster 11x17 C2.webp" alt="TCS 2025 Event Poster — Wild Rose MX" loading="lazy"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/tcs-updated-2026-schedule.webp" alt="2026 Triple Crown Series schedule graphic" loading="lazy"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/TCS WMX PREMIX 2025 Schedule v2.webp" alt="2025 WMX Premix Nationals schedule" loading="lazy"></div>
+            </div>
+          </div>
+
+          <!-- Broadcast Thumbnails -->
+          <div class="cs-sub">
+            <div class="cs-sub-label">Broadcast Thumbnails</div>
+            <div class="cs-graphics-grid" style="grid-template-columns:1fr 1fr">
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/round-1-thumb.webp" alt="Round 1 thumbnail — Wild Rose MX" loading="lazy"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/round-3-thumb.webp" alt="Round 3 thumbnail — Motocross Ste-Julie" loading="lazy"></div>
+            </div>
+          </div>
+
+          <!-- Championship Number Plates -->
+          <div class="cs-sub">
+            <div class="cs-sub-label">Championship Number Plates</div>
+            <div class="cs-graphics-grid">
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/450 Pro Champion.webp" alt="450 Pro Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/250 Pro Champion.webp" alt="250 Pro Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/TCS Stage 1 Champ Plate.webp" alt="Stage 1 Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/WCAN Champ Plate.webp" alt="WCAN Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/WMX West Champ Plate.webp" alt="WMX West Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/WMX East Champ Plate.webp" alt="WMX East Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/Premix West Champ Plate.webp" alt="Premix West Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/Premix East Champ Plate.webp" alt="Premix East Champion plate" loading="lazy" style="transform:scaleX(-1);border-radius:6px"></div>
+            </div>
+          </div>
+
+          <!-- Merch Store -->
+          <div class="cs-sub">
+            <div class="cs-sub-label">Merch Store</div>
+            <div class="cs-graphics-grid" style="grid-template-columns:1fr 1fr">
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/tcs-merch-dt.webp" alt="TCS Merch page" loading="lazy"></div>
+              <div class="cs-frame"><img src="portfolio/Triple Crown Series/tcs-merch-products-dt.webp" alt="TCS Merch product grid" loading="lazy"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BRAND -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">07 Brand</div>
+          <h3 class="cs-section-title">Identity Integration</h3>
+          <div class="cs-row">
+            <div></div>
             <div class="cs-logos">
               <div class="cs-logo-frame">
-                <span class="cs-logo-label">Full Logo</span>
+                <span class="cs-logo-label">Full</span>
                 <picture><source srcset="portfolio/Triple Crown Series/tcs-logo-full.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-logo-full.webp" alt="Triple Crown Series full logo" loading="lazy"></picture>
               </div>
               <div class="cs-logo-frame">
                 <span class="cs-logo-label">Horizontal</span>
                 <picture><source srcset="portfolio/Triple Crown Series/tcs-logo-hz.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-logo-hz.webp" alt="Triple Crown Series horizontal logo" loading="lazy"></picture>
               </div>
+              <div class="cs-logo-frame">
+                <span class="cs-logo-label">Crown Badge</span>
+                <img src="portfolio/Triple Crown Series/TCS-CrownTextCircleAsset 1.webp" alt="Triple Crown Series crown badge" loading="lazy" style="max-height:90px">
+              </div>
+              <div class="cs-logo-frame">
+                <span class="cs-logo-label">Premix Nationals</span>
+                <img src="portfolio/Triple Crown Series/Premix_Logo Final.webp" alt="FXR Premix Nationals logo" loading="lazy">
+              </div>
             </div>
           </div>
-
-          <!-- Brand DNA -->
           <div class="cs-brand-dna">
             <div class="cs-dna-row">
               <div class="cs-dna-label">Color Palette</div>
@@ -1172,229 +1533,9 @@
             <div class="cs-dna-row">
               <div class="cs-dna-label">Typography</div>
               <div class="cs-type-list">
-                <div class="cs-type-item"><span class="cs-type-role">Headings</span><span class="cs-type-name">Tungsten</span><span class="cs-type-sample">Bold — Race Titles & Hero Text</span></div>
-                <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name">Rajdhani</span><span class="cs-type-sample">Medium — All Copy & UI</span></div>
-                <div class="cs-type-item"><span class="cs-type-role">Data</span><span class="cs-type-name">Space Mono</span><span class="cs-type-sample">Monospace — Countdowns, Points & Stats</span></div>
-              </div>
-            </div>
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">Brand Attributes</div>
-              <div class="cs-attributes">
-                <span class="cs-attr">National Championship</span>
-                <span class="cs-attr">Coast-to-Coast</span>
-                <span class="cs-attr">High-Performance</span>
-                <span class="cs-attr">Broadcast-Ready</span>
-                <span class="cs-attr">Data-Driven</span>
-              </div>
-            </div>
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">Deliverables</div>
-              <div class="cs-deliverables">
-                <div class="cs-del-stat"><span class="cs-del-num">20+</span><span class="cs-del-label">Pages Built</span></div>
-                <div class="cs-del-stat"><span class="cs-del-num">15</span><span class="cs-del-label">Admin Modules</span></div>
-                <div class="cs-del-stat"><span class="cs-del-num">8</span><span class="cs-del-label">API Endpoints</span></div>
-                <div class="cs-del-stat"><span class="cs-del-num">100+</span><span class="cs-del-label">Rider Profiles</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 02 WEB — THE MAIN EVENT -->
-        <div class="cs-section">
-          <div class="cs-section-eyebrow">02 Web</div>
-          <h3 class="cs-section-title">A Complete Digital Platform</h3>
-          <p class="cs-section-desc">Not just a website — a full digital ecosystem. Hand-coded from scratch with zero framework dependencies, the TCS platform serves as the central hub for Canada's motocross championship. 20+ pages, a custom admin CMS, live championship data, and automated backend systems — all engineered to feel as fast as the racing itself.</p>
-
-          <div class="cs-page-tour" id="tcsTour">
-            <div class="cs-page-tour-screen">
-              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca</span></div>
-              <div class="cs-page-tour-img-wrap" id="tcsTourImgWrap">
-                <img src="portfolio/Triple Crown Series/tcs-home-full.jpg" alt="Triple Crown Series full homepage" loading="lazy" id="tcsTourImg">
-                <div class="cs-page-tour-window" id="tcsTourWindow"></div>
-              </div>
-            </div>
-            <div class="cs-page-tour-steps" id="tcsTourSteps">
-              <div class="cs-page-tour-step active" data-tour-y="0" data-tour-h="14">
-                <div class="cs-page-tour-step-title">Hero</div>
-                <p class="cs-page-tour-step-desc">Full-bleed cinematic slideshow cycling through high-res race photography on a 6-second interval with smooth crossfade transitions. Dark gradient overlay keeps the headline and CTAs punchy. Navigation features the full series lockup with a red "Watch Live" call-to-action.</p>
-              </div>
-              <div class="cs-page-tour-step" data-tour-y="14" data-tour-h="8">
-                <div class="cs-page-tour-step-title">Next Race Countdown</div>
-                <p class="cs-page-tour-step-desc">Live countdown timer updating every second — days, hours, minutes, seconds — building anticipation for the next gate drop. Featured event card pulls dynamically from the schedule data.</p>
-              </div>
-              <div class="cs-page-tour-step" data-tour-y="22" data-tour-h="22">
-                <div class="cs-page-tour-step-title">Schedule Grid</div>
-                <p class="cs-page-tour-step-desc">All 8 rounds displayed as filterable cards organized by the series' unique 3-stage format. Each card shows the venue, location, date, and stage badge. Stage filter tabs let fans drill into Western, Central, or Eastern rounds.</p>
-              </div>
-              <div class="cs-page-tour-step" data-tour-y="44" data-tour-h="14">
-                <div class="cs-page-tour-step-title">Championship Standings</div>
-                <p class="cs-page-tour-step-desc">Auto-scrolling ticker displaying current championship standings across all classes — 450 Pro, 250 Pro, WMX, and Teams. Rider chips show position, points, manufacturer logo, and champion badges. The ticker pauses on first view, then rolls at variable speed.</p>
-              </div>
-              <div class="cs-page-tour-step" data-tour-y="58" data-tour-h="14">
-                <div class="cs-page-tour-step-title">News Feed</div>
-                <p class="cs-page-tour-step-desc">Latest series news pulled dynamically and displayed in a responsive card grid with featured images, dates, and category tags.</p>
-              </div>
-              <div class="cs-page-tour-step" data-tour-y="72" data-tour-h="10">
-                <div class="cs-page-tour-step-title">Broadcast Partners</div>
-                <p class="cs-page-tour-step-desc">Fox Sports and Ryde TV partner cards with platform descriptions and direct links to watch live — connecting fans to every moto from anywhere.</p>
-              </div>
-              <div class="cs-page-tour-step" data-tour-y="82" data-tour-h="10">
-                <div class="cs-page-tour-step-title">Sponsor Marquee</div>
-                <p class="cs-page-tour-step-desc">Infinite-scrolling logo strip featuring 30+ series sponsors. Grayscale by default, full color on hover — clean presentation that gives every partner visibility without visual clutter.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 03 CHAMPIONSHIP MATRIX — the cool stuff -->
-        <div class="cs-section">
-          <div class="cs-section-eyebrow">03 Championship Engine</div>
-          <h3 class="cs-section-title">Real-Time Standings & Results</h3>
-          <p class="cs-section-desc">The crown jewel of the platform. A custom-built championship matrix that pulls live points, positions, and race results — always up to date, zero manual entry required. The results page features class-specific standings tables with color-coded round results, champion spotlight cards, expandable team breakdowns with nested rider rosters, and round quick-navigation. Fans and teams get a championship-grade data experience that rivals any major series.</p>
-
-          <div class="cs-brand-dna" style="margin-top:16px">
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">What It Does</div>
-              <div class="cs-attributes">
-                <span class="cs-attr">Live Standings Updates</span>
-                <span class="cs-attr">450 / 250 / WMX / Teams</span>
-                <span class="cs-attr">Color-Coded Round Results</span>
-                <span class="cs-attr">Champion Spotlight Cards</span>
-                <span class="cs-attr">Sticky Column Headers</span>
-                <span class="cs-attr">Team Championship Breakdowns</span>
-                <span class="cs-attr">Manufacturer Integration</span>
-                <span class="cs-attr">Historical Archive (2018–2025)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 04 CUSTOM CMS / ADMIN -->
-        <div class="cs-section">
-          <div class="cs-section-eyebrow">04 Custom CMS</div>
-          <h3 class="cs-section-title">Built-In Command Center</h3>
-          <p class="cs-section-desc">A full-featured admin dashboard built from scratch — no WordPress, no plugins, no off-the-shelf CMS. Role-based access control lets the Jetwerx team manage every aspect of the series' digital presence through 15 dedicated modules. News publishing, rider profiles, championship standings, event configuration, form submissions, media uploads, SEO settings — all controlled from one dark-mode command center that feels as polished as the public site.</p>
-
-          <div class="cs-brand-dna" style="margin-top:16px">
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">What the Team Controls</div>
-              <div class="cs-attributes">
-                <span class="cs-attr">Dashboard & Stats</span>
-                <span class="cs-attr">News Publishing</span>
-                <span class="cs-attr">Rider Profiles</span>
-                <span class="cs-attr">Event Configuration</span>
-                <span class="cs-attr">Championship Standings</span>
-                <span class="cs-attr">Live Timing Settings</span>
-                <span class="cs-attr">Form Submissions</span>
-                <span class="cs-attr">Media Library</span>
-                <span class="cs-attr">User Permissions</span>
-                <span class="cs-attr">SEO & Meta Tags</span>
-                <span class="cs-attr">Brand Assets</span>
-                <span class="cs-attr">Q&A Moderation</span>
-              </div>
-            </div>
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">Capabilities</div>
-              <div class="cs-attributes">
-                <span class="cs-attr">Role-Based Access (Viewer / Editor / Admin)</span>
-                <span class="cs-attr">Automated Email Routing</span>
-                <span class="cs-attr">Real-Time Data Sync</span>
-                <span class="cs-attr">File & Image Uploads</span>
-                <span class="cs-attr">Results Ingestion</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 05 KEY PAGES -->
-        <div class="cs-section">
-          <div class="cs-section-eyebrow">05 Key Pages</div>
-          <h3 class="cs-section-title">Every Page, Purpose-Built</h3>
-          <p class="cs-section-desc">Each page is designed for its specific job — not templated, not recycled. The events page maps the 8-round coast-to-coast schedule with stage filtering. The results page renders full championship matrices with expandable team rosters. The news system supports featured posts, category filtering, and search. The watch page connects fans to Fox Sports and Ryde TV broadcasts. Every layout is responsive, every interaction is intentional.</p>
-
-          <div class="cs-sub"><span class="cs-sub-label">Events</span></div>
-          <div class="cs-web-grid">
-            <div class="cs-browser">
-              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/events</span></div>
-              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-events-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-events-viewport.webp" alt="Triple Crown Series events page — 8-round schedule with stage filtering" loading="lazy"></picture></div>
-            </div>
-          </div>
-
-          <div class="cs-sub"><span class="cs-sub-label">Results & Standings</span></div>
-          <div class="cs-web-grid">
-            <div class="cs-browser">
-              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/results</span></div>
-              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-results-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-results-viewport.webp" alt="Triple Crown Series results page — championship standings matrix" loading="lazy"></picture></div>
-            </div>
-          </div>
-
-          <div class="cs-sub"><span class="cs-sub-label">News</span></div>
-          <div class="cs-web-grid">
-            <div class="cs-browser">
-              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/news</span></div>
-              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-news-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-news-viewport.webp" alt="Triple Crown Series news page — article feed with search and filtering" loading="lazy"></picture></div>
-            </div>
-          </div>
-
-          <div class="cs-sub"><span class="cs-sub-label">Watch</span></div>
-          <div class="cs-web-grid">
-            <div class="cs-browser">
-              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">triplecrownseries.ca/watch</span></div>
-              <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/tcs-watch-viewport.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-watch-viewport.webp" alt="Triple Crown Series watch page — broadcast partner links and streaming info" loading="lazy"></picture></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 06 GRAPHICS -->
-        <div class="cs-section">
-          <div class="cs-section-eyebrow">06 Graphics</div>
-          <h3 class="cs-section-title">Series Collateral</h3>
-          <p class="cs-section-desc">Schedule graphics, social media templates, Open Graph images, and merchandise mockups — all generated from custom-built internal tools. The OG image generator produces share-ready assets for every page. The thumbnail designer lets the team create social graphics with drag-and-drop composition. Even the merch mockups are AI-generated through a custom Recraft API pipeline.</p>
-
-          <div class="cs-graphics-grid cs-grid-3">
-            <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/TCS_2026-Schedule.webp" type="image/webp"><img src="portfolio/Triple Crown Series/TCS_2026-Schedule.webp" alt="2026 Triple Crown Series schedule graphic" loading="lazy"></picture></div>
-            <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/triple-crown-social-default.webp" type="image/webp"><img src="portfolio/Triple Crown Series/triple-crown-social-default.webp" alt="Triple Crown Series social media default image" loading="lazy"></picture></div>
-            <div class="cs-frame"><picture><source srcset="portfolio/Triple Crown Series/crown-tee.webp" type="image/webp"><img src="portfolio/Triple Crown Series/crown-tee.webp" alt="Triple Crown Series merchandise — crown tee mockup" loading="lazy"></picture></div>
-          </div>
-        </div>
-
-        <!-- 07 TECH STACK -->
-        <div class="cs-section">
-          <div class="cs-section-eyebrow">07 Under the Hood</div>
-          <h3 class="cs-section-title">Zero-Framework Architecture</h3>
-          <p class="cs-section-desc">No React. No Next.js. No WordPress. Every line of HTML, CSS, and JavaScript is hand-written — giving us complete control over performance, accessibility, and the exact user experience we want to deliver. The backend runs on Supabase (PostgreSQL + Auth) with Vercel serverless functions and Blob storage. 120+ SEO redirect rules, structured data markup, and performance-optimized asset delivery round out a stack that's built to last.</p>
-
-          <div class="cs-brand-dna" style="margin-top:16px">
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">Frontend</div>
-              <div class="cs-attributes">
-                <span class="cs-attr">Vanilla HTML / CSS / JS</span>
-                <span class="cs-attr">Zero Dependencies</span>
-                <span class="cs-attr">CSS Custom Properties</span>
-                <span class="cs-attr">Intersection Observer API</span>
-                <span class="cs-attr">Native Canvas API</span>
-                <span class="cs-attr">Responsive / Mobile-First</span>
-              </div>
-            </div>
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">Backend</div>
-              <div class="cs-attributes">
-                <span class="cs-attr">Supabase (PostgreSQL + Auth)</span>
-                <span class="cs-attr">Vercel Serverless Functions</span>
-                <span class="cs-attr">Vercel Blob Storage</span>
-                <span class="cs-attr">Recraft AI API (Merch Mockups)</span>
-                <span class="cs-attr">Automated Email Routing</span>
-              </div>
-            </div>
-            <div class="cs-dna-row cs-dna-full">
-              <div class="cs-dna-label">Infrastructure</div>
-              <div class="cs-attributes">
-                <span class="cs-attr">Vercel Edge Network</span>
-                <span class="cs-attr">120+ SEO Redirects</span>
-                <span class="cs-attr">JSON-LD Structured Data</span>
-                <span class="cs-attr">WebP Image Pipeline</span>
-                <span class="cs-attr">Font Preloading</span>
-                <span class="cs-attr">Dynamic Meta Wrapper (PHP)</span>
+                <div class="cs-type-item"><span class="cs-type-role">Display</span><span class="cs-type-name" style="font-family:'VANGO',sans-serif;font-size:.8rem">Vango</span><span class="cs-type-sample" style="font-family:'VANGO',sans-serif;font-size:.55rem">Triple Crown Series</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Headings</span><span class="cs-type-name" style="font-family:'Tungsten',sans-serif;font-size:.8rem;letter-spacing:.04em">Tungsten</span><span class="cs-type-sample" style="font-family:'Tungsten',sans-serif;font-size:.55rem;letter-spacing:.04em">Race Results & Standings</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name" style="font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600">Rajdhani</span><span class="cs-type-sample" style="font-family:'Rajdhani',sans-serif;font-size:.5rem;font-weight:500">Canada's Premier Motocross Racing Series</span></div>
               </div>
             </div>
           </div>
@@ -1463,6 +1604,122 @@
         </div>
   </template>
 
+  <template id="tpl-crockett-myers">
+        <!-- 01 GRAPHIC DESIGN — Sponsorship Proposal Deck -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">01 Graphic Design</div>
+          <h3 class="cs-section-title">Sponsorship Proposal Deck</h3>
+          <p class="cs-section-desc">An interactive, full-screen sponsorship proposal built for Crockett Myers #131 — a rising 250SX West privateer competing in Monster Energy Supercross, Pro Motocross, and SuperMotocross on a Suzuki RM-Z250. The nine-slide deck was engineered to land sponsor partnerships with bold motorsport typography, dynamic race photography, carbon-fiber textures, and neon accents. Content spans rider profile, three seasons of results, audience reach across Peacock and NBC, partnership tiers from $2,500 to $40K, and a full 24-round race schedule with interactive navigation.</p>
+
+          <!-- Brand DNA -->
+          <div class="cs-brand-dna" style="margin-bottom:28px">
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Color Palette</div>
+              <div class="cs-palette">
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#060606"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Black</span><span class="cs-swatch-hex">#060606</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#E9FC0F"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Neon</span><span class="cs-swatch-hex">#E9FC0F</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#FFFFFF;border-color:rgba(255,255,255,.2)"></div><div class="cs-swatch-info"><span class="cs-swatch-name">White</span><span class="cs-swatch-hex">#FFFFFF</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#111111"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Dark</span><span class="cs-swatch-hex">#111111</span></div></div>
+              </div>
+            </div>
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Typography</div>
+              <div class="cs-type-list">
+                <div class="cs-type-item"><span class="cs-type-role">Headings</span><span class="cs-type-name">Bebas Neue</span><span class="cs-type-sample">All Caps — Section Titles & Cover</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Labels</span><span class="cs-type-name">Share Tech Mono</span><span class="cs-type-sample">Mono — Eyebrows & Data Labels</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name">Barlow / Barlow Condensed</span><span class="cs-type-sample">Regular, Semi-Bold — Deck Copy</span></div>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Brand Attributes</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Speed</span>
+                <span class="cs-attr">Grit</span>
+                <span class="cs-attr">Privateer</span>
+                <span class="cs-attr">High-Tech</span>
+                <span class="cs-attr">Cinematic</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Deliverables</div>
+              <div class="cs-deliverables">
+                <div class="cs-del-stat"><span class="cs-del-num">9</span><span class="cs-del-label">Slides Designed</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">16:9</span><span class="cs-del-label">Widescreen Format</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">1</span><span class="cs-del-label">Interactive Web Deck</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-graphics-grid cs-grid-3">
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-cover.webp" alt="Crockett Myers deck cover" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-athlete.webp" alt="The Athlete slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-opportunity.webp" alt="The Opportunity slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-season.webp" alt="2026 Current Season slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-2025.webp" alt="2025 Season slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-rookie.webp" alt="2024 Rookie Year slide" loading="lazy"></picture></div>
+            <div class="cs-frame cs-redacted"><picture><img src="portfolio/Crockett Myers/cm-slide-partnership.webp" alt="Partnership Levels slide" loading="lazy"></picture><span class="cs-redacted-label">Confidential</span></div>
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-schedule.webp" alt="Race Schedule slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Crockett Myers/cm-slide-contact.webp" alt="Contact slide" loading="lazy"></picture></div>
+          </div>
+        </div>
+  </template>
+
+  <template id="tpl-veterans-mx">
+        <!-- 01 GRAPHIC DESIGN — Championship Race Deck -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">01 Graphic Design</div>
+          <h3 class="cs-section-title">Championship Race Deck</h3>
+          <p class="cs-section-desc">An interactive, full-screen race deck for the 2026 Veteran Motocross Championship — an AMA-sanctioned event held September 14–20 at Bar2Bar MX in Wichita, Kansas. Built for the Veteran Motocross Foundation, the five-slide presentation honors active and retired military through motocross with a military-inspired design system featuring navy, red, and gold accents with service branch emblems. Content covers event details, photo galleries from previous years, five sponsorship tiers from in-kind product support to $10,000 title sponsorship, and a direct contact flow. The deck includes animated transitions, a photo lightbox, sponsor marquee, and adaptive mobile layout.</p>
+
+          <!-- Brand DNA -->
+          <div class="cs-brand-dna" style="margin-bottom:28px">
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Color Palette</div>
+              <div class="cs-palette">
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#0A1628"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Navy</span><span class="cs-swatch-hex">#0A1628</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#B22234"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Red</span><span class="cs-swatch-hex">#B22234</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#C9B037"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Gold</span><span class="cs-swatch-hex">#C9B037</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#3A5A8C"></div><div class="cs-swatch-info"><span class="cs-swatch-name">Blue</span><span class="cs-swatch-hex">#3A5A8C</span></div></div>
+                <div class="cs-swatch"><div class="cs-swatch-color" style="background:#FFFFFF;border-color:rgba(255,255,255,.2)"></div><div class="cs-swatch-info"><span class="cs-swatch-name">White</span><span class="cs-swatch-hex">#FFFFFF</span></div></div>
+              </div>
+            </div>
+            <div class="cs-dna-row">
+              <div class="cs-dna-label">Typography</div>
+              <div class="cs-type-list">
+                <div class="cs-type-item"><span class="cs-type-role">Headings</span><span class="cs-type-name">EuroStile Extended</span><span class="cs-type-sample">Black Italic — Section Titles & Cover</span></div>
+                <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name">Inter</span><span class="cs-type-sample">Regular — Deck Copy</span></div>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Brand Attributes</div>
+              <div class="cs-attributes">
+                <span class="cs-attr">Honor</span>
+                <span class="cs-attr">Service</span>
+                <span class="cs-attr">Military</span>
+                <span class="cs-attr">Community</span>
+                <span class="cs-attr">Racing</span>
+              </div>
+            </div>
+            <div class="cs-dna-row cs-dna-full">
+              <div class="cs-dna-label">Deliverables</div>
+              <div class="cs-deliverables">
+                <div class="cs-del-stat"><span class="cs-del-num">5</span><span class="cs-del-label">Slides Designed</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">16:9</span><span class="cs-del-label">Widescreen Format</span></div>
+                <div class="cs-del-stat"><span class="cs-del-num">1</span><span class="cs-del-label">Interactive Web Deck</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-graphics-grid cs-grid-3">
+            <div class="cs-frame"><picture><img src="portfolio/Veterans MX/vmx-slide-cover.webp" alt="Veterans MX deck cover" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Veterans MX/vmx-slide-championship.webp" alt="The Championship slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Veterans MX/vmx-slide-experience.webp" alt="The Experience photo gallery slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Veterans MX/vmx-slide-tiers.webp" alt="Sponsor Tiers slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><img src="portfolio/Veterans MX/vmx-slide-contact.webp" alt="Contact slide" loading="lazy"></picture></div>
+          </div>
+        </div>
+  </template>
+
       <!-- Bottom nav -->
       <div class="cs-bottom-nav">
         <button class="cs-bottom-btn" id="csBackToTop">
@@ -1480,12 +1737,14 @@
   <!-- Live region for section change announcements -->
   <div id="sectionAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-  <footer class="sr-only" role="contentinfo">
-    <p>&copy; 2026 Socia Visual. All rights reserved.</p>
-    <nav aria-label="Legal">
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/accessibility.html">Accessibility Statement</a>
-      <button onclick="document.cookie='sv_consent=;path=/;max-age=0';location.reload()" style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit">Manage Cookie Preferences</button>
+  <footer class="site-footer" role="contentinfo">
+    <div class="sr-only">
+      <p>&copy; 2026 Socia Visual. All rights reserved.</p>
+    </div>
+    <nav class="footer-legal" aria-label="Legal">
+      <a href="privacy.html" class="footer-link">Privacy Policy</a>
+      <a href="accessibility.html" class="footer-link">Accessibility</a>
+      <button id="cookieReset" class="footer-link footer-btn">Cookies</button>
     </nav>
   </footer>
 

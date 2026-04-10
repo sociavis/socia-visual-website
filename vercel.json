@@ -3,18 +3,6 @@
   "outputDirectory": ".",
   "headers": [
     {
-      "source": "/admin/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://cdn11.bigcommerce.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://yjmyqmfvtudhkkxarttw.supabase.co; base-uri 'self'; form-action 'self'" },
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
-      ]
-    },
-    {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
@@ -22,7 +10,7 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://formsubmit.co https://region1.google-analytics.com; frame-src https://www.google.com/recaptcha/; base-uri 'self'; form-action 'self' https://formsubmit.co" }
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://www.google-analytics.com https://cdn11.bigcommerce.com https://yjmyqmfvtudhkkxarttw.supabase.co; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://formsubmit.co https://region1.google-analytics.com https://yjmyqmfvtudhkkxarttw.supabase.co wss://yjmyqmfvtudhkkxarttw.supabase.co; frame-src https://www.google.com/recaptcha/; base-uri 'self'; form-action 'self' https://formsubmit.co" }
       ]
     },
     {

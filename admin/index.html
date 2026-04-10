@@ -1021,7 +1021,7 @@
         <span>Clients</span>
         <span class="nav-badge" id="partnerCount">0</span>
       </div>
-      <div class="nav-item" onclick="window.open('meeting-notes.html','_blank')" data-page="meetings">
+      <div class="nav-item" onclick="window.open('/admin/meeting-notes.html','_blank')" data-page="meetings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         <span>New Meeting</span>
       </div>
@@ -2360,7 +2360,7 @@ function renderOverview(partner, meetings, contractsList, invoicesList, projects
     <div class="overview-block">
       <h4>Recent Meetings <a onclick="switchClientTab('meetings')">View all &rarr;</a></h4>
       ${meetings.length ? recent(meetings).map(m => `
-        <div class="related-item" onclick="window.open('meeting-notes.html?id=${m.id}','_blank')">
+        <div class="related-item" onclick="window.open('/admin/meeting-notes.html?id=${m.id}','_blank')">
           <div class="related-item-main">
             <div class="related-item-title">${m.meeting_type ? m.meeting_type.charAt(0).toUpperCase() + m.meeting_type.slice(1) : 'Meeting'} — ${m.meeting_date || ''}</div>
             <div class="related-item-meta">${m.attendees || 'No attendees'}</div>
@@ -2400,7 +2400,7 @@ function renderRelatedMeetings(meetings) {
   const el = document.getElementById('relatedMeetings');
   if (!meetings.length) { el.innerHTML = '<div class="related-empty">No meeting notes yet. Click "+ Meeting Note" above to start one.</div>'; return; }
   el.innerHTML = meetings.map(m => `
-    <div class="related-item" onclick="window.open('meeting-notes.html?id=${m.id}','_blank')">
+    <div class="related-item" onclick="window.open('/admin/meeting-notes.html?id=${m.id}','_blank')">
       <div class="related-item-main">
         <div class="related-item-title">${m.meeting_type ? m.meeting_type.charAt(0).toUpperCase() + m.meeting_type.slice(1) : 'Meeting'} — ${m.meeting_date || 'No date'}</div>
         <div class="related-item-meta">${m.attendees || 'No attendees'} ${m.contact ? '· ' + m.contact : ''}</div>
@@ -2453,7 +2453,7 @@ function renderRelatedProjects(projectsList) {
 function newMeetingForClient() {
   const p = partners.find(x => x.id === activePartnerId);
   if (!p) return;
-  const url = `meeting-notes.html?client=${encodeURIComponent(p.company_name)}`;
+  const url = `/admin/meeting-notes.html?client=${encodeURIComponent(p.company_name)}`;
   window.open(url, '_blank');
 }
 

@@ -715,6 +715,182 @@
   .modal-box .form-group { margin-bottom: 14px; }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
 
+  /* ═══ CLIENT HUB ═══ */
+  .client-hub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+  .client-hub-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: var(--text);
+  }
+  .client-hub-actions { display: flex; gap: 8px; }
+
+  .client-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .client-stat {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .client-stat-label {
+    font-size: 9px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .client-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--text);
+  }
+  .client-stat-value.accent { color: var(--accent); }
+  .client-stat-value.green { color: var(--green); }
+  .client-stat-value.yellow { color: var(--yellow); }
+
+  .client-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+    overflow-x: auto;
+  }
+  .client-tab {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .15s;
+    white-space: nowrap;
+    letter-spacing: .5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .client-tab:hover { color: var(--text); }
+  .client-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--surface-3);
+    color: var(--text-dim);
+    padding: 1px 6px;
+    border-radius: 8px;
+    min-width: 18px;
+    text-align: center;
+  }
+  .client-tab.active .tab-count { background: var(--accent-dim); color: var(--accent); }
+
+  .client-tab-panel { display: none; }
+  .client-tab-panel.active { display: block; }
+
+  .related-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .related-item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+  .related-item:hover {
+    border-color: var(--accent);
+    background: var(--surface-3);
+  }
+  .related-item-main { flex: 1; min-width: 0; }
+  .related-item-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .related-item-meta {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    letter-spacing: .5px;
+  }
+  .related-item-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .related-item-amount {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--text);
+  }
+  .related-empty {
+    padding: 36px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    background: var(--surface-2);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .overview-block {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .overview-block h4 {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .overview-block h4 a {
+    font-family: var(--font);
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .overview-block h4 a:hover { color: var(--accent-2); }
+
   /* ═══ SETTINGS PAGE ═══ */
   .settings-content {
     padding: 28px;
@@ -842,12 +1018,12 @@
       </div>
       <div class="nav-item" onclick="navigate('partners')" data-page="partners">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        <span>Partners</span>
+        <span>Clients</span>
         <span class="nav-badge" id="partnerCount">0</span>
       </div>
       <div class="nav-item" onclick="window.open('meeting-notes.html','_blank')" data-page="meetings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        <span>Meeting Notes</span>
+        <span>New Meeting</span>
       </div>
 
       <div class="nav-section-label">System</div>
@@ -1034,43 +1210,90 @@
         <div class="invoices-layout">
           <div class="inv-sidebar">
             <div class="inv-sidebar-header">
-              <h3>All Partners</h3>
+              <h3>All Clients</h3>
               <button class="btn btn-primary btn-sm" onclick="newPartner()">+ New</button>
             </div>
             <div class="inv-list" id="partnerList"></div>
           </div>
           <div class="inv-editor" id="partnerEditor">
             <div class="empty-state" id="partnerEmpty">
-              <p style="margin-bottom:6px;">No partner selected</p>
-              <p>Create a new partner or select one from the list.</p>
+              <p style="margin-bottom:6px;">No client selected</p>
+              <p>Create a new client or select one from the list.</p>
             </div>
             <div id="partnerForm" style="display:none;">
-              <div class="inv-editor-title">Partner <span id="partnerEditName" class="tag"></span></div>
-              <div class="form-row">
-                <div class="form-group"><label>Company Name</label><input type="text" id="pCompany" placeholder="DME Academy"></div>
-                <div class="form-group"><label>Slug</label><input type="text" id="pSlug" placeholder="dme-academy" style="font-family:var(--mono);"></div>
-              </div>
-              <div class="form-row">
-                <div class="form-group"><label>Contact Name</label><input type="text" id="pContact" placeholder="Greg Birgfeld"></div>
-                <div class="form-group"><label>Contact Email</label><input type="email" id="pEmail" placeholder="greg@dmeacademy.com"></div>
-              </div>
-              <div class="form-row">
-                <div class="form-group"><label>Portal Password</label><input type="text" id="pPassword" placeholder="Set client password"></div>
-                <div class="form-group"><label>Status</label>
-                  <select id="pStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+
+              <!-- Client Header -->
+              <div class="client-hub-header">
+                <div class="client-hub-title">
+                  <span id="partnerEditName">Client</span>
+                </div>
+                <div class="client-hub-actions">
+                  <button class="btn btn-sm" onclick="newMeetingForClient()">+ Meeting Note</button>
+                  <button class="btn btn-sm" onclick="copyPortalLink()">Portal Link</button>
                 </div>
               </div>
-              <div class="form-row">
-                <div class="form-group"><label>Proposal URL</label><input type="text" id="pProposal" placeholder="https://dme.sociavisual.com/proposal"></div>
+
+              <!-- Stats Strip -->
+              <div class="client-stats" id="clientStats"></div>
+
+              <!-- Tabs -->
+              <div class="client-tabs">
+                <div class="client-tab active" data-tab="overview" onclick="switchClientTab('overview')">Overview</div>
+                <div class="client-tab" data-tab="meetings" onclick="switchClientTab('meetings')">Meeting Notes <span class="tab-count" id="tabCountMeetings">0</span></div>
+                <div class="client-tab" data-tab="contracts" onclick="switchClientTab('contracts')">Contracts <span class="tab-count" id="tabCountContracts">0</span></div>
+                <div class="client-tab" data-tab="invoices" onclick="switchClientTab('invoices')">Invoices <span class="tab-count" id="tabCountInvoices">0</span></div>
+                <div class="client-tab" data-tab="projects" onclick="switchClientTab('projects')">Projects <span class="tab-count" id="tabCountProjects">0</span></div>
+                <div class="client-tab" data-tab="details" onclick="switchClientTab('details')">Details</div>
               </div>
-              <div class="form-row">
-                <div class="form-group"><label>Notes</label><textarea id="pNotes" placeholder="Internal notes about this client..."></textarea></div>
+
+              <!-- Tab Panels -->
+              <div class="client-tab-panel active" id="clientTab-overview">
+                <div class="overview-grid" id="overviewGrid"></div>
               </div>
-              <div class="inv-actions">
-                <button class="btn btn-primary" onclick="savePartner()">Save</button>
-                <button class="btn" onclick="copyPortalLink()">Copy Portal Link</button>
-                <button class="btn btn-danger" onclick="deletePartner()">Delete</button>
+
+              <div class="client-tab-panel" id="clientTab-meetings">
+                <div class="related-list" id="relatedMeetings"></div>
               </div>
+
+              <div class="client-tab-panel" id="clientTab-contracts">
+                <div class="related-list" id="relatedContracts"></div>
+              </div>
+
+              <div class="client-tab-panel" id="clientTab-invoices">
+                <div class="related-list" id="relatedInvoices"></div>
+              </div>
+
+              <div class="client-tab-panel" id="clientTab-projects">
+                <div class="related-list" id="relatedProjects"></div>
+              </div>
+
+              <div class="client-tab-panel" id="clientTab-details">
+                <div class="form-row">
+                  <div class="form-group"><label>Company Name</label><input type="text" id="pCompany" placeholder="KefiKanna"></div>
+                  <div class="form-group"><label>Slug</label><input type="text" id="pSlug" placeholder="kefikanna" style="font-family:var(--mono);"></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group"><label>Contact Name</label><input type="text" id="pContact" placeholder="Primary contact"></div>
+                  <div class="form-group"><label>Contact Email</label><input type="email" id="pEmail" placeholder="contact@client.com"></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group"><label>Portal Password</label><input type="text" id="pPassword" placeholder="Set client password"></div>
+                  <div class="form-group"><label>Status</label>
+                    <select id="pStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group"><label>Proposal URL</label><input type="text" id="pProposal" placeholder="https://client.sociavisual.com/proposal"></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group"><label>Notes</label><textarea id="pNotes" placeholder="Internal notes about this client..."></textarea></div>
+                </div>
+                <div class="inv-actions">
+                  <button class="btn btn-primary" onclick="savePartner()">Save</button>
+                  <button class="btn btn-danger" onclick="deletePartner()">Delete</button>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -1180,7 +1403,7 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', projects: 'Projects', partners: 'Partners', settings: 'Settings' };
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', projects: 'Projects', partners: 'Clients', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') renderDashboard();
@@ -2051,7 +2274,7 @@ function renderPartnerList() {
   }).join('');
 }
 
-function selectPartner(id) {
+async function selectPartner(id) {
   activePartnerId = id;
   const p = partners.find(x => x.id === id);
   if (!p) return;
@@ -2065,8 +2288,173 @@ function selectPartner(id) {
   document.getElementById('pStatus').value = p.status || 'active';
   document.getElementById('pProposal').value = p.proposal_url || '';
   document.getElementById('pNotes').value = p.notes || '';
-  document.getElementById('partnerEditName').textContent = p.company_name || '';
+  document.getElementById('partnerEditName').textContent = p.company_name || 'Client';
+  switchClientTab('overview');
   renderPartnerList();
+  await renderClientHub(p);
+}
+
+// ═══ CLIENT HUB ═══
+function nameMatch(a, b) {
+  if (!a || !b) return false;
+  return a.toString().trim().toLowerCase() === b.toString().trim().toLowerCase();
+}
+
+function switchClientTab(tab) {
+  document.querySelectorAll('.client-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.client-tab-panel').forEach(p => p.classList.toggle('active', p.id === 'clientTab-' + tab));
+}
+
+async function renderClientHub(partner) {
+  const name = partner.company_name || '';
+
+  // Filter related items by name (case-insensitive) or partner_id where applicable
+  const partnerMeetings = await fetchMeetingNotesForClient(name);
+  const partnerContracts = contracts.filter(c => nameMatch(c.client_name, name) || nameMatch(c.company_name, name));
+  const partnerInvoices = invoices.filter(i => nameMatch(i.companyName, name) || nameMatch(i.clientName, name));
+  const partnerProjects = allProjects.filter(p => p.partner_id === partner.id);
+
+  // Update tab counts
+  document.getElementById('tabCountMeetings').textContent = partnerMeetings.length;
+  document.getElementById('tabCountContracts').textContent = partnerContracts.length;
+  document.getElementById('tabCountInvoices').textContent = partnerInvoices.length;
+  document.getElementById('tabCountProjects').textContent = partnerProjects.length;
+
+  // Stats strip
+  const totalBilled = partnerInvoices.reduce((s, inv) => s + (inv.items || []).reduce((a, i) => a + i.qty * i.price, 0), 0);
+  const outstanding = partnerInvoices.filter(i => i.status !== 'paid').reduce((s, inv) => s + (inv.items || []).reduce((a, i) => a + i.qty * i.price, 0), 0);
+  const activeProj = partnerProjects.filter(p => p.status === 'active').length;
+  const lastMeeting = partnerMeetings.length ? new Date(partnerMeetings[0].meeting_date || partnerMeetings[0].created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+  const fmt = n => '$' + n.toLocaleString('en-US');
+
+  document.getElementById('clientStats').innerHTML = `
+    <div class="client-stat"><div class="client-stat-label">Total Billed</div><div class="client-stat-value accent">${fmt(totalBilled)}</div></div>
+    <div class="client-stat"><div class="client-stat-label">Outstanding</div><div class="client-stat-value ${outstanding > 0 ? 'yellow' : 'green'}">${fmt(outstanding)}</div></div>
+    <div class="client-stat"><div class="client-stat-label">Active Projects</div><div class="client-stat-value">${activeProj}</div></div>
+    <div class="client-stat"><div class="client-stat-label">Meetings</div><div class="client-stat-value">${partnerMeetings.length}</div></div>
+    <div class="client-stat"><div class="client-stat-label">Last Meeting</div><div class="client-stat-value" style="font-size:13px;">${lastMeeting}</div></div>
+  `;
+
+  // Overview panel
+  renderOverview(partner, partnerMeetings, partnerContracts, partnerInvoices, partnerProjects);
+
+  // Tab content
+  renderRelatedMeetings(partnerMeetings);
+  renderRelatedContracts(partnerContracts);
+  renderRelatedInvoices(partnerInvoices);
+  renderRelatedProjects(partnerProjects);
+}
+
+async function fetchMeetingNotesForClient(name) {
+  if (!name) return [];
+  try {
+    const { data, error } = await sb.from('meeting_notes').select('*').ilike('client_name', name).order('meeting_date', { ascending: false });
+    if (error) return [];
+    return data || [];
+  } catch(e) { return []; }
+}
+
+function renderOverview(partner, meetings, contractsList, invoicesList, projectsList) {
+  const recent = (arr, n=3) => arr.slice(0, n);
+  const html = `
+    <div class="overview-block">
+      <h4>Recent Meetings <a onclick="switchClientTab('meetings')">View all &rarr;</a></h4>
+      ${meetings.length ? recent(meetings).map(m => `
+        <div class="related-item" onclick="window.open('meeting-notes.html?id=${m.id}','_blank')">
+          <div class="related-item-main">
+            <div class="related-item-title">${m.meeting_type ? m.meeting_type.charAt(0).toUpperCase() + m.meeting_type.slice(1) : 'Meeting'} — ${m.meeting_date || ''}</div>
+            <div class="related-item-meta">${m.attendees || 'No attendees'}</div>
+          </div>
+        </div>`).join('') : '<div class="related-empty">No meetings yet. Click "+ Meeting Note" to start one.</div>'}
+    </div>
+
+    <div class="overview-block">
+      <h4>Active Projects <a onclick="switchClientTab('projects')">View all &rarr;</a></h4>
+      ${projectsList.length ? recent(projectsList).map(p => `
+        <div class="related-item" onclick="navigate('projects');setTimeout(()=>selectProject('${p.id}'),50)">
+          <div class="related-item-main">
+            <div class="related-item-title">${p.name}</div>
+            <div class="related-item-meta">${(p.status || 'active').toUpperCase()}</div>
+          </div>
+        </div>`).join('') : '<div class="related-empty">No projects yet.</div>'}
+    </div>
+
+    <div class="overview-block">
+      <h4>Recent Invoices <a onclick="switchClientTab('invoices')">View all &rarr;</a></h4>
+      ${invoicesList.length ? recent(invoicesList).map(inv => {
+        const amt = (inv.items || []).reduce((s, i) => s + i.qty * i.price, 0);
+        return `<div class="related-item" onclick="navigate('invoices');setTimeout(()=>selectInvoice('${inv.id}'),50)">
+          <div class="related-item-main">
+            <div class="related-item-title">Invoice #${inv.number || '—'}</div>
+            <div class="related-item-meta">${inv.date || ''} · ${(inv.status || 'unpaid').toUpperCase()}</div>
+          </div>
+          <div class="related-item-right"><div class="related-item-amount">$${amt.toLocaleString('en-US')}</div></div>
+        </div>`;
+      }).join('') : '<div class="related-empty">No invoices yet.</div>'}
+    </div>
+  `;
+  document.getElementById('overviewGrid').innerHTML = html;
+}
+
+function renderRelatedMeetings(meetings) {
+  const el = document.getElementById('relatedMeetings');
+  if (!meetings.length) { el.innerHTML = '<div class="related-empty">No meeting notes yet. Click "+ Meeting Note" above to start one.</div>'; return; }
+  el.innerHTML = meetings.map(m => `
+    <div class="related-item" onclick="window.open('meeting-notes.html?id=${m.id}','_blank')">
+      <div class="related-item-main">
+        <div class="related-item-title">${m.meeting_type ? m.meeting_type.charAt(0).toUpperCase() + m.meeting_type.slice(1) : 'Meeting'} — ${m.meeting_date || 'No date'}</div>
+        <div class="related-item-meta">${m.attendees || 'No attendees'} ${m.contact ? '· ' + m.contact : ''}</div>
+      </div>
+      <div class="related-item-right">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3h7v7"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </div>
+    </div>`).join('');
+}
+
+function renderRelatedContracts(contractsList) {
+  const el = document.getElementById('relatedContracts');
+  if (!contractsList.length) { el.innerHTML = '<div class="related-empty">No contracts yet.</div>'; return; }
+  el.innerHTML = contractsList.map(c => `
+    <div class="related-item" onclick="navigate('contracts');setTimeout(()=>selectContract('${c.id}'),50)">
+      <div class="related-item-main">
+        <div class="related-item-title">Contract #${c.number || '—'}</div>
+        <div class="related-item-meta">${c.date || ''} · ${(c.status || 'draft').toUpperCase()}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderRelatedInvoices(invoicesList) {
+  const el = document.getElementById('relatedInvoices');
+  if (!invoicesList.length) { el.innerHTML = '<div class="related-empty">No invoices yet.</div>'; return; }
+  el.innerHTML = invoicesList.map(inv => {
+    const amt = (inv.items || []).reduce((s, i) => s + i.qty * i.price, 0);
+    return `<div class="related-item" onclick="navigate('invoices');setTimeout(()=>selectInvoice('${inv.id}'),50)">
+      <div class="related-item-main">
+        <div class="related-item-title">Invoice #${inv.number || '—'}</div>
+        <div class="related-item-meta">${inv.date || ''} · ${(inv.status || 'unpaid').toUpperCase()}</div>
+      </div>
+      <div class="related-item-right"><div class="related-item-amount">$${amt.toLocaleString('en-US')}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderRelatedProjects(projectsList) {
+  const el = document.getElementById('relatedProjects');
+  if (!projectsList.length) { el.innerHTML = '<div class="related-empty">No projects yet.</div>'; return; }
+  el.innerHTML = projectsList.map(p => `
+    <div class="related-item" onclick="navigate('projects');setTimeout(()=>selectProject('${p.id}'),50)">
+      <div class="related-item-main">
+        <div class="related-item-title">${p.name}</div>
+        <div class="related-item-meta">${(p.status || 'active').toUpperCase()}</div>
+      </div>
+    </div>`).join('');
+}
+
+function newMeetingForClient() {
+  const p = partners.find(x => x.id === activePartnerId);
+  if (!p) return;
+  const url = `meeting-notes.html?client=${encodeURIComponent(p.company_name)}`;
+  window.open(url, '_blank');
 }
 
 function generateSlug(name) {

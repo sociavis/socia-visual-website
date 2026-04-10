@@ -466,8 +466,8 @@
       </svg>
     </div>
     <div class="brand-divider"></div>
-    <div class="client-logo">
-      <img src="https://cdn11.bigcommerce.com/s-h1gdcgyldo/images/stencil/250x100/logo_1770597665__69627.original.png" alt="KefiKanna" crossorigin="anonymous">
+    <div class="client-logo" id="clientLogoWrap">
+      <img id="clientLogoImg" src="https://cdn11.bigcommerce.com/s-h1gdcgyldo/images/stencil/250x100/logo_1770597665__69627.original.png" alt="Client" crossorigin="anonymous">
     </div>
     <div class="collab-tag">DISCOVERY SESSION</div>
   </div>
@@ -1029,15 +1029,40 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
+// ═══ KNOWN CLIENT LOGOS ═══
+// Mapping of known clients to their logo URLs (for the co-branded header)
+const CLIENT_LOGOS = {
+  'kefikanna': 'https://cdn11.bigcommerce.com/s-h1gdcgyldo/images/stencil/250x100/logo_1770597665__69627.original.png'
+};
+
+function setClientBranding(name) {
+  if (!name) return;
+  document.getElementById('clientNameDisplay').textContent = name;
+  document.title = `Discovery — ${name} | Socia Visual`;
+  const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const logo = CLIENT_LOGOS[slug];
+  const wrap = document.getElementById('clientLogoWrap');
+  if (logo) {
+    document.getElementById('clientLogoImg').src = logo;
+    wrap.style.display = '';
+  } else {
+    // No known logo — show wordmark fallback
+    wrap.innerHTML = `<div style="font-family:var(--font);font-weight:700;font-size:18px;color:var(--text);letter-spacing:.5px;">${name}</div>`;
+  }
+}
+
 // ═══ URL PARAMS (for linking from admin) ═══
 const params = new URLSearchParams(window.location.search);
+if (params.get('client')) {
+  setClientBranding(params.get('client'));
+}
 if (params.get('id')) {
   noteId = params.get('id');
   // load from Supabase
   (async () => {
     const { data, error } = await sb.from('meeting_notes').select('*').eq('id', noteId).single();
     if (data) {
-      document.getElementById('clientNameDisplay').textContent = data.client_name || 'Client';
+      setClientBranding(data.client_name || 'Client');
       document.getElementById('metaDate').value = data.meeting_date || '';
       document.getElementById('metaType').value = data.meeting_type || 'discovery';
       document.getElementById('metaAttendees').value = data.attendees || '';

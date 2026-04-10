@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery Meeting — Socia Visual</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050505;
+    --surface: #0a0a0a;
+    --surface-2: #111;
+    --surface-3: #1a1a1a;
+    --border: #222;
+    --border-light: #2a2a2a;
+    --text: #e8e8e8;
+    --text-dim: #777;
+    --text-muted: #555;
+    --accent: #a8ff00;
+    --accent-2: #d4ff00;
+    --accent-dim: rgba(168,255,0,.1);
+    --accent-dim-2: rgba(168,255,0,.05);
+    --green: #4caf50;
+    --yellow: #ffb428;
+    --red: #ff4444;
+    --font: 'Chakra Petch', sans-serif;
+    --mono: 'Share Tech Mono', monospace;
+    /* client brand */
+    --client-accent: #b4bad1;
+    --client-accent-dim: rgba(180,186,209,.1);
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ═══ TOOLBAR ═══ */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+  }
+  .toolbar-left { display: flex; align-items: center; gap: 20px; }
+  .toolbar-left .back-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color .2s;
+  }
+  .toolbar-left .back-link:hover { color: var(--accent); }
+  .toolbar-right { display: flex; gap: 10px; align-items: center; }
+
+  .toolbar-status {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-muted);
+    transition: background .3s;
+  }
+  .status-dot.saved { background: var(--green); }
+  .status-dot.saving { background: var(--yellow); animation: pulse .8s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+
+  .btn {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 12px;
+    padding: 8px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid var(--border-light);
+    background: var(--surface-3);
+    color: var(--text);
+    transition: all .2s;
+    letter-spacing: .5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--accent); color: #050505; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: #050505; }
+
+  /* ═══ CO-BRANDED HEADER ═══ */
+  .meeting-header {
+    padding: 48px 32px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .meeting-header::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(168,255,0,.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .meeting-header::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: 200px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(180,186,209,.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .brand-strip {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+  .brand-strip .sv-logo svg { width: 44px; height: 44px; }
+  .brand-divider {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, transparent, var(--border-light), transparent);
+  }
+  .brand-strip .client-logo img {
+    height: 40px;
+    width: auto;
+    filter: brightness(1.1);
+  }
+  .brand-strip .collab-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .meeting-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    max-width: 800px;
+  }
+  .meta-field label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .meta-field input, .meta-field select {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    width: 100%;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .meta-field input:focus, .meta-field select:focus { border-color: var(--accent); }
+  .meta-field select { cursor: pointer; }
+  .meta-field select option { background: var(--surface-2); }
+
+  .meeting-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    margin-bottom: 20px;
+  }
+  .meeting-title span { color: var(--accent); }
+
+  /* ═══ SECTIONS ═══ */
+  .form-body {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  .discovery-section {
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .discovery-section:hover { border-color: var(--border-light); }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s;
+  }
+  .section-header:hover { background: var(--surface-2); }
+
+  .section-number {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(168,255,0,.15);
+  }
+  .section-number.done {
+    background: var(--accent);
+    color: #050505;
+    border-color: var(--accent);
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    flex: 1;
+  }
+
+  .section-progress {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .section-chevron {
+    color: var(--text-muted);
+    transition: transform .2s;
+    flex-shrink: 0;
+  }
+  .section-chevron.open { transform: rotate(180deg); }
+
+  .section-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+  .section-body.open { max-height: 2000px; }
+
+  .section-inner {
+    padding: 4px 24px 24px;
+  }
+
+  /* ═══ QUESTIONS ═══ */
+  .q-group {
+    margin-bottom: 20px;
+  }
+  .q-group:last-child { margin-bottom: 0; }
+
+  .q-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .q-label .q-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+
+  .q-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  textarea.q-input, input.q-input {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    width: 100%;
+    outline: none;
+    transition: border-color .2s;
+    resize: vertical;
+  }
+  textarea.q-input { min-height: 64px; }
+  textarea.q-input:focus, input.q-input:focus { border-color: var(--accent); }
+
+  .q-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .q-chip {
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    background: var(--surface-3);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .q-chip:hover { border-color: var(--accent); color: var(--text); }
+  .q-chip.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .q-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* ═══ NOTES FOOTER ═══ */
+  .notes-footer {
+    padding: 40px 32px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .notes-footer h3 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .notes-footer textarea {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 16px;
+    border-radius: 8px;
+    width: 100%;
+    min-height: 120px;
+    outline: none;
+    resize: vertical;
+    transition: border-color .2s;
+  }
+  .notes-footer textarea:focus { border-color: var(--accent); }
+
+  /* ═══ TOAST ═══ */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface-3);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all .25s ease;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ═══ PDF EXPORT OVERRIDES ═══ */
+  @media print {
+    .toolbar { display: none !important; }
+    body { background: #111 !important; }
+  }
+
+  /* ═══ RESPONSIVE — half-screen friendly ═══ */
+  @media (max-width: 680px) {
+    .meeting-header { padding: 28px 20px; }
+    .form-body { padding: 20px; }
+    .q-row { grid-template-columns: 1fr; }
+    .meeting-meta { grid-template-columns: 1fr 1fr; }
+    .brand-strip .collab-tag { display: none; }
+    .meeting-title { font-size: 22px; }
+  }
+
+  /* half-screen optimized for google meet side-by-side */
+  @media (max-width: 520px) {
+    .toolbar { padding: 10px 16px; }
+    .meeting-header { padding: 20px 16px; }
+    .form-body { padding: 16px; }
+    .section-header { padding: 14px 16px; }
+    .section-inner { padding: 4px 16px 20px; }
+    .meeting-meta { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ TOOLBAR ═══ -->
+<div class="toolbar">
+  <div class="toolbar-left">
+    <a href="index.html#dashboard" class="back-link">&larr; ADMIN</a>
+    <div class="toolbar-status">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">READY</span>
+    </div>
+  </div>
+  <div class="toolbar-right">
+    <button class="btn" onclick="saveNotes()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save
+    </button>
+    <button class="btn" onclick="exportPDF()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export PDF
+    </button>
+    <button class="btn btn-primary" onclick="saveAndExport()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      Save & Send
+    </button>
+  </div>
+</div>
+
+<!-- ═══ CO-BRANDED HEADER ═══ -->
+<div class="meeting-header" id="meetingHeader">
+  <div class="brand-strip">
+    <div class="sv-logo">
+      <svg viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg" fill="#a8ff00" stroke="none">
+        <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+        <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+        <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+      </svg>
+    </div>
+    <div class="brand-divider"></div>
+    <div class="client-logo">
+      <img src="https://cdn11.bigcommerce.com/s-h1gdcgyldo/images/stencil/250x100/logo_1770597665__69627.original.png" alt="KefiKanna" crossorigin="anonymous">
+    </div>
+    <div class="collab-tag">DISCOVERY SESSION</div>
+  </div>
+
+  <div class="meeting-title">Discovery Meeting — <span id="clientNameDisplay">KefiKanna</span></div>
+
+  <div class="meeting-meta">
+    <div class="meta-field">
+      <label>Date</label>
+      <input type="date" id="metaDate" value="2026-04-10">
+    </div>
+    <div class="meta-field">
+      <label>Meeting Type</label>
+      <select id="metaType">
+        <option value="discovery" selected>Discovery / Intro</option>
+        <option value="followup">Follow-Up</option>
+        <option value="kickoff">Project Kickoff</option>
+        <option value="review">Review / Feedback</option>
+      </select>
+    </div>
+    <div class="meta-field">
+      <label>Attendees</label>
+      <input type="text" id="metaAttendees" placeholder="Names of everyone on the call">
+    </div>
+    <div class="meta-field">
+      <label>Client Contact</label>
+      <input type="text" id="metaContact" placeholder="Primary contact name & role">
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DISCOVERY FORM ═══ -->
+<div class="form-body" id="formBody">
+
+  <!-- 1. THE BUSINESS -->
+  <div class="discovery-section" data-section="1">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-number">1</div>
+      <div class="section-title">The Business</div>
+      <div class="section-progress" data-progress="1">0 / 4</div>
+      <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body open">
+      <div class="section-inner">
+        <div class="q-group">
+          <div class="q-label">Tell us about KefiKanna — what's the story behind the brand?</div>
+          <div class="q-sub">Origin, meaning of the name, mission, what makes you different</div>
+          <textarea class="q-input" data-field="brand_story" placeholder="Notes..."></textarea>
+        </div>
+        <div class="q-group">
+          <div class="q-label">What do you sell? <span class="q-hint">SELECT ALL THAT APPLY</span></div>
+          <div class="q-chips" data-field="products">
+            <div class="q-chip" data-val="thca-flower">THCa Flower</div>
+            <div class="q-chip" data-val="cbd">CBD Products</div>
+            <div class="q-chip" data-val="edibles">Edibles / Gummies</div>
+            <div class="q-chip" data-val="prerolls">Pre-Rolls</div>
+            <div class="q-chip" data-val="topicals">Topicals</div>
+            <div class="q-chip" data-val="merch">Merchandise</div>
+            <div class="q-chip" data-val="other">Other</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">How do you sell? <span class="q-hint">SELECT ALL THAT APPLY</span></div>
+          <div class="q-chips" data-field="channels">
+            <div class="q-chip" data-val="retail">Retail / Storefront</div>
+            <div class="q-chip" data-val="ecommerce">E-Commerce / Online</div>
+            <div class="q-chip" data-val="wholesale">Wholesale / B2B</div>
+            <div class="q-chip" data-val="delivery">Delivery</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Where do you operate? Locations, states, plans to expand?</div>
+          <textarea class="q-input" data-field="locations" placeholder="Locations, states served, expansion plans..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. TARGET AUDIENCE -->
+  <div class="discovery-section" data-section="2">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-number">2</div>
+      <div class="section-title">Target Audience</div>
+      <div class="section-progress" data-progress="2">0 / 3</div>
+      <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="section-inner">
+        <div class="q-group">
+          <div class="q-label">Who is your ideal customer?</div>
+          <div class="q-sub">Age range, lifestyle, what brings them in, first-timer vs connoisseur</div>
+          <textarea class="q-input" data-field="ideal_customer" placeholder="Notes..."></textarea>
+        </div>
+        <div class="q-group">
+          <div class="q-label">What vibe are your customers looking for? <span class="q-hint">SELECT ALL</span></div>
+          <div class="q-chips" data-field="customer_vibe">
+            <div class="q-chip" data-val="wellness">Wellness / Health</div>
+            <div class="q-chip" data-val="luxury">Premium / Luxury</div>
+            <div class="q-chip" data-val="casual">Casual / Social</div>
+            <div class="q-chip" data-val="medical">Medical / Therapeutic</div>
+            <div class="q-chip" data-val="adventurous">Adventurous / Explorers</div>
+            <div class="q-chip" data-val="lifestyle">Lifestyle / Culture</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Who do you consider your competitors? Anyone you admire visually?</div>
+          <div class="q-sub">Inside or outside the cannabis industry — brands whose look you respect</div>
+          <textarea class="q-input" data-field="competitors" placeholder="Names, URLs if they have them..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. WEBSITE & DIGITAL -->
+  <div class="discovery-section" data-section="3">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-number">3</div>
+      <div class="section-title">Website & Digital Presence</div>
+      <div class="section-progress" data-progress="3">0 / 4</div>
+      <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="section-inner">
+        <div class="q-group">
+          <div class="q-label">What's not working about the current site?</div>
+          <div class="q-sub">Pain points, frustrations, things customers complain about</div>
+          <textarea class="q-input" data-field="site_pain" placeholder="Notes..."></textarea>
+        </div>
+        <div class="q-group">
+          <div class="q-label">What should the website accomplish? <span class="q-hint">TOP PRIORITIES</span></div>
+          <div class="q-chips" data-field="site_goals">
+            <div class="q-chip" data-val="sell">Drive Online Sales</div>
+            <div class="q-chip" data-val="foot-traffic">Drive Foot Traffic</div>
+            <div class="q-chip" data-val="brand-story">Tell the Brand Story</div>
+            <div class="q-chip" data-val="educate">Educate Customers</div>
+            <div class="q-chip" data-val="age-gate">Age Verification</div>
+            <div class="q-chip" data-val="loyalty">Build Community / Loyalty</div>
+            <div class="q-chip" data-val="menu">Product Menu / Catalog</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Current platform & tools?</div>
+          <div class="q-sub">BigCommerce, Shopify, POS system, email marketing, etc.</div>
+          <textarea class="q-input" data-field="current_stack" placeholder="Platform, integrations, tools they use..."></textarea>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Key pages or features they want?</div>
+          <div class="q-sub">Shop, blog, rewards program, store locator, strain guide, etc.</div>
+          <textarea class="q-input" data-field="key_pages" placeholder="Notes..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. BRAND & IDENTITY -->
+  <div class="discovery-section" data-section="4">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-number">4</div>
+      <div class="section-title">Brand & Identity</div>
+      <div class="section-progress" data-progress="4">0 / 3</div>
+      <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="section-inner">
+        <div class="q-group">
+          <div class="q-label">Is the current logo / brand identity staying, or is that on the table?</div>
+          <div class="q-chips" data-field="brand_scope">
+            <div class="q-chip" data-val="keep">Keep Current Logo</div>
+            <div class="q-chip" data-val="refresh">Refresh / Evolve</div>
+            <div class="q-chip" data-val="rebrand">Full Rebrand</div>
+            <div class="q-chip" data-val="unsure">Open to Discussion</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">How would you describe your brand personality?</div>
+          <div class="q-sub">Pick words that feel right — or tell us in your own words</div>
+          <div class="q-chips" data-field="brand_personality">
+            <div class="q-chip" data-val="premium">Premium / Elevated</div>
+            <div class="q-chip" data-val="earthy">Earthy / Natural</div>
+            <div class="q-chip" data-val="modern">Modern / Sleek</div>
+            <div class="q-chip" data-val="bold">Bold / Edgy</div>
+            <div class="q-chip" data-val="warm">Warm / Welcoming</div>
+            <div class="q-chip" data-val="clinical">Clean / Clinical</div>
+            <div class="q-chip" data-val="playful">Playful / Fun</div>
+            <div class="q-chip" data-val="spiritual">Spiritual / Mindful</div>
+          </div>
+          <textarea class="q-input" data-field="brand_notes" placeholder="Anything else about brand feel..." style="margin-top:12px"></textarea>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Do you have existing brand assets?</div>
+          <div class="q-sub">Logo files, color palette, fonts, photography, packaging designs</div>
+          <div class="q-chips" data-field="existing_assets">
+            <div class="q-chip" data-val="logo-files">Logo Files (AI/SVG/PNG)</div>
+            <div class="q-chip" data-val="colors">Color Palette</div>
+            <div class="q-chip" data-val="fonts">Brand Fonts</div>
+            <div class="q-chip" data-val="photos">Product Photography</div>
+            <div class="q-chip" data-val="packaging">Packaging Designs</div>
+            <div class="q-chip" data-val="guidelines">Brand Guidelines</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. GRAPHICS & PRINT -->
+  <div class="discovery-section" data-section="5">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-number">5</div>
+      <div class="section-title">Graphics & Print</div>
+      <div class="section-progress" data-progress="5">0 / 2</div>
+      <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="section-inner">
+        <div class="q-group">
+          <div class="q-label">What kind of graphic design work do you need? <span class="q-hint">SELECT ALL</span></div>
+          <div class="q-chips" data-field="graphics_scope">
+            <div class="q-chip" data-val="packaging">Product Packaging</div>
+            <div class="q-chip" data-val="labels">Labels / Stickers</div>
+            <div class="q-chip" data-val="social">Social Media Graphics</div>
+            <div class="q-chip" data-val="menus">In-Store Menus / Signage</div>
+            <div class="q-chip" data-val="business-cards">Business Cards</div>
+            <div class="q-chip" data-val="merch">Merchandise / Apparel</div>
+            <div class="q-chip" data-val="flyers">Flyers / Print Ads</div>
+            <div class="q-chip" data-val="banners">Banners / Event Materials</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Any specific print projects coming up?</div>
+          <div class="q-sub">New product launch, event, seasonal campaign, store opening, etc.</div>
+          <textarea class="q-input" data-field="print_projects" placeholder="Notes..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. MOTION & ANIMATION -->
+  <div class="discovery-section" data-section="6">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-number">6</div>
+      <div class="section-title">Motion & Animation</div>
+      <div class="section-progress" data-progress="6">0 / 2</div>
+      <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="section-inner">
+        <div class="q-group">
+          <div class="q-label">What kind of motion work interests you? <span class="q-hint">SELECT ALL</span></div>
+          <div class="q-chips" data-field="motion_scope">
+            <div class="q-chip" data-val="site-animations">Website Animations / Interactions</div>
+            <div class="q-chip" data-val="logo-animation">Animated Logo Reveal</div>
+            <div class="q-chip" data-val="social-video">Social Media Video Content</div>
+            <div class="q-chip" data-val="product-video">Product Showcase Videos</div>
+            <div class="q-chip" data-val="explainer">Explainer / Brand Video</div>
+            <div class="q-chip" data-val="ad-creative">Ad Creatives (Video)</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Where will motion content live?</div>
+          <div class="q-chips" data-field="motion_platforms">
+            <div class="q-chip" data-val="website">Website</div>
+            <div class="q-chip" data-val="instagram">Instagram</div>
+            <div class="q-chip" data-val="tiktok">TikTok</div>
+            <div class="q-chip" data-val="youtube">YouTube</div>
+            <div class="q-chip" data-val="in-store">In-Store Displays</div>
+            <div class="q-chip" data-val="email">Email Marketing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. TIMELINE & BUDGET -->
+  <div class="discovery-section" data-section="7">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-number">7</div>
+      <div class="section-title">Timeline, Budget & Next Steps</div>
+      <div class="section-progress" data-progress="7">0 / 4</div>
+      <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+      <div class="section-inner">
+        <div class="q-group">
+          <div class="q-label">Is there a target launch date or deadline driving this?</div>
+          <div class="q-sub">New store opening, event, season, product drop, etc.</div>
+          <textarea class="q-input" data-field="timeline" placeholder="Notes..."></textarea>
+        </div>
+        <div class="q-group">
+          <div class="q-label">What's the priority order?</div>
+          <div class="q-sub">If everything can't happen at once, what comes first?</div>
+          <textarea class="q-input" data-field="priorities" placeholder="e.g. Website first, then packaging, then motion..."></textarea>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Budget range <span class="q-hint">OPTIONAL — HELPS US SCOPE</span></div>
+          <div class="q-chips" data-field="budget_range">
+            <div class="q-chip" data-val="under-5k">Under $5K</div>
+            <div class="q-chip" data-val="5-10k">$5K – $10K</div>
+            <div class="q-chip" data-val="10-25k">$10K – $25K</div>
+            <div class="q-chip" data-val="25k+">$25K+</div>
+            <div class="q-chip" data-val="discuss">Let's Discuss</div>
+          </div>
+        </div>
+        <div class="q-group">
+          <div class="q-label">Decision process — who else is involved?</div>
+          <div class="q-sub">Partners, investors, marketing team, etc.</div>
+          <textarea class="q-input" data-field="decision_makers" placeholder="Notes..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ OPEN NOTES ═══ -->
+<div class="notes-footer">
+  <h3>Additional Notes</h3>
+  <textarea id="openNotes" data-field="open_notes" placeholder="Anything else that came up during the conversation..."></textarea>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ═══ CONFIG ═══
+const SUPABASE_URL = 'https://yjmyqmfvtudhkkxarttw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqbXlxbWZ2dHVkaGtreGFydHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzAxMjQsImV4cCI6MjA5MDE0NjEyNH0.kOctH25mfqGAqnd3OCMmGiLto2TuSPt8IoFpKdjn-So';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const STORAGE_KEY = 'sv_meeting_';
+let noteId = null;
+let autoSaveTimer = null;
+
+// ═══ CHIP TOGGLES ═══
+document.querySelectorAll('.q-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    chip.classList.toggle('active');
+    updateProgress(chip.closest('.discovery-section'));
+    queueAutoSave();
+  });
+});
+
+// ═══ TEXT INPUT TRACKING ═══
+document.querySelectorAll('.q-input').forEach(input => {
+  input.addEventListener('input', () => {
+    updateProgress(input.closest('.discovery-section'));
+    queueAutoSave();
+  });
+});
+
+// meta fields auto-save too
+document.querySelectorAll('.meta-field input, .meta-field select').forEach(el => {
+  el.addEventListener('input', queueAutoSave);
+});
+
+document.getElementById('openNotes').addEventListener('input', queueAutoSave);
+
+// ═══ SECTION ACCORDION ═══
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.section-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open', body.classList.contains('open'));
+}
+
+// ═══ PROGRESS TRACKING ═══
+function updateProgress(section) {
+  if (!section) return;
+  const num = section.dataset.section;
+  const inputs = section.querySelectorAll('.q-input');
+  const chipGroups = section.querySelectorAll('.q-chips');
+  let filled = 0;
+  let total = inputs.length + chipGroups.length;
+
+  inputs.forEach(i => { if (i.value.trim()) filled++; });
+  chipGroups.forEach(g => { if (g.querySelector('.q-chip.active')) filled++; });
+
+  const prog = section.querySelector(`[data-progress="${num}"]`);
+  if (prog) prog.textContent = `${filled} / ${total}`;
+
+  // Update section number dot
+  const dot = section.querySelector('.section-number');
+  if (filled === total && total > 0) {
+    dot.classList.add('done');
+  } else {
+    dot.classList.remove('done');
+  }
+}
+
+// init progress
+document.querySelectorAll('.discovery-section').forEach(updateProgress);
+
+// ═══ COLLECT DATA ═══
+function collectData() {
+  const data = {
+    meta: {
+      date: document.getElementById('metaDate').value,
+      type: document.getElementById('metaType').value,
+      attendees: document.getElementById('metaAttendees').value,
+      contact: document.getElementById('metaContact').value,
+      client_name: document.getElementById('clientNameDisplay').textContent,
+    },
+    responses: {},
+    open_notes: document.getElementById('openNotes').value,
+    updated_at: new Date().toISOString()
+  };
+
+  // text inputs
+  document.querySelectorAll('.q-input').forEach(input => {
+    const field = input.dataset.field;
+    if (field) data.responses[field] = input.value;
+  });
+
+  // chip groups
+  document.querySelectorAll('.q-chips').forEach(group => {
+    const field = group.dataset.field;
+    const selected = [...group.querySelectorAll('.q-chip.active')].map(c => c.dataset.val);
+    if (field) data.responses[field] = selected;
+  });
+
+  return data;
+}
+
+// ═══ AUTO-SAVE (localStorage) ═══
+function queueAutoSave() {
+  clearTimeout(autoSaveTimer);
+  setStatus('saving');
+  autoSaveTimer = setTimeout(() => {
+    const data = collectData();
+    localStorage.setItem(STORAGE_KEY + (noteId || 'draft'), JSON.stringify(data));
+    setStatus('saved');
+  }, 800);
+}
+
+// ═══ RESTORE FROM localStorage ═══
+function restoreLocal() {
+  const raw = localStorage.getItem(STORAGE_KEY + (noteId || 'draft'));
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    if (data.meta) {
+      document.getElementById('metaDate').value = data.meta.date || '';
+      document.getElementById('metaType').value = data.meta.type || 'discovery';
+      document.getElementById('metaAttendees').value = data.meta.attendees || '';
+      document.getElementById('metaContact').value = data.meta.contact || '';
+    }
+    if (data.responses) {
+      Object.entries(data.responses).forEach(([field, val]) => {
+        if (Array.isArray(val)) {
+          const group = document.querySelector(`.q-chips[data-field="${field}"]`);
+          if (group) val.forEach(v => {
+            const chip = group.querySelector(`[data-val="${v}"]`);
+            if (chip) chip.classList.add('active');
+          });
+        } else {
+          const input = document.querySelector(`[data-field="${field}"].q-input`);
+          if (input) input.value = val;
+        }
+      });
+    }
+    if (data.open_notes) document.getElementById('openNotes').value = data.open_notes;
+    document.querySelectorAll('.discovery-section').forEach(updateProgress);
+  } catch(e) { console.warn('Restore failed', e); }
+}
+
+// ═══ SAVE TO SUPABASE ═══
+async function saveNotes() {
+  setStatus('saving');
+  const data = collectData();
+  const row = {
+    client_name: data.meta.client_name,
+    meeting_date: data.meta.date,
+    meeting_type: data.meta.type,
+    attendees: data.meta.attendees,
+    contact: data.meta.contact,
+    responses: data.responses,
+    open_notes: data.open_notes,
+    updated_at: data.updated_at
+  };
+
+  try {
+    if (noteId) {
+      await sb.from('meeting_notes').update(row).eq('id', noteId);
+    } else {
+      row.created_at = new Date().toISOString();
+      const { data: inserted, error } = await sb.from('meeting_notes').insert(row).select().single();
+      if (error) throw error;
+      if (inserted) noteId = inserted.id;
+    }
+    localStorage.setItem(STORAGE_KEY + (noteId || 'draft'), JSON.stringify(data));
+    setStatus('saved');
+    showToast('Meeting notes saved');
+  } catch(e) {
+    console.error('Save error:', e);
+    // fallback — always save locally
+    localStorage.setItem(STORAGE_KEY + 'draft', JSON.stringify(data));
+    setStatus('saved');
+    showToast('Saved locally (DB table may need setup)');
+  }
+}
+
+// ═══ PDF EXPORT ═══
+function exportPDF() {
+  const clientName = document.getElementById('clientNameDisplay').textContent;
+  const date = document.getElementById('metaDate').value;
+  const filename = `${clientName.replace(/\s+/g, '-')}_Discovery_${date}.pdf`;
+
+  // temporarily adjust for print
+  const el = document.documentElement.cloneNode(true);
+
+  const opt = {
+    margin: [0.3, 0.4, 0.3, 0.4],
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: {
+      scale: 2,
+      backgroundColor: '#0a0a0a',
+      useCORS: true,
+      logging: false
+    },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+  };
+
+  // hide toolbar for export
+  const toolbar = document.querySelector('.toolbar');
+  toolbar.style.display = 'none';
+
+  // expand all sections for PDF
+  document.querySelectorAll('.section-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.section-chevron').forEach(c => c.classList.add('open'));
+
+  html2pdf().set(opt).from(document.body).save().then(() => {
+    toolbar.style.display = '';
+    showToast('PDF exported — ' + filename);
+  });
+}
+
+// ═══ SAVE & SEND ═══
+async function saveAndExport() {
+  await saveNotes();
+  exportPDF();
+}
+
+// ═══ STATUS INDICATOR ═══
+function setStatus(state) {
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  dot.className = 'status-dot ' + state;
+  const labels = { saving: 'SAVING...', saved: 'SAVED', ready: 'READY' };
+  text.textContent = labels[state] || state.toUpperCase();
+}
+
+// ═══ TOAST ═══
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ═══ URL PARAMS (for linking from admin) ═══
+const params = new URLSearchParams(window.location.search);
+if (params.get('id')) {
+  noteId = params.get('id');
+  // load from Supabase
+  (async () => {
+    const { data, error } = await sb.from('meeting_notes').select('*').eq('id', noteId).single();
+    if (data) {
+      document.getElementById('clientNameDisplay').textContent = data.client_name || 'Client';
+      document.getElementById('metaDate').value = data.meeting_date || '';
+      document.getElementById('metaType').value = data.meeting_type || 'discovery';
+      document.getElementById('metaAttendees').value = data.attendees || '';
+      document.getElementById('metaContact').value = data.contact || '';
+      if (data.responses) {
+        Object.entries(data.responses).forEach(([field, val]) => {
+          if (Array.isArray(val)) {
+            const group = document.querySelector(`.q-chips[data-field="${field}"]`);
+            if (group) val.forEach(v => {
+              const chip = group.querySelector(`[data-val="${v}"]`);
+              if (chip) chip.classList.add('active');
+            });
+          } else {
+            const input = document.querySelector(`[data-field="${field}"].q-input`);
+            if (input) input.value = val;
+          }
+        });
+      }
+      if (data.open_notes) document.getElementById('openNotes').value = data.open_notes;
+      document.querySelectorAll('.discovery-section').forEach(updateProgress);
+    }
+  })();
+} else {
+  restoreLocal();
+}
+
+// ═══ KEYBOARD SHORTCUTS ═══
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    saveNotes();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'e') {
+    e.preventDefault();
+    exportPDF();
+  }
+});
+</script>
+</body>
+</html>

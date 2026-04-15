@@ -202,9 +202,26 @@
   .payment-section p { font-size: 14px; line-height: 1.8; color: #333; }
   .payment-section strong { font-weight: 700; color: #1a1a1a; }
 
-  .notes-section { margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; }
-  .notes-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-  .notes-section p { font-size: 14px; line-height: 1.6; color: #555; }
+  .timesheet-cta { margin: 28px 0 32px; display: flex; justify-content: center; }
+  .timesheet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: #1a1a1a;
+    color: #fff;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 2px solid #1a1a1a;
+    transition: all 0.15s ease;
+  }
+  .timesheet-btn:hover { background: #48b8d0; border-color: #48b8d0; color: #1a1a1a; }
+  .timesheet-btn svg { display: block; }
+  @media print { .timesheet-cta { display: none; } }
 
   .not-found { text-align: center; padding: 100px 40px; font-size: 18px; color: #999; }
 
@@ -346,12 +363,19 @@ function renderInvoice(invoice) {
     </tr>`;
   });
 
-  let notesHTML = '';
+  // Extract an optional timesheet link from notes and render it as a button.
+  // Any remaining notes content is dropped — notes section no longer renders.
+  let timesheetBtnHTML = '';
   if (invoice.notes) {
-    notesHTML = `<div class="notes-section">
-      <h3>Notes</h3>
-      <p>${invoice.notes.replace(/\n/g, '<br>')}</p>
-    </div>`;
+    const m = invoice.notes.match(/https?:\/\/[^\s"'<>]+\/billing\/[^\s"'<>]+timesheet[^\s"'<>]*\.html/i);
+    if (m) {
+      timesheetBtnHTML = `<div class="timesheet-cta">
+        <a href="${m[0]}" class="timesheet-btn" target="_blank" rel="noopener">
+          <span>View Timesheet</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>`;
+    }
   }
 
   let clientBlock = invoice.companyName || invoice.clientName || '';
@@ -410,6 +434,8 @@ function renderInvoice(invoice) {
         </table>
       </div>
 
+      ${timesheetBtnHTML}
+
       <div class="payment-section">
         <h3>Electronic Payment Info:</h3>
         <p>
@@ -419,8 +445,6 @@ function renderInvoice(invoice) {
           <strong>PayPal:</strong> paypal.me/sociavis
         </p>
       </div>
-
-      ${notesHTML}
     </div>
   `;
 }

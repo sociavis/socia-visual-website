@@ -1653,23 +1653,53 @@ function buildInvoiceHTML(inv) {
 
 async function exportPDF() {
   const inv = await getCurrentInvoice(); if (!inv) return;
+
+  // If the invoice notes link to a timesheet HTML on this domain, fetch and inline its body.
+  let timesheetBlock = '';
+  if (inv.notes) {
+    const m = inv.notes.match(/https?:\/\/[^\s"'<>]+\/billing\/[^\s"'<>]+timesheet[^\s"'<>]*\.html/i);
+    if (m) {
+      try {
+        const res = await fetch(m[0], { cache: 'no-store' });
+        if (res.ok) {
+          const html = await res.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const docEl = doc.querySelector('.doc');
+          // Strip interactive/toolbar bits that don't belong in a PDF.
+          doc.querySelectorAll('.toolbar, .xref').forEach(n => n.remove());
+          // Pull inline <style> tags from the timesheet so its styles survive the move.
+          const styles = Array.from(doc.querySelectorAll('style')).map(s => s.outerHTML).join('\n');
+          const body = docEl ? docEl.outerHTML : doc.body.innerHTML;
+          timesheetBlock = `${styles}<div style="page-break-before:always;break-before:page;margin-top:40px;">${body}</div>`;
+        }
+      } catch (e) { console.warn('Timesheet fetch failed:', e); }
+    }
+  }
+
   const w = window.open('', '_blank');
   w.document.write(`<!DOCTYPE html><html><head><title>Invoice #${inv.number}</title>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap');
       *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+      html, body { margin:0; padding:0; }
       body { font-family:'Chakra Petch',sans-serif; background:#fff; color:#1a1a1a; }
-      @media print { body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+      @page { size: auto; margin: 0.5in; }
+      @media print {
+        body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .page-wrap { box-shadow:none !important; }
+      }
     </style>
   </head><body>
-    <div style="width:800px;margin:0 auto;">${buildInvoiceHTML(inv)}</div>
+    <div class="page-wrap" style="width:800px;margin:0 auto;">${buildInvoiceHTML(inv)}</div>
+    ${timesheetBlock ? `<div class="page-wrap" style="width:800px;margin:0 auto;">${timesheetBlock}</div>` : ''}
     <script>
       window.onafterprint = function() { window.close(); };
-      setTimeout(function() { window.print(); }, 400);
+      setTimeout(function() { window.print(); }, 500);
     <\/script>
   </body></html>`);
   w.document.close();
-  toast('Print dialog opened — save as PDF');
+  toast(timesheetBlock ? 'Invoice + timesheet ready — save as PDF' : 'Print dialog opened — save as PDF');
 }
 
 function copyLink() {

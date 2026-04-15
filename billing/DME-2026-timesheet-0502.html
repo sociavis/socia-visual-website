@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -232,7 +233,7 @@
 
 <div class="toolbar">
   <a class="ghost" href="https://sociavisual.com/invoice.html?id=inv_dme_0502">← Invoice #0502</a>
-  <button onclick="window.print()">Print / Save PDF</button>
+  <button onclick="downloadPDF()">Download PDF</button>
 </div>
 
 <div class="doc">
@@ -350,6 +351,20 @@
 
   </div>
 </div>
+
+<script>
+function downloadPDF() {
+  const el = document.querySelector('.doc');
+  const filename = 'Socia_Timesheet_0502.pdf';
+  html2pdf().set({
+    margin: 0,
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: -window.scrollY },
+    jsPDF: { unit: 'px', format: [800, el.scrollHeight], hotfixes: ['px_scaling'] }
+  }).from(el).save();
+}
+</script>
 
 </body>
 </html>

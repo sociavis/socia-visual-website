@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timesheet #0502 — DME Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Chakra Petch', sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .toolbar {
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 0 20px;
+  }
+  .toolbar a, .toolbar button {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: 1px solid #1a1a1a;
+    background: #1a1a1a;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .toolbar a.ghost { background: #fff; color: #1a1a1a; }
+  .doc {
+    width: 800px;
+    max-width: 100%;
+    margin: 0 auto 40px;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  }
+  .hero {
+    background: linear-gradient(135deg, #7dd3c0, #5bc4d4, #48b8d0);
+    padding: 48px 56px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 2px;
+    margin: 0;
+  }
+  .hero svg { width: 160px; fill: #1a1a1a; stroke: none; }
+  .body {
+    padding: 40px 56px 56px;
+  }
+  .meta-row {
+    display: flex;
+    gap: 120px;
+    margin-bottom: 36px;
+  }
+  .meta-row .k {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 4px;
+  }
+  .meta-row .v {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .party {
+    margin-bottom: 28px;
+  }
+  .party .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 4px;
+    display: inline-block;
+  }
+  .party p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-top: 6px;
+  }
+  .party .email {
+    font-size: 13px;
+    color: #666;
+    margin-top: 2px;
+  }
+  .period {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+  }
+  thead th {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 2px solid #1a1a1a;
+    text-align: left;
+  }
+  thead th.num { text-align: right; }
+  tbody td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    vertical-align: top;
+  }
+  tbody td.date { white-space: nowrap; font-weight: 600; }
+  tbody td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  tbody tr.subtotal td {
+    background: #fafafa;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #666;
+    border-top: 2px solid #1a1a1a;
+  }
+  tbody tr.subtotal td.num { color: #1a1a1a; }
+  .total-box {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+  }
+  .total-box table {
+    width: auto;
+    margin: 0;
+  }
+  .total-box td {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid #ddd;
+  }
+  .total-box td.val { text-align: right; min-width: 120px; }
+  .payment {
+    margin-top: 8px;
+  }
+  .payment h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .payment p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+  }
+  .notes {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+  }
+  .notes h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .notes p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+  .xref {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: #f5f5f5;
+    border-left: 4px solid #48b8d0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .xref .lbl {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .xref a {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    background: #1a1a1a;
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .doc { box-shadow: none; margin: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a class="ghost" href="https://sociavisual.com/invoice.html?id=inv_dme_0502">← Invoice #0502</a>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<div class="doc">
+  <div class="hero">
+    <h1>TIMESHEET</h1>
+    <svg viewBox="0 0 2098.6 515.2" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="633.2 164 567 236.2 546.5 258.5 480.3 330.8 100.9 330.8 167.1 258.5 452.9 258.5 473.4 236.2 187.6 236.2 253.8 164 633.2 164"/>
+      <g>
+        <polygon points="1059 69.5 992.8 141.7 907.3 234.9 813.7 234.9 899.2 141.7 274.3 141.7 340.5 69.5 1059 69.5"/>
+        <polygon points="735.7 258.5 1190.5 258.5 1124.3 330.8 505.5 330.8 658.4 164 752.1 164 665.4 258.5 735.7 258.5"/>
+        <polygon points="1997.7 330.8 1562 330.8 1628.2 258.6 1837.9 258.6 1731.9 143 1707.6 143 1535.4 330.8 1146.8 330.8 1213 258.6 1279.3 258.6 1386.4 141.7 1111.7 141.7 1026.3 234.9 932.6 234.9 1084.3 69.5 1658.7 69.5 1592.4 141.7 1480.1 141.7 1478.9 143 1372.9 258.6 1508 258.6 1681.4 69.5 1758.1 69.5 1997.7 330.8"/>
+      </g>
+      <g>
+        <path d="M100.9,382.6h35.7l1.9,29.1,25.6-29.1h45.7l-61.1,63.8h-40.7l-7.1-63.8Z"/>
+        <path d="M495,446.4h-41.2l27-63.8h41.2l-27,63.8Z"/>
+        <path d="M767.2,446.4l5.5-12.9h47.7c.3,0,.5-.3.8-.8l.4-1.1c0-.1,0-.3,0-.5l-32.2-21.7c-.8-.6-1.4-1.3-1.7-2.2s-.5-2-.5-3.2c0-2,.3-4.2,1-6.5.7-2.3,1.4-4.3,2.2-5.9l1.7-3.9c.6-1.4,1.5-2.6,2.8-3.5,1.3-1,2.6-1.5,3.9-1.5h94l-5.5,12.9h-54.9c-.7,0-1.2.5-1.6,1.6-.1,1,0,1.6.4,1.6l38.3,26.1c.8.6,1.4,1.3,1.7,2.2s.5,1.9.5,3c0,1.6-.3,3.1-1,4.6l-3.2,7.7c-1.2,2.8-3.2,4.3-5.9,4.3h-94.7Z"/>
+        <path d="M1245.9,446.4h-97.3c-1.7,0-3.1-.4-4.1-1.2-1-.8-1.7-1.8-2.1-2.9-.4-1.1-.5-2.4-.4-3.7.1-1.4.4-2.6.9-3.8l22.1-52.1h41.2l-20.6,48.6c-.2.6-.3,1.1-.2,1.6.1.5.5.7,1.1.7h23.3l21.6-50.9h41.3l-27,63.8Z"/>
+        <path d="M1626,446.4h-41.3l9.3-21.8h-25.3l-9.3,21.8h-41.2l22-52c.5-1.1,1.3-2.4,2.3-3.7,1-1.4,2.2-2.7,3.6-3.8,1.4-1.2,2.9-2.2,4.6-3,1.7-.8,3.4-1.2,5.1-1.2h97.3l-27,63.8ZM1574,411.7h25.3l6.9-16.2h-23.3c-.7,0-1.2.2-1.7.7-.5.5-.9,1-1.2,1.6l-5.9,13.9Z"/>
+        <path d="M1898.1,446.4l27-63.8h41.2l-21.6,50.9h52.9l-5.5,12.9h-94.1Z"/>
+      </g>
+      <polyline points="642.7 141 368 141 282.6 234.2 187.6 236.2 340.6 68.8 610.3 68.8" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="body">
+    <div class="meta-row">
+      <div>
+        <div class="k">Date</div>
+        <div class="v">04/15/2026</div>
+      </div>
+      <div>
+        <div class="k">Invoice No</div>
+        <div class="v">0502</div>
+      </div>
+    </div>
+
+    <div class="party">
+      <div class="label">Timesheet From:</div>
+      <p>Scott Socia<br>903-617-1527<br>scott@sociavisual.com</p>
+    </div>
+
+    <div class="party">
+      <div class="label">Prepared For:</div>
+      <p>DME Academy<br>Greg Birgfeld</p>
+      <div class="email">greg.birgfeld@dmeacademy.com</div>
+    </div>
+
+    <div class="period">April 2026 · Apr 7 – Apr 13</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:18%">Date</th>
+          <th class="num" style="width:14%">Duration</th>
+          <th>Task</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="date">Tue · Apr 7</td>
+          <td class="num">1h 34m</td>
+          <td>Kickoff after content drop from Austin — planning docs, spec &amp; checklist, content inventory</td>
+        </tr>
+        <tr>
+          <td class="date">Wed · Apr 8</td>
+          <td class="num">2h 11m</td>
+          <td>First camp page (Baseball) — design, layout &amp; master template for the remaining four</td>
+        </tr>
+        <tr>
+          <td class="date">Wed · Apr 8</td>
+          <td class="num">2h 23m</td>
+          <td>Pages 2 &amp; 3 (Basketball, Golf) — duplicate template, swap content, dates, imagery, registration links</td>
+        </tr>
+        <tr>
+          <td class="date">Thu · Apr 9</td>
+          <td class="num">2h 18m</td>
+          <td>Pages 4 &amp; 5 (Soccer, Volleyball) — content population + round-1 revisions across all 5 pages after Greg's feedback</td>
+        </tr>
+        <tr>
+          <td class="date">Fri · Apr 10</td>
+          <td class="num">0h 34m</td>
+          <td>Final QA sweep &amp; publish — link checks, mobile, SEO basics</td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="2" class="num">9h 00m</td>
+          <td>Build + Round 1 subtotal</td>
+        </tr>
+        <tr>
+          <td class="date">Sat · Apr 11</td>
+          <td class="num">1h 36m</td>
+          <td>Round 2 — context pass, Baseball post rebuild, footer HubSpot form ID diagnosis (404 issue) &amp; fix across all 5 events</td>
+        </tr>
+        <tr>
+          <td class="date">Sat · Apr 11</td>
+          <td class="num">1h 24m</td>
+          <td>Round 2 cont. — Basketball, Golf, Soccer, Volleyball: price, schedule row, pricing section rebuild + final QA</td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="2" class="num">3h 00m</td>
+          <td>Round 2 subtotal</td>
+        </tr>
+        <tr>
+          <td class="date">Mon · Apr 13</td>
+          <td class="num">0h 30m</td>
+          <td>Round 3 polish — Golf age fix, Camp dropdown additions, Summer Prep promo swap + new HubSpot form on Basketball, Soccer, Volleyball</td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="2" class="num">0h 30m</td>
+          <td>Round 3 subtotal</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="total-box">
+      <table>
+        <tr>
+          <td>Total · 12.50 h × $65.00</td>
+          <td class="val">$812.50</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="xref">
+      <div class="lbl">Accompanies Invoice #0502</div>
+      <a href="https://sociavisual.com/invoice.html?id=inv_dme_0502">View Invoice →</a>
+    </div>
+
+    <div class="notes">
+      <h3>Notes</h3>
+      <p>Durations reflect actual working time only — calendar spread across Apr 7–13 is not billed. Total of 12h 30m bills at $65.00/hr for $812.50. Task detail cross-references the work log at <em>Clients/DME Academy/web/work-log.md</em>.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

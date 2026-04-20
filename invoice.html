@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invoice — Socia Visual</title>
 <meta name="robots" content="noindex, nofollow">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
@@ -62,59 +61,23 @@
 
   .action-bar .ab-btn-primary:hover { background: #333; }
 
-  .status-toggle {
+  .status-pill {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #555;
-    margin-left: 8px;
-  }
-
-  .toggle-switch {
-    position: relative;
-    width: 48px;
-    height: 26px;
-    cursor: pointer;
-  }
-
-  .toggle-switch input { display: none; }
-
-  .toggle-track {
-    position: absolute;
-    inset: 0;
-    background: #ffb428;
-    border-radius: 13px;
-    transition: background .25s;
-  }
-
-  .toggle-switch input:checked + .toggle-track { background: #4caf50; }
-
-  .toggle-knob {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    border-radius: 50%;
-    transition: transform .25s;
-    box-shadow: 0 1px 3px rgba(0,0,0,.2);
-  }
-
-  .toggle-switch input:checked ~ .toggle-knob { transform: translateX(22px); }
-
-  .toggle-label {
     font-family: 'Share Tech Mono', monospace;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    min-width: 52px;
+    padding: 6px 14px;
+    border-radius: 13px;
+    background: #fff3dc;
+    color: #b8860b;
+    border: 1px solid #ffb428;
+    margin-left: 8px;
   }
 
-  .toggle-label.paid-label { color: #4caf50; }
-  .toggle-label.unpaid-label { color: #b8860b; }
+  .status-pill.paid { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+  .status-pill.overdue { background: #ffe5e5; color: #c62828; border-color: #c62828; }
 
   .invoice-page {
     display: flex;
@@ -270,14 +233,7 @@
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     Download PDF
   </button>
-  <div class="status-toggle">
-    <label class="toggle-switch">
-      <input type="checkbox" id="statusToggle" onchange="toggleStatus()">
-      <div class="toggle-track"></div>
-      <div class="toggle-knob"></div>
-    </label>
-    <span class="toggle-label" id="statusLabel">Unpaid</span>
-  </div>
+  <span class="status-pill" id="statusPill">Unpaid</span>
 </div>
 
 <div class="invoice-page">
@@ -291,27 +247,44 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL = 'https://yjmyqmfvtudhkkxarttw.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqbXlxbWZ2dHVkaGtreGFydHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzAxMjQsImV4cCI6MjA5MDE0NjEyNH0.kOctH25mfqGAqnd3OCMmGiLto2TuSPt8IoFpKdjn-So';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 let currentInvoice = null;
+
+function showError(msg) {
+  document.getElementById('notFound').innerHTML = `<p>${msg}</p>`;
+}
 
 (async function() {
   const params = new URLSearchParams(window.location.search);
   const invoiceId = params.get('id');
-  if (!invoiceId) {
-    document.getElementById('notFound').innerHTML = '<p>Invoice not found.</p>';
+  const token = params.get('t');
+
+  if (!invoiceId || !token) {
+    showError('This invoice link is invalid or has expired. Please contact scott@sociavisual.com for a new link.');
     return;
   }
 
-  // Fetch from Supabase
-  const { data, error } = await sb.from('invoices').select('*').eq('id', invoiceId).single();
-
-  if (error || !data) {
-    document.getElementById('notFound').innerHTML = '<p>Invoice not found.</p>';
+  let resp;
+  try {
+    resp = await fetch(`/api/get-invoice?id=${encodeURIComponent(invoiceId)}&t=${encodeURIComponent(token)}`);
+  } catch {
+    showError('Unable to load invoice. Please try again in a moment.');
     return;
   }
+
+  if (resp.status === 403) {
+    showError('This invoice link is invalid or has expired. Please contact scott@sociavisual.com for a new link.');
+    return;
+  }
+  if (resp.status === 404) {
+    showError('Invoice not found.');
+    return;
+  }
+  if (!resp.ok) {
+    showError('Unable to load invoice. Please try again in a moment.');
+    return;
+  }
+
+  const { invoice: data } = await resp.json();
 
   const invoice = {
     id: data.id,
@@ -332,16 +305,16 @@ let currentInvoice = null;
 
   document.getElementById('actionBar').style.display = 'flex';
 
-  const toggle = document.getElementById('statusToggle');
-  const label = document.getElementById('statusLabel');
+  const pill = document.getElementById('statusPill');
   if (invoice.status === 'paid') {
-    toggle.checked = true;
-    label.textContent = 'Paid';
-    label.className = 'toggle-label paid-label';
+    pill.textContent = 'Paid';
+    pill.className = 'status-pill paid';
+  } else if (invoice.status === 'overdue') {
+    pill.textContent = 'Overdue';
+    pill.className = 'status-pill overdue';
   } else {
-    toggle.checked = false;
-    label.textContent = 'Unpaid';
-    label.className = 'toggle-label unpaid-label';
+    pill.textContent = 'Unpaid';
+    pill.className = 'status-pill';
   }
 
   renderInvoice(invoice);
@@ -447,37 +420,6 @@ function renderInvoice(invoice) {
       </div>
     </div>
   `;
-}
-
-async function toggleStatus() {
-  if (!currentInvoice) return;
-  const toggle = document.getElementById('statusToggle');
-  const label = document.getElementById('statusLabel');
-
-  const newStatus = toggle.checked ? 'paid' : 'unpaid';
-  currentInvoice.status = newStatus;
-
-  if (toggle.checked) {
-    label.textContent = 'Paid';
-    label.className = 'toggle-label paid-label';
-  } else {
-    label.textContent = 'Unpaid';
-    label.className = 'toggle-label unpaid-label';
-  }
-
-  // Write to Supabase — syncs to admin in real-time
-  const { error } = await sb.from('invoices').update({
-    status: newStatus,
-    updated_at: new Date().toISOString()
-  }).eq('id', currentInvoice.id);
-
-  if (error) {
-    console.error(error);
-    toast('Error updating status');
-    return;
-  }
-
-  toast(toggle.checked ? 'Marked as paid' : 'Marked as unpaid');
 }
 
 function downloadPDF() {

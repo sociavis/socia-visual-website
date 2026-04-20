@@ -1342,45 +1342,68 @@
 const SUPABASE_URL = 'https://yjmyqmfvtudhkkxarttw.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqbXlxbWZ2dHVkaGtreGFydHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzAxMjQsImV4cCI6MjA5MDE0NjEyNH0.kOctH25mfqGAqnd3OCMmGiLto2TuSPt8IoFpKdjn-So';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const AUTH_KEY = 'sv_admin_auth';
-
-let adminPassword = null; // fetched from Supabase
 let invoices = [];
 let activeId = null;
 let currentPage = 'dashboard';
 
 // ═══ AUTH ═══
-async function fetchPassword() {
-  const { data, error } = await sb.from('admin_settings').select('value').eq('key', 'admin_password').single();
-  if (!error && data) adminPassword = data.value;
-}
+// Admin session is a httpOnly cookie issued by /api/admin/login.
+// We check it on page load via /api/admin/session.
 
 async function authenticate() {
   const btn = document.querySelector('.auth-input-wrap button');
+  const errEl = document.getElementById('authError');
+  const passEl = document.getElementById('authPass');
   btn.textContent = '...';
-  if (!adminPassword) await fetchPassword();
-  btn.textContent = 'Enter';
+  errEl.textContent = '';
 
-  if (document.getElementById('authPass').value === adminPassword) {
-    sessionStorage.setItem(AUTH_KEY, '1');
-    document.getElementById('authGate').classList.add('hidden');
-    document.getElementById('app').classList.add('visible');
-    init();
-  } else {
-    document.getElementById('authError').textContent = 'Invalid password';
-    document.getElementById('authPass').value = '';
+  try {
+    const resp = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: passEl.value })
+    });
+
+    if (resp.ok) {
+      document.getElementById('authGate').classList.add('hidden');
+      document.getElementById('app').classList.add('visible');
+      init();
+      return;
+    }
+    if (resp.status === 429) {
+      errEl.textContent = 'Too many attempts — wait a minute';
+    } else {
+      errEl.textContent = 'Invalid password';
+      passEl.value = '';
+    }
+  } catch {
+    errEl.textContent = 'Network error — try again';
+  } finally {
+    btn.textContent = 'Enter';
   }
 }
 document.getElementById('authPass').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
-function logout() { sessionStorage.removeItem(AUTH_KEY); location.reload(); }
 
-if (sessionStorage.getItem(AUTH_KEY)) {
-  document.getElementById('authGate').classList.add('hidden');
-  document.getElementById('app').classList.add('visible');
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  document.addEventListener('DOMContentLoaded', () => document.getElementById('authPass').focus());
+async function logout() {
+  try { await fetch('/api/admin/logout', { method: 'POST' }); } catch {}
+  location.reload();
 }
+
+(async function checkSession() {
+  try {
+    const resp = await fetch('/api/admin/session');
+    const { authenticated } = await resp.json();
+    if (authenticated) {
+      document.getElementById('authGate').classList.add('hidden');
+      document.getElementById('app').classList.add('visible');
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => document.getElementById('authPass').focus());
+    }
+  } catch {
+    document.addEventListener('DOMContentLoaded', () => document.getElementById('authPass').focus());
+  }
+})();
 
 // ═══ INIT ═══
 async function init() {
@@ -1544,8 +1567,15 @@ async function newInvoice() {
     items: [{ qty: 1, description: '', price: 0 }],
     notes: ''
   };
-  const { error } = await sb.from('invoices').insert(invToRow(inv));
-  if (error) { console.error(error); toast('Error creating invoice'); return; }
+  const resp = await fetch('/api/admin/invoices', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(invToRow(inv))
+  });
+  if (!resp.ok) {
+    if (resp.status === 401) { toast('Session expired — reload'); return; }
+    console.error(await resp.text()); toast('Error creating invoice'); return;
+  }
   invoices.unshift(inv);
   document.getElementById('invoiceCount').textContent = invoices.length;
   selectInvoice(inv.id);
@@ -1593,8 +1623,15 @@ async function saveInvoice() {
     inv.items.push({ qty: parseFloat(inp[0].value) || 0, description: inp[1].value, price: parseFloat(inp[2].value) || 0 });
   });
   document.getElementById('editNumber').textContent = '#' + inv.number;
-  const { error } = await sb.from('invoices').upsert(invToRow(inv));
-  if (error) { console.error(error); toast('Error saving'); return; }
+  const resp = await fetch('/api/admin/invoices', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(invToRow(inv))
+  });
+  if (!resp.ok) {
+    if (resp.status === 401) { toast('Session expired — reload'); return; }
+    console.error(await resp.text()); toast('Error saving'); return;
+  }
   renderInvList();
   renderDashboard();
   toast('Invoice saved');
@@ -1602,8 +1639,11 @@ async function saveInvoice() {
 
 async function deleteInvoice() {
   if (!activeId || !confirm('Delete this invoice?')) return;
-  const { error } = await sb.from('invoices').delete().eq('id', activeId);
-  if (error) { console.error(error); toast('Error deleting'); return; }
+  const resp = await fetch(`/api/admin/invoices?id=${encodeURIComponent(activeId)}`, { method: 'DELETE' });
+  if (!resp.ok) {
+    if (resp.status === 401) { toast('Session expired — reload'); return; }
+    console.error(await resp.text()); toast('Error deleting'); return;
+  }
   invoices = invoices.filter(i => i.id !== activeId);
   activeId = null;
   document.getElementById('invoiceCount').textContent = invoices.length;
@@ -1702,17 +1742,37 @@ async function exportPDF() {
   toast(timesheetBlock ? 'Invoice + timesheet ready — save as PDF' : 'Print dialog opened — save as PDF');
 }
 
-function copyLink() {
+async function getSignedInvoiceUrl(invoiceId) {
+  const resp = await fetch('/api/admin/sign-invoice-url', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ invoice_id: invoiceId })
+  });
+  if (!resp.ok) throw new Error(`sign-invoice-url failed: ${resp.status}`);
+  const { url } = await resp.json();
+  return url;
+}
+
+async function copyLink() {
   if (!activeId) return;
-  const link = `${window.location.origin}/invoice.html?id=${activeId}`;
-  copyToClipboard(link);
-  toast('Invoice link copied');
-  saveInvoice();
+  await saveInvoice();
+  try {
+    const url = await getSignedInvoiceUrl(activeId);
+    copyToClipboard(url);
+    toast('Signed invoice link copied');
+  } catch (err) {
+    console.error(err); toast('Could not generate link');
+  }
 }
 
 async function openPreview() {
   const inv = await getCurrentInvoice(); if (!inv) return;
-  window.open(`../invoice.html?id=${inv.id}`, '_blank');
+  try {
+    const url = await getSignedInvoiceUrl(inv.id);
+    window.open(url, '_blank');
+  } catch (err) {
+    console.error(err); toast('Could not open preview');
+  }
 }
 
 // ═══ CONTRACTS ═══
@@ -2573,13 +2633,6 @@ async function changePassword() {
   const confirm = document.getElementById('sConfirmPass').value;
   const msgEl = document.getElementById('passMsg');
 
-  if (!adminPassword) await fetchPassword();
-
-  if (current !== adminPassword) {
-    msgEl.className = 'pass-error';
-    msgEl.textContent = 'Current password is incorrect';
-    return;
-  }
   if (!newPass || newPass.length < 4) {
     msgEl.className = 'pass-error';
     msgEl.textContent = 'New password must be at least 4 characters';
@@ -2591,19 +2644,19 @@ async function changePassword() {
     return;
   }
 
-  const { error } = await sb.from('admin_settings').update({
-    value: newPass,
-    updated_at: new Date().toISOString()
-  }).eq('key', 'admin_password');
+  const resp = await fetch('/api/admin/change-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ current_password: current, new_password: newPass })
+  });
 
-  if (error) {
+  if (!resp.ok) {
+    const { error } = await resp.json().catch(() => ({ error: 'Error updating password' }));
     msgEl.className = 'pass-error';
-    msgEl.textContent = 'Error updating password';
-    console.error(error);
+    msgEl.textContent = error || 'Error updating password';
     return;
   }
 
-  adminPassword = newPass;
   document.getElementById('sCurrentPass').value = '';
   document.getElementById('sNewPass').value = '';
   document.getElementById('sConfirmPass').value = '';

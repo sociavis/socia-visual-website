@@ -7,7 +7,12 @@
     "start": "echo 'Static site — open index.html or deploy to Vercel'"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "jsonwebtoken": "^9.0.2",
     "three": "0.128.0"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "homepage": "https://sociavisual.com",
   "repository": {

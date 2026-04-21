@@ -59,6 +59,23 @@ module.exports = async (req, res) => {
         await upsertCharge(sb, event.data.object);
         await markInvoiceRefunded(sb, event.data.object);
         break;
+      case 'customer.created':
+      case 'customer.updated':
+        await upsertCustomer(sb, event.data.object);
+        break;
+      case 'customer.deleted':
+        await sb.from('stripe_customers').delete().eq('stripe_customer_id', event.data.object.id);
+        break;
+      case 'payment_method.attached':
+      case 'payment_method.updated':
+      case 'payment_method.automatically_updated':
+        await upsertPaymentMethod(sb, event.data.object);
+        break;
+      case 'payment_method.detached':
+        await sb.from('payment_methods').update({
+          detached_at: new Date().toISOString()
+        }).eq('stripe_payment_method_id', event.data.object.id);
+        break;
       default:
         // Ignore other events for MVP
         break;
@@ -114,6 +131,33 @@ async function upsertCharge(sb, charge) {
     payment_method_type: charge.payment_method_details?.type || null,
     receipt_url: charge.receipt_url || null
   }, { onConflict: 'stripe_charge_id' });
+}
+
+async function upsertCustomer(sb, customer) {
+  await sb.from('stripe_customers').upsert({
+    stripe_customer_id: customer.id,
+    client_email: customer.email || '',
+    company_name: customer.metadata?.company_name || null,
+    client_name: customer.name || null,
+    default_payment_method_id: customer.invoice_settings?.default_payment_method || null,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'stripe_customer_id' });
+}
+
+async function upsertPaymentMethod(sb, pm) {
+  const card = pm.card || {};
+  const bank = pm.us_bank_account || pm.acss_debit || {};
+  await sb.from('payment_methods').upsert({
+    stripe_payment_method_id: pm.id,
+    stripe_customer_id: pm.customer,
+    type: pm.type,
+    brand: card.brand || null,
+    last4: card.last4 || bank.last4 || null,
+    exp_month: card.exp_month || null,
+    exp_year: card.exp_year || null,
+    bank_name: bank.bank_name || bank.institution_name || null,
+    detached_at: null
+  }, { onConflict: 'stripe_payment_method_id' });
 }
 
 async function markInvoiceRefunded(sb, charge) {

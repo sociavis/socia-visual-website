@@ -1,6 +1,12 @@
 {
   "buildCommand": "",
   "outputDirectory": ".",
+  "crons": [
+    {
+      "path": "/api/retainer-charges",
+      "schedule": "0 14 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

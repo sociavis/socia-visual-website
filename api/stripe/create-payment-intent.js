@@ -52,10 +52,44 @@ module.exports = async (req, res) => {
       } catch { /* fall through to creating a new one */ }
     }
 
+    // Look up or create a Stripe Customer for this client_email — enables
+    // saving the payment method for future retainer auto-charges.
+    let stripeCustomerId = null;
+    const clientEmail = (invoice.client_email || '').trim().toLowerCase();
+    if (clientEmail) {
+      const { data: existingCustomer } = await sb
+        .from('stripe_customers')
+        .select('stripe_customer_id')
+        .eq('client_email', clientEmail)
+        .maybeSingle();
+
+      if (existingCustomer?.stripe_customer_id) {
+        stripeCustomerId = existingCustomer.stripe_customer_id;
+      } else {
+        const customer = await stripe.customers.create({
+          email: invoice.client_email,
+          name: invoice.client_name || undefined,
+          metadata: {
+            company_name: invoice.company_name || '',
+            source: 'invoice'
+          }
+        });
+        stripeCustomerId = customer.id;
+        await sb.from('stripe_customers').upsert({
+          stripe_customer_id: customer.id,
+          client_email: clientEmail,
+          company_name: invoice.company_name || null,
+          client_name: invoice.client_name || null
+        }, { onConflict: 'stripe_customer_id' });
+      }
+    }
+
     const pi = await stripe.paymentIntents.create({
       amount: amountCents,
       currency,
       automatic_payment_methods: { enabled: true },
+      customer: stripeCustomerId || undefined,
+      setup_future_usage: stripeCustomerId ? 'off_session' : undefined,
       description: `Invoice #${invoice.number} — ${invoice.company_name || invoice.client_name || 'Client'}`,
       metadata: {
         invoice_id: invoice.id,

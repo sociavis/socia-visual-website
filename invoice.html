@@ -400,8 +400,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_51TOKIuQ5CJ2Q3cPET446RwjFnzj03oLZutAtI78nQogE6Ul2LlxtTTTPMCO26gNzCcpnWK3Gfn5YytmxrUaw4dFt00MoHgwOaR';
-const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+let stripe = null;
+
+async function initStripe() {
+  if (stripe) return stripe;
+  const resp = await fetch('/api/public-config');
+  const cfg = await resp.json();
+  if (!cfg.stripe_publishable_key) throw new Error('Payments not configured');
+  stripe = Stripe(cfg.stripe_publishable_key);
+  return stripe;
+}
 
 let currentInvoice = null;
 let invoiceToken = null;
@@ -636,6 +644,13 @@ async function openPayModal() {
 
   if (paymentElement) return; // already mounted
 
+  try {
+    await initStripe();
+  } catch (err) {
+    document.getElementById('payError').textContent = err.message || 'Unable to initialize payment';
+    return;
+  }
+
   let data;
   try {
     const resp = await fetch('/api/stripe/create-payment-intent', {
@@ -729,6 +744,7 @@ function showPaymentResult(pi) {
   const clientSecret = params.get('payment_intent_client_secret');
   if (!clientSecret) return;
 
+  try { await initStripe(); } catch { return; }
   const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
   if (paymentIntent) {
     document.getElementById('payModal').classList.add('open');

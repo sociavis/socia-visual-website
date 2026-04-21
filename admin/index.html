@@ -1389,6 +1389,14 @@ async function logout() {
   location.reload();
 }
 
+function runWhenDomReady(fn) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fn);
+  } else {
+    fn();
+  }
+}
+
 (async function checkSession() {
   try {
     const resp = await fetch('/api/admin/session');
@@ -1396,12 +1404,12 @@ async function logout() {
     if (authenticated) {
       document.getElementById('authGate').classList.add('hidden');
       document.getElementById('app').classList.add('visible');
-      document.addEventListener('DOMContentLoaded', init);
+      runWhenDomReady(init);
     } else {
-      document.addEventListener('DOMContentLoaded', () => document.getElementById('authPass').focus());
+      runWhenDomReady(() => document.getElementById('authPass').focus());
     }
   } catch {
-    document.addEventListener('DOMContentLoaded', () => document.getElementById('authPass').focus());
+    runWhenDomReady(() => document.getElementById('authPass').focus());
   }
 })();
 

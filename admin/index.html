@@ -1355,7 +1355,7 @@
 
       <!-- ── PAYMENTS ── -->
       <div class="page" id="page-payments">
-        <div class="settings-content">
+        <div class="settings-content" style="max-width:1100px;">
           <div class="settings-section">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px;">
               <div>
@@ -2802,8 +2802,8 @@ function renderRetainerSchedules() {
     el.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No retainer schedules yet</div>';
     return;
   }
-  el.innerHTML = `
-    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+  el.innerHTML = `<div style="overflow-x:auto;max-width:100%;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:720px;">
       <thead>
         <tr style="text-align:left;color:var(--text-dim);border-bottom:1px solid var(--border);">
           <th style="padding:10px 8px;">Client</th>
@@ -2832,7 +2832,7 @@ function renderRetainerSchedules() {
           <tr><td colspan="7" style="padding:4px 8px 10px;color:#c62828;font-size:11px;">⚠ Last charge error: ${escapeHtml(s.last_error)}</td></tr>` : ''}
         `).join('')}
       </tbody>
-    </table>`;
+    </table></div>`;
 }
 
 function renderCustomers() {
@@ -2870,8 +2870,8 @@ function renderCharges() {
     el.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No charges yet</div>';
     return;
   }
-  el.innerHTML = `
-    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+  el.innerHTML = `<div style="overflow-x:auto;max-width:100%;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:820px;">
       <thead>
         <tr style="text-align:left;color:var(--text-dim);border-bottom:1px solid var(--border);">
           <th style="padding:10px 8px;">Date</th>
@@ -2898,7 +2898,7 @@ function renderCharges() {
           </tr>
         `).join('')}
       </tbody>
-    </table>`;
+    </table></div>`;
 }
 
 function openRetainerEditor(id) {

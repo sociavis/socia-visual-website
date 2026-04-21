@@ -6,6 +6,7 @@
 <title>Invoice — Socia Visual</title>
 <meta name="robots" content="noindex, nofollow">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
 <style>
   @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
   @font-face { font-family: 'Chakra Petch'; src: url('fonts/chakra-petch-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
@@ -78,6 +79,130 @@
 
   .status-pill.paid { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
   .status-pill.overdue { background: #ffe5e5; color: #c62828; border-color: #c62828; }
+
+  .action-bar .ab-btn-pay {
+    background: #48b8d0;
+    color: #fff;
+    border-color: #48b8d0;
+    font-weight: 700;
+  }
+  .action-bar .ab-btn-pay:hover { background: #3ba5bd; border-color: #3ba5bd; }
+
+  .pay-modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .pay-modal-backdrop.open { display: flex; }
+
+  .pay-modal {
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 480px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    position: relative;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+  }
+
+  .pay-modal-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 4px 10px;
+    line-height: 1;
+  }
+  .pay-modal-close:hover { color: #333; }
+
+  .pay-modal h2 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    color: #1a1a1a;
+  }
+
+  .pay-modal .pay-invoice-ref {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .pay-modal .pay-amount {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: #48b8d0;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+  }
+
+  #payment-element { margin-bottom: 20px; }
+
+  .pay-submit-btn {
+    width: 100%;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px;
+    border-radius: 4px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .5px;
+  }
+  .pay-submit-btn:hover:not(:disabled) { background: #333; }
+  .pay-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+  .pay-error {
+    color: #c62828;
+    font-size: 13px;
+    margin-bottom: 14px;
+    min-height: 18px;
+  }
+
+  .pay-note {
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+    margin-top: 14px;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: .5px;
+  }
+
+  .pay-success {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .pay-success .check {
+    width: 64px; height: 64px;
+    background: #e8f5e9;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #2e7d32;
+  }
+  .pay-success h2 { color: #2e7d32; margin-bottom: 12px; }
+  .pay-success p { color: #666; font-size: 14px; line-height: 1.5; }
 
   .invoice-page {
     display: flex;
@@ -229,11 +354,39 @@
 <body>
 
 <div class="action-bar" id="actionBar" style="display:none;">
+  <button class="ab-btn ab-btn-pay" id="payBtn" onclick="openPayModal()" style="display:none;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+    Pay This Invoice
+  </button>
   <button class="ab-btn ab-btn-primary" onclick="downloadPDF()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     Download PDF
   </button>
   <span class="status-pill" id="statusPill">Unpaid</span>
+</div>
+
+<div class="pay-modal-backdrop" id="payModal" onclick="if(event.target===this)closePayModal()">
+  <div class="pay-modal">
+    <button class="pay-modal-close" onclick="closePayModal()" aria-label="Close">&times;</button>
+    <div id="payFormView">
+      <h2>Pay Invoice</h2>
+      <div class="pay-invoice-ref" id="payInvoiceRef"></div>
+      <div class="pay-amount" id="payAmount">$0.00</div>
+      <div id="payment-element"></div>
+      <div class="pay-error" id="payError"></div>
+      <button class="pay-submit-btn" id="paySubmit" onclick="submitPayment()">Pay Now</button>
+      <div class="pay-note">Secured by Stripe · Card &amp; ACH accepted</div>
+    </div>
+    <div id="paySuccessView" style="display:none;">
+      <div class="pay-success">
+        <div class="check">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 id="paySuccessTitle">Payment Received</h2>
+        <p id="paySuccessBody">Thank you — a receipt has been sent to your email.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="invoice-page">
@@ -247,7 +400,21 @@
 <div class="toast" id="toast"></div>
 
 <script>
+let stripe = null;
+
+async function initStripe() {
+  if (stripe) return stripe;
+  const resp = await fetch('/api/public-config');
+  const cfg = await resp.json();
+  if (!cfg.stripe_publishable_key) throw new Error('Payments not configured');
+  stripe = Stripe(cfg.stripe_publishable_key);
+  return stripe;
+}
+
 let currentInvoice = null;
+let invoiceToken = null;
+let elements = null;
+let paymentElement = null;
 
 function showError(msg) {
   document.getElementById('notFound').innerHTML = `<p>${msg}</p>`;
@@ -257,6 +424,7 @@ function showError(msg) {
   const params = new URLSearchParams(window.location.search);
   const invoiceId = params.get('id');
   const token = params.get('t');
+  invoiceToken = token;
 
   if (!invoiceId || !token) {
     showError('This invoice link is invalid or has expired. Please contact scott@sociavisual.com for a new link.');
@@ -306,15 +474,18 @@ function showError(msg) {
   document.getElementById('actionBar').style.display = 'flex';
 
   const pill = document.getElementById('statusPill');
+  const payBtn = document.getElementById('payBtn');
   if (invoice.status === 'paid') {
     pill.textContent = 'Paid';
     pill.className = 'status-pill paid';
   } else if (invoice.status === 'overdue') {
     pill.textContent = 'Overdue';
     pill.className = 'status-pill overdue';
+    payBtn.style.display = 'inline-flex';
   } else {
     pill.textContent = 'Unpaid';
     pill.className = 'status-pill';
+    payBtn.style.display = 'inline-flex';
   }
 
   renderInvoice(invoice);
@@ -444,6 +615,145 @@ function toast(msg) {
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2400);
 }
+
+// ═══ PAYMENT FLOW ═══
+function invoiceTotalCents() {
+  if (!currentInvoice) return 0;
+  let cents = 0;
+  for (const item of (currentInvoice.items || [])) {
+    cents += Math.round((Number(item.qty) || 0) * (Number(item.price) || 0) * 100);
+  }
+  return cents;
+}
+
+function formatCents(cents) {
+  return '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+async function openPayModal() {
+  if (!currentInvoice) return;
+  const cents = invoiceTotalCents();
+  if (cents < 50) { toast('Invoice amount too small'); return; }
+
+  document.getElementById('payInvoiceRef').textContent = `Invoice #${currentInvoice.number}`;
+  document.getElementById('payAmount').textContent = formatCents(cents);
+  document.getElementById('payFormView').style.display = 'block';
+  document.getElementById('paySuccessView').style.display = 'none';
+  document.getElementById('payError').textContent = '';
+  document.getElementById('payModal').classList.add('open');
+
+  if (paymentElement) return; // already mounted
+
+  try {
+    await initStripe();
+  } catch (err) {
+    document.getElementById('payError').textContent = err.message || 'Unable to initialize payment';
+    return;
+  }
+
+  let data;
+  try {
+    const resp = await fetch('/api/stripe/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ invoice_id: currentInvoice.id, token: invoiceToken })
+    });
+    data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || `Server error ${resp.status}`);
+  } catch (err) {
+    document.getElementById('payError').textContent = err.message || 'Unable to start payment';
+    return;
+  }
+
+  elements = stripe.elements({
+    clientSecret: data.client_secret,
+    appearance: {
+      theme: 'stripe',
+      variables: {
+        colorPrimary: '#48b8d0',
+        fontFamily: 'Chakra Petch, sans-serif',
+        borderRadius: '4px'
+      }
+    }
+  });
+
+  paymentElement = elements.create('payment', {
+    layout: { type: 'tabs', defaultCollapsed: false }
+  });
+  paymentElement.mount('#payment-element');
+}
+
+function closePayModal() {
+  document.getElementById('payModal').classList.remove('open');
+}
+
+async function submitPayment() {
+  if (!elements) return;
+  const submitBtn = document.getElementById('paySubmit');
+  const errEl = document.getElementById('payError');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Processing…';
+  errEl.textContent = '';
+
+  const { error, paymentIntent } = await stripe.confirmPayment({
+    elements,
+    redirect: 'if_required',
+    confirmParams: {
+      return_url: window.location.href
+    }
+  });
+
+  if (error) {
+    errEl.textContent = error.message || 'Payment failed';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Pay Now';
+    return;
+  }
+
+  showPaymentResult(paymentIntent);
+}
+
+function showPaymentResult(pi) {
+  const titleEl = document.getElementById('paySuccessTitle');
+  const bodyEl = document.getElementById('paySuccessBody');
+  const pill = document.getElementById('statusPill');
+
+  if (pi.status === 'succeeded') {
+    titleEl.textContent = 'Payment Received';
+    bodyEl.textContent = 'Thank you — a receipt has been emailed. You can close this tab.';
+    pill.textContent = 'Paid';
+    pill.className = 'status-pill paid';
+    document.getElementById('payBtn').style.display = 'none';
+  } else if (pi.status === 'processing') {
+    titleEl.textContent = 'Payment Processing';
+    bodyEl.textContent = 'Your payment is on the way. ACH transfers take 3–5 business days to clear. You\u2019ll get a receipt by email once it settles.';
+    pill.textContent = 'Processing';
+    pill.className = 'status-pill';
+  } else {
+    titleEl.textContent = 'Check Your Email';
+    bodyEl.textContent = 'Stripe needs one more step to complete payment. Check the email from Stripe to finish.';
+  }
+
+  document.getElementById('payFormView').style.display = 'none';
+  document.getElementById('paySuccessView').style.display = 'block';
+}
+
+// Handle return from 3DS / bank redirect
+(async function handleReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const clientSecret = params.get('payment_intent_client_secret');
+  if (!clientSecret) return;
+
+  try { await initStripe(); } catch { return; }
+  const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+  if (paymentIntent) {
+    document.getElementById('payModal').classList.add('open');
+    showPaymentResult(paymentIntent);
+    // Clean up query params so reloads don't re-trigger
+    const cleanUrl = window.location.pathname + '?id=' + params.get('id') + (params.get('t') ? '&t=' + params.get('t') : '');
+    window.history.replaceState({}, '', cleanUrl);
+  }
+})();
 </script>
 </body>
 </html>

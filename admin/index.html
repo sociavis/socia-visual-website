@@ -947,6 +947,54 @@
     .line-item { flex-wrap: wrap; }
     .dashboard-grid { grid-template-columns: repeat(2, 1fr); padding: 16px; }
   }
+
+  /* Payments modal */
+  .pay-modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .pay-modal-backdrop.open { display: flex; }
+  .pay-modal {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 100%;
+    padding: 28px;
+    position: relative;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    color: var(--text);
+  }
+  .pay-modal h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .pay-modal-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 4px 10px;
+    line-height: 1;
+  }
+  .pay-modal-close:hover { color: var(--text); }
+  .pay-error {
+    color: #ff6b6b;
+    font-size: 12px;
+    margin-top: 10px;
+    min-height: 16px;
+  }
 </style>
 </head>
 <body>
@@ -1008,6 +1056,12 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <span>Contracts</span>
         <span class="nav-badge" id="contractCount">0</span>
+      </div>
+
+      <div class="nav-item" onclick="navigate('payments')" data-page="payments">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span>Payments</span>
+        <span class="nav-badge" id="retainerCount">0</span>
       </div>
 
       <div class="nav-section-label">Clients</div>
@@ -1299,6 +1353,76 @@
         </div>
       </div>
 
+      <!-- ── PAYMENTS ── -->
+      <div class="page" id="page-payments">
+        <div class="settings-content" style="max-width:1100px;">
+          <div class="settings-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px;">
+              <div>
+                <h3>Retainer Schedules</h3>
+                <p class="section-desc">Recurring monthly invoices auto-charged against a saved payment method.</p>
+              </div>
+              <button class="btn btn-primary" onclick="openRetainerEditor()">+ New Retainer</button>
+            </div>
+            <div id="retainerSchedulesList">
+              <div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No retainer schedules yet</div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Customers &amp; Saved Payment Methods</h3>
+            <p class="section-desc">Clients who have paid at least once. Saved methods enable retainer auto-charge.</p>
+            <div id="customersList">
+              <div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No customers yet</div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3>Recent Charges</h3>
+            <p class="section-desc">Last 50 successful and failed charges across all invoices.</p>
+            <div id="chargesList">
+              <div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No charges yet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retainer Editor Modal -->
+      <div class="pay-modal-backdrop" id="retainerEditor" style="display:none;" onclick="if(event.target===this)closeRetainerEditor()">
+        <div class="pay-modal" style="max-width:520px;">
+          <button class="pay-modal-close" onclick="closeRetainerEditor()" aria-label="Close">&times;</button>
+          <h2 id="retainerEditorTitle">New Retainer Schedule</h2>
+          <div style="margin-top:16px;display:grid;gap:12px;">
+            <div class="form-group"><label>Client Email *</label><input type="email" id="rClientEmail" placeholder="client@example.com"></div>
+            <div class="form-group"><label>Company Name</label><input type="text" id="rCompany" placeholder="Company LLC"></div>
+            <div class="form-group"><label>Client Name</label><input type="text" id="rClientName" placeholder="First Last"></div>
+            <div class="form-group"><label>Description *</label><input type="text" id="rDescription" placeholder="Monthly Creative &amp; Web Retainer"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+              <div class="form-group"><label>Amount (USD) *</label><input type="number" id="rAmount" step="0.01" min="0" placeholder="3000.00"></div>
+              <div class="form-group"><label>Currency</label><select id="rCurrency"><option value="usd">USD</option><option value="cad">CAD</option></select></div>
+              <div class="form-group"><label>Day of Month *</label><input type="number" id="rDay" min="1" max="28" placeholder="1"></div>
+            </div>
+            <div class="form-group">
+              <label>Next Charge Date *</label>
+              <input type="date" id="rNextDate">
+            </div>
+            <div class="form-group">
+              <label>Saved Payment Method</label>
+              <select id="rPaymentMethod"><option value="">— Select a customer + PM from the customer list first —</option></select>
+            </div>
+            <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" id="rActive" checked style="width:auto;">
+              <label for="rActive" style="margin:0;">Active (cron will charge this)</label>
+            </div>
+          </div>
+          <div class="pay-error" id="retainerEditorError"></div>
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            <button class="btn btn-primary" style="flex:1" onclick="saveRetainer()">Save Schedule</button>
+            <button class="btn btn-danger" id="rDeleteBtn" style="display:none;" onclick="deleteRetainer()">Delete</button>
+          </div>
+        </div>
+      </div>
+
       <!-- ── SETTINGS ── -->
       <div class="page" id="page-settings">
         <div class="settings-content">
@@ -1434,11 +1558,12 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', projects: 'Projects', partners: 'Clients', settings: 'Settings' };
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', payments: 'Payments', projects: 'Projects', partners: 'Clients', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') renderDashboard();
   if (page === 'contracts') renderConList();
+  if (page === 'payments') loadPaymentsPage();
 }
 
 // ═══ REALTIME ═══
@@ -2632,6 +2757,255 @@ function copyPortalLink() {
   const link = `${window.location.origin}/portal/`;
   copyToClipboard(link);
   toast('Portal link copied');
+}
+
+// ═══ PAYMENTS (Retainer Schedules + Customers + Charges) ═══
+let retainerSchedules = [];
+let paymentCustomers = [];
+let paymentCharges = [];
+let editingRetainerId = null;
+
+async function loadPaymentsPage() {
+  try {
+    const [schedsResp, custsResp, payResp] = await Promise.all([
+      fetch('/api/admin/retainer-schedules'),
+      fetch('/api/admin/customers'),
+      fetch('/api/admin/payments')
+    ]);
+    if (!schedsResp.ok) throw new Error('schedules fetch failed');
+    if (!custsResp.ok) throw new Error('customers fetch failed');
+    if (!payResp.ok) throw new Error('payments fetch failed');
+    const schedsJson = await schedsResp.json();
+    const custsJson = await custsResp.json();
+    const payJson = await payResp.json();
+    retainerSchedules = schedsJson.schedules || [];
+    paymentCustomers = custsJson.customers || [];
+    paymentCharges = payJson.charges || [];
+    renderRetainerSchedules();
+    renderCustomers();
+    renderCharges();
+    document.getElementById('retainerCount').textContent = retainerSchedules.filter(s => s.active).length;
+  } catch (err) {
+    console.error('loadPaymentsPage', err);
+    toast('Error loading payments');
+  }
+}
+
+function fmtCents(cents, currency) {
+  const amount = (cents || 0) / 100;
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: (currency || 'usd').toUpperCase() }).format(amount);
+}
+
+function renderRetainerSchedules() {
+  const el = document.getElementById('retainerSchedulesList');
+  if (!retainerSchedules.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No retainer schedules yet</div>';
+    return;
+  }
+  el.innerHTML = `<div style="overflow-x:auto;max-width:100%;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:720px;">
+      <thead>
+        <tr style="text-align:left;color:var(--text-dim);border-bottom:1px solid var(--border);">
+          <th style="padding:10px 8px;">Client</th>
+          <th style="padding:10px 8px;">Description</th>
+          <th style="padding:10px 8px;text-align:right;">Amount</th>
+          <th style="padding:10px 8px;">Day</th>
+          <th style="padding:10px 8px;">Next Charge</th>
+          <th style="padding:10px 8px;">Status</th>
+          <th style="padding:10px 8px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${retainerSchedules.map(s => `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 8px;">
+              <div style="font-weight:600;">${escapeHtml(s.company_name || s.client_name || '—')}</div>
+              <div style="color:var(--text-dim);font-size:11px;">${escapeHtml(s.client_email)}</div>
+            </td>
+            <td style="padding:10px 8px;">${escapeHtml(s.description)}</td>
+            <td style="padding:10px 8px;text-align:right;font-family:'Share Tech Mono',monospace;">${fmtCents(s.amount_cents, s.currency)}</td>
+            <td style="padding:10px 8px;">${s.day_of_month}</td>
+            <td style="padding:10px 8px;font-family:'Share Tech Mono',monospace;">${s.next_charge_date}</td>
+            <td style="padding:10px 8px;"><span class="status-pill" style="font-size:10px;padding:3px 8px;${s.active ? 'background:rgba(168,255,0,.15);color:var(--accent);' : 'opacity:.5;'}">${s.active ? 'ACTIVE' : 'PAUSED'}</span></td>
+            <td style="padding:10px 8px;text-align:right;"><button class="btn" style="padding:4px 10px;font-size:11px;" onclick="openRetainerEditor('${s.id}')">Edit</button></td>
+          </tr>${s.last_error ? `
+          <tr><td colspan="7" style="padding:4px 8px 10px;color:#c62828;font-size:11px;">⚠ Last charge error: ${escapeHtml(s.last_error)}</td></tr>` : ''}
+        `).join('')}
+      </tbody>
+    </table></div>`;
+}
+
+function renderCustomers() {
+  const el = document.getElementById('customersList');
+  if (!paymentCustomers.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No customers yet</div>';
+    return;
+  }
+  el.innerHTML = paymentCustomers.map(c => `
+    <div style="padding:12px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-weight:600;">${escapeHtml(c.company_name || c.client_name || c.client_email)}</div>
+          <div style="color:var(--text-dim);font-size:12px;">${escapeHtml(c.client_email)} · ${escapeHtml(c.stripe_customer_id)}</div>
+        </div>
+      </div>
+      ${c.payment_methods.length ? `
+        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;">
+          ${c.payment_methods.map(pm => `
+            <div style="padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:11px;font-family:'Share Tech Mono',monospace;">
+              ${escapeHtml((pm.brand || pm.type || 'pm').toUpperCase())} ···· ${escapeHtml(pm.last4 || '')}
+              ${pm.exp_month ? ` · ${pm.exp_month}/${String(pm.exp_year).slice(-2)}` : ''}
+              ${pm.bank_name ? ` · ${escapeHtml(pm.bank_name)}` : ''}
+            </div>
+          `).join('')}
+        </div>
+      ` : '<div style="margin-top:6px;color:var(--text-dim);font-size:11px;">No saved payment methods</div>'}
+    </div>
+  `).join('');
+}
+
+function renderCharges() {
+  const el = document.getElementById('chargesList');
+  if (!paymentCharges.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-dim);font-size:13px;">No charges yet</div>';
+    return;
+  }
+  el.innerHTML = `<div style="overflow-x:auto;max-width:100%;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:820px;">
+      <thead>
+        <tr style="text-align:left;color:var(--text-dim);border-bottom:1px solid var(--border);">
+          <th style="padding:10px 8px;">Date</th>
+          <th style="padding:10px 8px;">Invoice</th>
+          <th style="padding:10px 8px;">Method</th>
+          <th style="padding:10px 8px;text-align:right;">Amount</th>
+          <th style="padding:10px 8px;text-align:right;">Fee</th>
+          <th style="padding:10px 8px;text-align:right;">Net</th>
+          <th style="padding:10px 8px;">Status</th>
+          <th style="padding:10px 8px;">Receipt</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${paymentCharges.slice(0, 50).map(c => `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 8px;font-family:'Share Tech Mono',monospace;font-size:11px;">${new Date(c.created_at).toLocaleString('en-US', {month:'2-digit',day:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}</td>
+            <td style="padding:10px 8px;font-family:'Share Tech Mono',monospace;">${escapeHtml(c.invoice_id || '—')}</td>
+            <td style="padding:10px 8px;">${escapeHtml(c.payment_method_type || '—')}</td>
+            <td style="padding:10px 8px;text-align:right;font-family:'Share Tech Mono',monospace;">${fmtCents(c.amount_cents, c.currency)}</td>
+            <td style="padding:10px 8px;text-align:right;font-family:'Share Tech Mono',monospace;color:var(--text-dim);">${c.fee_cents != null ? fmtCents(c.fee_cents, c.currency) : '—'}</td>
+            <td style="padding:10px 8px;text-align:right;font-family:'Share Tech Mono',monospace;">${c.net_cents != null ? fmtCents(c.net_cents, c.currency) : '—'}</td>
+            <td style="padding:10px 8px;">${escapeHtml(c.status)}</td>
+            <td style="padding:10px 8px;">${c.receipt_url ? `<a href="${escapeHtml(c.receipt_url)}" target="_blank" style="color:var(--accent);">view</a>` : '—'}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table></div>`;
+}
+
+function openRetainerEditor(id) {
+  editingRetainerId = id || null;
+  const sched = id ? retainerSchedules.find(s => s.id === id) : null;
+
+  document.getElementById('retainerEditorTitle').textContent = sched ? 'Edit Retainer' : 'New Retainer Schedule';
+  document.getElementById('rDeleteBtn').style.display = sched ? 'inline-flex' : 'none';
+  document.getElementById('retainerEditorError').textContent = '';
+
+  document.getElementById('rClientEmail').value = sched?.client_email || '';
+  document.getElementById('rCompany').value = sched?.company_name || '';
+  document.getElementById('rClientName').value = sched?.client_name || '';
+  document.getElementById('rDescription').value = sched?.description || '';
+  document.getElementById('rAmount').value = sched ? (sched.amount_cents / 100).toFixed(2) : '';
+  document.getElementById('rCurrency').value = sched?.currency || 'usd';
+  document.getElementById('rDay').value = sched?.day_of_month || '';
+  document.getElementById('rNextDate').value = sched?.next_charge_date || new Date().toISOString().slice(0, 10);
+  document.getElementById('rActive').checked = sched ? sched.active : true;
+
+  // Populate the payment-method dropdown from the loaded customers
+  const pmSelect = document.getElementById('rPaymentMethod');
+  pmSelect.innerHTML = '<option value="">— No saved method (client must pay manually first) —</option>';
+  for (const cust of paymentCustomers) {
+    for (const pm of cust.payment_methods) {
+      const label = `${cust.client_email} · ${(pm.brand || pm.type).toUpperCase()} ···· ${pm.last4 || ''}`;
+      const opt = document.createElement('option');
+      opt.value = JSON.stringify({ customer_id: cust.stripe_customer_id, pm_id: pm.stripe_payment_method_id });
+      opt.textContent = label;
+      if (sched && sched.stripe_payment_method_id === pm.stripe_payment_method_id) opt.selected = true;
+      pmSelect.appendChild(opt);
+    }
+  }
+
+  document.getElementById('retainerEditor').style.display = 'flex';
+  document.getElementById('retainerEditor').classList.add('open');
+}
+
+function closeRetainerEditor() {
+  document.getElementById('retainerEditor').style.display = 'none';
+  document.getElementById('retainerEditor').classList.remove('open');
+  editingRetainerId = null;
+}
+
+async function saveRetainer() {
+  const errEl = document.getElementById('retainerEditorError');
+  errEl.textContent = '';
+
+  const clientEmail = document.getElementById('rClientEmail').value.trim();
+  const description = document.getElementById('rDescription').value.trim();
+  const amount = parseFloat(document.getElementById('rAmount').value);
+  const day = parseInt(document.getElementById('rDay').value, 10);
+  const nextDate = document.getElementById('rNextDate').value;
+  if (!clientEmail || !description || !(amount > 0) || !(day >= 1 && day <= 28) || !nextDate) {
+    errEl.textContent = 'Fill required fields: email, description, amount, day (1–28), next date';
+    return;
+  }
+
+  const pmRaw = document.getElementById('rPaymentMethod').value;
+  let stripeCustomerId = null, stripePmId = null;
+  if (pmRaw) {
+    try { const j = JSON.parse(pmRaw); stripeCustomerId = j.customer_id; stripePmId = j.pm_id; } catch {}
+  }
+
+  const body = {
+    client_email: clientEmail,
+    company_name: document.getElementById('rCompany').value.trim() || null,
+    client_name: document.getElementById('rClientName').value.trim() || null,
+    description,
+    amount_cents: Math.round(amount * 100),
+    currency: document.getElementById('rCurrency').value,
+    day_of_month: day,
+    next_charge_date: nextDate,
+    stripe_customer_id: stripeCustomerId,
+    stripe_payment_method_id: stripePmId,
+    active: document.getElementById('rActive').checked
+  };
+  if (editingRetainerId) body.id = editingRetainerId;
+
+  const resp = await fetch('/api/admin/retainer-schedules', {
+    method: editingRetainerId ? 'PATCH' : 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    errEl.textContent = err.error || 'Save failed';
+    return;
+  }
+  closeRetainerEditor();
+  toast(editingRetainerId ? 'Retainer updated' : 'Retainer created');
+  loadPaymentsPage();
+}
+
+async function deleteRetainer() {
+  if (!editingRetainerId) return;
+  if (!confirm('Delete this retainer schedule? Existing invoices it generated stay intact.')) return;
+  const resp = await fetch(`/api/admin/retainer-schedules?id=${encodeURIComponent(editingRetainerId)}`, { method: 'DELETE' });
+  if (!resp.ok) { toast('Delete failed'); return; }
+  closeRetainerEditor();
+  toast('Retainer deleted');
+  loadPaymentsPage();
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 }
 
 // ═══ CHANGE PASSWORD ═══

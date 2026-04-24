@@ -1139,6 +1139,9 @@
                 </div>
               </div>
               <div class="form-row">
+                <div class="form-group"><label>Client</label><select id="fPartner" onchange="onPartnerPicked('f')"></select></div>
+              </div>
+              <div class="form-row">
                 <div class="form-group"><label>Company Name</label><input type="text" id="fCompany" placeholder="TRISTAR MX"></div>
                 <div class="form-group"><label>Client Name</label><input type="text" id="fClient" placeholder="John Smith"></div>
                 <div class="form-group"><label>Client Email</label><input type="email" id="fClientEmail" placeholder="john@tristarmx.com"></div>
@@ -1194,6 +1197,9 @@
               </div>
               <div class="form-row">
                 <div class="form-group"><label>Agreement Title</label><input type="text" id="cTitle" placeholder="Web Design & Development Services"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Client</label><select id="cPartner" onchange="onPartnerPicked('c')"></select></div>
               </div>
               <div class="form-row">
                 <div class="form-group"><label>Client Company</label><input type="text" id="cCompany" placeholder="DME Academy"></div>
@@ -1685,6 +1691,7 @@ function selectInvoice(id) {
   (inv.items || []).forEach(item => addLineItem(item));
   if (!inv.items || !inv.items.length) addLineItem();
   calcTotal();
+  syncPickerToInvoice();
   renderInvList();
 }
 
@@ -1954,6 +1961,7 @@ function selectContract(id) {
   container.innerHTML = '';
   (c.sections || []).forEach(s => addConSection(s));
   if (!c.sections || !c.sections.length) addConSection();
+  syncPickerToContract();
   renderConList();
 }
 
@@ -2480,6 +2488,82 @@ async function loadPartners() {
   if (error) { console.error(error); return; }
   partners = data || [];
   document.getElementById('partnerCount').textContent = partners.length;
+  renderPartnerPickers();
+}
+
+function renderPartnerPickers() {
+  const opts = '<option value="">— None —</option>'
+    + partners.map(p => `<option value="${p.id}">${p.company_name || '(unnamed)'}</option>`).join('')
+    + '<option value="__new__">+ Add new client…</option>';
+  ['fPartner', 'cPartner'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const prev = sel.value;
+    sel.innerHTML = opts;
+    if (prev && (prev === '__new__' || partners.find(p => p.id === prev))) sel.value = prev;
+    else sel.value = '';
+  });
+  if (activeId) syncPickerToInvoice();
+  if (activeConId) syncPickerToContract();
+}
+
+function syncPickerToInvoice() {
+  const sel = document.getElementById('fPartner');
+  if (!sel) return;
+  const inv = invoices.find(i => i.id === activeId);
+  if (!inv) { sel.value = ''; return; }
+  const match = partners.find(p => nameMatch(p.company_name, inv.companyName));
+  sel.value = match ? match.id : '';
+}
+
+function syncPickerToContract() {
+  const sel = document.getElementById('cPartner');
+  if (!sel) return;
+  const c = contracts.find(x => x.id === activeConId);
+  if (!c) { sel.value = ''; return; }
+  const match = partners.find(p => nameMatch(p.company_name, c.client_company));
+  sel.value = match ? match.id : '';
+}
+
+async function onPartnerPicked(prefix) {
+  const sel = document.getElementById(prefix + 'Partner');
+  const val = sel.value;
+  if (val === '__new__') { await addClientInline(prefix); return; }
+  if (!val) return;
+  const p = partners.find(x => x.id === val);
+  if (!p) return;
+  if (prefix === 'f') {
+    document.getElementById('fCompany').value = p.company_name || '';
+    document.getElementById('fClient').value = p.contact_name || '';
+    document.getElementById('fClientEmail').value = p.contact_email || '';
+  } else {
+    document.getElementById('cCompany').value = p.company_name || '';
+    document.getElementById('cClient').value = p.contact_name || '';
+    document.getElementById('cClientEmail').value = p.contact_email || '';
+  }
+}
+
+async function addClientInline(prefix) {
+  const sel = document.getElementById(prefix + 'Partner');
+  const company = (prompt('New client — company name:') || '').trim();
+  if (!company) { sel.value = ''; return; }
+  const contact = (prompt('Contact name (optional):') || '').trim();
+  const email = (prompt('Contact email (optional):') || '').trim();
+  const slug = company.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const row = {
+    id: 'partner_' + Date.now(),
+    slug, company_name: company, contact_name: contact, contact_email: email,
+    portal_password: '', proposal_url: '', status: 'active', notes: ''
+  };
+  const { error } = await sb.from('partners').insert(row);
+  if (error) { console.error(error); toast('Error creating client'); sel.value = ''; return; }
+  partners.push(row);
+  partners.sort((a, b) => (a.company_name || '').localeCompare(b.company_name || ''));
+  document.getElementById('partnerCount').textContent = partners.length;
+  renderPartnerPickers();
+  sel.value = row.id;
+  onPartnerPicked(prefix);
+  toast('Client added');
 }
 
 function renderPartnerList() {

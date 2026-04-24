@@ -34,35 +34,46 @@ async function rateLimit(ip) {
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return { ok: true };
   const key = `submit:${ip}`;
-  const r = await fetch(`${url}/pipeline`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify([['INCR', key], ['EXPIRE', key, 3600]])
-  });
-  if (!r.ok) return { ok: true };
-  const [{ result: count }] = await r.json();
-  return { ok: count <= 5, count };
+  try {
+    const r = await fetch(`${url}/pipeline`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify([['INCR', key], ['EXPIRE', key, 3600]])
+    });
+    if (!r.ok) return { ok: true };
+    const data = await r.json();
+    const count = Array.isArray(data) && data[0] ? data[0].result : 0;
+    return { ok: count <= 5, count };
+  } catch (err) {
+    console.warn('rateLimit failed (fail-open):', err.message);
+    return { ok: true };
+  }
 }
 
 async function verifyRecaptcha(token, ip) {
   if (!process.env.RECAPTCHA_SECRET_KEY) return { skipped: true };
   if (!token) return { ok: false, reason: 'missing-token' };
-  const params = new URLSearchParams({
-    secret: process.env.RECAPTCHA_SECRET_KEY,
-    response: token,
-    remoteip: ip
-  });
-  const r = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params
-  });
-  const j = await r.json();
-  if (!j.success) return { ok: false, reason: 'recaptcha-failed', errors: j['error-codes'] };
-  if (typeof j.score === 'number' && j.score < RECAPTCHA_MIN_SCORE) {
-    return { ok: false, reason: 'low-score', score: j.score };
+  try {
+    const params = new URLSearchParams({
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+      remoteip: ip
+    });
+    const r = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params
+    });
+    const j = await r.json();
+    if (!j.success) return { ok: false, reason: 'recaptcha-failed', errors: j['error-codes'] };
+    if (typeof j.score === 'number' && j.score < RECAPTCHA_MIN_SCORE) {
+      return { ok: false, reason: 'low-score', score: j.score };
+    }
+    return { ok: true, score: j.score };
+  } catch (err) {
+    console.error('verifyRecaptcha failed:', err.message);
+    return { ok: false, reason: 'verify-error', error: err.message };
   }
-  return { ok: true, score: j.score };
 }
 
 async function insertSubmission(formType, subject, fields, meta) {
@@ -203,25 +214,27 @@ module.exports = async (req, res) => {
     payload.reply_to = replyTo;
   }
 
+  // Always persist to DB first — email is best-effort
+  await insertSubmission(formType, subject, fields, { ip, userAgent, recaptchaScore: captcha.score });
+
   try {
-    const [emailResult] = await Promise.all([
-      fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }),
-      insertSubmission(formType, subject, fields, { ip, userAgent, recaptchaScore: captcha.score })
-    ]);
+    const emailResult = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
     if (!emailResult.ok) {
       const errText = await emailResult.text();
       console.error('Resend error:', emailResult.status, errText);
-      return res.status(502).json({ error: 'Email delivery failed' });
+      // Still count as success — submission is saved in DB
+      return res.status(200).json({ ok: true, emailDelivered: false });
     }
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, emailDelivered: true });
   } catch (err) {
-    console.error('Submit error:', err);
-    return res.status(500).json({ error: 'Server error' });
+    console.error('Submit (email) error:', err && err.stack ? err.stack : err);
+    // Email failed but data saved
+    return res.status(200).json({ ok: true, emailDelivered: false });
   }
 };

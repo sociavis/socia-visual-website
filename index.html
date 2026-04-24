@@ -57,8 +57,8 @@
   </style>
 
   <!-- Full stylesheet (minified, 34KB — loads fast with preload hint) -->
-  <link rel="preload" href="styles.css?v=14" as="style" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=14">
+  <link rel="preload" href="styles.css?v=16" as="style" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=16">
 
   <!-- Fonts (self-hosted, eliminates render-blocking Google Fonts chain) -->
   <style>
@@ -96,7 +96,7 @@
   <script defer src="three.min.js"></script>
   <script defer src="grid-scene.js"></script>
   <script defer src="logo-scene.js"></script>
-  <script defer src="script.js?v=14"></script>
+  <script defer src="script.js?v=16"></script>
   <noscript><style>
     .boot-overlay{display:none!important}
     .panel{position:static!important;opacity:1!important;visibility:visible!important;height:auto!important}
@@ -422,6 +422,22 @@
             <div class="work-card-corner work-card-corner--br"></div>
           </div>
 
+          <div class="work-card reveal" data-category="web" data-project="haus-of-revival">
+            <div class="work-card-img"><picture><source srcset="portfolio/Haus of Revival/home-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/home-hero.webp" alt="Haus of Revival — med spa and peptide therapy website" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Web</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Haus of Revival</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="web,brand" data-project="vat">
+            <div class="work-card-img"><picture><source srcset="portfolio/Victory Advanced Technologies/home-hero.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/home-hero.webp" alt="Victory Advanced Technologies — industrial manufacturing website" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Web</span><span>Brand</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">Victory Advanced Technologies</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
           <div class="work-card reveal" data-category="graphics,brand" data-project="gouker">
             <div class="work-card-img"><picture><source srcset="portfolio/Nathan Gouker/gouker-page-1.webp" type="image/webp"><img src="portfolio/Nathan Gouker/gouker-page-1.webp" alt="Nathan Gouker Racing sponsorship deck" loading="lazy"></picture></div>
             <div class="work-card-tags"><span>Graphic Design</span><span>Brand</span></div>
@@ -442,6 +458,14 @@
             <div class="work-card-img"><picture><img src="portfolio/Veterans MX/vmx-slide-cover.webp" alt="Veterans MX Championship race deck" loading="lazy"></picture></div>
             <div class="work-card-tags"><span>Graphic Design</span><span>Brand</span></div>
             <div class="work-card-info"><h3 class="work-card-title">Veterans MX Championship</h3></div>
+            <div class="work-card-corner work-card-corner--tl"></div>
+            <div class="work-card-corner work-card-corner--br"></div>
+          </div>
+
+          <div class="work-card reveal" data-category="graphics,brand" data-project="tfx">
+            <div class="work-card-img"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-01-cover.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-01-cover.webp" alt="The Fittest Experience — CrossFit sponsorship deck" loading="lazy"></picture></div>
+            <div class="work-card-tags"><span>Graphic Design</span><span>Brand</span></div>
+            <div class="work-card-info"><h3 class="work-card-title">The Fittest Experience</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
             <div class="work-card-corner work-card-corner--br"></div>
           </div>
@@ -1547,6 +1571,216 @@
                 <div class="cs-type-item"><span class="cs-type-role">Body</span><span class="cs-type-name" style="font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600">Rajdhani</span><span class="cs-type-sample" style="font-family:'Rajdhani',sans-serif;font-size:.5rem;font-weight:500">Canada's Premier Motocross Racing Series</span></div>
               </div>
             </div>
+          </div>
+        </div>
+
+  </template>
+
+  <template id="tpl-haus-of-revival">
+
+        <!-- 01 THE PLATFORM — Hero laptop + phone -->
+        <div class="cs-section" style="padding-top:24px">
+          <div class="cs-section-eyebrow">01 The Platform</div>
+          <h3 class="cs-section-title">A Luxury Med Spa, Digitized.</h3>
+          <p class="cs-section-desc">A full multi-page site for Haus of Revival — personalized peptide therapy sourced from FDA-registered pharmacies. Hand-coded, editorial in tone, engineered to balance clinical trust with aspirational wellness. A platform built to convert curiosity into consultations.</p>
+
+          <div class="sg-hero">
+            <div class="sg-laptop">
+              <div class="sg-laptop-bezel"><picture><source srcset="portfolio/Haus of Revival/home-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/home-hero.webp" alt="Haus of Revival — desktop homepage hero" loading="lazy"></picture></div>
+              <div class="sg-laptop-base"></div>
+            </div>
+            <div class="sg-phone">
+              <div class="sg-phone-bezel"><picture><source srcset="portfolio/Haus of Revival/mobile-home-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/mobile-home-hero.webp" alt="Haus of Revival — mobile homepage" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 HOME — Full page browser scroll -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">02 The Homepage</div>
+          <h3 class="cs-section-title">An Editorial Welcome</h3>
+          <p class="cs-section-desc">A scroll-driven landing experience that introduces the brand, the philosophy, and the practitioners — layered with typography, imagery, and subtle motion. Every section is built to earn trust before asking for a booking.</p>
+
+          <div class="cs-web-grid">
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">hausofrevival.com</span></div>
+              <div class="cs-frame" style="padding:0;border:none"><picture><source srcset="portfolio/Haus of Revival/home-full.webp" type="image/webp"><img src="portfolio/Haus of Revival/home-full.webp" alt="Haus of Revival — full home page" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03 PEPTIDE CATALOG -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">03 Peptide Catalog</div>
+          <h3 class="cs-section-title">Catalog + Dynamic Product Pages</h3>
+          <p class="cs-section-desc">A filterable catalog of peptide therapies backed by individual product pages — dosing, indications, clinical context, and direct booking. A template-driven architecture that scales as the catalog grows.</p>
+
+          <div class="sg-spread">
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Haus of Revival/peptides-full.webp" type="image/webp"><img src="portfolio/Haus of Revival/peptides-full.webp" alt="Haus of Revival — peptides catalog" loading="lazy"></picture>
+              <span class="sg-card-label">Peptide Catalog<span class="sg-card-url">/peptides</span></span>
+            </div>
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Haus of Revival/peptide-detail-full.webp" type="image/webp"><img src="portfolio/Haus of Revival/peptide-detail-full.webp" alt="Haus of Revival — peptide detail page" loading="lazy"></picture>
+              <span class="sg-card-label">Product Detail<span class="sg-card-url">/peptide</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 BOOKING + INFO -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">04 Booking &amp; Information</div>
+          <h3 class="cs-section-title">Every Page Has a Job</h3>
+          <p class="cs-section-desc">Appointments, FAQs, and brand story — each purpose-built. The booking flow drops visitors directly into consultation scheduling, the FAQ defuses objections before they form, and the about page earns credibility with clinical transparency.</p>
+
+          <div class="sg-spread">
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Haus of Revival/appointments-full.webp" type="image/webp"><img src="portfolio/Haus of Revival/appointments-full.webp" alt="Haus of Revival — appointments page" loading="lazy"></picture>
+              <span class="sg-card-label">Book a Consultation<span class="sg-card-url">/appointments</span></span>
+            </div>
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Haus of Revival/faqs-full.webp" type="image/webp"><img src="portfolio/Haus of Revival/faqs-full.webp" alt="Haus of Revival — FAQs page" loading="lazy"></picture>
+              <span class="sg-card-label">FAQ<span class="sg-card-url">/faqs</span></span>
+            </div>
+            <div class="sg-card sg-card-wide">
+              <picture><source srcset="portfolio/Haus of Revival/about-full.webp" type="image/webp"><img src="portfolio/Haus of Revival/about-full.webp" alt="Haus of Revival — about page" loading="lazy"></picture>
+              <span class="sg-card-label">About<span class="sg-card-url">/about</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 05 MOBILE -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">05 Mobile Experience</div>
+          <h3 class="cs-section-title">Designed for the Phone First</h3>
+          <p class="cs-section-desc">Every breakpoint was tuned end-to-end — typography reflows, imagery restacks, and the booking CTAs stay within thumb reach across the entire journey.</p>
+
+          <div class="cs-graphics-grid" style="grid-template-columns:repeat(3,1fr);gap:12px">
+            <div class="cs-frame"><picture><source srcset="portfolio/Haus of Revival/mobile-home-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/mobile-home-hero.webp" alt="Haus of Revival — mobile home hero" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/Haus of Revival/mobile-peptides-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/mobile-peptides-hero.webp" alt="Haus of Revival — mobile peptides catalog" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/Haus of Revival/mobile-peptide-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/mobile-peptide-hero.webp" alt="Haus of Revival — mobile peptide detail" loading="lazy"></picture></div>
+          </div>
+        </div>
+
+  </template>
+
+  <template id="tpl-vat">
+
+        <!-- 01 THE PLATFORM — Hero laptop + phone -->
+        <div class="cs-section" style="padding-top:24px">
+          <div class="cs-section-eyebrow">01 The Platform</div>
+          <h3 class="cs-section-title">Industrial Manufacturing, Digitized.</h3>
+          <p class="cs-section-desc">A multi-page digital command center for Victory Advanced Technologies — the industrial manufacturing and motor engineering arm of a Jetwerx partnership. Hand-coded, precision-tuned, engineered to communicate scale and capability to enterprise buyers in services, manufacturing, and industrial motors.</p>
+
+          <div class="sg-hero">
+            <div class="sg-laptop">
+              <div class="sg-laptop-bezel"><picture><source srcset="portfolio/Victory Advanced Technologies/home-hero.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/home-hero.webp" alt="Victory Advanced Technologies — desktop homepage" loading="lazy"></picture></div>
+              <div class="sg-laptop-base"></div>
+            </div>
+            <div class="sg-phone">
+              <div class="sg-phone-bezel"><picture><source srcset="portfolio/Victory Advanced Technologies/mobile-home-hero.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/mobile-home-hero.webp" alt="Victory Advanced Technologies — mobile homepage" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 HOME — Full page browser scroll -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">02 The Homepage</div>
+          <h3 class="cs-section-title">Built to Earn Trust</h3>
+          <p class="cs-section-desc">A scroll-driven landing experience architected around capability signals — scale, process, certifications, and partnership. Every section is tuned to move enterprise visitors toward inquiry.</p>
+
+          <div class="cs-web-grid">
+            <div class="cs-browser">
+              <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">victoryadvanced.tech</span></div>
+              <div class="cs-frame" style="padding:0;border:none"><picture><source srcset="portfolio/Victory Advanced Technologies/home-full.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/home-full.webp" alt="Victory Advanced Technologies — full home page" loading="lazy"></picture></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03 CAPABILITY PAGES -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">03 Capability Pages</div>
+          <h3 class="cs-section-title">Services, Manufacturing, Motors</h3>
+          <p class="cs-section-desc">Three dedicated capability pages — services, manufacturing operations, and industrial motors — each structured to answer the buyer questions that drive inbound contracts. Purpose-built content, not generic category pages.</p>
+
+          <div class="sg-spread">
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Victory Advanced Technologies/services-full.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/services-full.webp" alt="VAT — services page" loading="lazy"></picture>
+              <span class="sg-card-label">Services<span class="sg-card-url">/services</span></span>
+            </div>
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Victory Advanced Technologies/manufacturing-full.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/manufacturing-full.webp" alt="VAT — manufacturing page" loading="lazy"></picture>
+              <span class="sg-card-label">Manufacturing<span class="sg-card-url">/manufacturing</span></span>
+            </div>
+            <div class="sg-card sg-card-wide">
+              <picture><source srcset="portfolio/Victory Advanced Technologies/industrial-motors-full.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/industrial-motors-full.webp" alt="VAT — industrial motors page" loading="lazy"></picture>
+              <span class="sg-card-label">Industrial Motors<span class="sg-card-url">/industrial-motors</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 BRAND + CONTACT -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">04 About &amp; Contact</div>
+          <h3 class="cs-section-title">Company, Concepts, Connection</h3>
+          <p class="cs-section-desc">An About page grounded in engineering credibility, a Concepts page that showcases the R&amp;D pipeline, and a Contact flow engineered for qualified enterprise leads — not tire-kickers.</p>
+
+          <div class="sg-spread">
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Victory Advanced Technologies/about-full.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/about-full.webp" alt="VAT — about page" loading="lazy"></picture>
+              <span class="sg-card-label">About<span class="sg-card-url">/about</span></span>
+            </div>
+            <div class="sg-card">
+              <picture><source srcset="portfolio/Victory Advanced Technologies/concepts-full.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/concepts-full.webp" alt="VAT — concepts page" loading="lazy"></picture>
+              <span class="sg-card-label">Concepts<span class="sg-card-url">/concepts</span></span>
+            </div>
+            <div class="sg-card sg-card-wide">
+              <picture><source srcset="portfolio/Victory Advanced Technologies/contact-full.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/contact-full.webp" alt="VAT — contact page" loading="lazy"></picture>
+              <span class="sg-card-label">Contact<span class="sg-card-url">/contact</span></span>
+            </div>
+          </div>
+        </div>
+
+  </template>
+
+  <template id="tpl-tfx">
+        <!-- 01 THE DECK — Overview + Key Stats -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">01 The Sponsorship Deck</div>
+          <h3 class="cs-section-title">18 Years. 3,000 Athletes. One Championship.</h3>
+          <p class="cs-section-desc">A full-screen interactive sponsorship deck for The Fittest Experience — the longest-running CrossFit competition in the American South. Built slide-by-slide to move prospective sponsors from awareness to commitment, combining bold display typography, dynamic imagery, and live-counting stats across 14 purpose-built slides. 2026 Championship headed to Austin, TX.</p>
+
+          <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-01-cover.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-01-cover.webp" alt="The Fittest Experience — cover slide" loading="lazy"></picture></div>
+
+          <div class="sg-stats">
+            <div class="sg-stat"><span class="sg-stat-num">3,000+</span><span class="sg-stat-label">Athletes / Season</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">120</span><span class="sg-stat-label">Gyms Represented</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">$50K</span><span class="sg-stat-label">In Prizes</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">7M</span><span class="sg-stat-label">Impressions / Season</span></div>
+            <div class="sg-stat"><span class="sg-stat-num">45.1K</span><span class="sg-stat-label">IG Followers</span></div>
+          </div>
+        </div>
+
+        <!-- 02 SLIDE GALLERY -->
+        <div class="cs-section">
+          <div class="cs-section-eyebrow">02 Slide Gallery</div>
+          <h3 class="cs-section-title">Fourteen Slides, One Narrative</h3>
+          <p class="cs-section-desc">From cover to contact, every slide earns its place. Mission and history establish credibility. Reach and demographics quantify the audience. The event trio — Throwdowns, Qualifier, Championship — maps the season. Tiers and the map crystallize the opportunity. Brand partners close the trust loop.</p>
+
+          <div class="cs-mosaic">
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-02-mission.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-02-mission.webp" alt="TFX — Mission slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-03-history.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-03-history.webp" alt="TFX — History slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-04-reach.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-04-reach.webp" alt="TFX — Reach slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-05-demographics.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-05-demographics.webp" alt="TFX — Demographics slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-06-events.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-06-events.webp" alt="TFX — Events slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-07-throwdowns.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-07-throwdowns.webp" alt="TFX — Throwdowns slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-08-qualifier.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-08-qualifier.webp" alt="TFX — Qualifier slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-09-championship.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-09-championship.webp" alt="TFX — Championship slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-10-sponsorship.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-10-sponsorship.webp" alt="TFX — Sponsorship slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-11-tiers.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-11-tiers.webp" alt="TFX — Tiers slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-12-map.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-12-map.webp" alt="TFX — Map slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-13-brands.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-13-brands.webp" alt="TFX — Brands slide" loading="lazy"></picture></div>
+            <div class="cs-frame"><picture><source srcset="portfolio/The Fittest Experience/tfx-slide-14-contact.webp" type="image/webp"><img src="portfolio/The Fittest Experience/tfx-slide-14-contact.webp" alt="TFX — Contact slide" loading="lazy"></picture></div>
           </div>
         </div>
 

@@ -331,6 +331,41 @@
     margin-bottom: 14px;
   }
 
+  /* ═══ ANALYTICS WIDGET ═══ */
+  .analytics-section { padding: 0 28px 28px; }
+  .analytics-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .analytics-header h3 { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
+  .analytics-header .meta { font-size: 11px; font-family: var(--mono); color: var(--text-muted); letter-spacing: 1px; }
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 1100px) { .analytics-grid { grid-template-columns: 1fr; } }
+  .ga-panel {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .ga-panel h4 { font-size: 11px; font-family: var(--mono); color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+  .ga-totals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .ga-totals .ga-stat { background: var(--surface-3); border: 1px solid var(--border-light); border-radius: 6px; padding: 12px 14px; }
+  .ga-totals .ga-label { font-size: 10px; font-family: var(--mono); color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .ga-totals .ga-value { font-size: 20px; font-weight: 700; font-family: var(--mono); color: var(--accent); line-height: 1; }
+  .ga-spark { width: 100%; height: 80px; }
+  .ga-spark path { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+  .ga-spark .fill { fill: rgba(168,255,0,.08); stroke: none; }
+  .ga-list { list-style: none; padding: 0; margin: 0; }
+  .ga-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; gap: 12px; }
+  .ga-list li:last-child { border-bottom: none; }
+  .ga-list .ga-name { color: var(--text); font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ga-list .ga-num { color: var(--accent); font-family: var(--mono); font-weight: 700; }
+  .ga-empty { text-align: center; padding: 24px 16px; color: var(--text-muted); font-size: 13px; }
+  .ga-empty code { background: var(--surface-3); padding: 2px 6px; border-radius: 3px; font-family: var(--mono); color: var(--accent); font-size: 11px; }
+  .ga-empty .hint { font-size: 11px; margin-top: 8px; font-family: var(--mono); letter-spacing: 1px; }
+
   .recent-table {
     width: 100%;
     border-collapse: collapse;
@@ -1105,6 +1140,13 @@
       <!-- ── DASHBOARD ── -->
       <div class="page active" id="page-dashboard">
         <div class="dashboard-grid" id="dashStats"></div>
+        <div class="analytics-section" id="analyticsSection">
+          <div class="analytics-header">
+            <h3>Site Analytics — sociavisual.com</h3>
+            <span class="meta" id="analyticsMeta">Loading…</span>
+          </div>
+          <div id="analyticsBody"></div>
+        </div>
         <div class="recent-section">
           <h3>Recent Invoices</h3>
           <table class="recent-table" id="recentTable">
@@ -1553,6 +1595,7 @@ async function init() {
   renderProjectList();
   subscribeToChanges();
   if (window.location.hash) navigate(window.location.hash.slice(1));
+  else loadAnalytics();
 }
 
 // ═══ NAVIGATION ═══
@@ -1567,9 +1610,90 @@ function navigate(page) {
   const titles = { dashboard: 'Dashboard', invoices: 'Invoices', contracts: 'Contracts', payments: 'Payments', projects: 'Projects', partners: 'Clients', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
-  if (page === 'dashboard') renderDashboard();
+  if (page === 'dashboard') { renderDashboard(); loadAnalytics(); }
   if (page === 'contracts') renderConList();
   if (page === 'payments') loadPaymentsPage();
+}
+
+// ═══ ANALYTICS WIDGET ═══
+let analyticsLastFetch = 0;
+async function loadAnalytics(force) {
+  const body = document.getElementById('analyticsBody');
+  const meta = document.getElementById('analyticsMeta');
+  if (!body) return;
+  if (!force && Date.now() - analyticsLastFetch < 5 * 60 * 1000 && body.innerHTML) return;
+  meta.textContent = 'Loading…';
+  try {
+    const r = await fetch('/api/admin/analytics', { credentials: 'include' });
+    const data = await r.json();
+    analyticsLastFetch = Date.now();
+    if (!data.configured) { renderAnalyticsEmpty(body, meta); return; }
+    if (data.error) { meta.textContent = 'Error'; body.innerHTML = `<div class="ga-empty">Couldn't load analytics: ${data.detail || data.error}</div>`; return; }
+    renderAnalytics(data, body, meta);
+  } catch (e) {
+    console.error(e);
+    meta.textContent = 'Error';
+    body.innerHTML = `<div class="ga-empty">Couldn't load analytics: ${e.message}</div>`;
+  }
+}
+
+function renderAnalyticsEmpty(body, meta) {
+  meta.textContent = 'Not connected';
+  body.innerHTML = `<div class="ga-empty">
+    Set <code>GA4_PROPERTY_ID</code> and <code>GA4_SERVICE_ACCOUNT_KEY</code> in Vercel env to enable.
+    <div class="hint">See setup notes in /api/admin/analytics.js</div>
+  </div>`;
+}
+
+function renderAnalytics(data, body, meta) {
+  const fmt = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n);
+  const pct = n => (n * 100).toFixed(0) + '%';
+  const t = data.totals;
+  const days = data.byDay || [];
+
+  // Sparkline
+  let spark = '';
+  if (days.length > 1) {
+    const max = Math.max(...days.map(d => d.users), 1);
+    const W = 600, H = 80;
+    const stepX = W / (days.length - 1);
+    const pts = days.map((d, i) => `${(i * stepX).toFixed(1)},${(H - (d.users / max) * (H - 8) - 2).toFixed(1)}`);
+    const linePath = 'M' + pts.join(' L');
+    const fillPath = `${linePath} L${W},${H} L0,${H} Z`;
+    spark = `<svg class="ga-spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <path class="fill" d="${fillPath}" />
+      <path d="${linePath}" />
+    </svg>`;
+  }
+
+  body.innerHTML = `
+    <div class="analytics-grid">
+      <div class="ga-panel">
+        <h4>Last 28 Days</h4>
+        <div class="ga-totals">
+          <div class="ga-stat"><div class="ga-label">Users</div><div class="ga-value">${fmt(t.activeUsers)}</div></div>
+          <div class="ga-stat"><div class="ga-label">Sessions</div><div class="ga-value">${fmt(t.sessions)}</div></div>
+          <div class="ga-stat"><div class="ga-label">Pageviews</div><div class="ga-value">${fmt(t.pageViews)}</div></div>
+          <div class="ga-stat"><div class="ga-label">Engaged</div><div class="ga-value">${pct(t.engagementRate)}</div></div>
+        </div>
+        ${spark}
+      </div>
+      <div class="ga-panel">
+        <h4>Top Pages</h4>
+        <ul class="ga-list">
+          ${data.topPages.length ? data.topPages.map(p => `<li><span class="ga-name" title="${p.path}">${p.path}</span><span class="ga-num">${fmt(p.views)}</span></li>`).join('') : '<li><span class="ga-name">No data yet</span></li>'}
+        </ul>
+      </div>
+      <div class="ga-panel">
+        <h4>Top Sources</h4>
+        <ul class="ga-list">
+          ${data.topSources.length ? data.topSources.map(s => `<li><span class="ga-name">${s.source || '(direct)'}</span><span class="ga-num">${fmt(s.sessions)}</span></li>`).join('') : '<li><span class="ga-name">No data yet</span></li>'}
+        </ul>
+      </div>
+    </div>
+  `;
+  const cached = new Date(data.cachedAt);
+  meta.textContent = 'Updated ' + cached.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
 // ═══ REALTIME ═══

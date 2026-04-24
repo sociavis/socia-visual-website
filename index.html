@@ -57,8 +57,8 @@
   </style>
 
   <!-- Full stylesheet (minified, 34KB — loads fast with preload hint) -->
-  <link rel="preload" href="styles.css?v=13" as="style" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="preload" href="styles.css?v=14" as="style" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=14">
 
   <!-- Fonts (self-hosted, eliminates render-blocking Google Fonts chain) -->
   <style>
@@ -96,7 +96,7 @@
   <script defer src="three.min.js"></script>
   <script defer src="grid-scene.js"></script>
   <script defer src="logo-scene.js"></script>
-  <script defer src="script.js?v=13"></script>
+  <script defer src="script.js?v=14"></script>
   <noscript><style>
     .boot-overlay{display:none!important}
     .panel{position:static!important;opacity:1!important;visibility:visible!important;height:auto!important}
@@ -480,10 +480,10 @@
             </div>
           </div>
           <div class="section-right">
-            <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/scott@sociavisual.com" method="POST">
-              <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <form class="contact-form" id="contactForm" action="/api/submit" method="POST">
+              <input type="text" name="_honeypot" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
               <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-              <input type="hidden" name="_captcha" value="false">
+              <input type="hidden" name="_form" value="contact">
               <input type="hidden" name="_subject" value="New inquiry from sociavisual.com">
 
               <div class="form-group reveal">

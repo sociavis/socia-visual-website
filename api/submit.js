@@ -187,8 +187,11 @@ module.exports = async (req, res) => {
   // reCAPTCHA verification
   const captcha = await verifyRecaptcha(fields['g-recaptcha-response'], ip);
   if (!captcha.skipped && !captcha.ok) {
-    console.warn('reCAPTCHA rejected:', captcha);
-    return res.status(403).json({ error: 'Verification failed.' });
+    console.error('RECAPTCHA_REJECT reason=' + captcha.reason
+      + ' score=' + (captcha.score ?? 'n/a')
+      + ' errors=' + JSON.stringify(captcha.errors || [])
+      + ' tokenLen=' + String(fields['g-recaptcha-response'] || '').length);
+    return res.status(403).json({ error: 'Verification failed.', reason: captcha.reason });
   }
 
   if (!process.env.RESEND_API_KEY) {

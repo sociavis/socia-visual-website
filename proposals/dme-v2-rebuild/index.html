@@ -67,14 +67,28 @@ a:hover { text-decoration: underline; }
 
 .header {
   background: linear-gradient(135deg, #7dd3c0, #5bc4d4, #48b8d0);
-  padding: 48px 56px 40px;
-  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 44px 56px 38px;
+  display: flex; justify-content: space-between; align-items: center; gap: 24px;
 }
 .header h1 {
   font-size: 42px; font-weight: 700; letter-spacing: 2px;
   color: #1a1a1a;
+  flex: 0 1 auto;
 }
-.header-logo svg { width: 160px; height: auto; fill: #1a1a1a; }
+.header-logo {
+  flex: 0 0 auto;
+  max-width: 140px;
+}
+.header-logo img {
+  display: block;
+  width: 100%; height: auto;
+  filter: brightness(0); /* keep wordmark in solid #000 against the teal gradient */
+}
+@media (max-width: 600px) {
+  .header { padding: 32px 28px 28px; gap: 16px; }
+  .header h1 { font-size: 32px; }
+  .header-logo { max-width: 100px; }
+}
 
 .body { padding: 40px 56px 48px; }
 
@@ -227,9 +241,7 @@ a:hover { text-decoration: underline; }
 <div class="header">
   <h1>PROPOSAL</h1>
   <div class="header-logo">
-    <svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" aria-label="Socia Visual">
-      <text x="0" y="22" font-family="Chakra Petch" font-weight="700" font-size="22" letter-spacing="3" fill="#1a1a1a">SOCIA VISUAL</text>
-    </svg>
+    <img src="sv-wordmark.png" alt="Socia Visual">
   </div>
 </div>
 
@@ -306,12 +318,11 @@ Custom hand-coded WordPress site replacing the current dmeacademy.com. Consolida
 
 <div class="note-block">
   <h3>HubSpot Integration</h3>
-  <p>HubSpot remains DME's CRM and system of record. Socia Visual handles all WordPress-side wiring: tracking pixel, form embeds, meeting embeds, and field mapping into HubSpot CRM. DME team provides ~2–3 hours of HubSpot-side input:</p>
+  <p>HubSpot remains DME's CRM and system of record. Socia Visual handles all WordPress-side wiring: tracking pixel, form embeds, meeting embeds, and field mapping into HubSpot CRM. DME team provides HubSpot-side input:</p>
   <ul>
     <li>HubSpot Portal ID</li>
     <li>Confirm/build HubSpot forms (Apply, Contact, Camp Inquiry, Newsletter)</li>
     <li>Meeting links for admissions consults</li>
-    <li>Confirm chat widget routing (if used)</li>
   </ul>
 </div>
 

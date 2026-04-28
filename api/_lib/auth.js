@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const otplib = require('otplib');
+const speakeasy = require('speakeasy');
 const { createClient } = require('@supabase/supabase-js');
 
 const ADMIN_COOKIE_NAME = 'sv_admin_session';
@@ -111,7 +111,7 @@ async function verifyPassword(plain, stored) {
 }
 
 function generateTotpSecret() {
-  return otplib.generateSecret();
+  return speakeasy.generateSecret({ length: 20 }).base32;
 }
 
 function verifyTotpToken(token, secret) {
@@ -119,13 +119,12 @@ function verifyTotpToken(token, secret) {
   const cleaned = token.replace(/\s+/g, '');
   if (!/^\d{6}$/.test(cleaned)) return false;
   try {
-    const result = otplib.verifySync({ token: cleaned, secret });
-    return !!(result && result.valid);
+    return speakeasy.totp.verify({ secret, encoding: 'base32', token: cleaned, window: 1 });
   } catch { return false; }
 }
 
 function getTotpUri(secret, label = 'admin@sociavisual.com', issuer = 'Socia Visual') {
-  return otplib.generateURI({ label, issuer, secret });
+  return speakeasy.otpauthURL({ secret, encoding: 'base32', label, issuer });
 }
 
 module.exports = {

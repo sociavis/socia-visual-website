@@ -1,9 +1,12 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const otplib = require('otplib');
 const { createClient } = require('@supabase/supabase-js');
 
 const ADMIN_COOKIE_NAME = 'sv_admin_session';
 const ADMIN_SESSION_TTL_SECONDS = 12 * 60 * 60;
+const BCRYPT_HASH_RE = /^\$2[aby]\$/;
 
 function env(name) {
   const v = process.env[name];
@@ -87,6 +90,44 @@ function requireAdminSession(req, res) {
   return session;
 }
 
+function isBcryptHash(value) {
+  return typeof value === 'string' && BCRYPT_HASH_RE.test(value);
+}
+
+async function hashPassword(plain) {
+  return bcrypt.hash(plain, 12);
+}
+
+async function verifyPassword(plain, stored) {
+  if (typeof plain !== 'string' || typeof stored !== 'string') return false;
+  if (isBcryptHash(stored)) {
+    try { return await bcrypt.compare(plain, stored); } catch { return false; }
+  }
+  // Legacy plaintext — constant-time compare.
+  if (plain.length !== stored.length) return false;
+  try {
+    return crypto.timingSafeEqual(Buffer.from(plain), Buffer.from(stored));
+  } catch { return false; }
+}
+
+function generateTotpSecret() {
+  return otplib.generateSecret();
+}
+
+function verifyTotpToken(token, secret) {
+  if (typeof token !== 'string' || typeof secret !== 'string') return false;
+  const cleaned = token.replace(/\s+/g, '');
+  if (!/^\d{6}$/.test(cleaned)) return false;
+  try {
+    const result = otplib.verifySync({ token: cleaned, secret });
+    return !!(result && result.valid);
+  } catch { return false; }
+}
+
+function getTotpUri(secret, label = 'admin@sociavisual.com', issuer = 'Socia Visual') {
+  return otplib.generateURI({ label, issuer, secret });
+}
+
 module.exports = {
   ADMIN_COOKIE_NAME,
   getServiceRoleClient,
@@ -96,5 +137,11 @@ module.exports = {
   verifyAdminJwt,
   buildSessionCookie,
   readAdminSession,
-  requireAdminSession
+  requireAdminSession,
+  isBcryptHash,
+  hashPassword,
+  verifyPassword,
+  generateTotpSecret,
+  verifyTotpToken,
+  getTotpUri
 };

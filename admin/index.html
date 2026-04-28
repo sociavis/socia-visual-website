@@ -1099,9 +1099,13 @@
     </svg>
   </div>
   <h1>Admin Dashboard</h1>
-  <div class="auth-input-wrap">
+  <div class="auth-input-wrap" id="authPassWrap">
     <input type="password" id="authPass" placeholder="Password" autofocus>
     <button onclick="authenticate()">Enter</button>
+  </div>
+  <div class="auth-input-wrap hidden" id="auth2faWrap" style="margin-top:8px">
+    <input type="text" id="auth2faCode" placeholder="6-digit code" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+    <button onclick="authenticate()">Verify</button>
   </div>
   <div class="auth-error" id="authError"></div>
 </div>
@@ -1574,6 +1578,53 @@
             <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
             <div id="passMsg"></div>
           </div>
+
+          <div class="settings-section" style="margin-top:32px">
+            <h3>Two-Factor Authentication</h3>
+            <p class="section-desc">Require a 6-digit code from your authenticator app on every login. Strongly recommended.</p>
+
+            <div id="twoFaStatus" style="margin-bottom:12px;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#666">Loading status…</div>
+
+            <!-- DISABLED state: show Setup button -->
+            <div id="twoFaDisabledUi" class="hidden">
+              <button class="btn btn-primary" onclick="setup2fa()">Set up 2FA</button>
+            </div>
+
+            <!-- SETUP state: QR + verify -->
+            <div id="twoFaSetupUi" class="hidden">
+              <p style="margin:8px 0">Scan this QR code with your authenticator app (1Password, Authy, Google Authenticator, etc.).</p>
+              <div id="twoFaQr" style="display:inline-block;background:#fff;padding:12px;border-radius:8px;margin:8px 0"></div>
+              <p style="margin:8px 0;font-size:.7rem;color:#888">Or enter this secret manually: <code id="twoFaSecret" style="background:#1a1a1a;padding:4px 8px;border-radius:3px;color:#a8ff00;font-family:'Share Tech Mono',monospace"></code></p>
+              <div class="form-row" style="margin-top:12px">
+                <div class="form-group">
+                  <label>Enter the 6-digit code from your app to confirm</label>
+                  <input type="text" id="twoFaSetupCode" placeholder="000000" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="verify2faSetup()">Confirm &amp; Enable</button>
+              <button class="btn" onclick="cancel2faSetup()" style="margin-left:8px">Cancel</button>
+              <div id="twoFaSetupMsg" style="margin-top:8px"></div>
+            </div>
+
+            <!-- ENABLED state: show Disable -->
+            <div id="twoFaEnabledUi" class="hidden">
+              <p style="color:#a8ff00;margin-bottom:12px">✓ 2FA is enabled.</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Current Password</label>
+                  <input type="password" id="twoFaDisablePass" placeholder="Enter your password">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Current 6-digit Code</label>
+                  <input type="text" id="twoFaDisableCode" placeholder="000000" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+                </div>
+              </div>
+              <button class="btn" onclick="disable2fa()">Disable 2FA</button>
+              <div id="twoFaDisableMsg" style="margin-top:8px"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1599,38 +1650,62 @@ let currentPage = 'dashboard';
 // We check it on page load via /api/admin/session.
 
 async function authenticate() {
-  const btn = document.querySelector('.auth-input-wrap button');
   const errEl = document.getElementById('authError');
   const passEl = document.getElementById('authPass');
-  btn.textContent = '...';
+  const passWrap = document.getElementById('authPassWrap');
+  const twoFaWrap = document.getElementById('auth2faWrap');
+  const twoFaEl = document.getElementById('auth2faCode');
+  const passBtn = passWrap.querySelector('button');
+  const twoFaBtn = twoFaWrap.querySelector('button');
+  const twoFaActive = !twoFaWrap.classList.contains('hidden');
+  const activeBtn = twoFaActive ? twoFaBtn : passBtn;
+  const origLabel = activeBtn.textContent;
+  activeBtn.textContent = '...';
   errEl.textContent = '';
+
+  const body = { password: passEl.value };
+  if (twoFaActive) body.totp_code = twoFaEl.value.replace(/\s+/g, '');
 
   try {
     const resp = await fetch('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: passEl.value })
+      body: JSON.stringify(body)
     });
+    const data = await resp.json().catch(() => ({}));
 
-    if (resp.ok) {
+    if (resp.ok && data.ok) {
       document.getElementById('authGate').classList.add('hidden');
       document.getElementById('app').classList.add('visible');
       init();
       return;
     }
+    if (resp.ok && data.totp_required) {
+      passWrap.classList.add('hidden');
+      twoFaWrap.classList.remove('hidden');
+      twoFaEl.value = '';
+      twoFaEl.focus();
+      errEl.textContent = '';
+      return;
+    }
     if (resp.status === 429) {
       errEl.textContent = 'Too many attempts — wait a minute';
+    } else if (twoFaActive) {
+      errEl.textContent = data.error || 'Invalid 2FA code';
+      twoFaEl.value = '';
+      twoFaEl.focus();
     } else {
-      errEl.textContent = 'Invalid password';
+      errEl.textContent = data.error || 'Invalid password';
       passEl.value = '';
     }
   } catch {
     errEl.textContent = 'Network error — try again';
   } finally {
-    btn.textContent = 'Enter';
+    activeBtn.textContent = origLabel;
   }
 }
 document.getElementById('authPass').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
+document.getElementById('auth2faCode').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
 
 async function logout() {
   try { await fetch('/api/admin/logout', { method: 'POST' }); } catch {}
@@ -1690,6 +1765,7 @@ function navigate(page) {
   if (page === 'submissions') loadSubmissions();
   if (page === 'contracts') renderConList();
   if (page === 'payments') loadPaymentsPage();
+  if (page === 'settings' && typeof refresh2faStatus === 'function') refresh2faStatus();
 }
 
 // ═══ SUBMISSIONS ═══
@@ -3507,6 +3583,124 @@ function toast(msg) {
   const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2400);
 }
+
+// ═══ 2FA SETTINGS ═══
+async function refresh2faStatus() {
+  const statusEl = document.getElementById('twoFaStatus');
+  const disabledUi = document.getElementById('twoFaDisabledUi');
+  const setupUi = document.getElementById('twoFaSetupUi');
+  const enabledUi = document.getElementById('twoFaEnabledUi');
+  if (!statusEl) return;
+  try {
+    const r = await fetch('/api/admin/2fa-status', { credentials: 'include' });
+    const { enabled } = await r.json();
+    setupUi.classList.add('hidden');
+    if (enabled) {
+      statusEl.textContent = 'STATUS: ENABLED';
+      statusEl.style.color = '#a8ff00';
+      enabledUi.classList.remove('hidden');
+      disabledUi.classList.add('hidden');
+    } else {
+      statusEl.textContent = 'STATUS: DISABLED';
+      statusEl.style.color = '#888';
+      disabledUi.classList.remove('hidden');
+      enabledUi.classList.add('hidden');
+    }
+  } catch {
+    statusEl.textContent = 'STATUS: UNKNOWN';
+  }
+}
+
+async function setup2fa() {
+  const setupUi = document.getElementById('twoFaSetupUi');
+  const disabledUi = document.getElementById('twoFaDisabledUi');
+  const qrEl = document.getElementById('twoFaQr');
+  const secretEl = document.getElementById('twoFaSecret');
+  const msgEl = document.getElementById('twoFaSetupMsg');
+  msgEl.textContent = '';
+  try {
+    const r = await fetch('/api/admin/setup-2fa', { method: 'POST', credentials: 'include' });
+    const data = await r.json();
+    if (!r.ok) { toast(data.error || 'Setup failed'); return; }
+    qrEl.innerHTML = '<img src="' + data.qr_data_url + '" alt="2FA QR Code" style="display:block;width:240px;height:240px">';
+    secretEl.textContent = data.secret;
+    disabledUi.classList.add('hidden');
+    setupUi.classList.remove('hidden');
+    document.getElementById('twoFaSetupCode').value = '';
+    document.getElementById('twoFaSetupCode').focus();
+  } catch {
+    toast('Network error');
+  }
+}
+
+function cancel2faSetup() {
+  document.getElementById('twoFaSetupUi').classList.add('hidden');
+  document.getElementById('twoFaDisabledUi').classList.remove('hidden');
+  document.getElementById('twoFaSetupMsg').textContent = '';
+}
+
+async function verify2faSetup() {
+  const code = document.getElementById('twoFaSetupCode').value.replace(/\s+/g, '');
+  const msgEl = document.getElementById('twoFaSetupMsg');
+  if (!/^\d{6}$/.test(code)) { msgEl.className = 'pass-error'; msgEl.textContent = 'Enter the 6-digit code'; return; }
+  try {
+    const r = await fetch('/api/admin/verify-2fa-setup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ totp_code: code })
+    });
+    const data = await r.json();
+    if (!r.ok) { msgEl.className = 'pass-error'; msgEl.textContent = data.error || 'Invalid code'; return; }
+    msgEl.className = 'pass-success';
+    msgEl.textContent = '2FA enabled.';
+    toast('2FA enabled');
+    setTimeout(() => refresh2faStatus(), 600);
+  } catch {
+    msgEl.className = 'pass-error';
+    msgEl.textContent = 'Network error';
+  }
+}
+
+async function disable2fa() {
+  const password = document.getElementById('twoFaDisablePass').value;
+  const code = document.getElementById('twoFaDisableCode').value.replace(/\s+/g, '');
+  const msgEl = document.getElementById('twoFaDisableMsg');
+  msgEl.textContent = '';
+  if (!password || !/^\d{6}$/.test(code)) {
+    msgEl.className = 'pass-error';
+    msgEl.textContent = 'Enter your password and current 6-digit code';
+    return;
+  }
+  if (!confirm('Disable 2FA? Your account will be protected by password only.')) return;
+  try {
+    const r = await fetch('/api/admin/disable-2fa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ password, totp_code: code })
+    });
+    const data = await r.json();
+    if (!r.ok) { msgEl.className = 'pass-error'; msgEl.textContent = data.error || 'Failed'; return; }
+    document.getElementById('twoFaDisablePass').value = '';
+    document.getElementById('twoFaDisableCode').value = '';
+    msgEl.className = 'pass-success';
+    msgEl.textContent = '2FA disabled.';
+    toast('2FA disabled');
+    setTimeout(() => refresh2faStatus(), 600);
+  } catch {
+    msgEl.className = 'pass-error';
+    msgEl.textContent = 'Network error';
+  }
+}
+
+// Refresh 2FA status whenever user navigates to settings page.
+(function() {
+  const settingsLink = document.querySelector('[data-page="settings"]');
+  if (settingsLink) settingsLink.addEventListener('click', () => setTimeout(refresh2faStatus, 100));
+  // Also refresh on initial load if we're already on settings.
+  if (location.hash === '#settings') setTimeout(refresh2faStatus, 300);
+})();
 </script>
 </body>
 </html>

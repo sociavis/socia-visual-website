@@ -8,7 +8,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
+    "bcryptjs": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
+    "otplib": "^13.4.0",
+    "qrcode": "^1.5.4",
     "stripe": "^18.2.1",
     "three": "0.128.0"
   },

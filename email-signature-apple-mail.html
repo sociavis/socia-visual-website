@@ -1,0 +1,491 @@
+<!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║        SOCIA VISUAL — APPLE MAIL SIGNATURE               ║
+  ║        Supports dark + light mode via prefers-color-scheme
+  ║                                                          ║
+  ║  HOW TO INSTALL IN APPLE MAIL                            ║
+  ║  1. Open Mail → Settings → Signatures                    ║
+  ║  2. Click + to create a new signature, name it anything  ║
+  ║  3. Close Mail completely (Cmd+Q)                        ║
+  ║  4. In Finder: Go → Go to Folder →                       ║
+  ║       ~/Library/Mail/V10/MailData/Signatures/            ║
+  ║     (folder may be V9 or V11 depending on Mail version)  ║
+  ║  5. Sort by Date Modified — open the newest .mailsig     ║
+  ║     file in TextEdit                                      ║
+  ║  6. Delete everything from <!DOCTYPE html> onward        ║
+  ║  7. Paste the full contents of this file from            ║
+  ║     <!DOCTYPE html> down                                  ║
+  ║  8. Save, reopen Mail — done.                            ║
+  ╚══════════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: transparent;
+    font-family: 'Chakra Petch', monospace, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ════════════════════════════════════════
+     DARK MODE (default)
+  ════════════════════════════════════════ */
+
+  .sig {
+    width: 100%;
+    max-width: 560px;
+    background: #0a0a0a;
+    border: 1px solid #1c1c1c;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sig-topbar {
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #A8FF00 35%, #D4FF00 65%, transparent 100%);
+    -webkit-animation: barPulse 3s ease-in-out infinite;
+    animation: barPulse 3s ease-in-out infinite;
+  }
+  @-webkit-keyframes barPulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+  @keyframes barPulse          { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  /* Scan-line texture */
+  .sig-scan {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(168, 255, 0, 0.013) 3px,
+      rgba(168, 255, 0, 0.013) 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* HUD corner brackets */
+  .corner {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-color: #A8FF00;
+    border-style: solid;
+    opacity: 0;
+    z-index: 11;
+    -webkit-animation: cornersIn 0.6s ease forwards;
+    animation: cornersIn 0.6s ease forwards;
+  }
+  .c-tl { top: 5px;    left: 5px;   border-width: 1px 0 0 1px; -webkit-animation-delay:.1s; animation-delay:.1s; }
+  .c-tr { top: 5px;    right: 5px;  border-width: 1px 1px 0 0; -webkit-animation-delay:.2s; animation-delay:.2s; }
+  .c-bl { bottom: 5px; left: 5px;   border-width: 0 0 1px 1px; -webkit-animation-delay:.3s; animation-delay:.3s; }
+  .c-br { bottom: 5px; right: 5px;  border-width: 0 1px 1px 0; -webkit-animation-delay:.4s; animation-delay:.4s; }
+  @-webkit-keyframes cornersIn { to { opacity: 0.5; } }
+  @keyframes cornersIn          { to { opacity: 0.5; } }
+
+  /* ── Main row ── */
+  .sig-body {
+    padding: 22px 24px 0;
+    position: relative;
+    z-index: 1;
+  }
+  .sig-row {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Logo — 3D animated GIF (transparent bg, works on any background color) */
+  .logo-mark { -webkit-flex-shrink: 0; flex-shrink: 0; width: 72px; height: 72px; }
+  .logo-gif  { width: 72px; height: 72px; display: block; }
+
+  /* Vertical divider */
+  .vdivider {
+    width: 1px;
+    height: 76px;
+    background: linear-gradient(180deg, transparent, #A8FF00 40%, #D4FF00 60%, transparent);
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+    opacity: 0;
+    -webkit-animation: fadeIn 0.8s ease forwards 0.5s;
+    animation: fadeIn 0.8s ease forwards 0.5s;
+  }
+  @-webkit-keyframes fadeIn { to { opacity: 0.35; } }
+  @keyframes fadeIn          { to { opacity: 0.35; } }
+
+  /* Info block */
+  .sig-info {
+    -webkit-flex: 1;
+    flex: 1;
+    min-width: 0;
+    opacity: 0;
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
+    -webkit-animation: slideIn 0.6s ease forwards 0.3s;
+    animation: slideIn 0.6s ease forwards 0.3s;
+  }
+  @-webkit-keyframes slideIn { to { opacity: 1; -webkit-transform: none; transform: none; } }
+  @keyframes slideIn          { to { opacity: 1; transform: none; } }
+
+  .sig-name {
+    font-family: 'Chakra Petch', monospace, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #e8e8e8;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 4px;
+    white-space: nowrap;
+  }
+
+  .sig-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: #A8FF00;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    -webkit-animation: flicker 10s ease-in-out infinite 2s;
+    animation: flicker 10s ease-in-out infinite 2s;
+  }
+  @-webkit-keyframes flicker {
+    0%, 94%, 96%, 98%, 100% { opacity: 1; }
+    95% { opacity: 0.4; } 97% { opacity: 0.8; } 99% { opacity: 0.5; }
+  }
+  @keyframes flicker {
+    0%, 94%, 96%, 98%, 100% { opacity: 1; }
+    95% { opacity: 0.4; } 97% { opacity: 0.8; } 99% { opacity: 0.5; }
+  }
+
+  .sig-contacts { display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
+  .contact-row  { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; gap: 9px; }
+
+  .contact-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 7.5px;
+    color: #333;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    width: 24px;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+  }
+
+  .contact-val {
+    font-family: 'Chakra Petch', monospace, sans-serif;
+    font-size: 10.5px;
+    color: #888;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .contact-val:hover { color: #A8FF00; }
+
+  /* ── Services marquee ── */
+  .sig-services {
+    margin-top: 18px;
+    padding: 9px 0;
+    border-top: 1px solid #141414;
+    border-bottom: 1px solid #141414;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .services-track {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    width: -webkit-max-content;
+    width: max-content;
+    -webkit-animation: marquee 24s linear infinite;
+    animation: marquee 24s linear infinite;
+  }
+  @-webkit-keyframes marquee {
+    from { -webkit-transform: translateX(0); transform: translateX(0); }
+    to   { -webkit-transform: translateX(-50%); transform: translateX(-50%); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .svc-item {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 9px;
+    padding: 0 22px;
+    white-space: nowrap;
+  }
+
+  .svc-diamond {
+    width: 5px;
+    height: 5px;
+    background: #A8FF00;
+    -webkit-clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+    opacity: 0.55;
+  }
+
+  .svc-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 7.5px;
+    color: #282828;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  /* ── Footer ── */
+  .sig-footer {
+    padding: 11px 24px 16px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Shimmer: keyframe only moves background-position,
+     gradient colors live on the element so media query can swap them */
+  .sig-tagline {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #1c1c1c 0%, #A8FF00 50%, #1c1c1c 100%);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    -webkit-animation: shimmer 5s linear infinite;
+    animation: shimmer 5s linear infinite;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+  }
+  @-webkit-keyframes shimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+
+  .sig-socials {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 16px;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+  }
+
+  .soc-link {
+    display: inline-flex;
+    align-items: center;
+    color: #555555;
+    text-decoration: none;
+    opacity: 1;
+    -webkit-transition: color 0.25s ease;
+    transition: color 0.25s ease;
+  }
+  .soc-link svg { width: 14px; height: 14px; display: block; }
+  .soc-link:hover { color: #A8FF00; }
+
+  .sig-bottombar {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #A8FF00 50%, transparent 100%);
+    opacity: 0;
+    -webkit-animation: fadeIn 1.2s ease forwards 0.8s;
+    animation: fadeIn 1.2s ease forwards 0.8s;
+  }
+
+  /* ════════════════════════════════════════
+     LIGHT MODE OVERRIDES
+     — logo switches to dark charcoal (neon green has
+       near-zero contrast on white backgrounds)
+     — glow animation is redefined as a soft shadow
+     — all chrome flips to near-white with dark text
+  ════════════════════════════════════════ */
+  @media (prefers-color-scheme: light) {
+
+    .sig {
+      background: #f7f7f7;
+      border-color: #e0e0e0;
+    }
+
+    /* Lighter scan lines */
+    .sig-scan {
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0, 0, 0, 0.015) 3px,
+        rgba(0, 0, 0, 0.015) 4px
+      );
+    }
+
+    /* Corner brackets: swap to mid-gray */
+    .corner { border-color: #c0c0c0; }
+    @-webkit-keyframes cornersIn { to { opacity: 0.6; } }
+    @keyframes cornersIn          { to { opacity: 0.6; } }
+
+    /* Logo GIF transparent bg — neon green shows on any background */
+    /* No override needed; GIF works on light backgrounds too */
+
+    /* Vertical divider: light gray */
+    .vdivider {
+      background: linear-gradient(180deg, transparent, #c8c8c8 40%, #d8d8d8 60%, transparent);
+    }
+
+    /* Text */
+    .sig-name  { color: #111111; }
+    .sig-title { color: #4d7a00; } /* dark olive: readable on white */
+
+    /* Contacts */
+    .contact-tag { color: #aaaaaa; }
+    .contact-val { color: #444444; }
+    .contact-val:hover { color: #4d7a00; }
+
+    /* Services strip */
+    .sig-services { border-color: #e8e8e8; }
+    .svc-diamond  { background: #5a8c00; } /* darker green, visible on light */
+    .svc-label    { color: #aaaaaa; }
+
+    /* Tagline shimmer: swap gradient colors (background-position
+       animation stays the same — only the gradient itself changes) */
+    .sig-tagline {
+      background: linear-gradient(90deg, #c0c0c0 0%, #4d7a00 50%, #c0c0c0 100%);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Socials */
+    .soc-link { color: #888; }
+    .soc-link:hover { color: #4d7a00; }
+  }
+
+  /* ════════════════════════════════════════
+     MOBILE (≤ 480px)
+  ════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    .sig-body   { padding: 18px 16px 0; }
+    .sig-footer { padding: 10px 16px 14px; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: flex-start; align-items: flex-start; gap: 8px; }
+    .sig-name   { font-size: 13px; }
+    .sig-title  { font-size: 8px; }
+    .contact-val { font-size: 9.5px; }
+    .logo-mark { width: 56px; height: 56px; }
+    .logo-gif  { width: 56px; height: 56px; }
+    .vdivider   { height: 66px; }
+    .sig-row    { gap: 14px; }
+    /* Shimmer breaks at very narrow widths — fall back to static color */
+    .sig-tagline {
+      background: none;
+      -webkit-background-clip: unset;
+      -webkit-text-fill-color: unset;
+      background-clip: unset;
+      color: #444444;
+      -webkit-animation: none;
+      animation: none;
+    }
+  }
+
+  /* Mobile light mode: tagline static dark text */
+  @media (max-width: 480px) and (prefers-color-scheme: light) {
+    .sig-tagline { color: #777777; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sig">
+  <div class="sig-topbar"></div>
+  <div class="sig-scan"></div>
+  <div class="corner c-tl"></div>
+  <div class="corner c-tr"></div>
+  <div class="corner c-bl"></div>
+  <div class="corner c-br"></div>
+
+  <div class="sig-body">
+    <div class="sig-row">
+
+      <!-- 3D animated logomark: WebGL-rendered GIF with transparent background -->
+      <div class="logo-mark">
+        <img class="logo-gif" src="https://socia-email-signature.vercel.app/socia-logo-email.gif" alt="Socia Visual" width="72" height="72">
+      </div>
+
+      <div class="vdivider"></div>
+
+      <div class="sig-info">
+        <div class="sig-name">Scott Socia</div>
+        <div class="sig-title">// Founder &amp; Creative Director</div>
+        <div class="sig-contacts">
+          <div class="contact-row">
+            <span class="contact-tag">WEB</span>
+            <a href="https://sociavisual.com" class="contact-val">sociavisual.com</a>
+          </div>
+          <div class="contact-row">
+            <span class="contact-tag">EML</span>
+            <a href="mailto:scott@sociavisual.com" class="contact-val">scott@sociavisual.com</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sig-services">
+    <div class="services-track">
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Design</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Development</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Brand Identity</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Graphic Design</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Motion Graphics</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Visual Identity</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Design</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Development</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Brand Identity</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Graphic Design</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Motion Graphics</span></div>
+      <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Visual Identity</span></div>
+    </div>
+  </div>
+
+  <div class="sig-footer">
+    <div class="sig-tagline">Sharp design. Clean code. Visuals that hit different.</div>
+    <div class="sig-socials">
+      <a href="https://www.linkedin.com/company/sociavisual" class="soc-link" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a href="https://www.behance.net/scottsocia" class="soc-link" title="Behance"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.938 4.503c.702 0 1.34.06 1.92.188.577.13 1.07.33 1.485.61.41.28.733.65.96 1.12.225.47.34 1.05.34 1.73 0 .74-.17 1.36-.507 1.86-.338.5-.837.9-1.502 1.22.906.26 1.576.72 2.022 1.37.448.66.665 1.45.665 2.36 0 .75-.13 1.39-.41 1.93-.28.55-.67 1-1.16 1.35-.48.348-1.05.6-1.68.767-.635.165-1.3.254-1.99.254H0V4.51h6.938v-.007zm-.588 5.656c.648 0 1.17-.152 1.568-.447.397-.296.596-.756.596-1.377 0-.332-.06-.61-.173-.833-.12-.222-.283-.4-.49-.527-.207-.126-.44-.217-.712-.27-.27-.05-.558-.076-.856-.076H3.107v3.53h3.243zm.188 5.847c.33 0 .64-.03.93-.09s.54-.16.754-.3c.21-.14.38-.33.5-.57.12-.24.18-.54.18-.9 0-.72-.19-1.23-.58-1.54-.38-.3-.9-.45-1.54-.45H3.108v3.85h3.43zm11.555-5.74c.65 0 1.24.13 1.76.38.52.25.97.6 1.34 1.04.37.45.65.97.84 1.57.19.6.27 1.24.24 1.93H14.22c.04.78.28 1.39.73 1.82.45.43 1.04.64 1.79.64.53 0 .98-.14 1.36-.42.37-.28.6-.58.7-.9h2.91c-.46 1.42-1.17 2.44-2.13 3.06-.96.63-2.14.94-3.54.94-.96 0-1.82-.16-2.6-.47-.77-.31-1.43-.75-1.97-1.33-.54-.58-.96-1.27-1.25-2.09-.3-.82-.44-1.73-.44-2.73 0-.97.15-1.86.46-2.68.3-.82.74-1.53 1.29-2.12.55-.6 1.21-1.06 1.97-1.39.76-.33 1.6-.5 2.52-.5zm.06 2.3c-.66 0-1.2.18-1.64.54-.43.36-.7.9-.8 1.6h4.76c-.08-.72-.32-1.26-.72-1.63-.4-.37-.93-.51-1.6-.51zM14.8 4.5h5.57v1.58H14.8V4.5z"/></svg></a>
+      <a href="https://www.facebook.com/sociavis" class="soc-link" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+    </div>
+  </div>
+
+  <div class="sig-bottombar"></div>
+</div>
+
+</body>
+</html>

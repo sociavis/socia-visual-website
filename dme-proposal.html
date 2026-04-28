@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Design Proposal — DME Academy × Socia Visual</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #050505;
+      --dark: #0a0a0a;
+      --dark-2: #0f0f0f;
+      --grey: #1a1a1a;
+      --grey-mid: #2a2a2a;
+      --white: #e8e8e8;
+      --white-dim: #999;
+      --accent-1: #a8ff00;
+      --accent-2: #d4ff00;
+      --gradient: linear-gradient(135deg, #a8ff00, #d4ff00);
+      --gradient-text: linear-gradient(135deg, #a8ff00 0%, #d4ff00 50%, #c8ff30 100%);
+      --error: #ff4444;
+      --warning: #ffb428;
+      --font-body: 'Chakra Petch', monospace, sans-serif;
+      --font-heading: 'Chakra Petch', monospace, sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+      --ease: cubic-bezier(0.65, 0.05, 0, 1);
+      --ease-out: cubic-bezier(0.33, 0, 0, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-1) var(--black);
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--accent-1);
+      color: var(--black);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Noise + Scanlines ── */
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      opacity: 0.03;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px;
+    }
+
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 9997;
+      pointer-events: none;
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgba(0,0,0,.08) 2px, rgba(0,0,0,.08) 4px);
+    }
+
+    /* ── Utility ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 20px;
+    }
+
+    .label-line {
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: var(--gradient);
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    .text-accent {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-sub {
+      color: var(--white-dim);
+      font-size: 0.9rem;
+      margin-bottom: 48px;
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168, 255, 0, 0.15), transparent);
+      margin: 0;
+    }
+
+    /* ── Nav ── */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5, 5, 5, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168, 255, 0, 0.06);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo {
+      width: 28px;
+      height: 28px;
+    }
+
+    .nav-logo svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .nav-title {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      border: 1px solid rgba(168, 255, 0, 0.1);
+      padding: 4px 10px;
+    }
+
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-1);
+    }
+
+    .nav-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-1);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 140px 24px 100px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('img/DSC00974-1-scaled.jpg') center center / cover no-repeat;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, var(--black) 0%, transparent 30%, transparent 60%, var(--black) 100%);
+    }
+
+    .dme-logo {
+      width: 180px;
+      margin-bottom: 32px;
+      opacity: 0.9;
+    }
+
+    .dme-logo img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-overline {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-overline::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gradient);
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.6rem, 7vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .hero-text {
+      font-size: 1rem;
+      color: var(--white-dim);
+      max-width: 480px;
+      margin-bottom: 56px;
+      line-height: 1.7;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      position: relative;
+      padding-left: 16px;
+    }
+
+    .hero-meta-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: var(--gradient);
+    }
+
+    .hero-meta-item .value {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .hero-meta-item .label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      margin-top: 2px;
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 80px 0;
+    }
+
+    /* ── Audit Cards ── */
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .audit-card {
+      position: relative;
+      background: rgba(15, 15, 15, 0.6);
+      border: 1px solid rgba(168, 255, 0, 0.06);
+      padding: 28px 24px;
+      transition: all 0.4s var(--ease);
+    }
+
+    .audit-card:hover {
+      border-color: rgba(168, 255, 0, 0.25);
+      background: rgba(168, 255, 0, 0.02);
+    }
+
+    /* Corner accents */
+    .audit-card::before,
+    .audit-card::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-color: transparent;
+      border-style: solid;
+      transition: border-color 0.3s;
+    }
+
+    .audit-card::before {
+      top: -1px;
+      left: -1px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .audit-card::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .audit-card:hover::before,
+    .audit-card:hover::after {
+      border-color: var(--accent-1);
+    }
+
+    .severity-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      margin-bottom: 16px;
+    }
+
+    .severity-tag.critical {
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      color: var(--error);
+      background: rgba(255, 68, 68, 0.08);
+    }
+
+    /* ── Critical Alert (full-width) ── */
+    .critical-alert {
+      background: rgba(255, 68, 68, 0.04);
+      border: 1px solid rgba(255, 68, 68, 0.15);
+      padding: 32px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .critical-alert::before,
+    .critical-alert::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-style: solid;
+      border-color: var(--error);
+      transition: border-color 0.3s;
+    }
+
+    .critical-alert::before {
+      top: -1px;
+      left: -1px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .critical-alert::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .critical-alert-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .critical-alert-header h3 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--error);
+    }
+
+    .critical-alert > p {
+      font-size: 0.85rem;
+      color: var(--white-dim);
+      line-height: 1.7;
+      max-width: 680px;
+      margin-bottom: 24px;
+    }
+
+    .critical-alert > p:last-child {
+      margin-bottom: 0;
+    }
+
+    .evidence-block {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 68, 68, 0.1);
+      padding: 20px 24px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1.8;
+      color: var(--white-dim);
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .evidence-block::before {
+      content: 'SOURCE: DMEACADEMY.COM / ABOUT';
+      display: block;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: rgba(255, 68, 68, 0.5);
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 68, 68, 0.08);
+    }
+
+    .evidence-block .injected {
+      color: var(--error);
+      background: rgba(255, 68, 68, 0.1);
+      padding: 2px 6px;
+      border: 1px solid rgba(255, 68, 68, 0.2);
+      white-space: nowrap;
+    }
+
+    .evidence-block .normal {
+      color: rgba(232, 232, 232, 0.3);
+    }
+
+    .critical-note {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+      color: var(--white-dim);
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 68, 68, 0.08);
+      line-height: 1.7;
+    }
+
+    /* ── Diagnostics / Score Gauges ── */
+    .scores-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .score-gauge {
+      text-align: center;
+      padding: 28px 16px;
+      background: rgba(15, 15, 15, 0.6);
+      border: 1px solid rgba(168, 255, 0, 0.04);
+      position: relative;
+    }
+
+    .gauge-ring {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 14px;
+      position: relative;
+    }
+
+    .gauge-ring svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-ring .track {
+      fill: none;
+      stroke: var(--grey-mid);
+      stroke-width: 3;
+    }
+
+    .gauge-ring .fill {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 251.2;
+      transition: stroke-dashoffset 1.2s var(--ease);
+    }
+
+    .gauge-ring .fill.fail { stroke: var(--error); }
+    .gauge-ring .fill.warn { stroke: var(--warning); }
+    .gauge-ring .fill.good { stroke: var(--accent-1); }
+
+    .gauge-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .gauge-value.fail { color: var(--error); }
+    .gauge-value.warn { color: var(--warning); }
+    .gauge-value.good { color: var(--accent-1); }
+
+    .gauge-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+    }
+
+    .device-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .device-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(168, 255, 0, 0.1);
+    }
+
+    /* ── Metrics Table ── */
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+
+    .metrics-table th {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(168, 255, 0, 0.08);
+    }
+
+    .metrics-table td {
+      font-size: 0.8rem;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(168, 255, 0, 0.03);
+    }
+
+    .metrics-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .metric-value.fail { color: var(--error); }
+    .metric-value.warn { color: var(--warning); }
+    .metric-value.good { color: var(--accent-1); }
+
+    .metric-status {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .metric-status.fail { background: var(--error); }
+    .metric-status.warn { background: var(--warning); }
+    .metric-status.good { background: var(--accent-1); }
+
+    /* ── Issues List ── */
+    .issues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .issue-group {
+      background: rgba(15, 15, 15, 0.6);
+      border: 1px solid rgba(168, 255, 0, 0.04);
+      padding: 24px;
+    }
+
+    .issue-group h4 {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .issue-group h4 .count {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      color: var(--black);
+      background: var(--error);
+      padding: 1px 6px;
+      letter-spacing: 0;
+    }
+
+    .issue-group ul {
+      list-style: none;
+    }
+
+    .issue-group ul li {
+      font-size: 0.75rem;
+      color: var(--white-dim);
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .issue-group ul li::before {
+      content: '✕';
+      color: var(--error);
+      font-size: 0.6rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .issue-group ul li:last-child {
+      border-bottom: none;
+    }
+
+    .solution-note {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(168, 255, 0, 0.06);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      color: var(--accent-1);
+      line-height: 1.6;
+    }
+
+    .solution-note strong {
+      color: var(--white);
+    }
+
+    @media (max-width: 640px) {
+      .scores-row { grid-template-columns: repeat(2, 1fr); }
+      .gauge-ring { width: 72px; height: 72px; }
+      .gauge-value { font-size: 1.3rem; }
+    }
+
+    .severity-tag.warning {
+      border: 1px solid rgba(255, 180, 40, 0.25);
+      color: var(--warning);
+      background: rgba(255, 180, 40, 0.08);
+    }
+
+    .severity-tag.info {
+      border: 1px solid rgba(168, 255, 0, 0.2);
+      color: var(--accent-1);
+      background: rgba(168, 255, 0, 0.06);
+    }
+
+    .audit-card h3 {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .audit-card p {
+      font-size: 0.82rem;
+      color: var(--white-dim);
+      line-height: 1.6;
+    }
+
+    /* ── Rate Cards ── */
+    .rates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .rate-card {
+      position: relative;
+      background: rgba(15, 15, 15, 0.6);
+      border: 1px solid rgba(168, 255, 0, 0.06);
+      padding: 40px 32px;
+      transition: all 0.4s var(--ease);
+    }
+
+    .rate-card:hover {
+      border-color: rgba(168, 255, 0, 0.3);
+      background: rgba(168, 255, 0, 0.02);
+    }
+
+    .rate-card::before,
+    .rate-card::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: transparent;
+      border-style: solid;
+      transition: border-color 0.3s;
+    }
+
+    .rate-card::before {
+      top: -1px;
+      left: -1px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .rate-card::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .rate-card:hover::before,
+    .rate-card:hover::after {
+      border-color: var(--accent-1);
+    }
+
+    .rate-card.featured {
+      border-color: rgba(168, 255, 0, 0.2);
+    }
+
+    .rate-card.featured::before,
+    .rate-card.featured::after {
+      border-color: rgba(168, 255, 0, 0.4);
+    }
+
+    .rate-card .card-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 20px;
+    }
+
+    .rate-card .price {
+      font-family: var(--font-heading);
+      font-size: 3.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .rate-card .price span {
+      font-size: 1rem;
+      font-weight: 400;
+      background: none;
+      -webkit-text-fill-color: var(--white-dim);
+      letter-spacing: 0;
+    }
+
+    .rate-card .price-note {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--white-dim);
+      letter-spacing: 0.05em;
+      margin-bottom: 28px;
+    }
+
+    .rate-card ul {
+      list-style: none;
+    }
+
+    .rate-card ul li {
+      font-size: 0.82rem;
+      color: rgba(232, 232, 232, 0.75);
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(168, 255, 0, 0.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .rate-card ul li::before {
+      content: '▸';
+      color: var(--accent-1);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .rate-card ul li:last-child {
+      border-bottom: none;
+    }
+
+    /* ── Process ── */
+    .process-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 24px;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(168, 255, 0, 0.04);
+      align-items: start;
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      color: var(--accent-1);
+      opacity: 0.25;
+      line-height: 1;
+      padding-top: 2px;
+    }
+
+    .step-content h3 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+    }
+
+    .step-content p {
+      font-size: 0.82rem;
+      color: var(--white-dim);
+      line-height: 1.7;
+    }
+
+    /* ── Terms ── */
+    .terms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .term-block {
+      background: rgba(15, 15, 15, 0.6);
+      border: 1px solid rgba(168, 255, 0, 0.04);
+      padding: 24px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .term-block:hover {
+      border-color: rgba(168, 255, 0, 0.15);
+    }
+
+    .term-block h3 {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+
+    .term-block h3 .term-icon {
+      color: var(--accent-1);
+      margin-right: 8px;
+      font-size: 0.7rem;
+    }
+
+    .term-block p {
+      font-size: 0.8rem;
+      color: var(--white-dim);
+      line-height: 1.65;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 100px 0 120px;
+    }
+
+    .cta-section p {
+      color: var(--white-dim);
+      margin-bottom: 40px;
+      font-size: 0.95rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s var(--ease);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(168, 255, 0, 0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(168, 255, 0, 0.2);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-1);
+      color: var(--accent-1);
+      transform: translateY(-2px);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 1px solid rgba(168, 255, 0, 0.04);
+    }
+
+    footer p {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+    }
+
+    footer a {
+      color: var(--accent-1);
+    }
+
+    /* ── Scroll Reveals ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    /* ── Side Nav ── */
+    .side-nav {
+      position: fixed;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+    }
+
+    .side-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .side-nav-label {
+      font-family: var(--font-mono);
+      font-size: 0;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      opacity: 0;
+      transform: translateX(6px);
+      transition: all 0.3s var(--ease);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .side-nav-item:hover .side-nav-label,
+    .side-nav-item.active .side-nav-label {
+      font-size: 0.55rem;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .side-nav-item.active .side-nav-label {
+      color: var(--accent-1);
+    }
+
+    .side-nav-dot {
+      width: 8px;
+      height: 8px;
+      border: 1px solid rgba(168, 255, 0, 0.2);
+      background: transparent;
+      position: relative;
+      flex-shrink: 0;
+      transition: all 0.3s var(--ease);
+    }
+
+    .side-nav-item:hover .side-nav-dot {
+      border-color: rgba(168, 255, 0, 0.5);
+    }
+
+    .side-nav-item.active .side-nav-dot {
+      border-color: var(--accent-1);
+      background: var(--accent-1);
+      box-shadow: 0 0 8px rgba(168, 255, 0, 0.3);
+    }
+
+    /* Track line between dots */
+    .side-nav-track {
+      position: fixed;
+      right: 31px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: calc(100% - 40px);
+      max-height: 280px;
+      background: rgba(168, 255, 0, 0.06);
+      z-index: 98;
+      pointer-events: none;
+    }
+
+    .side-nav-progress {
+      width: 100%;
+      height: 0%;
+      background: var(--gradient);
+      transition: height 0.4s var(--ease);
+    }
+
+    /* ── Mobile Menu ── */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      width: 48px;
+      height: 48px;
+      background: var(--dark);
+      border: 1px solid rgba(168, 255, 0, 0.15);
+      cursor: pointer;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 0;
+      transition: border-color 0.3s;
+    }
+
+    .mobile-menu-btn span {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: var(--accent-1);
+      transition: all 0.3s var(--ease);
+      transform-origin: center;
+    }
+
+    .mobile-menu-btn.open {
+      border-color: var(--accent-1);
+    }
+
+    .mobile-menu-btn.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .mobile-menu-btn.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .mobile-menu-btn.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      z-index: 199;
+      background: rgba(10, 10, 10, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(168, 255, 0, 0.1);
+      padding: 8px 0;
+      opacity: 0;
+      transform: translateY(10px) scale(0.95);
+      transform-origin: bottom right;
+      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+      pointer-events: none;
+    }
+
+    .mobile-menu.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .mobile-menu-item {
+      display: block;
+      padding: 12px 24px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      text-decoration: none;
+      transition: all 0.2s;
+      border-left: 2px solid transparent;
+    }
+
+    .mobile-menu-item:hover,
+    .mobile-menu-item.active {
+      color: var(--accent-1);
+      background: rgba(168, 255, 0, 0.04);
+      border-left-color: var(--accent-1);
+    }
+
+    @media (max-width: 900px) {
+      .side-nav, .side-nav-track { display: none; }
+      .mobile-menu-btn { display: flex; }
+      .mobile-menu { display: block; }
+    }
+
+    @media (max-width: 640px) {
+      section { padding: 60px 0; }
+      .hero { padding: 100px 24px 60px; }
+      .hero-meta { gap: 28px; }
+      .process-step { grid-template-columns: 40px 1fr; gap: 14px; }
+      .step-num { font-size: 1.3rem; }
+      .rate-card { padding: 32px 24px; }
+      .rate-card .price { font-size: 2.6rem; }
+      .nav-tag { display: none; }
+      .nav-status { display: none; }
+    }
+
+    /* ── Password Gate ── */
+    .pw-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: opacity 0.5s var(--ease), visibility 0.5s;
+    }
+
+    .pw-gate.unlocked {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .pw-gate-logo {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 32px;
+    }
+
+    .pw-gate-logo svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .pw-gate-title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 32px;
+    }
+
+    .pw-gate-form {
+      display: flex;
+      gap: 0;
+      position: relative;
+    }
+
+    .pw-gate-input {
+      background: var(--dark);
+      border: 1px solid rgba(168, 255, 0, 0.15);
+      border-right: none;
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      padding: 14px 20px;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .pw-gate-input:focus {
+      border-color: var(--accent-1);
+    }
+
+    .pw-gate-input::placeholder {
+      color: rgba(232, 232, 232, 0.2);
+      letter-spacing: 0.15em;
+    }
+
+    .pw-gate-submit {
+      background: var(--gradient);
+      border: none;
+      color: var(--black);
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 14px 24px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .pw-gate-submit:hover {
+      opacity: 0.85;
+    }
+
+    .pw-gate-error {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--error);
+      margin-top: 12px;
+      height: 16px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .pw-gate-error.show {
+      opacity: 1;
+    }
+
+    .page-content {
+      display: none;
+    }
+
+    .page-content.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Password Gate -->
+  <div class="pw-gate" id="pwGate">
+    <div class="pw-gate-logo" aria-hidden="true">
+      <svg viewBox="0 0 1920 1920">
+        <defs><linearGradient id="pwGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a8ff00"/><stop offset="100%" stop-color="#d4ff00"/></linearGradient></defs>
+        <polygon fill="url(#pwGrad)" points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+        <polygon fill="url(#pwGrad)" points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+        <polygon fill="url(#pwGrad)" points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+      </svg>
+    </div>
+    <div class="pw-gate-title">Confidential Proposal</div>
+    <div class="pw-gate-form">
+      <input type="password" class="pw-gate-input" id="pwInput" placeholder="Enter access code" autocomplete="off" autofocus>
+      <button class="pw-gate-submit" id="pwSubmit">Access ▸</button>
+    </div>
+    <div class="pw-gate-error" id="pwError">Invalid access code</div>
+  </div>
+
+  <!-- Page Content (hidden until authenticated) -->
+  <div class="page-content" id="pageContent">
+
+  <!-- Overlays -->
+  <div class="noise" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav class="top-nav">
+    <div class="nav-brand">
+      <div class="nav-logo" aria-hidden="true">
+        <svg viewBox="0 0 1920 1920">
+          <defs><linearGradient id="svGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a8ff00"/><stop offset="100%" stop-color="#d4ff00"/></linearGradient></defs>
+          <polygon fill="url(#svGrad)" points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+          <polygon fill="url(#svGrad)" points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+          <polygon fill="url(#svGrad)" points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+        </svg>
+      </div>
+      <span class="nav-title">Socia Visual</span>
+    </div>
+    <div class="nav-meta">
+      <span class="nav-tag">Confidential Proposal</span>
+      <span class="nav-status">Active</span>
+    </div>
+  </nav>
+
+  <!-- Side Nav -->
+  <nav class="side-nav" id="sideNav" aria-label="Section navigation">
+    <a href="#hero" class="side-nav-item active" data-section="hero">
+      <span class="side-nav-label">Top</span>
+      <span class="side-nav-dot"></span>
+    </a>
+    <a href="#assessment" class="side-nav-item" data-section="assessment">
+      <span class="side-nav-label">Assessment</span>
+      <span class="side-nav-dot"></span>
+    </a>
+    <a href="#diagnostics" class="side-nav-item" data-section="diagnostics">
+      <span class="side-nav-label">Diagnostics</span>
+      <span class="side-nav-dot"></span>
+    </a>
+    <a href="#rates" class="side-nav-item" data-section="rates">
+      <span class="side-nav-label">Rates</span>
+      <span class="side-nav-dot"></span>
+    </a>
+    <a href="#agreement" class="side-nav-item" data-section="agreement">
+      <span class="side-nav-label">Agreement</span>
+      <span class="side-nav-dot"></span>
+    </a>
+    <a href="#next" class="side-nav-item" data-section="next">
+      <span class="side-nav-label">Next Steps</span>
+      <span class="side-nav-dot"></span>
+    </a>
+  </nav>
+
+  <!-- Mobile Nav Menu -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open section menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#hero" class="mobile-menu-item" data-section="hero">Top</a>
+    <a href="#assessment" class="mobile-menu-item" data-section="assessment">01 — Assessment</a>
+    <a href="#diagnostics" class="mobile-menu-item" data-section="diagnostics">02 — Diagnostics</a>
+    <a href="#rates" class="mobile-menu-item" data-section="rates">03 — Rates</a>
+    <a href="#agreement" class="mobile-menu-item" data-section="agreement">04 — Agreement</a>
+    <a href="#next" class="mobile-menu-item" data-section="next">05 — Next Steps</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="dme-logo reveal"><img src="img/DME_Academy_Logo.png" alt="DME Academy"></div>
+      <div class="hero-overline reveal">Web Design Proposal — Prepared for Greg Birgfeld · March 2026</div>
+      <h1 class="reveal">Build the digital home<br><span class="text-accent">your academy deserves</span></h1>
+      <p class="hero-text reveal">A web presence that matches the caliber of your athletes, your program, and the dream you're helping them ignite.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item reveal">
+          <div class="value">15+ Years</div>
+          <div class="label">Sports & Motorsport Design</div>
+        </div>
+        <div class="hero-meta-item reveal">
+          <div class="value">Built for Speed</div>
+          <div class="label">No Lag, No Compromise</div>
+        </div>
+        <div class="hero-meta-item reveal">
+          <div class="value">Full Service</div>
+          <div class="label">Design → Develop → Optimize</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Site Audit -->
+  <section id="assessment">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label"><span class="label-line"></span>01 // Assessment</span>
+        <h2 class="section-title">What we <span class="text-accent">found</span></h2>
+        <p class="section-sub">A quick technical review of dmeacademy.com revealed a few things worth addressing right away.</p>
+      </div>
+      <!-- Critical Alert — Full Width -->
+      <div class="critical-alert reveal">
+        <div class="critical-alert-header">
+          <div class="severity-tag critical">Critical Security Issue</div>
+        </div>
+        <h3 style="font-family:var(--font-heading);font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:14px;">Unauthorized Content Found in Your Source Code</h3>
+        <p>During a technical review of dmeacademy.com, we found third-party content injected into your site's source code — specifically, links promoting anabolic steroid sales embedded within the HTML. This type of injection is typically hidden from visitors but visible to search engine crawlers, which is how it avoids detection.</p>
+        <p>Here's exactly what we found in the source code:</p>
+        <div class="evidence-block">
+          <span class="normal">...About DME Academy?...</span><br>
+          <span class="injected">Strongman Finishers for Big Muscle Gains buy dball online → buy-steroids.online/product/ultima-dbol Shoulder Workouts for Women: Add Shape and Size!</span><br>
+          <span class="normal">...one of the leading private schools for student-athlete development...</span>
+        </div>
+        <p class="critical-note">Even though visitors may not see this, Google's crawlers can — and it can lead to search ranking penalties. For a youth-focused institution, having steroid marketplace links anywhere in your codebase is a reputation and security risk. We flagged this immediately because it should be addressed regardless of whether we work together. Happy to discuss the best path forward on our first call.</p>
+      </div>
+
+      <div class="audit-grid" style="margin-top: 8px;">
+        <div class="audit-card reveal">
+          <div class="severity-tag warning">Needs Attention</div>
+          <h3>Fragmented Stylesheets</h3>
+          <p>Multiple CSS files with overlapping rules are slowing load times and making updates harder than they need to be. A consolidated codebase would improve performance and maintainability.</p>
+        </div>
+        <div class="audit-card reveal">
+          <div class="severity-tag warning">Needs Attention</div>
+          <h3>Mobile Experience Gaps</h3>
+          <p>Heavy reliance on breakpoint-specific styling creates inconsistencies across devices. Modern responsive techniques would deliver a smoother experience for parents and recruits on mobile.</p>
+        </div>
+        <div class="audit-card reveal">
+          <div class="severity-tag info">Opportunity</div>
+          <h3>Visual Identity Refresh</h3>
+          <p>DME has grown significantly since launch. The web presence should reflect where you are now — an elite, nationally recognized academy — not where you started.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Diagnostics -->
+  <section id="diagnostics">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label"><span class="label-line"></span>02 // Diagnostics</span>
+        <h2 class="section-title">Performance <span class="text-accent">report</span></h2>
+        <p class="section-sub">We ran a full Google Lighthouse audit on dmeacademy.com. These are the same metrics Google uses to rank your site in search results.</p>
+      </div>
+
+      <!-- Mobile Scores -->
+      <div class="device-label reveal">Mobile</div>
+      <div class="scores-row reveal">
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill fail" cx="45" cy="45" r="40" style="stroke-dashoffset: 210.8"/>
+            </svg>
+            <div class="gauge-value fail">16</div>
+          </div>
+          <div class="gauge-label">Performance</div>
+        </div>
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill warn" cx="45" cy="45" r="40" style="stroke-dashoffset: 50.2"/>
+            </svg>
+            <div class="gauge-value warn">80</div>
+          </div>
+          <div class="gauge-label">Accessibility</div>
+        </div>
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill fail" cx="45" cy="45" r="40" style="stroke-dashoffset: 108.0"/>
+            </svg>
+            <div class="gauge-value fail">57</div>
+          </div>
+          <div class="gauge-label">Best Practices</div>
+        </div>
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill good" cx="45" cy="45" r="40" style="stroke-dashoffset: 20.1"/>
+            </svg>
+            <div class="gauge-value good">92</div>
+          </div>
+          <div class="gauge-label">SEO</div>
+        </div>
+      </div>
+
+      <!-- Mobile Metrics -->
+      <table class="metrics-table reveal">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="metric-status fail"></span>First Contentful Paint</td>
+            <td class="metric-value fail">4.3s</td>
+            <td style="font-size:0.7rem;color:var(--white-dim)">Should be under 1.8s</td>
+          </tr>
+          <tr>
+            <td><span class="metric-status fail"></span>Largest Contentful Paint</td>
+            <td class="metric-value fail">30.0s</td>
+            <td style="font-size:0.7rem;color:var(--white-dim)">Should be under 2.5s</td>
+          </tr>
+          <tr>
+            <td><span class="metric-status fail"></span>Total Blocking Time</td>
+            <td class="metric-value fail">2,720ms</td>
+            <td style="font-size:0.7rem;color:var(--white-dim)">Should be under 200ms</td>
+          </tr>
+          <tr>
+            <td><span class="metric-status warn"></span>Cumulative Layout Shift</td>
+            <td class="metric-value warn">0.241</td>
+            <td style="font-size:0.7rem;color:var(--white-dim)">Should be under 0.1</td>
+          </tr>
+          <tr>
+            <td><span class="metric-status fail"></span>Speed Index</td>
+            <td class="metric-value fail">21.9s</td>
+            <td style="font-size:0.7rem;color:var(--white-dim)">Should be under 3.4s</td>
+          </tr>
+          <tr>
+            <td><span class="metric-status fail"></span>Time to Interactive</td>
+            <td class="metric-value fail">56.7s</td>
+            <td style="font-size:0.7rem;color:var(--white-dim)">Should be under 3.8s</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Desktop Scores -->
+      <div class="device-label reveal">Desktop</div>
+      <div class="scores-row reveal">
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill fail" cx="45" cy="45" r="40" style="stroke-dashoffset: 118.1"/>
+            </svg>
+            <div class="gauge-value fail">53</div>
+          </div>
+          <div class="gauge-label">Performance</div>
+        </div>
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill warn" cx="45" cy="45" r="40" style="stroke-dashoffset: 50.2"/>
+            </svg>
+            <div class="gauge-value warn">80</div>
+          </div>
+          <div class="gauge-label">Accessibility</div>
+        </div>
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill fail" cx="45" cy="45" r="40" style="stroke-dashoffset: 115.6"/>
+            </svg>
+            <div class="gauge-value fail">54</div>
+          </div>
+          <div class="gauge-label">Best Practices</div>
+        </div>
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 90 90">
+              <circle class="track" cx="45" cy="45" r="40"/>
+              <circle class="fill good" cx="45" cy="45" r="40" style="stroke-dashoffset: 20.1"/>
+            </svg>
+            <div class="gauge-value good">92</div>
+          </div>
+          <div class="gauge-label">SEO</div>
+        </div>
+      </div>
+
+      <!-- Issues Found -->
+      <div style="margin-top: 16px;"></div>
+      <div class="device-label reveal">Issues Found</div>
+      <div class="issues-grid">
+        <div class="issue-group reveal">
+          <h4>Accessibility <span class="count">5 issues</span></h4>
+          <ul>
+            <li>Insufficient color contrast ratios on text elements</li>
+            <li>Images missing alt text attributes</li>
+            <li>Links without discernible names</li>
+            <li>Pinch-to-zoom disabled via viewport meta tag</li>
+            <li>Page missing main landmark for screen readers</li>
+          </ul>
+          <div class="solution-note"><strong>Our approach →</strong> Proper contrast ratios, alt text on all images, landmark structure for screen readers, and full keyboard navigation — brought up to WCAG 2.1 AA standards.</div>
+        </div>
+        <div class="issue-group reveal">
+          <h4>Best Practices <span class="count">3 issues</span></h4>
+          <ul>
+            <li>Using deprecated browser APIs</li>
+            <li>Third-party cookies present (blocked by modern browsers)</li>
+            <li>Unresolved issues in Chrome DevTools</li>
+          </ul>
+          <div class="solution-note"><strong>Our approach →</strong> Audit and replace deprecated APIs, eliminate third-party cookie dependencies, resolve all DevTools warnings — clean, modern, compliant code.</div>
+        </div>
+        <div class="issue-group reveal">
+          <h4>Performance <span class="count">Critical</span></h4>
+          <ul>
+            <li>30-second load time for primary content on mobile</li>
+            <li>Nearly a minute to become interactive on mobile</li>
+            <li>2.7 seconds of main thread blocking</li>
+            <li>Significant layout shifts during page load</li>
+          </ul>
+          <div class="solution-note"><strong>Our approach →</strong> Optimize images, implement lazy loading, clean up render-blocking resources, reduce page weight — dramatically faster load times without a full rebuild.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Rates -->
+  <section id="rates">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label"><span class="label-line"></span>03 // Rates</span>
+        <h2 class="section-title">Transparent <span class="text-accent">pricing</span></h2>
+        <p class="section-sub">Straightforward hourly rates. No hidden fees, no surprise invoices. You'll always know what you're paying for before work begins.</p>
+      </div>
+      <div class="rates-grid">
+        <div class="rate-card featured reveal">
+          <div class="card-label">Standard Rate</div>
+          <div class="price">$65 <span>/ hour</span></div>
+          <div class="price-note">For scheduled, planned work</div>
+          <ul>
+            <li>Site updates, fixes & content changes</li>
+            <li>Performance & speed optimization</li>
+            <li>Security audits & cleanup</li>
+            <li>Design improvements & new pages</li>
+            <li>Browser & device testing</li>
+            <li>Ongoing maintenance & support</li>
+          </ul>
+        </div>
+        <div class="rate-card reveal">
+          <div class="card-label">Rush Rate</div>
+          <div class="price">$85 <span>/ hour</span></div>
+          <div class="price-note">For urgent & time-sensitive requests</div>
+          <ul>
+            <li>Same-day or next-day turnaround</li>
+            <li>Emergency fixes & hotfixes</li>
+            <li>Event-driven deadlines</li>
+            <li>Weekend or after-hours work</li>
+            <li>Priority scheduling</li>
+            <li>Same scope of services as standard</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="divider"></div>
+
+  <!-- Terms -->
+  <section id="agreement">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label"><span class="label-line"></span>04 // Agreement</span>
+        <h2 class="section-title">The <span class="text-accent">details</span></h2>
+        <p class="section-sub">The fine print, kept simple.</p>
+      </div>
+      <div class="terms-grid">
+        <div class="term-block reveal">
+          <h3><span class="term-icon">▸</span> Billing</h3>
+          <p>Time is tracked and invoiced bi-weekly or monthly — your preference. Invoices include a detailed breakdown of hours and tasks completed.</p>
+        </div>
+        <div class="term-block reveal">
+          <h3><span class="term-icon">▸</span> Communication</h3>
+          <p>Available via email, text, or your preferred channel. Same-day responses during business hours, and available around the clock for anything urgent or time-sensitive. You'll never have to chase me.</p>
+        </div>
+        <div class="term-block reveal">
+          <h3><span class="term-icon">▸</span> Scope</h3>
+          <p>All work is scoped and estimated upfront so there are no surprises. If priorities shift or new requests come in, we discuss and align before anything changes.</p>
+        </div>
+        <div class="term-block reveal">
+          <h3><span class="term-icon">▸</span> Ownership</h3>
+          <p>Upon payment, all deliverables and source files are yours. Full ownership, no licensing games, no hostage situations.</p>
+        </div>
+        <div class="term-block reveal">
+          <h3><span class="term-icon">▸</span> Rush Policy</h3>
+          <p>Rush rate applies to any request requiring turnaround within 48 hours, or work performed outside standard business hours — evenings, weekends, holidays.</p>
+        </div>
+        <div class="term-block reveal">
+          <h3><span class="term-icon">▸</span> Flexibility</h3>
+          <p>No long-term contracts. This is an ongoing working relationship — either party can wrap up with 14 days notice. Simple as that.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <section class="cta-section" id="next">
+    <div class="container reveal">
+      <span class="section-label"><span class="label-line"></span>05 // Next Steps</span>
+      <h2 class="section-title">Ready to <span class="text-accent">get started?</span></h2>
+      <p>Let's hop on a quick call to align on priorities and I'll have a scope estimate ready within 24 hours.</p>
+      <div class="cta-buttons">
+        <a href="mailto:greg.birgfeld@dmeacademy.com?subject=DME%20Academy%20%C3%97%20Socia%20Visual%20%E2%80%94%20Let's%20Go&cc=wwwsociaio@gmail.com" class="btn btn-primary">Let's Do This ▸</a>
+        <a href="https://sociavisual.com" class="btn btn-secondary" target="_blank">View Portfolio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Prepared by <a href="https://sociavisual.com" target="_blank">Socia Visual</a> &mdash; March 2026 &mdash; This document is confidential</p>
+  </footer>
+
+  <script>
+    // ── Scroll Reveal ──
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+      revealObserver.observe(el);
+    });
+
+    // ── Side Nav + Mobile Menu ──
+    const sections = ['hero','assessment','diagnostics','rates','agreement','next'];
+    const sideNavItems = document.querySelectorAll('.side-nav-item');
+    const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
+    const progressBar = null;
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    // Active section tracking
+    function updateActiveSection() {
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min((scrollY / docHeight) * 100, 100);
+      if (progressBar) progressBar.style.height = progress + '%';
+
+      let current = 'hero';
+      // If at bottom of page, activate last section
+      if (scrollY + window.innerHeight >= document.documentElement.scrollHeight - 50) {
+        current = sections[sections.length - 1];
+      } else {
+        for (const id of sections) {
+          const el = document.getElementById(id);
+          if (el && el.offsetTop - 200 <= scrollY) current = id;
+        }
+      }
+
+      sideNavItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.section === current);
+      });
+      mobileMenuItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.section === current);
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    updateActiveSection();
+
+    // Smooth scroll for nav items
+    [...sideNavItems, ...mobileMenuItems].forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById(item.dataset.section);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (menuOpen) toggleMenu();
+        }
+      });
+    });
+
+    // Mobile hamburger
+    function toggleMenu() {
+      menuOpen = !menuOpen;
+      mobileBtn.classList.toggle('open', menuOpen);
+      mobileMenu.classList.toggle('visible', menuOpen);
+    }
+
+    mobileBtn.addEventListener('click', toggleMenu);
+
+    // Close menu on outside tap
+    document.addEventListener('click', (e) => {
+      if (menuOpen && !mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)) {
+        toggleMenu();
+      }
+    });
+  </script>
+
+  </div><!-- /page-content -->
+
+  <!-- Password Gate Script -->
+  <script>
+    var k = [68,77,69,50,54];
+
+    function tryUnlock() {
+      var input = document.getElementById('pwInput');
+      var val = input.value;
+      var match = val.length === k.length;
+      if (match) {
+        for (var i = 0; i < k.length; i++) {
+          if (val.charCodeAt(i) !== k[i]) { match = false; break; }
+        }
+      }
+      if (match) {
+        document.getElementById('pwGate').classList.add('unlocked');
+        document.getElementById('pageContent').classList.add('visible');
+        sessionStorage.setItem('sv_proposal_auth', '1');
+      } else {
+        document.getElementById('pwError').classList.add('show');
+        input.value = '';
+        input.focus();
+        setTimeout(function() { document.getElementById('pwError').classList.remove('show'); }, 2000);
+      }
+    }
+
+    document.getElementById('pwSubmit').addEventListener('click', tryUnlock);
+    document.getElementById('pwInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') tryUnlock();
+    });
+
+    if (sessionStorage.getItem('sv_proposal_auth') === '1') {
+      document.getElementById('pwGate').classList.add('unlocked');
+      document.getElementById('pageContent').classList.add('visible');
+    }
+  </script>
+
+</body>
+</html>

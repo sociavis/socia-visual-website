@@ -399,7 +399,7 @@
         <!-- Project grid -->
         <div class="work-grid" id="workGrid">
           <div class="work-card reveal" data-category="web,brand,graphics,motion" data-project="arenacross">
-            <div class="work-card-img"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Slide1.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Slide1.webp" alt="AMA Arenacross Championship event poster" loading="lazy"></picture></div>
+            <div class="work-card-img"><video class="wc-video" muted loop playsinline preload="none" poster="portfolio/AMA FIM Arenacross Championship/Arenacross/home-loop-poster.webp" aria-label="AMA Arenacross Championship website tour"><source src="portfolio/AMA FIM Arenacross Championship/Arenacross/home-loop.mp4" type="video/mp4"></video></div>
             <div class="work-card-tags"><span>Web</span><span>Brand</span><span>Graphics</span><span>Motion</span></div>
             <div class="work-card-info"><h3 class="work-card-title">AMA Arenacross Championship</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
@@ -415,7 +415,7 @@
           </div>
 
           <div class="work-card reveal" data-category="web,brand" data-project="tcs">
-            <div class="work-card-img"><picture><source srcset="portfolio/Triple Crown Series/tcs-home-dt.webp" type="image/webp"><img src="portfolio/Triple Crown Series/tcs-home-dt.webp" alt="Triple Crown Series website homepage" loading="lazy"></picture></div>
+            <div class="work-card-img"><video class="wc-video" muted loop playsinline preload="none" poster="portfolio/Triple Crown Series/home-loop-poster.webp" aria-label="Triple Crown Series website tour"><source src="portfolio/Triple Crown Series/home-loop.mp4" type="video/mp4"></video></div>
             <div class="work-card-tags"><span>Web</span><span>Brand</span></div>
             <div class="work-card-info"><h3 class="work-card-title">Triple Crown Series</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
@@ -423,7 +423,7 @@
           </div>
 
           <div class="work-card reveal" data-category="web" data-project="haus-of-revival">
-            <div class="work-card-img"><picture><source srcset="portfolio/Haus of Revival/home-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/home-hero.webp" alt="Haus of Revival — med spa and peptide therapy website" loading="lazy"></picture></div>
+            <div class="work-card-img"><video class="wc-video" muted loop playsinline preload="none" poster="portfolio/Haus of Revival/home-loop-poster.webp" aria-label="Haus of Revival website tour"><source src="portfolio/Haus of Revival/home-loop.mp4" type="video/mp4"></video></div>
             <div class="work-card-tags"><span>Web</span></div>
             <div class="work-card-info"><h3 class="work-card-title">Haus of Revival</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
@@ -431,7 +431,7 @@
           </div>
 
           <div class="work-card reveal" data-category="web,brand" data-project="vat">
-            <div class="work-card-img"><picture><source srcset="portfolio/Victory Advanced Technologies/home-hero.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/home-hero.webp" alt="Victory Advanced Technologies — industrial manufacturing website" loading="lazy"></picture></div>
+            <div class="work-card-img"><video class="wc-video" muted loop playsinline preload="none" poster="portfolio/Victory Advanced Technologies/home-loop-poster.webp" aria-label="Victory Advanced Technologies — industrial manufacturing website"><source src="portfolio/Victory Advanced Technologies/home-loop.mp4" type="video/mp4"></video></div>
             <div class="work-card-tags"><span>Web</span><span>Brand</span></div>
             <div class="work-card-info"><h3 class="work-card-title">Victory Advanced Technologies</h3></div>
             <div class="work-card-corner work-card-corner--tl"></div>
@@ -623,7 +623,7 @@
   .cs-frame::before,.cs-frame::after{content:"";position:absolute;width:12px;height:12px;z-index:2;pointer-events:none}
   .cs-frame::before{top:0;left:0;border-top:1px solid #a8ff00;border-left:1px solid #a8ff00}
   .cs-frame::after{bottom:0;right:0;border-bottom:1px solid #a8ff00;border-right:1px solid #a8ff00}
-  .cs-frame img{width:100%;display:block}
+  .cs-frame img,.cs-frame video{width:100%;display:block}
 
   /* Branding: logo showcase */
   .cs-logos{display:flex;flex-direction:column;gap:16px}
@@ -719,12 +719,16 @@
   .sg-hero{display:flex;align-items:flex-end;justify-content:center;gap:20px;margin-top:20px}
   .sg-laptop{position:relative;width:100%;max-width:640px}
   .sg-laptop-bezel{background:#111;border:2px solid #2a2a2a;border-radius:8px 8px 0 0;overflow:hidden}
-  .sg-laptop-bezel img{width:100%;display:block}
-  .sg-laptop-base{height:10px;background:linear-gradient(to bottom,#2a2a2a,#181818);border-radius:0 0 4px 4px;margin:0 -3%}
+  .sg-laptop-bezel img,.sg-laptop-bezel video{width:100%;display:block}
+  .sg-laptop-base{position:relative;height:10px;background:linear-gradient(to bottom,#2a2a2a,#181818);border-radius:0 0 4px 4px;margin:0 -3%}
   .sg-laptop-base::before{content:"";display:block;width:16%;height:3px;background:#333;border-radius:0 0 3px 3px;margin:0 auto}
   .sg-phone{width:20%;max-width:120px;flex-shrink:0}
-  .sg-phone-bezel{background:#111;border:2px solid #2a2a2a;border-radius:14px;padding:5px;overflow:hidden}
-  .sg-phone-bezel img{width:100%;display:block;border-radius:9px}
+  .sg-phone-bezel{position:relative;background:#111;border:2px solid #2a2a2a;border-radius:14px;padding:5px;overflow:hidden}
+  .sg-phone-bezel img,.sg-phone-bezel video{width:100%;display:block;border-radius:9px}
+
+  /* SV-branded mockup signature — neon gradient hairline at the seams */
+  .sg-mockup-branded .sg-laptop-base::before{background:linear-gradient(90deg,transparent,#a8ff00 30%,#d4ff00 50%,#a8ff00 70%,transparent);height:2px;width:18%;opacity:.55;box-shadow:0 0 4px rgba(168,255,0,.25)}
+  .sg-mockup-branded .sg-phone-bezel::after{content:"";position:absolute;left:38%;right:38%;bottom:1px;height:1px;background:linear-gradient(90deg,transparent,#a8ff00,transparent);opacity:.5;border-radius:1px;pointer-events:none}
 
   /* Floating screen cards */
   .sg-spread{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
@@ -1009,7 +1013,7 @@
           <div class="cs-web-grid">
             <div class="cs-browser">
               <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">arenacrossusa.com</span></div>
-              <div class="cs-frame"><picture><source srcset="portfolio/AMA FIM Arenacross Championship/Arenacross/Homepage.webp" type="image/webp"><img src="portfolio/AMA FIM Arenacross Championship/Arenacross/Homepage.webp" alt="Arenacross homepage" loading="lazy"></picture></div>
+              <div class="cs-frame" style="padding:0"><video class="cs-autovideo" muted loop playsinline preload="none" poster="portfolio/AMA FIM Arenacross Championship/Arenacross/home-loop-poster.webp" aria-label="Arenacross website tour"><source src="portfolio/AMA FIM Arenacross Championship/Arenacross/home-loop.mp4" type="video/mp4"></video></div>
             </div>
             <div class="cs-browser">
               <div class="cs-browser-bar"><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-dot"></span><span class="cs-browser-url">arenacrossusa.com/schedule</span></div>
@@ -1307,13 +1311,13 @@
           <h3 class="cs-section-title">Canada's Premier Motocross Racing Series, Digitized.</h3>
           <p class="cs-section-desc">A 20+ page digital platform for the Triple Crown Series — hand-coded from the ground up with a custom CMS, a 15-module admin dashboard, and real-time data wired directly to the series' live timing and scoring provider. When a rider crosses a finish line, the site knows.</p>
 
-          <div class="sg-hero">
+          <div class="sg-hero sg-mockup-branded">
             <div class="sg-laptop">
-              <div class="sg-laptop-bezel"><img src="portfolio/Triple Crown Series/tcs-home-dt.webp" alt="Triple Crown Series — desktop homepage" loading="lazy"></div>
+              <div class="sg-laptop-bezel"><video class="sg-loop" muted loop playsinline preload="none" poster="portfolio/Triple Crown Series/home-loop-poster.webp" aria-label="Triple Crown Series — desktop homepage tour"><source src="portfolio/Triple Crown Series/home-loop.mp4" type="video/mp4"></video></div>
               <div class="sg-laptop-base"></div>
             </div>
             <div class="sg-phone">
-              <div class="sg-phone-bezel"><img src="portfolio/Triple Crown Series/tcs-home-mob.webp" alt="Triple Crown Series — mobile" loading="lazy"></div>
+              <div class="sg-phone-bezel"><video class="sg-loop" muted loop playsinline preload="none" poster="portfolio/Triple Crown Series/mobile-loop-poster.webp" aria-label="Triple Crown Series — mobile tour"><source src="portfolio/Triple Crown Series/mobile-loop.mp4" type="video/mp4"></video></div>
             </div>
           </div>
         </div>
@@ -1584,13 +1588,13 @@
           <h3 class="cs-section-title">A Luxury Med Spa, Digitized.</h3>
           <p class="cs-section-desc">A full multi-page site for Haus of Revival — personalized peptide therapy sourced from FDA-registered pharmacies. Hand-coded, editorial in tone, engineered to balance clinical trust with aspirational wellness. A platform built to convert curiosity into consultations.</p>
 
-          <div class="sg-hero">
+          <div class="sg-hero sg-mockup-branded">
             <div class="sg-laptop">
-              <div class="sg-laptop-bezel"><picture><source srcset="portfolio/Haus of Revival/home-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/home-hero.webp" alt="Haus of Revival — desktop homepage hero" loading="lazy"></picture></div>
+              <div class="sg-laptop-bezel"><video class="sg-loop" muted loop playsinline preload="none" poster="portfolio/Haus of Revival/home-loop-poster.webp" aria-label="Haus of Revival — desktop homepage tour"><source src="portfolio/Haus of Revival/home-loop.mp4" type="video/mp4"></video></div>
               <div class="sg-laptop-base"></div>
             </div>
             <div class="sg-phone">
-              <div class="sg-phone-bezel"><picture><source srcset="portfolio/Haus of Revival/mobile-home-hero.webp" type="image/webp"><img src="portfolio/Haus of Revival/mobile-home-hero.webp" alt="Haus of Revival — mobile homepage" loading="lazy"></picture></div>
+              <div class="sg-phone-bezel"><video class="sg-loop" muted loop playsinline preload="none" poster="portfolio/Haus of Revival/mobile-loop-poster.webp" aria-label="Haus of Revival — mobile tour"><source src="portfolio/Haus of Revival/mobile-loop.mp4" type="video/mp4"></video></div>
             </div>
           </div>
         </div>
@@ -1672,13 +1676,13 @@
           <h3 class="cs-section-title">Industrial Electric Motors, Digitized.</h3>
           <p class="cs-section-desc">A multi-page digital command center for Victory Advanced Technologies — a Saint John, New Brunswick manufacturer of rugged, high-performance electric motors for automotive, marine, and aerospace. Hand-coded and precision-tuned to communicate engineering capability, explosion-proof certifications, and the four-year warranty standing behind every unit.</p>
 
-          <div class="sg-hero">
+          <div class="sg-hero sg-mockup-branded">
             <div class="sg-laptop">
-              <div class="sg-laptop-bezel"><picture><source srcset="portfolio/Victory Advanced Technologies/home-hero.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/home-hero.webp" alt="Victory Advanced Technologies — desktop homepage" loading="lazy"></picture></div>
+              <div class="sg-laptop-bezel"><video class="sg-loop" muted loop playsinline preload="none" poster="portfolio/Victory Advanced Technologies/home-loop-poster.webp" aria-label="Victory Advanced Technologies — desktop homepage"><source src="portfolio/Victory Advanced Technologies/home-loop.mp4" type="video/mp4"></video></div>
               <div class="sg-laptop-base"></div>
             </div>
             <div class="sg-phone">
-              <div class="sg-phone-bezel"><picture><source srcset="portfolio/Victory Advanced Technologies/mobile-home-hero.webp" type="image/webp"><img src="portfolio/Victory Advanced Technologies/mobile-home-hero.webp" alt="Victory Advanced Technologies — mobile homepage" loading="lazy"></picture></div>
+              <div class="sg-phone-bezel"><video class="sg-loop" muted loop playsinline preload="none" poster="portfolio/Victory Advanced Technologies/mobile-loop-poster.webp" aria-label="Victory Advanced Technologies — mobile homepage"><source src="portfolio/Victory Advanced Technologies/mobile-loop.mp4" type="video/mp4"></video></div>
             </div>
           </div>
         </div>

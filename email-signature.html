@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socia Visual — Email Signature</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #050505;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 40px 20px;
+      font-family: 'Chakra Petch', monospace, sans-serif;
+    }
+
+    .page-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: #2a2a2a;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Signature Card ─── */
+    .sig {
+      width: 580px;
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Top neon bar */
+    .sig-topbar {
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, #A8FF00 30%, #D4FF00 70%, transparent 100%);
+      animation: barPulse 3s ease-in-out infinite;
+    }
+    @keyframes barPulse {
+      0%, 100% { opacity: 0.5; }
+      50%       { opacity: 1; }
+    }
+
+    /* Scan lines */
+    .sig::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(168, 255, 0, 0.012) 3px,
+        rgba(168, 255, 0, 0.012) 4px
+      );
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* HUD corner brackets */
+    .corner {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-color: #A8FF00;
+      border-style: solid;
+      opacity: 0;
+      z-index: 11;
+      animation: cornersIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .corner-tl { top: 6px;  left: 6px;  border-width: 1px 0 0 1px; animation-delay: 0.1s; }
+    .corner-tr { top: 6px;  right: 6px; border-width: 1px 1px 0 0; animation-delay: 0.2s; }
+    .corner-bl { bottom: 6px; left: 6px;  border-width: 0 0 1px 1px; animation-delay: 0.3s; }
+    .corner-br { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; animation-delay: 0.4s; }
+    @keyframes cornersIn {
+      to { opacity: 0.5; }
+    }
+
+    /* ─── Main body ─── */
+    .sig-body {
+      padding: 24px 28px 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sig-row {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    /* Logo */
+    .logo-mark {
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      position: relative;
+    }
+    .logo-mark svg {
+      width: 52px;
+      height: 52px;
+      animation: logoPulse 4s ease-in-out infinite;
+    }
+    @keyframes logoPulse {
+      0%, 100% { filter: drop-shadow(0 0 5px rgba(168,255,0,0.35)); }
+      50%       { filter: drop-shadow(0 0 14px rgba(168,255,0,0.75)) drop-shadow(0 0 28px rgba(168,255,0,0.2)); }
+    }
+
+    /* Vertical divider */
+    .vdivider {
+      width: 1px;
+      height: 72px;
+      background: linear-gradient(180deg, transparent, #A8FF00 40%, #D4FF00 60%, transparent);
+      flex-shrink: 0;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.5s;
+    }
+    @keyframes fadeIn { to { opacity: 0.4; } }
+
+    /* Text info */
+    .sig-info {
+      flex: 1;
+      opacity: 0;
+      transform: translateX(6px);
+      animation: slideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
+    }
+    @keyframes slideIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .sig-name {
+      font-family: 'Chakra Petch', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #e8e8e8;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .sig-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9.5px;
+      color: #A8FF00;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      animation: titleFlicker 10s ease-in-out infinite 2s;
+    }
+    @keyframes titleFlicker {
+      0%, 94%, 96%, 98%, 100% { opacity: 1; }
+      95%  { opacity: 0.5; }
+      97%  { opacity: 0.8; }
+      99%  { opacity: 0.6; }
+    }
+
+    .sig-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contact-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8px;
+      color: #2a2a2a;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      width: 26px;
+      flex-shrink: 0;
+    }
+
+    .contact-val {
+      font-family: 'Chakra Petch', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: #999;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+    .contact-val:hover { color: #A8FF00; }
+
+    /* ─── Services strip ─── */
+    .sig-services {
+      margin-top: 20px;
+      padding: 10px 0;
+      border-top: 1px solid #141414;
+      border-bottom: 1px solid #141414;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .services-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      width: max-content;
+      animation: marquee 22s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .svc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 24px;
+      white-space: nowrap;
+    }
+
+    .svc-diamond {
+      width: 5px;
+      height: 5px;
+      background: #A8FF00;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .svc-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8px;
+      color: #2a2a2a;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Footer row ─── */
+    .sig-footer {
+      padding: 12px 28px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sig-tagline {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #1a1a1a 0%, #A8FF00 50%, #1a1a1a 100%);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 5s linear infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+
+    .sig-socials {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .soc-link {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 8.5px;
+      color: #2a2a2a;
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      position: relative;
+      transition: color 0.25s ease;
+    }
+    .soc-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, #A8FF00, #D4FF00);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .soc-link:hover { color: #A8FF00; }
+    .soc-link:hover::after { width: 100%; }
+
+    .soc-sep {
+      font-size: 8px;
+      color: #1a1a1a;
+    }
+
+    /* Bottom glow bar */
+    .sig-bottombar {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #A8FF00 50%, transparent 100%);
+      opacity: 0;
+      animation: barFadeIn 1.2s ease forwards 0.8s;
+    }
+    @keyframes barFadeIn { to { opacity: 0.2; } }
+
+    /* ─── Usage note ─── */
+    .usage-note {
+      width: 580px;
+      padding: 16px 20px;
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      color: #2a2a2a;
+      letter-spacing: 0.12em;
+      line-height: 1.9;
+    }
+    .usage-note strong {
+      color: #A8FF00;
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-label">// Socia Visual — Animated Email Signature</div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--              SIGNATURE                  -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="sig">
+    <div class="sig-topbar"></div>
+
+    <!-- HUD corners -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- Inline gradient def for logo -->
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stop-color="#A8FF00"/>
+          <stop offset="100%" stop-color="#D4FF00"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="sig-body">
+      <div class="sig-row">
+
+        <!-- Logo mark -->
+        <div class="logo-mark">
+          <svg viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg" fill="url(#lg)">
+            <polygon points="1454.6 882 625.1 882 469.2 1035.9 1298.7 1035.9 1454.6 882"/>
+            <polygon points="331.3 960.5 959.1 332.7 1188.3 562 1406.8 562 1179.6 334.8 958.6 113.7 114.4 959 428.2 1275.9 1055.4 1275.9 1211.3 1122.1 492.9 1122.1 331.3 960.5"/>
+            <polygon points="1493 648.1 862.1 648.1 706.2 802 1428.4 802 1586.9 960.5 959.1 1588.3 849.7 1478.9 732.9 1362.1 514.4 1362.1 739.7 1587.4 958.6 1806.3 1805.6 960.7 1493 648.1"/>
+          </svg>
+        </div>
+
+        <div class="vdivider"></div>
+
+        <!-- Info -->
+        <div class="sig-info">
+          <div class="sig-name">Scott Socia</div>
+          <div class="sig-title">// Founder &amp; Creative Director</div>
+          <div class="sig-contacts">
+            <div class="contact-row">
+              <span class="contact-tag">WEB</span>
+              <a href="https://sociavisual.com" class="contact-val">sociavisual.com</a>
+            </div>
+            <div class="contact-row">
+              <span class="contact-tag">EML</span>
+              <a href="mailto:scott@sociavisual.com" class="contact-val">scott@sociavisual.com</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Services marquee -->
+    <div class="sig-services">
+      <div class="services-track">
+        <!-- set 1 -->
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Design</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Development</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Brand Identity</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Graphic Design</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Motion Graphics</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Visual Identity</span></div>
+        <!-- set 2 (duplicate for seamless loop) -->
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Design</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Web Development</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Brand Identity</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Graphic Design</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Motion Graphics</span></div>
+        <div class="svc-item"><span class="svc-diamond"></span><span class="svc-label">Visual Identity</span></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="sig-footer">
+      <div class="sig-tagline">Sharp design. Clean code. Visuals that hit different.</div>
+      <div class="sig-socials">
+        <a href="https://www.linkedin.com/company/sociavisual" class="soc-link">LinkedIn</a>
+        <span class="soc-sep">/</span>
+        <a href="https://www.behance.net/scottsocia" class="soc-link">Behance</a>
+        <span class="soc-sep">/</span>
+        <a href="https://www.facebook.com/sociavis" class="soc-link">Facebook</a>
+      </div>
+    </div>
+
+    <div class="sig-bottombar"></div>
+  </div>
+
+  <!-- Usage note -->
+  <div class="usage-note">
+    <strong>// USAGE NOTES</strong><br>
+    Apple Mail — insert via Preferences → Signatures → drag this file in.<br>
+    Gmail / Outlook — animations require HTML embed. Export as GIF via screen recorder for static clients.<br>
+    Recommended recorder: <strong>Rottenwood / Kap</strong> · Export: <strong>580×170px · 30fps · loop</strong>
+  </div>
+
+</body>
+</html>

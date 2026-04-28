@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /stats.php
+Disallow: /admin
+Disallow: /portal
 Disallow: /og-image-generator.html
 
 Sitemap: https://sociavisual.com/sitemap.xml

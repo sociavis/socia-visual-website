@@ -1,6 +1,7 @@
 /* Logo 3D Scene — Wireframe→solid logo with HUD rings + orbiting particles */
 (function () {
   if (typeof THREE === "undefined") return;
+  if (document.body.classList.contains("perf-low")) return;
   var wrap = document.getElementById("logo3d");
   if (!wrap) return;
   var container = wrap.querySelector(".logo-3d-scene");

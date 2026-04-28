@@ -3,554 +3,350 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DME Academy v2 — Site Rebuild Proposal</title>
+<title>Proposal — DME Academy v2 · Socia Visual</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --black:#050505;
-  --dark:#0a0a0a;
-  --dark-2:#101010;
-  --grey:#181818;
-  --grey-mid:#242424;
-  --line:#2a2a2a;
-  --white:#e8e8e8;
-  --white-dim:#999;
-  --white-faint:#666;
-  --accent:#a8ff00;
-  --accent-2:#d4ff00;
-  --gradient:linear-gradient(135deg,#a8ff00,#d4ff00);
-  --dme-navy:#203d7c;
-  --dme-blue:#2498ff;
-  --dme-gold:#c7a659;
-  --font:'Chakra Petch',sans-serif;
-  --mono:'Share Tech Mono',monospace;
-}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{
-  background:var(--black);color:var(--white);font-family:var(--font);
-  font-weight:400;line-height:1.55;overflow-x:hidden;min-height:100vh;
-}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%;height:auto}
-::selection{background:var(--accent);color:var(--black)}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 
-/* ── BG GRID ── */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:80px 80px;opacity:.18;
-  mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);
+body {
+  font-family: 'Chakra Petch', sans-serif;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ── LAYOUT ── */
-.wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
-section{padding:88px 0;position:relative}
-.eyebrow{
-  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:18px;display:inline-flex;align-items:center;gap:10px;
-}
-.eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
-h1,h2,h3,h4{font-family:var(--font);font-weight:600;letter-spacing:-.01em;line-height:1.05}
-h1{font-size:clamp(44px,6.4vw,84px);font-weight:700}
-h2{font-size:clamp(32px,4.2vw,52px)}
-h3{font-size:24px}
-h4{font-size:16px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
-.text-accent{
-  background:var(--gradient);-webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;color:transparent;
-}
-.lede{font-size:19px;color:var(--white-dim);max-width:680px;line-height:1.6}
-.mono{font-family:var(--mono)}
+a { color: #48b8d0; text-decoration: none; }
+a:hover { text-decoration: underline; }
 
-/* ── TOP BAR ── */
-.bar{
-  position:sticky;top:0;z-index:50;background:rgba(5,5,5,.85);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--line);
+.action-bar {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.bar-inner{
-  max-width:1180px;margin:0 auto;padding:14px 32px;
-  display:flex;align-items:center;justify-content:space-between;gap:16px;
+.action-bar .ab-btn {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 600; font-size: 13px;
+  padding: 8px 20px; border-radius: 4px;
+  border: 1px solid #ddd; background: #fff; color: #333;
+  cursor: pointer; transition: all .2s;
+  display: inline-flex; align-items: center; gap: 6px; letter-spacing: .5px;
 }
-.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--white-dim)}
-.brand-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px var(--accent)}
-.bar-meta{display:flex;align-items:center;gap:18px;font-family:var(--mono);font-size:11px;color:var(--white-faint);letter-spacing:.1em;text-transform:uppercase}
-.bar-meta span:not(:first-child)::before{content:'·';margin-right:18px;color:var(--line)}
+.action-bar .ab-btn:hover { border-color: #333; }
+.action-bar .ab-btn-pay {
+  background: #48b8d0; color: #fff; border-color: #48b8d0; font-weight: 700;
+}
+.action-bar .ab-btn-pay:hover { background: #3ba5bd; border-color: #3ba5bd; }
+.status-pill {
+  display: inline-flex; align-items: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+  padding: 6px 14px; border-radius: 13px;
+  background: #fff3dc; color: #b8860b; border: 1px solid #ffb428;
+  margin-left: 8px;
+}
 
-/* ── HERO ── */
-.hero{padding:120px 0 80px;position:relative}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:8px 14px;border:1px solid var(--accent);border-radius:100px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:32px;background:rgba(168,255,0,.04);
+.page { display: flex; justify-content: center; padding: 40px 20px; }
+.doc {
+  background: #fff;
+  width: 100%; max-width: 800px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.08);
+  border-radius: 2px;
+  overflow: hidden;
 }
-.hero h1{margin-bottom:28px;max-width:1000px}
-.hero-sub{font-size:21px;color:var(--white-dim);max-width:680px;margin-bottom:48px;line-height:1.55}
-.hero-meta{display:flex;flex-wrap:wrap;gap:24px;font-family:var(--mono);font-size:12px;color:var(--white-faint);letter-spacing:.12em;text-transform:uppercase}
-.hero-meta span{display:flex;align-items:center;gap:8px}
-.hero-meta span::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%}
 
-/* ── APPROACH GRID ── */
-.grid{display:grid;gap:20px}
-.grid-4{grid-template-columns:repeat(4,1fr)}
-.grid-3{grid-template-columns:repeat(3,1fr)}
-.grid-2{grid-template-columns:repeat(2,1fr)}
-@media(max-width:980px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:1fr}}
-@media(max-width:640px){.grid-4,.grid-2{grid-template-columns:1fr}}
+.header {
+  background: linear-gradient(135deg, #7dd3c0, #5bc4d4, #48b8d0);
+  padding: 48px 56px 40px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.header h1 {
+  font-size: 42px; font-weight: 700; letter-spacing: 2px;
+  color: #1a1a1a;
+}
+.header-logo svg { width: 160px; height: auto; fill: #1a1a1a; }
 
-.card{
-  background:var(--dark-2);border:1px solid var(--line);border-radius:6px;
-  padding:28px 24px;position:relative;transition:border-color .2s,transform .2s;
-}
-.card:hover{border-color:var(--grey-mid);transform:translateY(-2px)}
-.card-num{
-  font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.18em;
-  margin-bottom:18px;display:block;
-}
-.card h4{margin-bottom:12px;color:var(--white)}
-.card p{font-size:14px;color:var(--white-dim);line-height:1.6}
+.body { padding: 40px 56px 48px; }
 
-/* ── COMPARISON ── */
-.compare{
-  display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;
-  border:1px solid var(--line);border-radius:6px;overflow:hidden;
-  background:var(--dark-2);
+.meta-row {
+  display: flex; gap: 80px; margin-bottom: 36px; flex-wrap: wrap;
 }
-@media(max-width:780px){.compare{grid-template-columns:1fr}.compare-divider{display:none}}
-.compare-col{padding:36px 32px}
-.compare-col-label{
-  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--white-faint);margin-bottom:24px;
+.meta-col label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: #888;
+  display: block; margin-bottom: 4px;
 }
-.compare-col.now .compare-col-label{color:var(--white-faint)}
-.compare-col.next .compare-col-label{color:var(--accent)}
-.compare-divider{width:1px;background:var(--line)}
-.compare-row{
-  display:flex;justify-content:space-between;align-items:baseline;
-  padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;
+.meta-col span {
+  font-size: 16px; font-weight: 600; color: #1a1a1a;
+  font-family: 'Share Tech Mono', monospace;
 }
-.compare-row:last-child{border-bottom:none}
-.compare-row .label{color:var(--white-faint);font-size:13px}
-.compare-row .val{color:var(--white);font-family:var(--mono);font-size:13px}
-.compare-col.next .compare-row .val{color:var(--accent)}
 
-/* ── PHASES ── */
-.phase{
-  background:var(--dark-2);border:1px solid var(--line);border-radius:8px;
-  padding:40px 36px;position:relative;overflow:hidden;
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: #888;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 4px;
+  display: inline-block;
 }
-.phase.featured{border-color:var(--accent);background:linear-gradient(180deg,rgba(168,255,0,.04),var(--dark-2))}
-.phase-tag{
-  display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  padding:4px 10px;border-radius:3px;margin-bottom:18px;
-}
-.phase.featured .phase-tag{background:var(--accent);color:var(--black)}
-.phase:not(.featured) .phase-tag{background:var(--grey-mid);color:var(--white-dim)}
-.phase h3{font-size:32px;margin-bottom:8px}
-.phase-price{font-family:var(--mono);font-size:14px;color:var(--white-dim);margin-bottom:24px}
-.phase-price strong{color:var(--white);font-size:22px;margin-right:6px}
-.phase ul{list-style:none}
-.phase li{
-  padding:10px 0 10px 22px;font-size:14px;color:var(--white-dim);position:relative;
-  border-bottom:1px solid var(--line);
-}
-.phase li:last-child{border-bottom:none}
-.phase li::before{
-  content:'→';position:absolute;left:0;color:var(--accent);font-family:var(--mono);
-}
-.phase-foot{margin-top:24px;font-size:12px;color:var(--white-faint);font-family:var(--mono);letter-spacing:.06em}
 
-/* ── HOSTING ROW ── */
-.hosting{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
-  border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--dark-2);
-}
-@media(max-width:780px){.hosting{grid-template-columns:1fr}}
-.host-cell{padding:28px;border-right:1px solid var(--line)}
-.host-cell:last-child{border-right:none}
-@media(max-width:780px){.host-cell{border-right:none;border-bottom:1px solid var(--line)}.host-cell:last-child{border-bottom:none}}
-.host-cell .label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--white-faint);margin-bottom:10px}
-.host-cell .price{font-size:24px;color:var(--white);font-weight:600;margin-bottom:6px}
-.host-cell p{font-size:13px;color:var(--white-dim);line-height:1.5}
+.from-block, .to-block { margin-bottom: 28px; }
+.from-block p, .to-block p { font-size: 15px; line-height: 1.6; color: #1a1a1a; }
+.to-block .client-email { font-size: 13px; color: #666; margin-top: 2px; }
 
-/* ── INVOICES ── */
-.inv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-@media(max-width:780px){.inv-grid{grid-template-columns:1fr}}
-.invoice{
-  background:linear-gradient(180deg,var(--dark-2) 0%,var(--dark) 100%);
-  border:1px solid var(--line);border-radius:8px;padding:32px 30px;
-  position:relative;overflow:hidden;display:flex;flex-direction:column;
+.project-title {
+  font-size: 22px; font-weight: 700;
+  margin: 8px 0 28px; color: #1a1a1a;
 }
-.invoice.primary{border-color:var(--accent)}
-.invoice.primary::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient);
-}
-.inv-tag{
-  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--white-faint);margin-bottom:8px;
-}
-.invoice.primary .inv-tag{color:var(--accent)}
-.inv-title{font-size:20px;font-weight:600;color:var(--white);margin-bottom:6px;line-height:1.3}
-.inv-desc{font-size:13px;color:var(--white-dim);margin-bottom:24px;line-height:1.5}
-.inv-amount{
-  font-family:var(--mono);font-size:42px;color:var(--white);font-weight:600;
-  margin-bottom:4px;letter-spacing:-.02em;
-}
-.inv-amount-label{font-family:var(--mono);font-size:11px;color:var(--white-faint);letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px}
-.inv-meta{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;font-family:var(--mono);font-size:12px;color:var(--white-dim)}
-.inv-meta-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)}
-.inv-meta-row:last-child{border-bottom:none}
-.inv-meta-row .v{color:var(--white)}
-.inv-pay{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  padding:16px 24px;background:var(--gradient);color:var(--black);
-  font-family:var(--font);font-size:14px;font-weight:700;letter-spacing:.08em;
-  text-transform:uppercase;border-radius:4px;border:none;cursor:pointer;
-  transition:transform .15s,filter .15s;width:100%;margin-top:auto;
-}
-.inv-pay:hover{transform:translateY(-1px);filter:brightness(1.06)}
-.invoice:not(.primary) .inv-pay{
-  background:transparent;color:var(--white);border:1px solid var(--line);
-}
-.invoice:not(.primary) .inv-pay:hover{border-color:var(--accent);color:var(--accent)}
-.inv-pay-note{
-  text-align:center;font-family:var(--mono);font-size:10px;color:var(--white-faint);
-  letter-spacing:.16em;text-transform:uppercase;margin-top:10px;
-}
-.inv-pay-note span{color:var(--accent)}
 
-/* ── BRAND CALLOUT ── */
-.brandbar{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:0;
-  border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:32px;
+.overview {
+  font-size: 14px; line-height: 1.7; color: #333;
+  margin-bottom: 32px;
 }
-@media(max-width:780px){.brandbar{grid-template-columns:repeat(2,1fr)}}
-.swatch{padding:24px;border-right:1px solid var(--line);text-align:center}
-.swatch:last-child{border-right:none}
-.swatch-chip{height:64px;border-radius:4px;margin-bottom:12px}
-.swatch-name{font-family:var(--mono);font-size:11px;color:var(--white-dim);letter-spacing:.1em;margin-bottom:4px}
-.swatch-hex{font-family:var(--mono);font-size:11px;color:var(--white-faint)}
 
-/* ── FOOTER ── */
-footer{
-  border-top:1px solid var(--line);padding:48px 0 64px;margin-top:64px;
-  font-family:var(--mono);font-size:12px;color:var(--white-faint);letter-spacing:.06em;
+.line-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+.line-table thead th {
+  font-size: 12px; font-weight: 700; padding: 10px 12px;
+  border-bottom: 2px solid #1a1a1a; text-align: left; color: #1a1a1a;
+  letter-spacing: .5px; text-transform: uppercase;
 }
-.foot-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
-@media(max-width:640px){.foot-grid{grid-template-columns:1fr}}
-.foot-meta{display:flex;flex-wrap:wrap;gap:24px;justify-content:flex-end}
-@media(max-width:640px){.foot-meta{justify-content:flex-start}}
+.line-table thead th:last-child { text-align: right; }
+.line-table tbody td {
+  font-size: 14px; padding: 12px; border: 1px solid #ddd; color: #333;
+  line-height: 1.5;
+}
+.line-table tbody td:last-child { text-align: right; font-weight: 600; }
+.line-table .item-sub { font-size: 12px; color: #888; margin-top: 4px; }
 
-/* utility */
-.mt-s{margin-top:24px}.mt-m{margin-top:48px}.mt-l{margin-top:72px}
-.section-head{margin-bottom:48px;max-width:780px}
-.section-head h2{margin-bottom:16px}
+.totals { display: flex; justify-content: flex-end; margin-bottom: 36px; }
+.totals table { border-collapse: collapse; }
+.totals td { padding: 8px 14px; font-size: 14px; font-weight: 700; border: 1px solid #ddd; }
+.totals td:last-child { text-align: right; min-width: 110px; font-family: 'Share Tech Mono', monospace; }
+.totals tr.grand td { background: #1a1a1a; color: #fff; border-color: #1a1a1a; font-size: 16px; }
+.totals tr.terms td { background: #f5f5f5; color: #444; font-weight: 500; font-size: 12px; }
+
+.note-block { margin-bottom: 24px; }
+.note-block h3 {
+  font-size: 14px; font-weight: 700; color: #1a1a1a;
+  margin-bottom: 6px; letter-spacing: .3px;
+}
+.note-block p {
+  font-size: 14px; line-height: 1.7; color: #444;
+}
+.note-block ul {
+  font-size: 13px; line-height: 1.8; color: #444;
+  list-style: none; margin-top: 6px;
+}
+.note-block li { padding-left: 16px; position: relative; }
+.note-block li::before {
+  content: '·'; position: absolute; left: 4px; color: #48b8d0; font-weight: 700;
+}
+
+.pay-section {
+  background: #f5f5f5;
+  border-left: 4px solid #48b8d0;
+  padding: 24px 28px;
+  margin-top: 32px;
+  border-radius: 2px;
+}
+.pay-section h3 {
+  font-size: 14px; font-weight: 700; color: #1a1a1a;
+  letter-spacing: .5px; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .pay-grid { grid-template-columns: 1fr; } }
+
+.pay-card {
+  background: #fff; border: 1px solid #e0e0e0;
+  border-radius: 4px; padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.pay-card .label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; color: #888; letter-spacing: 1px; text-transform: uppercase;
+}
+.pay-card .amount {
+  font-size: 24px; font-weight: 700; color: #1a1a1a;
+  font-family: 'Share Tech Mono', monospace;
+}
+.pay-card .desc { font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 8px; }
+.pay-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 10px 16px;
+  background: #48b8d0; color: #fff !important;
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700; font-size: 13px; letter-spacing: .5px;
+  border-radius: 4px; text-decoration: none; transition: background .15s;
+  margin-top: auto;
+}
+.pay-btn:hover { background: #3ba5bd; text-decoration: none; }
+.pay-btn.secondary { background: #1a1a1a; }
+.pay-btn.secondary:hover { background: #333; }
+
+.foot {
+  padding: 24px 56px 32px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  font-size: 12px; color: #888;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: .5px;
+}
+.foot a { color: #48b8d0; }
+
+@media print {
+  .action-bar { display: none; }
+  body { background: #fff; }
+  .doc { box-shadow: none; max-width: 100%; }
+  .page { padding: 0; }
+}
 </style>
 </head>
 <body>
 
-<div class="bar">
-  <div class="bar-inner">
-    <div class="brand"><span class="brand-dot"></span> Socia Visual × DME Academy</div>
-    <div class="bar-meta">
-      <span>Proposal v2.0</span>
-      <span>2026.04.27</span>
+<div class="action-bar">
+  <button class="ab-btn" onclick="window.print()">↓ Print / Save PDF</button>
+  <a class="ab-btn ab-btn-pay" href="https://sociavisual.com/invoice.html?id=inv_dme_0505&t=Aj4fyYVElSjwCSjuFUu6N2iBrwZmG_ZuO10DEiMAmWQ">Pay Deposit · $1,950 →</a>
+  <span class="status-pill">Awaiting deposit</span>
+</div>
+
+<div class="page">
+<div class="doc">
+
+<div class="header">
+  <h1>PROPOSAL</h1>
+  <div class="header-logo">
+    <svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" aria-label="Socia Visual">
+      <text x="0" y="22" font-family="Chakra Petch" font-weight="700" font-size="22" letter-spacing="3" fill="#1a1a1a">SOCIA VISUAL</text>
+    </svg>
+  </div>
+</div>
+
+<div class="body">
+
+<div class="meta-row">
+  <div class="meta-col">
+    <label>Proposal No</label>
+    <span>DME-2026-V2</span>
+  </div>
+  <div class="meta-col">
+    <label>Date</label>
+    <span>2026-04-27</span>
+  </div>
+  <div class="meta-col">
+    <label>Valid Through</label>
+    <span>2026-05-15</span>
+  </div>
+</div>
+
+<div class="from-block">
+  <div class="section-label">From</div>
+  <p><strong>Socia Visual</strong></p>
+  <p>Scott Socia · scott@sociavisual.com · 903.617.1527</p>
+</div>
+
+<div class="to-block">
+  <div class="section-label">For</div>
+  <p><strong>DME Academy</strong></p>
+  <p>Greg Birgfeld<span class="client-email"> · greg.birgfeld@dmeacademy.com</span></p>
+</div>
+
+<div class="project-title">DME Academy v2 — Website Rebuild</div>
+
+<p class="overview">
+Custom hand-coded WordPress site replacing the current dmeacademy.com. Consolidates dmeacademy.com + dmecamps.com onto a single platform on new hosting (Kinsta), fully isolated from the current environment. HubSpot stays the system of record for forms and CRM. No page builders, minimal plugins, fast load, fully editable in standard WP admin.
+</p>
+
+<table class="line-table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Hours</th>
+      <th>Rate</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Complete v2 site rebuild — fixed bid</strong>
+        <div class="item-sub">Custom WP theme, page templates from spec, custom post types, Kinsta deployment, HubSpot integration, content migration, SEO redirects, DNS cutover.</div>
+      </td>
+      <td style="text-align:center;">60</td>
+      <td>$65.00</td>
+      <td>$3,900.00</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="totals">
+  <table>
+    <tr><td>Subtotal</td><td>$3,900.00</td></tr>
+    <tr class="terms"><td>Deposit (50% to start)</td><td>$1,950.00</td></tr>
+    <tr class="terms"><td>Balance (on launch)</td><td>$1,950.00</td></tr>
+    <tr class="grand"><td>TOTAL</td><td>$3,900.00</td></tr>
+  </table>
+</div>
+
+<div class="note-block">
+  <h3>Hosting · Kinsta</h3>
+  <p>Premium managed WordPress on Google Cloud's premium tier. Includes Cloudflare Enterprise CDN, daily backups (14-day retention), free SSL, malware-removal SLA, and one-click staging. Recommended plan ~$70/mo, billed direct to DME — account in DME's name, full ownership.</p>
+</div>
+
+<div class="note-block">
+  <h3>HubSpot Integration</h3>
+  <p>HubSpot remains DME's CRM and system of record. Socia Visual handles all WordPress-side wiring: tracking pixel, form embeds, meeting embeds, and field mapping into HubSpot CRM. DME team provides ~2–3 hours of HubSpot-side input:</p>
+  <ul>
+    <li>HubSpot Portal ID</li>
+    <li>Confirm/build HubSpot forms (Apply, Contact, Camp Inquiry, Newsletter)</li>
+    <li>Meeting links for admissions consults</li>
+    <li>Confirm chat widget routing (if used)</li>
+  </ul>
+</div>
+
+<div class="note-block">
+  <h3>Timeline</h3>
+  <p>~1 week from cleared deposit to live site. Begins same day deposit clears. Final balance due on launch.</p>
+</div>
+
+<div class="pay-section">
+  <h3>Payment</h3>
+  <div class="pay-grid">
+    <div class="pay-card">
+      <div class="label">Phase 1 · Deposit</div>
+      <div class="amount">$1,950.00</div>
+      <div class="desc">Required to start. Invoice #0505 — Stripe (cards or ACH).</div>
+      <a class="pay-btn" href="https://sociavisual.com/invoice.html?id=inv_dme_0505&t=Aj4fyYVElSjwCSjuFUu6N2iBrwZmG_ZuO10DEiMAmWQ">Pay Deposit →</a>
+    </div>
+    <div class="pay-card">
+      <div class="label">Outstanding · April 2026</div>
+      <div class="amount">$812.50</div>
+      <div class="desc">Prior monthly billing. Invoice #0502 — same Stripe link format.</div>
+      <a class="pay-btn secondary" href="https://sociavisual.com/invoice.html?id=inv_dme_0502&t=KWB2-JfULQwVBA8Is9Q2af3BE0T_hivvrlut8cEjtcE">Pay April →</a>
     </div>
   </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="wrap">
-    <div class="hero-tag"><span>●</span> Site Rebuild Proposal</div>
-    <h1>A new home for DME Academy —<br><span class="text-accent">built clean, built right.</span></h1>
-    <p class="hero-sub">A consolidated dmeacademy.com + dmecamps.com, custom-built on WordPress. No page builders. No plugin sprawl. Fully isolated from the current site. HubSpot stays the system of record.</p>
-    <div class="hero-meta">
-      <span>Total Fixed Bid · $3,900</span>
-      <span>60 Hours · $65/hr</span>
-      <span>Turnaround · ~1 week</span>
-    </div>
-  </div>
-</section>
+</div><!-- /body -->
 
-<!-- APPROACH -->
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">01 · The Approach</div>
-      <h2>Four principles. Everything else <span class="text-accent">follows from them.</span></h2>
-    </div>
-    <div class="grid grid-4">
-      <div class="card">
-        <span class="card-num">/01</span>
-        <h4>Custom Hand-Coded Theme</h4>
-        <p>No Elementor, no Beaver Builder, no Bricks. Real PHP templates with clean editable content fields. Faster, leaner, and easier for your team to update than any builder-driven site.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/02</span>
-        <h4>Total Isolation</h4>
-        <p>The new site lives on a different host (Kinsta), with a fresh database, fresh files, and no shared credentials with the current site. Whatever's affecting the old site can't reach the new one.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/03</span>
-        <h4>HubSpot-First</h4>
-        <p>HubSpot stays your CRM and system of record. Forms route directly to HubSpot. Tracking pixel site-wide. Meeting embeds for admissions consults. Nothing competes with what already works.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/04</span>
-        <h4>Real DME Brand</h4>
-        <p>We pulled the actual hex values, typography, and logo from your production site — not the approximations in the spec doc. The result feels unmistakably DME from the first frame.</p>
-      </div>
-    </div>
+<div class="foot">
+  <span>Socia Visual · scott@sociavisual.com · sociavisual.com</span>
+  <span>DME-2026-V2 · 2026.04.27</span>
+</div>
 
-    <div class="brandbar">
-      <div class="swatch"><div class="swatch-chip" style="background:#203d7c"></div><div class="swatch-name">Navy</div><div class="swatch-hex">#203d7c</div></div>
-      <div class="swatch"><div class="swatch-chip" style="background:#2498ff"></div><div class="swatch-name">Accent Blue</div><div class="swatch-hex">#2498ff</div></div>
-      <div class="swatch"><div class="swatch-chip" style="background:#1a2e74"></div><div class="swatch-name">Deep Navy</div><div class="swatch-hex">#1a2e74</div></div>
-      <div class="swatch"><div class="swatch-chip" style="background:#c7a659"></div><div class="swatch-name">Gold</div><div class="swatch-hex">#c7a659</div></div>
-      <div class="swatch"><div class="swatch-chip" style="background:#dd6420"></div><div class="swatch-name">Orange</div><div class="swatch-hex">#dd6420</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- COMPARISON -->
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">02 · Now vs. Next</div>
-      <h2>What changes — <span class="text-accent">at a glance.</span></h2>
-      <p class="lede mt-s">The current site has accumulated layers of plugins and a dated builder over the years. The v2 build modernizes the foundation while keeping the structure and brand you already have.</p>
-    </div>
-
-    <div class="compare">
-      <div class="compare-col now">
-        <div class="compare-col-label">Current site</div>
-        <div class="compare-row"><span class="label">Plugins loaded on homepage</span><span class="val">11+</span></div>
-        <div class="compare-row"><span class="label">Page builder</span><span class="val">Builder-based</span></div>
-        <div class="compare-row"><span class="label">Custom theme</span><span class="val">Inherited</span></div>
-        <div class="compare-row"><span class="label">Font families loaded</span><span class="val">3</span></div>
-        <div class="compare-row"><span class="label">Two domains</span><span class="val">dmeacademy + dmecamps</span></div>
-        <div class="compare-row"><span class="label">SEO posture</span><span class="val">Vulnerable</span></div>
-      </div>
-      <div class="compare-divider"></div>
-      <div class="compare-col next">
-        <div class="compare-col-label">v2 Rebuild</div>
-        <div class="compare-row"><span class="label">Plugins loaded on homepage</span><span class="val">4</span></div>
-        <div class="compare-row"><span class="label">Page builder</span><span class="val">None — hand-coded</span></div>
-        <div class="compare-row"><span class="label">Custom theme</span><span class="val">Built fresh for DME</span></div>
-        <div class="compare-row"><span class="label">Font families loaded</span><span class="val">2</span></div>
-        <div class="compare-row"><span class="label">Consolidated</span><span class="val">One site, two paths</span></div>
-        <div class="compare-row"><span class="label">SEO posture</span><span class="val">Fully isolated, hardened</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SCOPE -->
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">03 · Scope of Work</div>
-      <h2>What's <span class="text-accent">included.</span></h2>
-      <p class="lede mt-s">A complete site replacement — not a phased proof-of-concept. One fixed bid, one launch, one site that puts the current dmeacademy.com out of its misery.</p>
-    </div>
-
-    <div class="phase featured" style="max-width:none;">
-      <span class="phase-tag">Single Fixed Bid · 60 Hours</span>
-      <h3>DME Academy v2 — Complete Site Rebuild</h3>
-      <p class="phase-price"><strong>$3,900</strong>· $1,950 deposit · $1,950 on launch</p>
-      <ul>
-        <li>Custom hand-coded WordPress theme — no Elementor, no Beaver Builder, no page builders of any kind</li>
-        <li>All page templates from your spec doc, built design-faithful with real DME branding</li>
-        <li>Consolidates dmeacademy.com + dmecamps.com into a single site with clear paths for both audiences</li>
-        <li>Custom post types for editorial content: Sport, Camp, News, Program, Coach</li>
-        <li>Editable in standard WordPress admin — your team manages content the way they always have, just faster and cleaner</li>
-        <li>HubSpot tracking pixel site-wide + HubSpot forms wired into your CRM</li>
-        <li>SEO-optimized: schema markup, sitemap, RankMath configured, mobile-first responsive, accessibility-checked</li>
-        <li>Targeting <strong>mid-90s to 100</strong> on Google PageSpeed across all pages — fast enough that page speed actively helps SEO instead of dragging it</li>
-        <li>301 redirect map preserving SEO equity from the current site</li>
-        <li>DNS cutover with MX-record audit so email isn't disrupted at launch</li>
-        <li>Content migration from current site — text, key media, news archive (within reason; gigantic media libraries scoped separately)</li>
-      </ul>
-      <p class="phase-foot">Fixed bid · No surprise hourly overruns · Half up front, half on launch · Stripe (cards or ACH) accepted.</p>
-    </div>
-  </div>
-</section>
-
-<!-- KINSTA -->
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">04 · Hosting · Why Kinsta</div>
-      <h2>Premium managed WordPress, <span class="text-accent">built for sites like yours.</span></h2>
-      <p class="lede mt-s">Kinsta is one of the two top-tier managed WordPress hosts in the world — built on Google Cloud's premium network, with a security and performance posture that fits a school site exactly. We're recommending a clean break from the current host, not a side-by-side comparison shop.</p>
-    </div>
-
-    <div class="grid grid-3">
-      <div class="card">
-        <span class="card-num">/01</span>
-        <h4>Built on Google Cloud Premium Tier</h4>
-        <p>The same infrastructure layer that runs Google's own products. 35+ datacenters globally, low-latency routing, enterprise-grade DDoS protection. The current host can't match the underlying network performance.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/02</span>
-        <h4>Free Cloudflare Enterprise CDN</h4>
-        <p>Included on every plan. Pages load from the closest edge server to each visitor — meaningful for a school whose audience spans recruiting territories. Most hosts charge extra for this; Kinsta bundles it.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/03</span>
-        <h4>Daily Backups, 14-Day Retention</h4>
-        <p>Automatic, off-site, restorable in one click. If anything ever goes sideways, we roll back to yesterday in under five minutes. This is how a school's site should be backed up — full stop.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/04</span>
-        <h4>Hardware-Isolated Staging</h4>
-        <p>Every site gets its own one-click staging environment. We can test changes on a copy of the live site without risk, then push them live with another click. Currently a multi-hour task on most hosts.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/05</span>
-        <h4>Malware Scanning + Removal SLA</h4>
-        <p>Kinsta scans for malware automatically. If their scan ever finds something they didn't catch, they remove it themselves at no charge. The current host doesn't offer this.</p>
-      </div>
-      <div class="card">
-        <span class="card-num">/06</span>
-        <h4>Latest PHP, Latest Everything</h4>
-        <p>PHP 8.3, the latest WordPress core, automatic security patches, free SSL via Let's Encrypt (auto-renewing). The platform stays modern; we don't have to fight the host to get current.</p>
-      </div>
-    </div>
-
-    <div class="hosting mt-m">
-      <div class="host-cell">
-        <div class="label">Plan recommendation</div>
-        <div class="price">~$70/mo</div>
-        <p>Kinsta Pro tier — handles up to 50K monthly visits with headroom for enrollment-season spikes. We can start on Hobby ($35/mo) and one-click upgrade if traffic grows.</p>
-      </div>
-      <div class="host-cell">
-        <div class="label">Annual cost vs current</div>
-        <div class="price">$840/yr</div>
-        <p>Comparable to or less than what DME pays now for WP Engine — for materially better infrastructure and the reset of starting clean on a non-compromised environment.</p>
-      </div>
-      <div class="host-cell">
-        <div class="label">Account ownership</div>
-        <div class="price">100%</div>
-        <p>The Kinsta account is registered to DME, not Socia Visual. You own the hosting, the domain, the SSL, the backups, and the site — outright, with no middlemen.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HUBSPOT -->
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">05 · HubSpot Integration</div>
-      <h2>What we handle — and <span class="text-accent">what you'll need to provide.</span></h2>
-      <p class="lede mt-s">HubSpot stays your CRM and system of record. The new site is downstream of HubSpot, never competing with it. Most of the integration work is on our side — but we'll need a small number of things from your team to wire it up cleanly.</p>
-    </div>
-
-    <div class="grid grid-2">
-      <div class="card">
-        <span class="card-num">/ Our side</span>
-        <h4>What Socia Visual handles</h4>
-        <p style="margin-bottom:14px;">Everything technical on the WordPress side, end to end:</p>
-        <ul style="list-style:none;font-size:13px;color:var(--white-dim);line-height:1.8;">
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> Drop the HubSpot tracking pixel site-wide</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> Embed HubSpot forms (Apply, Contact, Camp Inquiry, Newsletter)</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> Style forms to match the new DME design system</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> Embed HubSpot meeting links (admissions consults)</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> Wire HubSpot chat widget if you use one</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> Test every form end-to-end into HubSpot CRM</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> Confirm conversion events fire correctly in HubSpot reporting</li>
-        </ul>
-      </div>
-      <div class="card" style="border-color:var(--accent);background:linear-gradient(180deg,rgba(168,255,0,.04),var(--dark-2));">
-        <span class="card-num" style="color:var(--accent);">/ Your side</span>
-        <h4>What we'll need from you (≈2–3 hrs total)</h4>
-        <p style="margin-bottom:14px;">Small but important — most of these are 5-minute lookups in HubSpot:</p>
-        <ul style="list-style:none;font-size:13px;color:var(--white-dim);line-height:1.8;">
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> <strong style="color:var(--white);">HubSpot Portal ID / Hub ID</strong> (single number, lives in HubSpot Settings)</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> <strong style="color:var(--white);">Forms list</strong> — confirm or build the forms in HubSpot's form builder for: Apply, Contact, Camp Inquiry, Newsletter, plus any sport-specific inquiries</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> <strong style="color:var(--white);">Meeting links</strong> — which staff calendars are bookable for admissions consults? Provide the HubSpot meeting URLs</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> <strong style="color:var(--white);">Chat widget</strong> — yes/no, and if yes confirm which inbox routes</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> <strong style="color:var(--white);">CRM workflows</strong> — confirm the existing lead-routing workflows are pointed where you want them (your team owns the workflow logic; we just feed leads in)</li>
-          <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);font-family:var(--mono);">→</span> <strong style="color:var(--white);">HubSpot CMS pages</strong> (if any) — decide whether any pages currently on HubSpot CMS get migrated to WordPress or stay on HubSpot</li>
-        </ul>
-      </div>
-    </div>
-
-    <p style="margin-top:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--white-faint);letter-spacing:.06em;line-height:1.7;">
-      None of this is gating the build — we can start without it.<br>We'll just need this list before we deploy forms in week one.
-    </p>
-  </div>
-</section>
-
-<!-- GET STARTED / INVOICES -->
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">06 · Get Started</div>
-      <h2>Pay below to <span class="text-accent">kick this off.</span></h2>
-      <p class="lede mt-s">Stripe is now wired into our invoices — cards or ACH, both work directly from these links. The deposit invoice opens in the standard Socia Visual invoice viewer with a Pay button.</p>
-    </div>
-
-    <div class="inv-grid">
-      <div class="invoice primary">
-        <div class="inv-tag">Deposit · Required to start</div>
-        <div class="inv-title">DME Academy v2 — Site Rebuild</div>
-        <div class="inv-desc">Custom hand-coded WordPress, fully isolated, HubSpot-integrated. Half of $3,900 fixed bid; final $1,950 due on launch (~1 week from kickoff).</div>
-        <div class="inv-amount">$1,950.00</div>
-        <div class="inv-amount-label">Invoice #0505 · USD</div>
-        <div class="inv-meta">
-          <div class="inv-meta-row"><span>Issued</span><span class="v">Apr 27, 2026</span></div>
-          <div class="inv-meta-row"><span>Terms</span><span class="v">Net on receipt</span></div>
-          <div class="inv-meta-row"><span>Payable to</span><span class="v">Socia Visual</span></div>
-        </div>
-        <a class="inv-pay" href="https://sociavisual.com/invoice.html?id=inv_dme_0505&t=Aj4fyYVElSjwCSjuFUu6N2iBrwZmG_ZuO10DEiMAmWQ" target="_blank" rel="noopener">Pay Deposit · $1,950 →</a>
-        <div class="inv-pay-note"><span>Stripe</span> · Cards & ACH</div>
-      </div>
-
-      <div class="invoice">
-        <div class="inv-tag">Outstanding · April 2026</div>
-        <div class="inv-title">DME Academy — April Invoice</div>
-        <div class="inv-desc">12.5 hours of WordPress work on the current dmeacademy.com (Apr 6–12, 2026). Standard monthly billing cycle. View invoice for full timesheet detail.</div>
-        <div class="inv-amount">$812.50</div>
-        <div class="inv-amount-label">Invoice #0502 · USD</div>
-        <div class="inv-meta">
-          <div class="inv-meta-row"><span>Issued</span><span class="v">Apr 15, 2026</span></div>
-          <div class="inv-meta-row"><span>Terms</span><span class="v">Net 14</span></div>
-          <div class="inv-meta-row"><span>Payable to</span><span class="v">Socia Visual</span></div>
-        </div>
-        <a class="inv-pay" href="https://sociavisual.com/invoice.html?id=inv_dme_0502&t=KWB2-JfULQwVBA8Is9Q2af3BE0T_hivvrlut8cEjtcE" target="_blank" rel="noopener">Pay April · $812.50 →</a>
-        <div class="inv-pay-note"><span>Stripe</span> · Cards & ACH</div>
-      </div>
-    </div>
-
-    <p style="margin-top:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--white-faint);letter-spacing:.06em;line-height:1.7;">
-      Once the deposit clears, work begins same day.<br>~1 week to launch from deposit-clear.
-    </p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="wrap">
-    <div class="foot-grid">
-      <div>
-        <div style="color:var(--white);font-size:14px;letter-spacing:.04em;margin-bottom:6px;">Socia Visual</div>
-        <div>Scott · scott@sociavisual.com · 903.617.1527</div>
-      </div>
-      <div class="foot-meta">
-        <span>Proposal · DME v2 Rebuild</span>
-        <span>2026.04.27</span>
-        <span>v2.0</span>
-      </div>
-    </div>
-  </div>
-</footer>
+</div><!-- /doc -->
+</div><!-- /page -->
 
 </body>
 </html>

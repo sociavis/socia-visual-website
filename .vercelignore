@@ -1,4 +1,6 @@
 # Ignore source files and large assets not needed for web
 *.psd
 *.pdf
+# Allow client-facing proposal PDFs to deploy
+!proposals/**/*.pdf
 email-signature*.html

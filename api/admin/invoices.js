@@ -2,7 +2,7 @@ const { getServiceRoleClient, requireAdminSession } = require('../_lib/auth');
 
 const ALLOWED_FIELDS = [
   'id', 'number', 'date', 'status', 'company_name', 'client_name',
-  'client_email', 'period', 'items', 'notes', 'paid_at'
+  'client_email', 'period', 'items', 'notes', 'paid_at', 'currency'
 ];
 
 function sanitize(body) {

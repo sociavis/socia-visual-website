@@ -1259,6 +1259,9 @@
                 <div class="form-group"><label>Status</label>
                   <select id="fStatus"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="overdue">Overdue</option></select>
                 </div>
+                <div class="form-group"><label>Currency</label>
+                  <select id="fCurrency"><option value="usd">USD</option><option value="cad">CAD (enables ACSS)</option></select>
+                </div>
               </div>
               <div class="form-row">
                 <div class="form-group"><label>Client</label><select id="fPartner" onchange="onPartnerPicked('f')"></select></div>
@@ -2052,10 +2055,10 @@ function subscribeToChanges() {
 
 // ═══ DB HELPERS ═══
 function rowToInv(r) {
-  return { id: r.id, number: r.number, date: r.date, status: r.status, companyName: r.company_name, clientName: r.client_name, clientEmail: r.client_email, period: r.period, items: r.items || [], notes: r.notes };
+  return { id: r.id, number: r.number, date: r.date, status: r.status, companyName: r.company_name, clientName: r.client_name, clientEmail: r.client_email, period: r.period, items: r.items || [], notes: r.notes, currency: r.currency || 'usd' };
 }
 function invToRow(inv) {
-  return { id: inv.id, number: inv.number, date: inv.date, status: inv.status, company_name: inv.companyName, client_name: inv.clientName, client_email: inv.clientEmail, period: inv.period, items: inv.items, notes: inv.notes, updated_at: new Date().toISOString() };
+  return { id: inv.id, number: inv.number, date: inv.date, status: inv.status, company_name: inv.companyName, client_name: inv.clientName, client_email: inv.clientEmail, period: inv.period, items: inv.items, notes: inv.notes, currency: inv.currency || 'usd', updated_at: new Date().toISOString() };
 }
 
 async function loadInvoices() {
@@ -2128,6 +2131,7 @@ function selectInvoice(id) {
   document.getElementById('fNumber').value = inv.number || '';
   document.getElementById('fDate').value = inv.date || '';
   document.getElementById('fStatus').value = inv.status || 'unpaid';
+  document.getElementById('fCurrency').value = (inv.currency || 'usd').toLowerCase();
   document.getElementById('fCompany').value = inv.companyName || '';
   document.getElementById('fClient').value = inv.clientName || '';
   document.getElementById('fClientEmail').value = inv.clientEmail || '';
@@ -2199,6 +2203,7 @@ async function saveInvoice() {
   inv.number = document.getElementById('fNumber').value;
   inv.date = document.getElementById('fDate').value;
   inv.status = document.getElementById('fStatus').value;
+  inv.currency = document.getElementById('fCurrency').value || 'usd';
   inv.companyName = document.getElementById('fCompany').value;
   inv.clientName = document.getElementById('fClient').value;
   inv.clientEmail = document.getElementById('fClientEmail').value;

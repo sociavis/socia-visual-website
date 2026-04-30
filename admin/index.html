@@ -1289,6 +1289,7 @@
                 <button class="btn" onclick="exportPDF()">Export PDF</button>
                 <button class="btn" onclick="copyLink()">Copy Client Link</button>
                 <button class="btn" onclick="openPreview()">Preview</button>
+                <button class="btn" onclick="duplicateInvoice()">Duplicate</button>
                 <button class="btn btn-danger" onclick="deleteInvoice()">Delete</button>
               </div>
             </div>
@@ -2243,6 +2244,57 @@ async function deleteInvoice() {
   document.getElementById('invForm').style.display = 'none';
   document.getElementById('invEmpty').style.display = 'block';
   toast('Invoice deleted');
+}
+
+// Roll a "Month YYYY" period forward by one month (e.g. "April 2026" -> "May 2026").
+// Returns the original string unchanged if it doesn't match.
+function rollPeriodForward(period) {
+  if (!period) return period;
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const m = period.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (!m) return period;
+  const idx = months.findIndex(x => x.toLowerCase() === m[1].toLowerCase());
+  if (idx < 0) return period;
+  const year = parseInt(m[2], 10);
+  const nextIdx = (idx + 1) % 12;
+  const nextYear = idx === 11 ? year + 1 : year;
+  return `${months[nextIdx]} ${nextYear}`;
+}
+
+async function duplicateInvoice() {
+  if (!activeId) return;
+  // Persist any unsaved edits on the source first so the copy reflects current state.
+  await saveInvoice();
+  const src = invoices.find(i => i.id === activeId);
+  if (!src) return;
+  const maxNum = invoices.reduce((m, i) => { const n = parseInt(i.number) || 0; return n > m ? n : m; }, 0);
+  const dup = {
+    id: 'inv_' + Date.now(),
+    number: String(maxNum + 1).padStart(4, '0'),
+    date: new Date().toISOString().split('T')[0],
+    status: 'unpaid',
+    companyName: src.companyName || '',
+    clientName: src.clientName || '',
+    clientEmail: src.clientEmail || '',
+    period: rollPeriodForward(src.period || ''),
+    items: (src.items || []).map(it => ({ qty: it.qty, description: it.description, price: it.price })),
+    notes: src.notes || '',
+    currency: src.currency || 'usd'
+  };
+  const resp = await fetch('/api/admin/invoices', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(invToRow(dup))
+  });
+  if (!resp.ok) {
+    if (resp.status === 401) { toast('Session expired — reload'); return; }
+    console.error(await resp.text()); toast('Error duplicating invoice'); return;
+  }
+  invoices.unshift(dup);
+  document.getElementById('invoiceCount').textContent = invoices.length;
+  selectInvoice(dup.id);
+  renderDashboard();
+  toast(`Duplicated as #${dup.number}`);
 }
 
 async function getCurrentInvoice() {

@@ -1078,6 +1078,266 @@
     min-height: 16px;
   }
 
+  /* ═══ COMMAND CENTER ═══ */
+  .cc-wrap { padding: 0 0 24px; max-width: 1380px; }
+  .cc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cc-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .cc-header h2 .cc-pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 10px;
+    animation: ccPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--accent);
+    vertical-align: middle;
+  }
+  @keyframes ccPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(1.3); }
+  }
+  .cc-header .cc-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* KPI strip */
+  .cc-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .cc-tile {
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s, transform .2s;
+  }
+  .cc-tile:hover { border-color: var(--border-light); transform: translateY(-1px); }
+  .cc-tile.alert { border-color: var(--red); animation: ccTileAlert 2.4s ease-in-out infinite; }
+  @keyframes ccTileAlert {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); }
+    50%      { box-shadow: 0 0 0 4px rgba(255,68,68,.08); }
+  }
+  .cc-tile.warn { border-color: var(--yellow); }
+  .cc-tile.good { border-left: 3px solid var(--accent); }
+  .cc-tile-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .cc-tile-value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+  .cc-tile-value.crit { color: var(--red); }
+  .cc-tile-value.warn { color: var(--yellow); }
+  .cc-tile-value.good { color: var(--accent); }
+  .cc-tile-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .cc-tile-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .cc-tile-bar div {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--surface-3);
+  }
+  .cc-tile-bar .green  { background: var(--accent); }
+  .cc-tile-bar .yellow { background: var(--yellow); }
+  .cc-tile-bar .red    { background: var(--red); }
+
+  /* Section heading */
+  .cc-h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 28px 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cc-h3 .cc-h3-meta { letter-spacing: 1.5px; font-size: 10px; }
+
+  /* Mission grid */
+  .cc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .cc-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--text-muted);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+    position: relative;
+  }
+  .cc-card:hover { border-color: var(--border-light); transform: translateY(-1px); }
+  .cc-card.green   { border-left-color: var(--accent); }
+  .cc-card.yellow  { border-left-color: var(--yellow); }
+  .cc-card.red     { border-left-color: var(--red); animation: ccCardAlert 2.4s ease-in-out infinite; }
+  .cc-card.unknown { border-left-color: var(--text-muted); opacity: 0.85; }
+  .cc-card.inactive{ opacity: 0.5; border-left-color: var(--border); }
+  @keyframes ccCardAlert {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); }
+    50%      { box-shadow: 0 0 0 4px rgba(255,68,68,.08); }
+  }
+  .cc-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .cc-card-label { font-weight: 600; font-size: 13px; }
+  .cc-card-domain {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+    word-break: break-all;
+  }
+  .cc-card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .cc-card-tags span {
+    background: var(--surface-3);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .cc-card-tags .cat { color: var(--accent); }
+  .cc-card-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .cc-card-bar .findings { color: var(--text); font-weight: 700; }
+  .cc-card-bar .findings.bad { color: var(--red); }
+  .cc-card-bar .findings.warn { color: var(--yellow); }
+  .cc-card-pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px; vertical-align: middle;
+  }
+  .cc-card.green   .cc-card-pulse { background: var(--accent);  box-shadow: 0 0 4px var(--accent); }
+  .cc-card.yellow  .cc-card-pulse { background: var(--yellow);  box-shadow: 0 0 4px var(--yellow); }
+  .cc-card.red     .cc-card-pulse { background: var(--red);     box-shadow: 0 0 4px var(--red); animation: ccPulse 1.4s ease-in-out infinite; }
+  .cc-card.unknown .cc-card-pulse { background: var(--text-muted); }
+  .cc-card.inactive .cc-card-pulse{ background: var(--border-light); }
+
+  /* Activity stream */
+  .cc-stream {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .cc-act {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 10px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    font-size: 13px;
+    transition: background .15s;
+  }
+  .cc-act:hover { background: var(--surface-3); }
+  .cc-act:last-child { border-bottom: none; }
+  .cc-act-icon {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface-3);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .cc-act-icon.security  { background: rgba(255,68,68,.15);   color: var(--red); }
+  .cc-act-icon.invoice   { background: rgba(168,255,0,.15);   color: var(--accent); }
+  .cc-act-icon.charge    { background: rgba(76,175,80,.15);   color: var(--green); }
+  .cc-act-icon.submission{ background: rgba(102,194,255,.12); color: #66c2ff; }
+  .cc-act-title { font-size: 13px; color: var(--text); }
+  .cc-act-meta  {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+  }
+  .cc-act-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .cc-empty {
+    padding: 50px 20px;
+    text-align: center;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
   /* ═══ SECURITY ═══ */
   .sec-page { padding: 24px; max-width: 1320px; }
   .sec-hero {
@@ -1400,8 +1660,45 @@
 
     <div class="page-area">
 
-      <!-- ── DASHBOARD ── -->
+      <!-- ── DASHBOARD / COMMAND CENTER ── -->
       <div class="page active" id="page-dashboard">
+
+        <!-- Operations Command Center -->
+        <div class="cc-wrap">
+          <div class="cc-header">
+            <h2><span class="cc-pulse"></span>Operations Command Center</h2>
+            <span class="cc-meta" id="ccMeta">Initializing…</span>
+          </div>
+
+          <!-- KPI strip -->
+          <div class="cc-strip" id="ccStrip">
+            <div class="cc-tile"><div class="cc-tile-label">Asset Health</div><div class="cc-tile-value" id="ccAssetHealthCount">—</div><div class="cc-tile-sub" id="ccAssetHealthSub">loading</div><div class="cc-tile-bar" id="ccAssetHealthBar"></div></div>
+            <div class="cc-tile"><div class="cc-tile-label">Critical / High</div><div class="cc-tile-value crit" id="ccCritCount">—</div><div class="cc-tile-sub" id="ccCritSub">security findings</div></div>
+            <div class="cc-tile"><div class="cc-tile-label">Medium</div><div class="cc-tile-value warn" id="ccMedCount">—</div><div class="cc-tile-sub">open security</div></div>
+            <div class="cc-tile"><div class="cc-tile-label">Overdue Invoices</div><div class="cc-tile-value warn" id="ccOverdueCount">—</div><div class="cc-tile-sub" id="ccOverdueAmount">—</div></div>
+            <div class="cc-tile"><div class="cc-tile-label">MRR (Active Retainers)</div><div class="cc-tile-value good" id="ccMrr">—</div><div class="cc-tile-sub" id="ccMrrSub">—</div></div>
+            <div class="cc-tile"><div class="cc-tile-label">New Submissions</div><div class="cc-tile-value" id="ccSubCount">—</div><div class="cc-tile-sub" id="ccSubSub">unread / 30d</div></div>
+          </div>
+
+          <!-- Client mission grid -->
+          <div class="cc-h3">
+            <span>Client Mission Grid</span>
+            <span class="cc-h3-meta" id="ccGridMeta">—</span>
+          </div>
+          <div class="cc-grid" id="ccGrid">
+            <div class="cc-empty">Loading client roster…</div>
+          </div>
+
+          <!-- Activity stream -->
+          <div class="cc-h3">
+            <span>Recent Activity</span>
+            <span class="cc-h3-meta">Last 30 days · merged feed</span>
+          </div>
+          <div class="cc-stream" id="ccStream">
+            <div class="cc-empty">Loading activity…</div>
+          </div>
+        </div>
+
         <div class="dashboard-grid" id="dashStats"></div>
         <div class="analytics-section" id="analyticsSection">
           <div class="analytics-header">
@@ -2095,7 +2392,7 @@ async function init() {
   renderProjectList();
   subscribeToChanges();
   if (window.location.hash) navigate(window.location.hash.slice(1));
-  else loadAnalytics();
+  else { loadAnalytics(); loadCommandCenter(); }
 }
 
 // ═══ NAVIGATION ═══
@@ -2110,7 +2407,7 @@ function navigate(page) {
   const titles = { dashboard: 'Dashboard', submissions: 'Submissions', security: 'Security', invoices: 'Invoices', contracts: 'Contracts', payments: 'Payments', projects: 'Projects', partners: 'Clients', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
-  if (page === 'dashboard') { renderDashboard(); loadAnalytics(); loadSubmissions(); }
+  if (page === 'dashboard') { renderDashboard(); loadAnalytics(); loadSubmissions(); loadCommandCenter(); }
   if (page === 'submissions') loadSubmissions();
   if (page === 'contracts') renderConList();
   if (page === 'payments') loadPaymentsPage();
@@ -4104,6 +4401,135 @@ async function disable2fa() {
   // Also refresh on initial load if we're already on settings.
   if (location.hash === '#settings') setTimeout(refresh2faStatus, 300);
 })();
+
+// ═══ COMMAND CENTER ═══
+let ccData = null;
+
+async function loadCommandCenter() {
+  try {
+    const r = await fetch('/api/admin/command-center', { credentials: 'include' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    ccData = await r.json();
+    renderCommandCenter();
+  } catch (e) {
+    console.error('loadCommandCenter', e);
+    const meta = document.getElementById('ccMeta');
+    if (meta) meta.textContent = 'Failed: ' + e.message;
+  }
+}
+
+function renderCommandCenter() {
+  if (!ccData) return;
+  const { kpis, assets, activity, generated_at } = ccData;
+
+  // Meta
+  const meta = document.getElementById('ccMeta');
+  if (meta) meta.textContent = `Last sync ${secTimeAgo(generated_at)} · ${assets.filter(a => a.active).length} active assets`;
+
+  // ── KPI tiles ──
+  const fmtMoney = (cents, ccy = 'USD') => '$' + ((cents || 0) / 100).toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+  // Asset health tile
+  const status = kpis.asset_status || { green: 0, yellow: 0, red: 0, unknown: 0 };
+  const totalActive = (status.green || 0) + (status.yellow || 0) + (status.red || 0) + (status.unknown || 0);
+  document.getElementById('ccAssetHealthCount').textContent = `${status.green || 0}/${totalActive}`;
+  document.getElementById('ccAssetHealthSub').textContent = `${status.green || 0} green · ${status.yellow || 0} yellow · ${status.red || 0} red · ${status.unknown || 0} unswept`;
+  const bar = document.getElementById('ccAssetHealthBar');
+  bar.innerHTML = '';
+  const segs = [['green', status.green || 0], ['yellow', status.yellow || 0], ['red', status.red || 0]];
+  for (const [cls, n] of segs) {
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('div');
+      d.className = cls;
+      bar.appendChild(d);
+    }
+  }
+  for (let i = 0; i < (status.unknown || 0); i++) bar.appendChild(document.createElement('div'));
+
+  // Critical / High
+  const critTotal = (kpis.open_critical || 0) + (kpis.open_high || 0);
+  const critEl = document.getElementById('ccCritCount');
+  critEl.textContent = critTotal;
+  document.getElementById('ccCritSub').textContent = `${kpis.open_critical || 0} crit · ${kpis.open_high || 0} high`;
+  const critTile = critEl.closest('.cc-tile');
+  critTile.classList.toggle('alert', critTotal > 0);
+
+  // Medium
+  document.getElementById('ccMedCount').textContent = kpis.open_medium || 0;
+
+  // Overdue invoices
+  const overdueEl = document.getElementById('ccOverdueCount');
+  overdueEl.textContent = kpis.overdue_invoice_count || 0;
+  document.getElementById('ccOverdueAmount').textContent = fmtMoney(kpis.overdue_invoice_amount_cents);
+  overdueEl.closest('.cc-tile').classList.toggle('warn', (kpis.overdue_invoice_count || 0) > 0);
+
+  // MRR
+  document.getElementById('ccMrr').textContent = fmtMoney(kpis.mrr_cents);
+  document.getElementById('ccMrrSub').textContent = `${kpis.active_retainers || 0} active${kpis.retainer_errors ? ` · ${kpis.retainer_errors} error${kpis.retainer_errors > 1 ? 's' : ''}` : ''}`;
+
+  // Submissions
+  document.getElementById('ccSubCount').textContent = kpis.unread_submissions || 0;
+  document.getElementById('ccSubSub').textContent = `${kpis.unread_submissions || 0} unread · ${kpis.submissions_30d || 0} in 30d`;
+
+  // ── Mission grid ──
+  const grid = document.getElementById('ccGrid');
+  const gridMeta = document.getElementById('ccGridMeta');
+  gridMeta.textContent = `${assets.filter(a => a.active).length} active · ${assets.filter(a => !a.active).length} archived`;
+
+  if (!assets.length) {
+    grid.innerHTML = '<div class="cc-empty">No assets registered. Visit Security tab → + Asset.</div>';
+  } else {
+    // Sort: active first, then category, then label
+    const sorted = [...assets].sort((a, b) => {
+      if (a.active !== b.active) return a.active ? -1 : 1;
+      if (a.category !== b.category) return (a.category || '').localeCompare(b.category || '');
+      return (a.label || '').localeCompare(b.label || '');
+    });
+    grid.innerHTML = sorted.map(a => {
+      const cls = !a.active ? 'inactive' : (a.mission_status || 'unknown');
+      const findingsCls = a.open_count === 0 ? '' : (a.worst_severity === 'critical' || a.worst_severity === 'high' ? 'bad' : 'warn');
+      const sweptAgo = a.last_swept_at ? secTimeAgo(a.last_swept_at) : 'never';
+      return `
+        <div class="cc-card ${cls}" onclick="navigate('security')">
+          <div class="cc-card-head">
+            <div>
+              <div class="cc-card-label"><span class="cc-card-pulse"></span>${escapeHtml(a.label)}</div>
+              <div class="cc-card-domain">${escapeHtml(a.domain || '')}</div>
+            </div>
+          </div>
+          <div class="cc-card-tags">
+            <span class="cat">${escapeHtml(a.category || 'client')}</span>
+            ${a.host_provider ? `<span>${escapeHtml(a.host_provider)}</span>` : ''}
+            ${a.cms ? `<span>${escapeHtml(a.cms)}</span>` : ''}
+            ${a.active ? '' : '<span>archived</span>'}
+          </div>
+          <div class="cc-card-bar">
+            <span>Findings <span class="findings ${findingsCls}">${a.open_count || 0}</span></span>
+            <span>${sweptAgo}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── Activity stream ──
+  const stream = document.getElementById('ccStream');
+  if (!activity.length) {
+    stream.innerHTML = '<div class="cc-empty">No recent activity.</div>';
+  } else {
+    const iconFor = { security: 'SEC', invoice: 'INV', charge: '$', submission: 'IN' };
+    stream.innerHTML = activity.map(a => `
+      <div class="cc-act">
+        <div class="cc-act-icon ${a.type}">${iconFor[a.type] || '·'}</div>
+        <div>
+          <div class="cc-act-title">${escapeHtml(a.title || '—')}</div>
+          <div class="cc-act-meta">${escapeHtml(a.meta || a.type)}${a.severity ? ' · ' + escapeHtml(a.severity) : ''}</div>
+        </div>
+        <div class="cc-act-time">${secTimeAgo(a.ts)}</div>
+      </div>
+    `).join('');
+  }
+}
 
 // ═══ SECURITY ═══
 let secAssets = [];

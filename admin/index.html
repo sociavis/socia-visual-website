@@ -1077,6 +1077,205 @@
     margin-top: 10px;
     min-height: 16px;
   }
+
+  /* ═══ SECURITY ═══ */
+  .sec-page { padding: 24px; max-width: 1320px; }
+  .sec-hero {
+    display: grid;
+    grid-template-columns: minmax(220px, 260px) 1fr;
+    gap: 24px;
+    align-items: stretch;
+    margin-bottom: 24px;
+  }
+  .sec-score-card {
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .sec-score-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--accent), transparent 60%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    opacity: .35;
+  }
+  .sec-score-ring { width: 168px; height: 168px; }
+  .sec-score-ring .track { fill: none; stroke: var(--surface-3); stroke-width: 10; }
+  .sec-score-ring .arc { fill: none; stroke: url(#secGradient); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset .6s ease, stroke .3s; }
+  .sec-score-num {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    text-anchor: middle;
+    fill: var(--text);
+  }
+  .sec-score-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-anchor: middle;
+    fill: var(--text-dim);
+  }
+  .sec-score-status {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .sec-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .sec-stat {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sec-stat-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+  .sec-stat-num { font-size: 26px; font-weight: 700; }
+  .sec-stat-num.crit { color: var(--red); }
+  .sec-stat-num.high { color: #ff8a3d; }
+  .sec-stat-num.med  { color: var(--yellow); }
+  .sec-stat-num.low  { color: #66c2ff; }
+  .sec-stat-num.info { color: var(--text-dim); }
+  .sec-stat-num.score { color: var(--accent); }
+
+  .sec-actionbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .sec-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sec-filter {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-light);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .sec-filter:hover { color: var(--text); border-color: var(--border-light); }
+  .sec-filter.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+  .sec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .sec-asset {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--text-muted);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+  }
+  .sec-asset:hover { border-color: var(--border-light); transform: translateY(-1px); }
+  .sec-asset.green  { border-left-color: var(--green); }
+  .sec-asset.yellow { border-left-color: var(--yellow); }
+  .sec-asset.red    { border-left-color: var(--red); animation: secPulse 2.4s ease-in-out infinite; }
+  .sec-asset.unknown{ border-left-color: var(--text-muted); }
+  @keyframes secPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); } 50% { box-shadow: 0 0 0 4px rgba(255,68,68,.08); } }
+  .sec-asset-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .sec-asset-label { font-weight: 600; font-size: 14px; color: var(--text); }
+  .sec-asset-domain { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-top: 2px; word-break: break-all; }
+  .sec-asset-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+  .sec-asset-tag { background: var(--surface-3); padding: 3px 8px; border-radius: 3px; }
+  .sec-asset-tag.cat { color: var(--accent); }
+  .sec-asset-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
+  .sec-asset-bar .count { color: var(--text); font-weight: 700; }
+  .sec-asset-bar .count.bad { color: var(--red); }
+
+  .sec-feed { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .sec-feed-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .sec-feed-head h3 { font-size: 14px; }
+  .sec-feed-head .meta { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+  .sec-row {
+    display: grid;
+    grid-template-columns: 64px 1fr 140px 120px 130px;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    font-size: 13px;
+    transition: background .15s;
+  }
+  .sec-row:hover { background: var(--surface-3); }
+  .sec-row:last-child { border-bottom: none; }
+  .sec-row.resolved { opacity: .45; }
+  .sec-sev {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4px 6px;
+    border-radius: 3px;
+    background: var(--surface-3);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .sec-sev.critical { background: rgba(255,68,68,.15); color: var(--red); }
+  .sec-sev.high     { background: rgba(255,138,61,.15); color: #ff8a3d; }
+  .sec-sev.medium   { background: rgba(255,180,40,.15); color: var(--yellow); }
+  .sec-sev.low      { background: rgba(102,194,255,.12); color: #66c2ff; }
+  .sec-sev.info     { background: var(--surface-3); color: var(--text-dim); }
+  .sec-row .title { color: var(--text); font-weight: 500; }
+  .sec-row .src   { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 1.2px; text-transform: uppercase; }
+  .sec-row .ago   { font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+  .sec-row .actions { display: flex; gap: 4px; justify-content: flex-end; }
+  .sec-row .actions button {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .sec-row .actions button:hover { color: var(--accent); border-color: var(--accent); }
+  .sec-row .actions button.danger:hover { color: var(--red); border-color: var(--red); }
+
+  .sec-empty { padding: 60px 20px; text-align: center; color: var(--text-dim); font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+
+  .sec-modal-body { font-family: var(--mono); font-size: 11px; line-height: 1.7; color: var(--text-dim); white-space: pre-wrap; word-break: break-all; max-height: 400px; overflow: auto; padding: 12px; background: var(--surface-3); border-radius: 6px; border: 1px solid var(--border); }
+  .sec-modal-body strong { color: var(--text); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .sec-hero { grid-template-columns: 1fr; }
+    .sec-row { grid-template-columns: 64px 1fr; gap: 8px; }
+    .sec-row > .src, .sec-row > .ago, .sec-row > .actions { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -1135,6 +1334,13 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         <span>Submissions</span>
         <span class="nav-badge" id="submissionCount">0</span>
+      </div>
+
+      <div class="nav-section-label">Security</div>
+      <div class="nav-item" onclick="navigate('security')" data-page="security">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        <span>Security</span>
+        <span class="nav-badge" id="securityCount">0</span>
       </div>
 
       <div class="nav-section-label">Finance</div>
@@ -1555,6 +1761,145 @@
         </div>
       </div>
 
+      <!-- ── SECURITY ── -->
+      <div class="page" id="page-security">
+        <div class="sec-page">
+
+          <!-- Hero: score ring + summary stats -->
+          <div class="sec-hero">
+            <div class="sec-score-card">
+              <svg class="sec-score-ring" viewBox="0 0 180 180" id="secScoreRing">
+                <defs>
+                  <linearGradient id="secGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#a8ff00"/>
+                    <stop offset="100%" stop-color="#d4ff00"/>
+                  </linearGradient>
+                </defs>
+                <circle class="track" cx="90" cy="90" r="78"/>
+                <circle class="arc" cx="90" cy="90" r="78"
+                        transform="rotate(-90 90 90)"
+                        stroke-dasharray="490" stroke-dashoffset="490"
+                        id="secArc"/>
+                <text class="sec-score-num" x="90" y="92" id="secScoreNum">—</text>
+                <text class="sec-score-label" x="90" y="118">POSTURE</text>
+              </svg>
+              <div class="sec-score-status" id="secStatus">Loading sweep…</div>
+            </div>
+
+            <div class="sec-summary-grid" id="secSummary">
+              <div class="sec-stat"><span class="sec-stat-label">Critical</span><span class="sec-stat-num crit" id="secCritCount">—</span></div>
+              <div class="sec-stat"><span class="sec-stat-label">High</span><span class="sec-stat-num high" id="secHighCount">—</span></div>
+              <div class="sec-stat"><span class="sec-stat-label">Medium</span><span class="sec-stat-num med" id="secMedCount">—</span></div>
+              <div class="sec-stat"><span class="sec-stat-label">Low</span><span class="sec-stat-num low" id="secLowCount">—</span></div>
+              <div class="sec-stat"><span class="sec-stat-label">Info</span><span class="sec-stat-num info" id="secInfoCount">—</span></div>
+              <div class="sec-stat"><span class="sec-stat-label">Resolved (lifetime)</span><span class="sec-stat-num" id="secResolvedCount">—</span></div>
+            </div>
+          </div>
+
+          <!-- Action bar: filters + run-sweep + add-asset -->
+          <div class="sec-actionbar">
+            <div class="sec-filters" id="secFilters">
+              <button class="sec-filter active" data-filter="all">All</button>
+              <button class="sec-filter" data-filter="critical">Critical</button>
+              <button class="sec-filter" data-filter="high">High</button>
+              <button class="sec-filter" data-filter="medium">Medium</button>
+              <button class="sec-filter" data-filter="low">Low</button>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-ghost" onclick="openSecAssetEditor()">+ Asset</button>
+              <button class="btn btn-primary" id="secRunSweepBtn" onclick="runSecuritySweep()">Run Sweep</button>
+            </div>
+          </div>
+
+          <!-- Asset health grid -->
+          <h3 style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);font-family:var(--mono);margin-bottom:12px;">Monitored Assets</h3>
+          <div class="sec-grid" id="secAssetGrid">
+            <div class="sec-empty">No assets registered. Click + Asset to add one.</div>
+          </div>
+
+          <!-- Findings feed -->
+          <div class="sec-feed">
+            <div class="sec-feed-head">
+              <h3>Open Findings</h3>
+              <span class="meta" id="secFeedMeta">—</span>
+            </div>
+            <div id="secFeed">
+              <div class="sec-empty">No findings yet — click Run Sweep to scan.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asset editor modal -->
+        <div class="pay-modal-backdrop" id="secAssetEditor" style="display:none;" onclick="if(event.target===this)closeSecAssetEditor()">
+          <div class="pay-modal" style="max-width:520px;">
+            <button class="pay-modal-close" onclick="closeSecAssetEditor()" aria-label="Close">&times;</button>
+            <h2 id="secAssetEditorTitle">New Monitored Asset</h2>
+            <div style="margin-top:16px;display:grid;gap:12px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group"><label>Slug *</label><input type="text" id="saSlug" placeholder="tcs"></div>
+                <div class="form-group"><label>Category</label>
+                  <select id="saCategory">
+                    <option value="crown-jewel">Crown Jewel</option>
+                    <option value="studio">Studio</option>
+                    <option value="client" selected>Client</option>
+                    <option value="product">Product</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group"><label>Label *</label><input type="text" id="saLabel" placeholder="Triple Crown Series"></div>
+              <div class="form-group"><label>Domain *</label><input type="text" id="saDomain" placeholder="triplecrown-series.com"></div>
+              <div class="form-group"><label>HTTPS URL</label><input type="text" id="saUrl" placeholder="https://triplecrown-series.com (defaults to https://<domain>)"></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="form-group"><label>Host Provider</label>
+                  <select id="saHost">
+                    <option value="">—</option>
+                    <option value="vercel">Vercel</option>
+                    <option value="hostinger">Hostinger</option>
+                    <option value="site5">Site5</option>
+                    <option value="wordpress.com">WordPress.com</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group"><label>CMS</label>
+                  <select id="saCms">
+                    <option value="">—</option>
+                    <option value="static">Static</option>
+                    <option value="custom">Custom</option>
+                    <option value="wordpress">WordPress</option>
+                    <option value="ecwid">Ecwid</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group"><label>Notes</label><input type="text" id="saNotes" placeholder="Round 1 = June 7. Site5 + Vercel split."></div>
+              <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+                <input type="checkbox" id="saActive" checked style="width:auto;">
+                <label for="saActive" style="margin:0;">Active (include in sweeps)</label>
+              </div>
+            </div>
+            <div class="pay-error" id="secAssetEditorError"></div>
+            <div style="display:flex;gap:8px;margin-top:16px;">
+              <button class="btn btn-primary" style="flex:1" onclick="saveSecAsset()">Save Asset</button>
+              <button class="btn btn-danger" id="saDeleteBtn" style="display:none;" onclick="deleteSecAsset()">Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event detail modal -->
+        <div class="pay-modal-backdrop" id="secEventDetail" style="display:none;" onclick="if(event.target===this)closeSecEventDetail()">
+          <div class="pay-modal" style="max-width:680px;">
+            <button class="pay-modal-close" onclick="closeSecEventDetail()" aria-label="Close">&times;</button>
+            <h2 id="secEventDetailTitle">Finding</h2>
+            <div id="secEventDetailMeta" style="margin:10px 0 14px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--text-dim);"></div>
+            <div class="sec-modal-body" id="secEventDetailBody">…</div>
+            <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+              <button class="btn btn-primary" onclick="triageEvent('resolved')">Mark Resolved</button>
+              <button class="btn btn-ghost" onclick="triageEvent('ignored')">Ignore</button>
+              <button class="btn btn-ghost" onclick="triageEvent('open')">Reopen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── SETTINGS ── -->
       <div class="page" id="page-settings">
         <div class="settings-content">
@@ -1762,13 +2107,14 @@ function navigate(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (target) target.classList.add('active');
   if (navItem) navItem.classList.add('active');
-  const titles = { dashboard: 'Dashboard', submissions: 'Submissions', invoices: 'Invoices', contracts: 'Contracts', payments: 'Payments', projects: 'Projects', partners: 'Clients', settings: 'Settings' };
+  const titles = { dashboard: 'Dashboard', submissions: 'Submissions', security: 'Security', invoices: 'Invoices', contracts: 'Contracts', payments: 'Payments', projects: 'Projects', partners: 'Clients', settings: 'Settings' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   window.location.hash = page;
   if (page === 'dashboard') { renderDashboard(); loadAnalytics(); loadSubmissions(); }
   if (page === 'submissions') loadSubmissions();
   if (page === 'contracts') renderConList();
   if (page === 'payments') loadPaymentsPage();
+  if (page === 'security') loadSecurityPage();
   if (page === 'settings' && typeof refresh2faStatus === 'function') refresh2faStatus();
 }
 
@@ -3757,6 +4103,352 @@ async function disable2fa() {
   if (settingsLink) settingsLink.addEventListener('click', () => setTimeout(refresh2faStatus, 100));
   // Also refresh on initial load if we're already on settings.
   if (location.hash === '#settings') setTimeout(refresh2faStatus, 300);
+})();
+
+// ═══ SECURITY ═══
+let secAssets = [];
+let secEvents = [];
+let secSummary = null;
+let secFilter = 'all';
+let secEditingAssetId = null;
+let secViewingEventId = null;
+
+async function loadSecurityPage(force) {
+  try {
+    const r = await fetch('/api/admin/security', { credentials: 'include' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    secAssets = j.assets || [];
+    secEvents = j.events || [];
+    secSummary = j.summary || null;
+    renderSecurity();
+    updateSecurityBadge();
+  } catch (e) {
+    console.error('loadSecurityPage', e);
+    document.getElementById('secStatus').textContent = 'Failed: ' + e.message;
+  }
+}
+
+function updateSecurityBadge() {
+  const open = secEvents.filter(e => e.status === 'open' && ['critical','high'].includes(e.severity)).length;
+  const badge = document.getElementById('securityCount');
+  if (badge) badge.textContent = open;
+}
+
+function renderSecurity() {
+  renderSecurityScore();
+  renderSecuritySummary();
+  renderSecurityAssets();
+  renderSecurityFeed();
+}
+
+function renderSecurityScore() {
+  const score = secSummary?.score ?? 0;
+  const num = document.getElementById('secScoreNum');
+  const arc = document.getElementById('secArc');
+  const status = document.getElementById('secStatus');
+  num.textContent = score;
+  // Circumference = 2 * pi * 78 ≈ 490
+  const C = 490;
+  const offset = C - (C * score / 100);
+  arc.setAttribute('stroke-dashoffset', offset);
+
+  // Color the arc by score band.
+  let color = '#a8ff00';
+  if (score < 60) color = '#ff4444';
+  else if (score < 85) color = '#ffb428';
+  arc.style.stroke = color;
+  num.style.fill = color;
+
+  // Last sweep timestamp = max last_swept_at across assets.
+  const swept = secAssets.map(a => a.last_swept_at).filter(Boolean).sort().pop();
+  const sweptAgo = swept ? secTimeAgo(swept) : 'never';
+  const open = secSummary?.open || 0;
+  status.textContent = open === 0 ? `All clear — last sweep ${sweptAgo}` : `${open} open finding${open === 1 ? '' : 's'} — last sweep ${sweptAgo}`;
+}
+
+function renderSecuritySummary() {
+  if (!secSummary) return;
+  document.getElementById('secCritCount').textContent = secSummary.by_severity.critical || 0;
+  document.getElementById('secHighCount').textContent = secSummary.by_severity.high || 0;
+  document.getElementById('secMedCount').textContent = secSummary.by_severity.medium || 0;
+  document.getElementById('secLowCount').textContent = secSummary.by_severity.low || 0;
+  document.getElementById('secInfoCount').textContent = secSummary.by_severity.info || 0;
+  document.getElementById('secResolvedCount').textContent = secSummary.resolved_total || 0;
+}
+
+function renderSecurityAssets() {
+  const grid = document.getElementById('secAssetGrid');
+  if (!secAssets.length) {
+    grid.innerHTML = '<div class="sec-empty">No assets registered. Click + Asset to add one.</div>';
+    return;
+  }
+  grid.innerHTML = secAssets.map(a => {
+    const cls = a.last_swept_at ? (a.last_status || 'unknown') : 'unknown';
+    const openCount = a.open_count || 0;
+    const sweptAgo = a.last_swept_at ? secTimeAgo(a.last_swept_at) : 'never';
+    return `
+      <div class="sec-asset ${cls}" onclick="openSecAssetEditor('${a.id}')">
+        <div class="sec-asset-head">
+          <div>
+            <div class="sec-asset-label">${escapeHtml(a.label)}</div>
+            <div class="sec-asset-domain">${escapeHtml(a.domain)}</div>
+          </div>
+        </div>
+        <div class="sec-asset-meta">
+          <span class="sec-asset-tag cat">${escapeHtml(a.category || 'client')}</span>
+          ${a.host_provider ? `<span class="sec-asset-tag">${escapeHtml(a.host_provider)}</span>` : ''}
+          ${a.cms ? `<span class="sec-asset-tag">${escapeHtml(a.cms)}</span>` : ''}
+          ${a.active ? '' : '<span class="sec-asset-tag">paused</span>'}
+        </div>
+        <div class="sec-asset-bar">
+          <span>Open <span class="count ${openCount > 0 ? 'bad' : ''}">${openCount}</span></span>
+          <span>Swept ${sweptAgo}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderSecurityFeed() {
+  const feed = document.getElementById('secFeed');
+  const meta = document.getElementById('secFeedMeta');
+  let events = secEvents.filter(e => e.status === 'open');
+  if (secFilter !== 'all') events = events.filter(e => e.severity === secFilter);
+  // Sort by severity rank desc, then detected_at desc.
+  const rank = { info: 0, low: 1, medium: 2, high: 3, critical: 4 };
+  events.sort((a, b) => (rank[b.severity] - rank[a.severity]) || (new Date(b.detected_at) - new Date(a.detected_at)));
+  meta.textContent = `${events.length} shown • ${secEvents.filter(e => e.status === 'open').length} open total`;
+
+  if (!events.length) {
+    feed.innerHTML = '<div class="sec-empty">No open findings — everything looks clean.</div>';
+    return;
+  }
+  const assetMap = new Map(secAssets.map(a => [a.id, a]));
+  feed.innerHTML = events.map(e => {
+    const asset = assetMap.get(e.asset_id);
+    const assetLabel = asset ? asset.label : '—';
+    return `
+      <div class="sec-row" onclick="openSecEventDetail('${e.id}')">
+        <div><span class="sec-sev ${e.severity}">${e.severity}</span></div>
+        <div>
+          <div class="title">${escapeHtml(e.title)}</div>
+          <div class="src">${escapeHtml(assetLabel)} • ${escapeHtml(e.check_key)}</div>
+        </div>
+        <div class="src">${escapeHtml(e.source)}</div>
+        <div class="ago">${secTimeAgo(e.detected_at)}</div>
+        <div class="actions">
+          <button onclick="event.stopPropagation();quickTriage('${e.id}','resolved')">Resolve</button>
+          <button onclick="event.stopPropagation();quickTriage('${e.id}','ignored')">Ignore</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.addEventListener('click', (ev) => {
+  const f = ev.target.closest('.sec-filter');
+  if (!f) return;
+  secFilter = f.dataset.filter;
+  document.querySelectorAll('.sec-filter').forEach(b => b.classList.toggle('active', b === f));
+  renderSecurityFeed();
+});
+
+async function runSecuritySweep() {
+  const btn = document.getElementById('secRunSweepBtn');
+  if (!btn) return;
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sweeping…';
+  try {
+    const r = await fetch('/api/security-sweep', { method: 'POST', credentials: 'include' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    btn.textContent = `Swept ${j.swept}`;
+    setTimeout(() => { btn.disabled = false; btn.textContent = original; }, 1500);
+    await loadSecurityPage(true);
+  } catch (e) {
+    btn.textContent = 'Failed';
+    setTimeout(() => { btn.disabled = false; btn.textContent = original; }, 2000);
+    alert('Sweep failed: ' + e.message);
+  }
+}
+
+// ── Asset editor ──
+function openSecAssetEditor(id) {
+  secEditingAssetId = id || null;
+  const titleEl = document.getElementById('secAssetEditorTitle');
+  const delBtn = document.getElementById('saDeleteBtn');
+  if (id) {
+    const a = secAssets.find(x => x.id === id);
+    if (!a) return;
+    titleEl.textContent = `Edit: ${a.label}`;
+    document.getElementById('saSlug').value = a.slug || '';
+    document.getElementById('saLabel').value = a.label || '';
+    document.getElementById('saCategory').value = a.category || 'client';
+    document.getElementById('saDomain').value = a.domain || '';
+    document.getElementById('saUrl').value = a.https_url || '';
+    document.getElementById('saHost').value = a.host_provider || '';
+    document.getElementById('saCms').value = a.cms || '';
+    document.getElementById('saNotes').value = a.notes || '';
+    document.getElementById('saActive').checked = !!a.active;
+    delBtn.style.display = '';
+  } else {
+    titleEl.textContent = 'New Monitored Asset';
+    ['saSlug','saLabel','saDomain','saUrl','saNotes'].forEach(k => document.getElementById(k).value = '');
+    document.getElementById('saCategory').value = 'client';
+    document.getElementById('saHost').value = '';
+    document.getElementById('saCms').value = '';
+    document.getElementById('saActive').checked = true;
+    delBtn.style.display = 'none';
+  }
+  document.getElementById('secAssetEditorError').textContent = '';
+  document.getElementById('secAssetEditor').style.display = 'flex';
+}
+
+function closeSecAssetEditor() {
+  document.getElementById('secAssetEditor').style.display = 'none';
+  secEditingAssetId = null;
+}
+
+async function saveSecAsset() {
+  const errEl = document.getElementById('secAssetEditorError');
+  errEl.textContent = '';
+  const payload = {
+    slug: document.getElementById('saSlug').value.trim(),
+    label: document.getElementById('saLabel').value.trim(),
+    category: document.getElementById('saCategory').value,
+    domain: document.getElementById('saDomain').value.trim(),
+    https_url: document.getElementById('saUrl').value.trim() || undefined,
+    host_provider: document.getElementById('saHost').value || null,
+    cms: document.getElementById('saCms').value || null,
+    notes: document.getElementById('saNotes').value.trim() || null,
+    active: document.getElementById('saActive').checked
+  };
+  if (!payload.slug || !payload.label || !payload.domain) {
+    errEl.textContent = 'Slug, label, and domain are required.';
+    return;
+  }
+  try {
+    const url = secEditingAssetId
+      ? `/api/admin/security-assets?id=${encodeURIComponent(secEditingAssetId)}`
+      : '/api/admin/security-assets';
+    const method = secEditingAssetId ? 'PATCH' : 'POST';
+    const r = await fetch(url, {
+      method,
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'Save failed');
+    closeSecAssetEditor();
+    await loadSecurityPage(true);
+  } catch (e) {
+    errEl.textContent = e.message;
+  }
+}
+
+async function deleteSecAsset() {
+  if (!secEditingAssetId) return;
+  if (!confirm('Delete this asset and all its findings? This cannot be undone.')) return;
+  try {
+    const r = await fetch(`/api/admin/security-assets?id=${encodeURIComponent(secEditingAssetId)}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+    if (!r.ok) {
+      const j = await r.json().catch(() => ({}));
+      throw new Error(j.error || 'Delete failed');
+    }
+    closeSecAssetEditor();
+    await loadSecurityPage(true);
+  } catch (e) {
+    document.getElementById('secAssetEditorError').textContent = e.message;
+  }
+}
+
+// ── Event detail ──
+function openSecEventDetail(id) {
+  const ev = secEvents.find(e => e.id === id);
+  if (!ev) return;
+  secViewingEventId = id;
+  const asset = secAssets.find(a => a.id === ev.asset_id);
+  document.getElementById('secEventDetailTitle').textContent = ev.title;
+  document.getElementById('secEventDetailMeta').innerHTML =
+    `<span class="sec-sev ${ev.severity}">${ev.severity}</span> &nbsp; ` +
+    `${escapeHtml(asset ? asset.label : '—')} &nbsp;•&nbsp; ${escapeHtml(ev.source)} &nbsp;•&nbsp; ${escapeHtml(ev.check_key)} &nbsp;•&nbsp; ${secTimeAgo(ev.detected_at)} &nbsp;•&nbsp; ${escapeHtml(ev.status)}`;
+  let detail = '';
+  try { detail = JSON.stringify(ev.detail || {}, null, 2); } catch { detail = String(ev.detail); }
+  document.getElementById('secEventDetailBody').textContent = detail || '(no detail)';
+  document.getElementById('secEventDetail').style.display = 'flex';
+}
+
+function closeSecEventDetail() {
+  document.getElementById('secEventDetail').style.display = 'none';
+  secViewingEventId = null;
+}
+
+async function triageEvent(status) {
+  if (!secViewingEventId) return;
+  try {
+    const r = await fetch(`/api/admin/security-event?id=${encodeURIComponent(secViewingEventId)}`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    if (!r.ok) {
+      const j = await r.json().catch(() => ({}));
+      throw new Error(j.error || 'Triage failed');
+    }
+    closeSecEventDetail();
+    await loadSecurityPage(true);
+  } catch (e) {
+    alert('Triage failed: ' + e.message);
+  }
+}
+
+async function quickTriage(eventId, status) {
+  try {
+    const r = await fetch(`/api/admin/security-event?id=${encodeURIComponent(eventId)}`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    await loadSecurityPage(true);
+  } catch (e) {
+    alert('Triage failed: ' + e.message);
+  }
+}
+
+function secTimeAgo(iso) {
+  if (!iso) return '—';
+  const ms = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(ms / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + 'h ago';
+  const d = Math.floor(h / 24);
+  if (d < 30) return d + 'd ago';
+  return new Date(iso).toLocaleDateString();
+}
+
+// Boot security badge on init (so the count shows even before navigating).
+// The /api/admin/security endpoint will 401 cleanly if the session isn't established yet.
+(async () => {
+  try {
+    const r = await fetch('/api/admin/security', { credentials: 'include' });
+    if (!r.ok) return;
+    const j = await r.json();
+    secAssets = j.assets || [];
+    secEvents = j.events || [];
+    secSummary = j.summary || null;
+    updateSecurityBadge();
+  } catch {}
 })();
 </script>
 </body>

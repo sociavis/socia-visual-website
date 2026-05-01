@@ -1216,6 +1216,144 @@
   .cc-group-count .dots .yellow { background: var(--yellow); }
   .cc-group-count .dots .red    { background: var(--red);    box-shadow: 0 0 4px var(--red); }
 
+  /* Table-row view (wpmudev-style) */
+  .cc-table {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .cc-row {
+    display: grid;
+    grid-template-columns: 12px minmax(180px, 1.6fr) 90px 90px 60px 80px auto;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 14px 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    transition: background .12s;
+    cursor: pointer;
+  }
+  .cc-row:last-child { border-bottom: none; }
+  .cc-row:hover { background: var(--surface-3); }
+  .cc-row-pulse {
+    width: 4px;
+    height: 32px;
+    border-radius: 0 2px 2px 0;
+    background: var(--text-muted);
+  }
+  .cc-row.green   .cc-row-pulse { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .cc-row.yellow  .cc-row-pulse { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+  .cc-row.red     .cc-row-pulse { background: var(--red);    box-shadow: 0 0 6px var(--red); animation: ccPulse 1.6s ease-in-out infinite; }
+  .cc-row.unknown .cc-row-pulse { background: var(--text-muted); }
+  .cc-row.inactive { opacity: .55; }
+  .cc-row-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .cc-row-label { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-row-domain { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: .3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-row-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface-3);
+    padding: 3px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .cc-row-tag.type-website { background: rgba(102,194,255,.1); color: #66c2ff; }
+  .cc-row-tag.type-deck    { background: rgba(168,255,0,.1); color: var(--accent); }
+  .cc-row-tag.type-app     { background: rgba(180,90,255,.12); color: #b45aff; }
+  .cc-row-findings {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .cc-row-findings.bad  { color: var(--red); }
+  .cc-row-findings.warn { color: var(--yellow); }
+  .cc-row-findings.zero { color: var(--text-muted); font-weight: 400; }
+  .cc-row-swept {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: .5px;
+    white-space: nowrap;
+    text-align: right;
+  }
+  .cc-row-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+  }
+  .cc-shortcut {
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+    padding: 0;
+  }
+  .cc-shortcut:hover {
+    background: var(--surface);
+    border-color: var(--border-light);
+    color: var(--accent);
+  }
+  .cc-shortcut svg { width: 14px; height: 14px; }
+  .cc-shortcut[data-action="sweep"]:hover    { color: var(--accent); border-color: var(--accent); }
+  .cc-shortcut[data-action="security"]:hover { color: #66c2ff; border-color: #66c2ff; }
+  .cc-shortcut[data-action="visit"]:hover    { color: var(--accent); }
+
+  /* View toggle button group */
+  .cc-view-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .cc-view-toggle button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+  }
+  .cc-view-toggle button:hover { color: var(--text); }
+  .cc-view-toggle button.active { background: var(--accent-dim); color: var(--accent); }
+  .cc-view-toggle button svg { width: 14px; height: 14px; }
+  .cc-view-toggle button + button { border-left: 1px solid var(--border-light); }
+
+  /* Asset-type sub-filter row */
+  .cc-subfilter {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .cc-subfilter .cc-filter { font-size: 9px; padding: 4px 9px; }
+
+  @media (max-width: 1100px) {
+    .cc-row { grid-template-columns: 12px 1fr 80px auto; gap: 10px; }
+    .cc-row > .cc-row-tag,
+    .cc-row > .cc-row-swept { display: none; }
+  }
+
   /* Activity drawer */
   .cc-drawer-overlay {
     position: fixed;
@@ -1864,7 +2002,7 @@
             </div>
           </div>
 
-          <!-- Filter chip bar + drawer trigger -->
+          <!-- Filter chip bar + view toggle + drawer trigger -->
           <div class="cc-filterbar">
             <div class="cc-filters" id="ccFilters">
               <button class="cc-filter active" data-filter="all">All <span class="pill" id="ccCountAll">0</span></button>
@@ -1876,8 +2014,24 @@
             </div>
             <div style="display:flex;gap:8px;align-items:center;">
               <span class="cc-h3-meta" id="ccGridMeta" style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--text-dim);">—</span>
+              <div class="cc-view-toggle" id="ccViewToggle" role="tablist" aria-label="View toggle">
+                <button data-view="table" class="active" title="Table view" aria-label="Table view">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <button data-view="cards" title="Card view" aria-label="Card view">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                </button>
+              </div>
               <button class="btn btn-ghost" onclick="openCcDrawer()">Activity ›</button>
             </div>
+          </div>
+
+          <!-- Asset-type sub-filter -->
+          <div class="cc-subfilter" id="ccTypeFilters">
+            <button class="cc-filter active" data-type-filter="all">All Types <span class="pill" id="ccTypeCountAll">0</span></button>
+            <button class="cc-filter" data-type-filter="website">Websites <span class="pill" id="ccTypeCountWebsite">0</span></button>
+            <button class="cc-filter" data-type-filter="deck">Decks <span class="pill" id="ccTypeCountDeck">0</span></button>
+            <button class="cc-filter" data-type-filter="app">Apps <span class="pill" id="ccTypeCountApp">0</span></button>
           </div>
 
           <!-- Mission grid (grouped by category) -->
@@ -4604,6 +4758,8 @@ async function disable2fa() {
 // ═══ COMMAND CENTER ═══
 let ccData = null;
 let ccFilter = 'all';
+let ccTypeFilter = 'all';
+let ccView = localStorage.getItem('cc_view') || 'table';
 const ccCollapsedGroups = new Set(JSON.parse(localStorage.getItem('cc_collapsed_groups') || '[]'));
 
 const CC_CATEGORY_LABELS = {
@@ -4671,10 +4827,13 @@ function renderCommandCenter() {
 
   // ── Filter chip counts ──
   const counts = { all: 0, 'crown-jewel': 0, client: 0, product: 0, personal: 0, archived: 0 };
+  const typeCounts = { all: 0, website: 0, deck: 0, app: 0 };
   for (const a of assets) {
     if (!a.active) { counts.archived += 1; continue; }
     counts.all += 1;
     counts[a.category] = (counts[a.category] || 0) + 1;
+    typeCounts.all += 1;
+    typeCounts[a.asset_type || 'website'] = (typeCounts[a.asset_type || 'website'] || 0) + 1;
   }
   document.getElementById('ccCountAll').textContent       = counts.all;
   document.getElementById('ccCountStudio').textContent    = counts['crown-jewel'];
@@ -4682,8 +4841,15 @@ function renderCommandCenter() {
   document.getElementById('ccCountProduct').textContent   = counts.product;
   document.getElementById('ccCountPersonal').textContent  = counts.personal;
   document.getElementById('ccCountArchived').textContent  = counts.archived;
+  document.getElementById('ccTypeCountAll').textContent      = typeCounts.all;
+  document.getElementById('ccTypeCountWebsite').textContent  = typeCounts.website || 0;
+  document.getElementById('ccTypeCountDeck').textContent     = typeCounts.deck || 0;
+  document.getElementById('ccTypeCountApp').textContent      = typeCounts.app || 0;
 
-  // ── Mission grid (grouped) ──
+  // ── View toggle button state ──
+  document.querySelectorAll('#ccViewToggle button').forEach(b => b.classList.toggle('active', b.dataset.view === ccView));
+
+  // ── Mission grid / table ──
   const grid = document.getElementById('ccGrid');
   const gridMeta = document.getElementById('ccGridMeta');
 
@@ -4692,10 +4858,14 @@ function renderCommandCenter() {
   else if (ccFilter === 'all')      visibleAssets = activeAssets;
   else                              visibleAssets = activeAssets.filter(a => a.category === ccFilter);
 
-  gridMeta.textContent = `${visibleAssets.length} shown`;
+  if (ccTypeFilter !== 'all') {
+    visibleAssets = visibleAssets.filter(a => (a.asset_type || 'website') === ccTypeFilter);
+  }
+
+  gridMeta.textContent = `${visibleAssets.length} shown · ${ccView} view`;
 
   if (!visibleAssets.length) {
-    grid.innerHTML = '<div class="cc-empty">Nothing in this group.</div>';
+    grid.innerHTML = '<div class="cc-empty">Nothing matches these filters.</div>';
     return;
   }
 
@@ -4718,6 +4888,9 @@ function renderCommandCenter() {
       return acc;
     }, {});
     const dotsHtml = ['green', 'yellow', 'red'].map(k => `<span class="${k}" style="${tally[k] ? '' : 'display:none;'}" title="${tally[k] || 0} ${k}"></span>`).join('');
+    const body = ccView === 'table'
+      ? `<div class="cc-table">${items.map(a => ccRowHtml(a)).join('')}</div>`
+      : `<div class="cc-grid cc-group-grid">${items.map(a => ccCardHtml(a)).join('')}</div>`;
     return `
       <div class="cc-group ${collapsed ? 'collapsed' : ''}" data-cat="${catKey}">
         <button class="cc-group-head" onclick="ccToggleGroup('${catKey}')">
@@ -4728,9 +4901,7 @@ function renderCommandCenter() {
             <span class="dots">${dotsHtml}</span>
           </span>
         </button>
-        <div class="cc-grid cc-group-grid">
-          ${items.map(a => ccCardHtml(a)).join('')}
-        </div>
+        ${body}
       </div>
     `;
   }).join('');
@@ -4778,6 +4949,64 @@ function ccCardHtml(a) {
   `;
 }
 
+function ccRowHtml(a) {
+  const cls = (!a.active ? 'inactive ' : '') + (a.mission_status || 'unknown');
+  const findingsCls = a.open_count === 0 ? 'zero' : (a.worst_severity === 'critical' || a.worst_severity === 'high' ? 'bad' : 'warn');
+  const sweptAgo = a.last_swept_at ? secTimeAgo(a.last_swept_at) : 'never';
+  const type = a.asset_type || 'website';
+  const isWp = a.cms === 'wordpress';
+  const wpAdminUrl = isWp ? (a.https_url.replace(/\/$/, '') + '/wp-admin/') : null;
+  const slug = encodeURIComponent(a.slug);
+
+  // Inline icon set — each is a tiny SVG button. Sweep/findings/edit hit the admin API;
+  // visit/wpadmin open externally.
+  const ICONS = {
+    visit:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+    sweep:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>',
+    security: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    edit:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+    wp:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>'
+  };
+  const btn = (action, title, onclickJs, icon) =>
+    `<button class="cc-shortcut" data-action="${action}" title="${title}" onclick="event.stopPropagation();${onclickJs}">${icon}</button>`;
+
+  const shortcuts = [
+    btn('visit',    'Open site',          `window.open('${a.https_url}', '_blank', 'noopener')`, ICONS.visit),
+    btn('sweep',    'Sweep this asset',   `ccSweepOne('${slug}', this)`, ICONS.sweep),
+    btn('security', 'View findings',      `navigate('security')`, ICONS.security),
+    btn('edit',     'Edit asset',         `navigate('security');setTimeout(()=>openSecAssetEditor('${a.id}'),50)`, ICONS.edit),
+    isWp ? btn('wp', 'WP Admin', `window.open('${wpAdminUrl}', '_blank', 'noopener')`, ICONS.wp) : ''
+  ].join('');
+
+  return `
+    <div class="cc-row ${cls}" onclick="navigate('security')">
+      <div class="cc-row-pulse"></div>
+      <div class="cc-row-name">
+        <div class="cc-row-label">${escapeHtml(a.label)}</div>
+        <div class="cc-row-domain">${escapeHtml(a.domain || '')}</div>
+      </div>
+      <span class="cc-row-tag type-${type}">${escapeHtml(type)}</span>
+      <span class="cc-row-tag">${escapeHtml(a.host_provider || '—')}</span>
+      <span class="cc-row-findings ${findingsCls}">${a.open_count || 0}</span>
+      <span class="cc-row-swept">${sweptAgo}</span>
+      <div class="cc-row-actions">${shortcuts}</div>
+    </div>
+  `;
+}
+
+async function ccSweepOne(slug, btnEl) {
+  if (btnEl) btnEl.style.opacity = '0.4';
+  try {
+    const r = await fetch(`/api/security-sweep?slug=${slug}`, { method: 'POST', credentials: 'include' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    await loadCommandCenter();
+  } catch (e) {
+    alert('Sweep failed: ' + e.message);
+  } finally {
+    if (btnEl) btnEl.style.opacity = '1';
+  }
+}
+
 function ccToggleGroup(catKey) {
   if (ccCollapsedGroups.has(catKey)) ccCollapsedGroups.delete(catKey);
   else ccCollapsedGroups.add(catKey);
@@ -4788,14 +5017,27 @@ function ccToggleGroup(catKey) {
 
 function ccFilterTo(f) {
   ccFilter = f;
-  document.querySelectorAll('.cc-filter').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  document.querySelectorAll('.cc-filters .cc-filter').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderCommandCenter();
+}
+function ccTypeFilterTo(t) {
+  ccTypeFilter = t;
+  document.querySelectorAll('.cc-subfilter .cc-filter').forEach(b => b.classList.toggle('active', b.dataset.typeFilter === t));
+  renderCommandCenter();
+}
+function ccSetView(v) {
+  ccView = v;
+  localStorage.setItem('cc_view', v);
   renderCommandCenter();
 }
 
 document.addEventListener('click', (ev) => {
-  const f = ev.target.closest('.cc-filter');
-  if (!f) return;
-  ccFilterTo(f.dataset.filter);
+  const cat = ev.target.closest('.cc-filters .cc-filter');
+  if (cat) { ccFilterTo(cat.dataset.filter); return; }
+  const typ = ev.target.closest('.cc-subfilter .cc-filter');
+  if (typ) { ccTypeFilterTo(typ.dataset.typeFilter); return; }
+  const view = ev.target.closest('#ccViewToggle button');
+  if (view) { ccSetView(view.dataset.view); return; }
 });
 
 function openCcDrawer() {

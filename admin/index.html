@@ -1116,12 +1116,157 @@
     color: var(--text-dim);
   }
 
-  /* KPI strip */
+  /* KPI strip — 4 consolidated hero tiles */
   .cc-strip {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 12px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
+  }
+  .cc-tile-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: end;
+  }
+  .cc-tile-split .cc-tile-value { font-size: 22px; }
+  .cc-tile-split-sep {
+    height: 100%;
+    width: 1px;
+    background: var(--border);
+    grid-row: 1 / -1;
+    grid-column: 2 / 3;
+    margin: 0 -2px;
+  }
+
+  /* Filter chip bar */
+  .cc-filterbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .cc-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .cc-filter {
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border-light);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .cc-filter:hover { color: var(--text); }
+  .cc-filter.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+  .cc-filter .pill {
+    background: var(--surface-3);
+    color: var(--text-muted);
+    border-radius: 999px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    font-size: 9px;
+  }
+  .cc-filter.active .pill { background: rgba(168,255,0,.18); color: var(--accent); }
+
+  /* Category groups in mission grid */
+  .cc-group { margin-bottom: 18px; }
+  .cc-group-head {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    transition: color .15s;
+  }
+  .cc-group-head:hover { color: var(--text); }
+  .cc-group-chev {
+    display: inline-block;
+    transition: transform .2s;
+    color: var(--text-muted);
+    font-size: 8px;
+  }
+  .cc-group.collapsed .cc-group-chev { transform: rotate(-90deg); }
+  .cc-group.collapsed .cc-group-grid { display: none; }
+  .cc-group-count {
+    color: var(--text-muted);
+    margin-left: auto;
+    letter-spacing: 1.5px;
+  }
+  .cc-group-count .dots { display: inline-flex; gap: 3px; margin-left: 6px; }
+  .cc-group-count .dots span {
+    width: 6px; height: 6px; border-radius: 50%;
+    display: inline-block;
+    background: var(--surface-3);
+  }
+  .cc-group-count .dots .green  { background: var(--accent); }
+  .cc-group-count .dots .yellow { background: var(--yellow); }
+  .cc-group-count .dots .red    { background: var(--red);    box-shadow: 0 0 4px var(--red); }
+
+  /* Activity drawer */
+  .cc-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    z-index: 99;
+  }
+  .cc-drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .cc-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 440px;
+    max-width: 100vw;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform .25s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  .cc-drawer.open { transform: translateX(0); }
+  .cc-drawer-head {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cc-drawer-head h3 { font-size: 14px; }
+  .cc-drawer-head button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .cc-drawer-head button:hover { color: var(--accent); }
+  .cc-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+  }
+  @media (max-width: 600px) {
+    .cc-strip { grid-template-columns: 1fr 1fr; }
+    .cc-drawer { width: 100vw; }
   }
   .cc-tile {
     background: linear-gradient(180deg, var(--surface-2), var(--surface));
@@ -1670,31 +1815,85 @@
             <span class="cc-meta" id="ccMeta">Initializing…</span>
           </div>
 
-          <!-- KPI strip -->
+          <!-- 4 hero tiles -->
           <div class="cc-strip" id="ccStrip">
-            <div class="cc-tile"><div class="cc-tile-label">Asset Health</div><div class="cc-tile-value" id="ccAssetHealthCount">—</div><div class="cc-tile-sub" id="ccAssetHealthSub">loading</div><div class="cc-tile-bar" id="ccAssetHealthBar"></div></div>
-            <div class="cc-tile"><div class="cc-tile-label">Critical / High</div><div class="cc-tile-value crit" id="ccCritCount">—</div><div class="cc-tile-sub" id="ccCritSub">security findings</div></div>
-            <div class="cc-tile"><div class="cc-tile-label">Medium</div><div class="cc-tile-value warn" id="ccMedCount">—</div><div class="cc-tile-sub">open security</div></div>
-            <div class="cc-tile"><div class="cc-tile-label">Overdue Invoices</div><div class="cc-tile-value warn" id="ccOverdueCount">—</div><div class="cc-tile-sub" id="ccOverdueAmount">—</div></div>
-            <div class="cc-tile"><div class="cc-tile-label">MRR (Active Retainers)</div><div class="cc-tile-value good" id="ccMrr">—</div><div class="cc-tile-sub" id="ccMrrSub">—</div></div>
-            <div class="cc-tile"><div class="cc-tile-label">New Submissions</div><div class="cc-tile-value" id="ccSubCount">—</div><div class="cc-tile-sub" id="ccSubSub">unread / 30d</div></div>
+            <div class="cc-tile good" onclick="ccFilterTo('all')">
+              <div class="cc-tile-label">Asset Health</div>
+              <div class="cc-tile-value" id="ccAssetHealthCount">—</div>
+              <div class="cc-tile-sub" id="ccAssetHealthSub">loading</div>
+              <div class="cc-tile-bar" id="ccAssetHealthBar"></div>
+            </div>
+            <div class="cc-tile" id="ccFindingsTile">
+              <div class="cc-tile-label">Open Security Findings</div>
+              <div class="cc-tile-split">
+                <div>
+                  <div class="cc-tile-value crit" id="ccCritCount">—</div>
+                  <div class="cc-tile-sub">crit / high</div>
+                </div>
+                <div>
+                  <div class="cc-tile-value warn" id="ccMedCount">—</div>
+                  <div class="cc-tile-sub">medium</div>
+                </div>
+              </div>
+            </div>
+            <div class="cc-tile" id="ccMoneyTile">
+              <div class="cc-tile-label">Money in Motion</div>
+              <div class="cc-tile-split">
+                <div>
+                  <div class="cc-tile-value good" id="ccMrr">—</div>
+                  <div class="cc-tile-sub" id="ccMrrSub">MRR</div>
+                </div>
+                <div>
+                  <div class="cc-tile-value warn" id="ccOverdueAmount">—</div>
+                  <div class="cc-tile-sub" id="ccOverdueSub">overdue</div>
+                </div>
+              </div>
+            </div>
+            <div class="cc-tile" onclick="navigate('submissions')" style="cursor:pointer;">
+              <div class="cc-tile-label">Inbox · 30 days</div>
+              <div class="cc-tile-split">
+                <div>
+                  <div class="cc-tile-value" id="ccSubUnread">—</div>
+                  <div class="cc-tile-sub">unread</div>
+                </div>
+                <div>
+                  <div class="cc-tile-value" id="ccSub30d" style="color:var(--text-dim);">—</div>
+                  <div class="cc-tile-sub">total</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Client mission grid -->
-          <div class="cc-h3">
-            <span>Client Mission Grid</span>
-            <span class="cc-h3-meta" id="ccGridMeta">—</span>
-          </div>
-          <div class="cc-grid" id="ccGrid">
-            <div class="cc-empty">Loading client roster…</div>
+          <!-- Filter chip bar + drawer trigger -->
+          <div class="cc-filterbar">
+            <div class="cc-filters" id="ccFilters">
+              <button class="cc-filter active" data-filter="all">All <span class="pill" id="ccCountAll">0</span></button>
+              <button class="cc-filter" data-filter="crown-jewel">Studio <span class="pill" id="ccCountStudio">0</span></button>
+              <button class="cc-filter" data-filter="client">Clients <span class="pill" id="ccCountClient">0</span></button>
+              <button class="cc-filter" data-filter="product">Products <span class="pill" id="ccCountProduct">0</span></button>
+              <button class="cc-filter" data-filter="personal">Personal <span class="pill" id="ccCountPersonal">0</span></button>
+              <button class="cc-filter" data-filter="archived">Archived <span class="pill" id="ccCountArchived">0</span></button>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span class="cc-h3-meta" id="ccGridMeta" style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--text-dim);">—</span>
+              <button class="btn btn-ghost" onclick="openCcDrawer()">Activity ›</button>
+            </div>
           </div>
 
-          <!-- Activity stream -->
-          <div class="cc-h3">
-            <span>Recent Activity</span>
-            <span class="cc-h3-meta">Last 30 days · merged feed</span>
+          <!-- Mission grid (grouped by category) -->
+          <div id="ccGrid">
+            <div class="cc-empty">Loading…</div>
           </div>
-          <div class="cc-stream" id="ccStream">
+        </div>
+
+        <!-- Activity drawer -->
+        <div class="cc-drawer-overlay" id="ccDrawerOverlay" onclick="closeCcDrawer()"></div>
+        <div class="cc-drawer" id="ccDrawer">
+          <div class="cc-drawer-head">
+            <h3>Recent Activity</h3>
+            <button onclick="closeCcDrawer()" aria-label="Close">&times;</button>
+          </div>
+          <div class="cc-drawer-body" id="ccStream">
             <div class="cc-empty">Loading activity…</div>
           </div>
         </div>
@@ -4404,6 +4603,18 @@ async function disable2fa() {
 
 // ═══ COMMAND CENTER ═══
 let ccData = null;
+let ccFilter = 'all';
+const ccCollapsedGroups = new Set(JSON.parse(localStorage.getItem('cc_collapsed_groups') || '[]'));
+
+const CC_CATEGORY_LABELS = {
+  'crown-jewel': 'Studio',
+  'client':      'Client Sites',
+  'product':     'Products',
+  'personal':    'Personal',
+  'archived':    'Archived'
+};
+
+const CC_CATEGORY_ORDER = ['crown-jewel', 'client', 'product', 'personal', 'archived'];
 
 async function loadCommandCenter() {
   try {
@@ -4421,98 +4632,110 @@ async function loadCommandCenter() {
 function renderCommandCenter() {
   if (!ccData) return;
   const { kpis, assets, activity, generated_at } = ccData;
+  const fmtMoney = (cents) => '$' + ((cents || 0) / 100).toLocaleString(undefined, { maximumFractionDigits: 0 });
+  const activeAssets = assets.filter(a => a.active);
 
-  // Meta
+  // ── Meta ──
   const meta = document.getElementById('ccMeta');
-  if (meta) meta.textContent = `Last sync ${secTimeAgo(generated_at)} · ${assets.filter(a => a.active).length} active assets`;
+  if (meta) meta.textContent = `Last sync ${secTimeAgo(generated_at)} · ${activeAssets.length} active assets`;
 
-  // ── KPI tiles ──
-  const fmtMoney = (cents, ccy = 'USD') => '$' + ((cents || 0) / 100).toLocaleString(undefined, { maximumFractionDigits: 0 });
-
-  // Asset health tile
+  // ── KPI tile 1: Asset Health ──
   const status = kpis.asset_status || { green: 0, yellow: 0, red: 0, unknown: 0 };
   const totalActive = (status.green || 0) + (status.yellow || 0) + (status.red || 0) + (status.unknown || 0);
   document.getElementById('ccAssetHealthCount').textContent = `${status.green || 0}/${totalActive}`;
-  document.getElementById('ccAssetHealthSub').textContent = `${status.green || 0} green · ${status.yellow || 0} yellow · ${status.red || 0} red · ${status.unknown || 0} unswept`;
+  document.getElementById('ccAssetHealthSub').textContent = `${status.yellow || 0} yellow · ${status.red || 0} red · ${status.unknown || 0} unswept`;
   const bar = document.getElementById('ccAssetHealthBar');
   bar.innerHTML = '';
   const segs = [['green', status.green || 0], ['yellow', status.yellow || 0], ['red', status.red || 0]];
-  for (const [cls, n] of segs) {
-    for (let i = 0; i < n; i++) {
-      const d = document.createElement('div');
-      d.className = cls;
-      bar.appendChild(d);
-    }
+  for (const [cls, n] of segs) for (let i = 0; i < n; i++) {
+    const d = document.createElement('div'); d.className = cls; bar.appendChild(d);
   }
   for (let i = 0; i < (status.unknown || 0); i++) bar.appendChild(document.createElement('div'));
 
-  // Critical / High
+  // ── KPI tile 2: Open Security Findings (split) ──
   const critTotal = (kpis.open_critical || 0) + (kpis.open_high || 0);
-  const critEl = document.getElementById('ccCritCount');
-  critEl.textContent = critTotal;
-  document.getElementById('ccCritSub').textContent = `${kpis.open_critical || 0} crit · ${kpis.open_high || 0} high`;
-  const critTile = critEl.closest('.cc-tile');
-  critTile.classList.toggle('alert', critTotal > 0);
-
-  // Medium
+  document.getElementById('ccCritCount').textContent = critTotal;
   document.getElementById('ccMedCount').textContent = kpis.open_medium || 0;
+  document.getElementById('ccFindingsTile').classList.toggle('alert', critTotal > 0);
 
-  // Overdue invoices
-  const overdueEl = document.getElementById('ccOverdueCount');
-  overdueEl.textContent = kpis.overdue_invoice_count || 0;
-  document.getElementById('ccOverdueAmount').textContent = fmtMoney(kpis.overdue_invoice_amount_cents);
-  overdueEl.closest('.cc-tile').classList.toggle('warn', (kpis.overdue_invoice_count || 0) > 0);
-
-  // MRR
+  // ── KPI tile 3: Money in Motion (split) ──
   document.getElementById('ccMrr').textContent = fmtMoney(kpis.mrr_cents);
-  document.getElementById('ccMrrSub').textContent = `${kpis.active_retainers || 0} active${kpis.retainer_errors ? ` · ${kpis.retainer_errors} error${kpis.retainer_errors > 1 ? 's' : ''}` : ''}`;
+  document.getElementById('ccMrrSub').textContent = `MRR · ${kpis.active_retainers || 0} active`;
+  document.getElementById('ccOverdueAmount').textContent = fmtMoney(kpis.overdue_invoice_amount_cents);
+  document.getElementById('ccOverdueSub').textContent = `${kpis.overdue_invoice_count || 0} overdue · ${kpis.unpaid_invoice_count || 0} unpaid`;
+  document.getElementById('ccMoneyTile').classList.toggle('warn', (kpis.overdue_invoice_count || 0) > 0);
 
-  // Submissions
-  document.getElementById('ccSubCount').textContent = kpis.unread_submissions || 0;
-  document.getElementById('ccSubSub').textContent = `${kpis.unread_submissions || 0} unread · ${kpis.submissions_30d || 0} in 30d`;
+  // ── KPI tile 4: Inbox ──
+  document.getElementById('ccSubUnread').textContent = kpis.unread_submissions || 0;
+  document.getElementById('ccSub30d').textContent = kpis.submissions_30d || 0;
 
-  // ── Mission grid ──
+  // ── Filter chip counts ──
+  const counts = { all: 0, 'crown-jewel': 0, client: 0, product: 0, personal: 0, archived: 0 };
+  for (const a of assets) {
+    if (!a.active) { counts.archived += 1; continue; }
+    counts.all += 1;
+    counts[a.category] = (counts[a.category] || 0) + 1;
+  }
+  document.getElementById('ccCountAll').textContent       = counts.all;
+  document.getElementById('ccCountStudio').textContent    = counts['crown-jewel'];
+  document.getElementById('ccCountClient').textContent    = counts.client;
+  document.getElementById('ccCountProduct').textContent   = counts.product;
+  document.getElementById('ccCountPersonal').textContent  = counts.personal;
+  document.getElementById('ccCountArchived').textContent  = counts.archived;
+
+  // ── Mission grid (grouped) ──
   const grid = document.getElementById('ccGrid');
   const gridMeta = document.getElementById('ccGridMeta');
-  gridMeta.textContent = `${assets.filter(a => a.active).length} active · ${assets.filter(a => !a.active).length} archived`;
 
-  if (!assets.length) {
-    grid.innerHTML = '<div class="cc-empty">No assets registered. Visit Security tab → + Asset.</div>';
-  } else {
-    // Sort: active first, then category, then label
-    const sorted = [...assets].sort((a, b) => {
-      if (a.active !== b.active) return a.active ? -1 : 1;
-      if (a.category !== b.category) return (a.category || '').localeCompare(b.category || '');
-      return (a.label || '').localeCompare(b.label || '');
-    });
-    grid.innerHTML = sorted.map(a => {
-      const cls = !a.active ? 'inactive' : (a.mission_status || 'unknown');
-      const findingsCls = a.open_count === 0 ? '' : (a.worst_severity === 'critical' || a.worst_severity === 'high' ? 'bad' : 'warn');
-      const sweptAgo = a.last_swept_at ? secTimeAgo(a.last_swept_at) : 'never';
-      return `
-        <div class="cc-card ${cls}" onclick="navigate('security')">
-          <div class="cc-card-head">
-            <div>
-              <div class="cc-card-label"><span class="cc-card-pulse"></span>${escapeHtml(a.label)}</div>
-              <div class="cc-card-domain">${escapeHtml(a.domain || '')}</div>
-            </div>
-          </div>
-          <div class="cc-card-tags">
-            <span class="cat">${escapeHtml(a.category || 'client')}</span>
-            ${a.host_provider ? `<span>${escapeHtml(a.host_provider)}</span>` : ''}
-            ${a.cms ? `<span>${escapeHtml(a.cms)}</span>` : ''}
-            ${a.active ? '' : '<span>archived</span>'}
-          </div>
-          <div class="cc-card-bar">
-            <span>Findings <span class="findings ${findingsCls}">${a.open_count || 0}</span></span>
-            <span>${sweptAgo}</span>
-          </div>
-        </div>
-      `;
-    }).join('');
+  let visibleAssets = assets;
+  if (ccFilter === 'archived')      visibleAssets = assets.filter(a => !a.active);
+  else if (ccFilter === 'all')      visibleAssets = activeAssets;
+  else                              visibleAssets = activeAssets.filter(a => a.category === ccFilter);
+
+  gridMeta.textContent = `${visibleAssets.length} shown`;
+
+  if (!visibleAssets.length) {
+    grid.innerHTML = '<div class="cc-empty">Nothing in this group.</div>';
+    return;
   }
 
-  // ── Activity stream ──
+  // Group by category
+  const groups = new Map();
+  for (const a of visibleAssets) {
+    const k = !a.active ? 'archived' : a.category;
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(a);
+  }
+  const orderedKeys = [...CC_CATEGORY_ORDER, ...[...groups.keys()].filter(k => !CC_CATEGORY_ORDER.includes(k))]
+    .filter(k => groups.has(k));
+
+  grid.innerHTML = orderedKeys.map(catKey => {
+    const items = groups.get(catKey).sort((a, b) => (a.label || '').localeCompare(b.label || ''));
+    const collapsed = ccCollapsedGroups.has(catKey);
+    const tally = items.reduce((acc, a) => {
+      const k = !a.active ? 'inactive' : (a.mission_status || 'unknown');
+      acc[k] = (acc[k] || 0) + 1;
+      return acc;
+    }, {});
+    const dotsHtml = ['green', 'yellow', 'red'].map(k => `<span class="${k}" style="${tally[k] ? '' : 'display:none;'}" title="${tally[k] || 0} ${k}"></span>`).join('');
+    return `
+      <div class="cc-group ${collapsed ? 'collapsed' : ''}" data-cat="${catKey}">
+        <button class="cc-group-head" onclick="ccToggleGroup('${catKey}')">
+          <span class="cc-group-chev">▾</span>
+          <span class="cc-group-name">${escapeHtml(CC_CATEGORY_LABELS[catKey] || catKey)}</span>
+          <span class="cc-group-count">
+            ${items.length}
+            <span class="dots">${dotsHtml}</span>
+          </span>
+        </button>
+        <div class="cc-grid cc-group-grid">
+          ${items.map(a => ccCardHtml(a)).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // ── Activity stream (drawer) ──
   const stream = document.getElementById('ccStream');
   if (!activity.length) {
     stream.innerHTML = '<div class="cc-empty">No recent activity.</div>';
@@ -4529,6 +4752,59 @@ function renderCommandCenter() {
       </div>
     `).join('');
   }
+}
+
+function ccCardHtml(a) {
+  const cls = !a.active ? 'inactive' : (a.mission_status || 'unknown');
+  const findingsCls = a.open_count === 0 ? '' : (a.worst_severity === 'critical' || a.worst_severity === 'high' ? 'bad' : 'warn');
+  const sweptAgo = a.last_swept_at ? secTimeAgo(a.last_swept_at) : 'never';
+  return `
+    <div class="cc-card ${cls}" onclick="navigate('security')">
+      <div class="cc-card-head">
+        <div>
+          <div class="cc-card-label"><span class="cc-card-pulse"></span>${escapeHtml(a.label)}</div>
+          <div class="cc-card-domain">${escapeHtml(a.domain || '')}</div>
+        </div>
+      </div>
+      <div class="cc-card-tags">
+        ${a.host_provider ? `<span>${escapeHtml(a.host_provider)}</span>` : ''}
+        ${a.cms ? `<span>${escapeHtml(a.cms)}</span>` : ''}
+      </div>
+      <div class="cc-card-bar">
+        <span>Findings <span class="findings ${findingsCls}">${a.open_count || 0}</span></span>
+        <span>${sweptAgo}</span>
+      </div>
+    </div>
+  `;
+}
+
+function ccToggleGroup(catKey) {
+  if (ccCollapsedGroups.has(catKey)) ccCollapsedGroups.delete(catKey);
+  else ccCollapsedGroups.add(catKey);
+  localStorage.setItem('cc_collapsed_groups', JSON.stringify([...ccCollapsedGroups]));
+  const el = document.querySelector(`.cc-group[data-cat="${catKey}"]`);
+  if (el) el.classList.toggle('collapsed');
+}
+
+function ccFilterTo(f) {
+  ccFilter = f;
+  document.querySelectorAll('.cc-filter').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderCommandCenter();
+}
+
+document.addEventListener('click', (ev) => {
+  const f = ev.target.closest('.cc-filter');
+  if (!f) return;
+  ccFilterTo(f.dataset.filter);
+});
+
+function openCcDrawer() {
+  document.getElementById('ccDrawer').classList.add('open');
+  document.getElementById('ccDrawerOverlay').classList.add('open');
+}
+function closeCcDrawer() {
+  document.getElementById('ccDrawer').classList.remove('open');
+  document.getElementById('ccDrawerOverlay').classList.remove('open');
 }
 
 // ═══ SECURITY ═══

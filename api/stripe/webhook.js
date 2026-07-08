@@ -1,5 +1,6 @@
 const { getServiceRoleClient } = require('../_lib/auth');
 const { getStripeClient, readRawBody } = require('../_lib/stripe');
+const { sendInvoicePaidEmails } = require('../_lib/receipts');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -107,14 +108,31 @@ async function handlePaymentIntentSucceeded(sb, pi) {
   const invoiceId = pi.metadata?.invoice_id;
   if (!invoiceId) return;
 
-  await sb.from('invoices').update({
+  // Was this invoice already marked paid before this event? If so, skip the
+  // receipt so we never double-send (e.g. a manual mark-paid then a late PI event).
+  const { data: prior } = await sb
+    .from('invoices')
+    .select('status')
+    .eq('id', invoiceId)
+    .maybeSingle();
+  const alreadyPaid = prior?.status === 'paid';
+
+  const { data: invoice } = await sb.from('invoices').update({
     status: 'paid',
     paid_at: new Date().toISOString(),
     amount_cents: pi.amount,
     currency: pi.currency,
     stripe_payment_intent_id: pi.id,
     updated_at: new Date().toISOString()
-  }).eq('id', invoiceId);
+  }).eq('id', invoiceId).select().single();
+
+  // Send the branded client receipt + internal payment notification.
+  // Best-effort: sendInvoicePaidEmails never throws, so it can't affect
+  // payment recording. Webhook-event idempotency already guarantees this
+  // runs at most once per Stripe event.
+  if (invoice && !alreadyPaid) {
+    await sendInvoicePaidEmails(invoice, pi);
+  }
 }
 
 async function upsertCharge(sb, charge) {

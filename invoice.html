@@ -616,6 +616,7 @@ function renderInvoice(invoice) {
 
       ${payBtnHTML}
 
+      ${invoice.hide_payment_info ? '' : `
       <div class="payment-section">
         <h3>Electronic Payment Info:</h3>
         <p>
@@ -624,7 +625,7 @@ function renderInvoice(invoice) {
           <strong>Venmo:</strong> @socia739<br>
           <strong>PayPal:</strong> paypal.me/sociavis
         </p>
-      </div>
+      </div>`}
     </div>
   `;
 }

@@ -487,7 +487,8 @@ function showError(msg) {
     clientEmail: data.client_email,
     period: data.period,
     items: data.items || [],
-    notes: data.notes
+    notes: data.notes,
+    hidePaymentInfo: !!data.hide_payment_info
   };
 
   currentInvoice = invoice;
@@ -616,7 +617,7 @@ function renderInvoice(invoice) {
 
       ${payBtnHTML}
 
-      ${invoice.hide_payment_info ? '' : `
+      ${invoice.hidePaymentInfo ? '' : `
       <div class="payment-section">
         <h3>Electronic Payment Info:</h3>
         <p>

@@ -405,7 +405,7 @@ function renderContract(c) {
       <div class="party-block" style="margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid #eee;">
         <div class="party-label">Client</div>
         <div class="party-name">${c.client_company || ''}</div>
-        <div class="party-detail">${c.client_name || ''}<br>${c.client_email || ''}</div>
+        <div class="party-detail">${(c.client_name || '').split(/\s*\/\s*/).filter(Boolean).join('<br>')}<br>${c.client_email || ''}</div>
       </div>
 
       ${sections}

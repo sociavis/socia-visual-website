@@ -355,11 +355,18 @@ function renderContract(c) {
     </div>
   `).join('');
 
-  const isSigned = c.status === 'signed' && c.signature_client;
+  const isSigned = c.status === 'signed' && (c.signature_client || c.acceptance_method === 'click');
 
   const clientSigHTML = isSigned
-    ? `<div class="sig-display"><img src="${c.signature_client}" alt="Client signature"></div>
-       <div class="sig-date">${c.signature_date || ''}</div>`
+    ? (c.signature_client
+        ? `<div class="sig-display"><img src="${c.signature_client}" alt="Client signature"></div>
+           <div class="sig-date">${c.signature_date || ''}</div>`
+        : `<div class="sig-display" style="font-family:'Share Tech Mono',monospace;font-size:13px;line-height:1.7;color:#1a1a1a;">
+             <div style="font-size:11px;letter-spacing:1.5px;color:#4caf50;">ACCEPTED ELECTRONICALLY</div>
+             <div style="font-family:'Chakra Petch',sans-serif;font-size:16px;font-weight:600;margin-top:4px;">${c.accepted_by_name || c.client_name || ''}</div>
+             <div style="color:#666;">${c.accepted_by_email || c.client_email || ''}</div>
+           </div>
+           <div class="sig-date">${c.signature_date || ''}${c.agreement_url ? ` · <a href="${c.agreement_url}" style="color:#48b8d0;">agreement page</a>` : ''}</div>`)
     : `<div class="sig-canvas-wrap" id="sigWrap">
          <canvas id="sigCanvas"></canvas>
          <div class="sig-canvas-placeholder" id="sigPlaceholder">Sign here</div>

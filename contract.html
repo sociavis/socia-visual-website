@@ -272,6 +272,18 @@
 
   .not-found { text-align: center; padding: 100px 40px; font-size: 18px; color: #999; }
 
+  /* Click-to-accept (agreement link carries ?t=) */
+  .accept-form { position: relative; }
+  .accept-form .acc-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-top: 6px; }
+  .accept-form input[type=text], .accept-form input[type=email] { width: 100%; font: 14px 'Chakra Petch', sans-serif; padding: 9px 10px; border: 1px solid #ddd; border-radius: 3px; margin: 4px 0 8px; background: #fafafa; }
+  .accept-form input:focus { outline: none; border-color: #1a1a1a; background: #fff; }
+  .accept-form .acc-check { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #555; line-height: 1.5; margin: 6px 0 14px; cursor: pointer; }
+  .accept-form .acc-check input { margin-top: 3px; accent-color: #4caf50; }
+  .accept-form .acc-btn { font-family: 'Chakra Petch', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .5px; padding: 11px 20px; border-radius: 3px; border: 1px solid #4caf50; background: #4caf50; color: #fff; cursor: pointer; transition: background .15s; }
+  .accept-form .acc-btn:hover { background: #43a047; }
+  .accept-form .acc-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .accept-form .acc-msg { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: #c62828; margin-top: 8px; min-height: 1.2em; }
+
   .toast {
     position: fixed; bottom: 24px; right: 24px;
     background: #1a1a1a; color: #fff;
@@ -297,7 +309,7 @@
     .contract-page { padding: 0; }
     .contract-wrap { box-shadow: none; }
     .contract-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .sig-actions { display: none; }
+    .sig-actions, .accept-form { display: none; }
     .sig-canvas-placeholder { display: none; }
   }
 </style>
@@ -327,6 +339,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentContract = null;
 let sigCanvas, sigCtx, drawing = false, hasSignature = false;
+const ACCEPT_TOKEN = new URLSearchParams(window.location.search).get('t') || '';
 
 (async function() {
   const id = new URLSearchParams(window.location.search).get('id');
@@ -367,14 +380,25 @@ function renderContract(c) {
              <div style="color:#666;">${c.accepted_by_email || c.client_email || ''}</div>
            </div>
            <div class="sig-date">${c.signature_date || ''}${c.agreement_url ? ` · <a href="${c.agreement_url}" style="color:#48b8d0;">agreement page</a>` : ''}</div>`)
-    : `<div class="sig-canvas-wrap" id="sigWrap">
-         <canvas id="sigCanvas"></canvas>
-         <div class="sig-canvas-placeholder" id="sigPlaceholder">Sign here</div>
-       </div>
-       <div class="sig-actions">
-         <button onclick="clearSig()">Clear</button>
-         <button class="sign-btn" onclick="submitSignature()">Sign & Accept Agreement</button>
-       </div>`;
+    : (ACCEPT_TOKEN
+        ? `<div class="accept-form">
+             <input type="text" id="accWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;">
+             <label class="acc-label" for="accName">Full name</label>
+             <input id="accName" type="text" autocomplete="name" placeholder="Your full name">
+             <label class="acc-label" for="accEmail">Email</label>
+             <input id="accEmail" type="email" autocomplete="email" placeholder="you@company.com">
+             <label class="acc-check"><input id="accAgree" type="checkbox"> <span>I am authorized to act for ${c.client_company || 'the Client'} and I agree to the terms of this Service Agreement.</span></label>
+             <button class="acc-btn" id="accBtn" onclick="submitClickAccept()">Begin agreement →</button>
+             <div class="acc-msg" id="accMsg" role="status" aria-live="polite"></div>
+           </div>`
+        : `<div class="sig-canvas-wrap" id="sigWrap">
+             <canvas id="sigCanvas"></canvas>
+             <div class="sig-canvas-placeholder" id="sigPlaceholder">Sign here</div>
+           </div>
+           <div class="sig-actions">
+             <button onclick="clearSig()">Clear</button>
+             <button class="sign-btn" onclick="submitSignature()">Sign & Accept Agreement</button>
+           </div>`);
 
   const fmtDate = c.date || '';
 
@@ -412,7 +436,9 @@ function renderContract(c) {
 
       <div class="signature-area">
         <h2>Acceptance & Signature</h2>
-        <p style="font-size:13px;color:#666;margin-bottom:24px;line-height:1.7;">By signing below, both parties agree to the terms and conditions outlined in this Service Agreement. This agreement is binding upon execution by both parties.</p>
+        <p style="font-size:13px;color:#666;margin-bottom:24px;line-height:1.7;">${(ACCEPT_TOKEN && !isSigned)
+          ? 'Enter your name and email and click <strong>Begin agreement</strong>. That is your acceptance of the terms in this Service Agreement, with the same effect as a signature. The date, your name and email are recorded with the agreement and you receive a copy by email.'
+          : 'By signing below, both parties agree to the terms and conditions outlined in this Service Agreement. This agreement is binding upon execution by both parties.'}</p>
         <div class="sig-grid">
           <div class="sig-block">
             <label>Service Provider</label>
@@ -498,6 +524,39 @@ async function submitSignature() {
   document.getElementById('signedBadge').style.display = 'flex';
   renderContract(currentContract);
   toast('Agreement signed successfully');
+}
+
+async function submitClickAccept() {
+  if (!currentContract) return;
+  const name = (document.getElementById('accName').value || '').trim();
+  const email = (document.getElementById('accEmail').value || '').trim();
+  const msg = document.getElementById('accMsg');
+  const btn = document.getElementById('accBtn');
+  const say = (t) => { msg.textContent = t || ''; };
+  if (name.length < 2) { say('Please enter your full name.'); document.getElementById('accName').focus(); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { say('Please enter a valid email address.'); document.getElementById('accEmail').focus(); return; }
+  if (!document.getElementById('accAgree').checked) { say('Please tick the box to confirm you agree.'); return; }
+  btn.disabled = true; say('');
+  try {
+    const r = await fetch('/api/accept-agreement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ id: currentContract.id, t: ACCEPT_TOKEN, name, email, agree: true, website: document.getElementById('accWebsite').value })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!(r.ok && d.ok) && r.status !== 409) {
+      say(d.error || 'Something went wrong. Please try again or email scott@sociavisual.com.');
+      btn.disabled = false; return;
+    }
+    const { data } = await sb.from('contracts').select('*').eq('id', currentContract.id).single();
+    if (data) currentContract = data;
+    document.getElementById('signedBadge').style.display = 'flex';
+    renderContract(currentContract);
+    toast(r.status === 409 ? 'This agreement is already active' : 'Agreement accepted. Welcome aboard.');
+  } catch (err) {
+    say('Network error. Please try again or email scott@sociavisual.com.');
+    btn.disabled = false;
+  }
 }
 
 function downloadPDF() {

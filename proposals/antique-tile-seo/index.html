@@ -231,7 +231,7 @@
     <a href="#reporting">Reporting</a>
     <a href="#need">What we need</a>
     <a href="#terms">Terms</a>
-    <a href="#activate" class="cta">Begin agreement →</a>
+    <a href="#activate" class="cta">Accept agreement →</a>
   </div>
 </nav>
 
@@ -490,20 +490,14 @@
   <div class="activate" id="activate">
     <div class="in">
       <div>
-        <div class="eyebrow">Acceptance</div>
-        <h3>Begin the agreement</h3>
-        <p>Enter your name and email and click the button. That is your acceptance of the terms above, with the same effect as a signature. We record the date, your name and email with the agreement, and you get a copy by email.</p>
+        <div class="eyebrow">Next step</div>
+        <h3>Review and accept the agreement</h3>
+        <p>The agreement itself is a short, plain page: what we do, what it costs, how reporting works, and how to end it. Open it, read it, and click <strong>Begin agreement</strong> at the bottom when you're ready.</p>
         <p class="small">What happens next: we send the Google Business Profile access requests, your first invoice arrives with a secure pay link, and week one starts.</p>
       </div>
-      <div class="form-state">
-        <form id="acceptForm" novalidate>
-          <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-          <div class="field"><label for="accName">Your full name</label><input id="accName" name="name" type="text" autocomplete="name" required placeholder="Nahomy Hernandez"></div>
-          <div class="field"><label for="accEmail">Your email</label><input id="accEmail" name="email" type="email" autocomplete="email" required placeholder="nahomy@antiquetilesupply.com"></div>
-          <label class="check"><input id="accAgree" type="checkbox" required><span>I am authorized to act for Antique Tile Supply and I agree to the terms of this agreement.</span></label>
-          <button class="btn" id="accBtn" type="submit">Begin agreement <span class="arrow">→</span></button>
-          <div class="msg" id="accMsg" role="status" aria-live="polite"></div>
-        </form>
+      <div class="form-state" style="display:flex;flex-direction:column;justify-content:center;gap:14px;">
+        <a class="btn" id="openAgreement" href="https://sociavisual.com/contract.html?id=con_ats_seo_2026" style="border:0;justify-content:center;">Open the agreement <span class="arrow">→</span></a>
+        <p class="small" style="margin:0;text-align:center;">Agreement No. 051 · $650 per month · month to month</p>
       </div>
       <div class="active-state">
         <div class="badge">Agreement active</div>
@@ -514,6 +508,7 @@
           <li>Reply to Scott with the phone numbers and hours for each yard</li>
           <li>Your first invoice arrives by email with a secure pay link</li>
         </ul>
+        <p class="small" style="margin-top:14px"><a id="openAgreementSigned" href="https://sociavisual.com/contract.html?id=con_ats_seo_2026">View the signed agreement →</a></p>
       </div>
     </div>
   </div>
@@ -601,59 +596,22 @@
   const API = '/api/accept-agreement';
   const token = new URLSearchParams(location.search).get('t') || '';
   const box = document.getElementById('activate');
-  const form = document.getElementById('acceptForm');
-  const btn = document.getElementById('accBtn');
-  const msg = document.getElementById('accMsg');
   const line = document.getElementById('activeLine');
+  const url = `https://sociavisual.com/contract.html?id=${encodeURIComponent(CONTRACT_ID)}${token ? '&t=' + encodeURIComponent(token) : ''}`;
+  ['openAgreement', 'openAgreementSigned'].forEach(id => { const a = document.getElementById(id); if (a) a.href = url; });
 
   function fmt(iso) {
     try { return new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); } catch { return ''; }
   }
-  function showActive(d) {
-    box.classList.add('is-active');
-    const who = d.accepted_by ? ` by ${d.accepted_by}` : '';
-    line.textContent = `Accepted${who} on ${fmt(d.signed_at)}. The first 30 days are underway.`;
-    document.querySelector('nav.jump a.cta').textContent = 'Agreement active';
-  }
-  function setMsg(t, cls) { msg.textContent = t || ''; msg.className = 'msg' + (cls ? ' ' + cls : ''); }
-
-  // Current state
   fetch(`${API}?id=${encodeURIComponent(CONTRACT_ID)}`, { cache: 'no-store' })
     .then(r => r.ok ? r.json() : null)
-    .then(d => { if (d && d.status === 'signed') showActive(d); })
+    .then(d => {
+      if (!d || d.status !== 'signed') return;
+      box.classList.add('is-active');
+      line.textContent = `Accepted${d.accepted_by ? ' by ' + d.accepted_by : ''} on ${fmt(d.signed_at)}. The first 30 days are underway.`;
+      const cta = document.querySelector('nav.jump a.cta'); if (cta) cta.textContent = 'Agreement active';
+    })
     .catch(() => {});
-
-  if (!token) {
-    btn.disabled = true;
-    setMsg('This page needs the link Scott sent you. Open the agreement from that email to accept.', 'err');
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!token) return;
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    if (name.length < 2) { setMsg('Please enter your full name.', 'err'); form.name.focus(); return; }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setMsg('Please enter a valid email address.', 'err'); form.email.focus(); return; }
-    if (!document.getElementById('accAgree').checked) { setMsg('Please tick the box to confirm you agree.', 'err'); return; }
-
-    btn.disabled = true; setMsg('Activating…');
-    try {
-      const r = await fetch(API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ id: CONTRACT_ID, t: token, name, email, agree: true, website: form.website.value })
-      });
-      const d = await r.json().catch(() => ({}));
-      if (r.ok && d.ok) { showActive(d); return; }
-      if (r.status === 409) { showActive(d); return; }
-      setMsg(d.error || 'Something went wrong. Please try again or email scott@sociavisual.com.', 'err');
-      btn.disabled = false;
-    } catch (err) {
-      setMsg('Network error. Please try again or email scott@sociavisual.com.', 'err');
-      btn.disabled = false;
-    }
-  });
 })();
 </script>
 </body>

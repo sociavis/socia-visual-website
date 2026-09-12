@@ -224,13 +224,13 @@ const DATA = {
 
   phase: {
     title: "Month one, the foundation",
-    body: "The old site left 184 addresses that Google still sends people to, and every one of them was landing on an error page. Those are fixed and verified. The website now says plainly that Antique Tile sells material and does not install, and the quote form asks who is buying so a job lead is obvious before anyone picks up the phone. Next is measurement, which needs a Google account from you."
+    body: "The old site left 184 addresses that Google still sends people to, and every one of them was landing on an error page. Those are fixed and verified. Measurement is now live: Google Analytics is on every page, Search Console is verified and the sitemap is submitted, and a tap on either yard's phone number is recorded as a call. The quote form now asks who is buying, so a contractor order is obvious at a glance. Next is the Google Business Profiles for both yards."
   },
 
   // Real figures only. Leave value null until tracking is live.
   metrics: {
     live: false,
-    note: "Google Analytics and Search Console are not installed yet. They need a Google account for the business, which is the one thing we are waiting on. From the day they go in, this section fills with real numbers: calls, direction requests, visits and quote forms, compared month to month.",
+    note: "Tracking went live on September 12, so there is not yet enough history to report. Analytics needs a few days of real visitors before any number here means anything. Your first full set of figures lands with the September report in early October, and from then on this fills with calls, direction requests, visits and quote forms compared month to month.",
     items: [
       { label: "Calls from Google", value: null },
       { label: "Direction requests", value: null },
@@ -252,12 +252,10 @@ const DATA = {
     {
       name: "Bring in the right kind of lead",
       tasks: [
-        { t: "Say plainly on the website that Antique Tile supplies material and does not install", s: "done",
-          n: "Homepage headline, opening paragraph and the About section." },
-        { t: "New Trade page for contractors, landscapers and pool builders", s: "done",
-          n: "antiquetilesupply.com/contractors" },
-        { t: "New FAQ page, led by “Do you install the material you sell?”", s: "done",
-          n: "Written so Google can show the answer directly in search results." },
+        { t: "Homepage headline now names the material and the metro", s: "done",
+          n: "Travertine, limestone and marble, straight from our Arizona yards." },
+        { t: "New FAQ page answering what people ask at the counter", s: "done",
+          n: "Marked up so Google can show the answers directly in search results." },
         { t: "Quote form now asks who is buying, square footage, timing, pickup or delivery", s: "done",
           n: "Trade enquiries arrive tagged [Trade] in the subject line; anything asking for labor is tagged too." }
       ]
@@ -265,11 +263,14 @@ const DATA = {
     {
       name: "Start measuring",
       tasks: [
-        { t: "Install Google Analytics and Tag Manager", s: "wait",
-          n: "Needs a Google account for the business." },
-        { t: "Verify Search Console and submit the sitemap", s: "wait", n: "Same account." },
-        { t: "Baseline report: where rankings, reviews, calls and visits stand on day 30", s: "idle",
-          n: "Runs once tracking has collected a full week." }
+        { t: "Install Google Analytics on every page", s: "done",
+          n: "Live and confirmed collecting on September 12." },
+        { t: "Verify Search Console and submit the sitemap", s: "done",
+          n: "Ownership verified, all 31 pages submitted for indexing." },
+        { t: "Record phone taps, directions taps and quote forms as conversions", s: "done",
+          n: "Tested end to end on the live site." },
+        { t: "Baseline report: where rankings, reviews, calls and visits stand on day 30", s: "active",
+          n: "Collecting now. Lands with the September report." }
       ]
     },
     {
@@ -307,8 +308,6 @@ const DATA = {
   ],
 
   needs: [
-    { t: "A Google account for the business, or access to the one you use",
-      sub: "This is the single biggest blocker. Nothing can be measured until it exists, and measurement is what the monthly report is built on." },
     { t: "Manager access to both Google Business Profiles",
       sub: "We send the request from Socia Visual; you approve it from the email Google sends." },
     { t: "Opening hours for the Phoenix yard and the Mesa yard",
@@ -321,13 +320,19 @@ const DATA = {
   ],
 
   log: [
-    { d: "September 12, 2026", h: "Repositioned the site around selling material",
+    { d: "September 12, 2026", h: "Measurement is live",
       items: [
-        "Homepage now leads with what is sold and where, and states that Antique Tile is a supply yard, not an installer",
-        "Built a Trade page aimed at contractors, landscapers and pool builders",
-        "Built an FAQ page that answers “Do you install?” first, marked up so Google can show it in search results",
+        "Google Analytics installed on every page and confirmed collecting",
+        "Search Console ownership verified and the full sitemap submitted for indexing",
+        "A tap on either yard's phone number, a tap for directions and a sent quote form are all recorded as conversions",
+        "Fixed a fault in the conversion tracking that would have recorded none of those events"
+      ] },
+    { d: "September 12, 2026", h: "Aimed the site at people buying material",
+      items: [
+        "Homepage headline now names the material and the metro rather than a slogan",
+        "Built an FAQ page, marked up so Google can show the answers directly in search results",
         "Rebuilt the quote form to ask who is buying, the square footage, the timing and pickup or delivery",
-        "Trade enquiries now arrive with [Trade] in the subject line so they are obvious on a phone screen",
+        "Orders from contractors and landscapers now arrive with [Trade] in the subject line so they are obvious on a phone screen",
         "Swept the whole site for spelling that did not match an Arizona business"
       ] },
     { d: "September 1 to 11, 2026", h: "Fixed what the old site left broken",
@@ -398,7 +403,7 @@ $("planBody").innerHTML = DATA.groups.map(g => {
     </ul></div>`;
 }).join("");
 
-$("needLede").textContent = `${DATA.needs.length} things, and the first one unlocks the rest. Reply to Scott with any of them and we move the same day.`;
+$("needLede").textContent = `${DATA.needs.length} things. Reply to Scott with any of them and we move the same day.`;
 $("needBody").innerHTML = DATA.needs.map((n,i) => `
   <li><span class="n">${String(i+1).padStart(2,"0")}</span>
   <span>${esc(n.t)}${n.sub ? `<span class="sub">${esc(n.sub)}</span>` : ""}</span></li>`).join("");

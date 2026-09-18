@@ -18,7 +18,7 @@ import gif_mark, gif_rotator
 
 BASE = "https://sociavisual.com/assets/sig"
 OUT  = os.path.abspath("../assets/sig")
-VER  = "v1"
+VER  = "v2"
 
 Z  = ('style="padding:0;margin:0;line-height:0;font-size:0;'
       'vertical-align:top;border:0;"')

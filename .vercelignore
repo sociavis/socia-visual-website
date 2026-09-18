@@ -4,3 +4,9 @@
 # Allow client-facing proposal PDFs to deploy
 !proposals/**/*.pdf
 email-signature*.html
+
+# signature build sources (art itself lives in assets/sig)
+signatures/*.py
+signatures/fonts
+signatures/__pycache__
+signatures/preview.html

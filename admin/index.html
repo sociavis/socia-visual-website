@@ -3196,22 +3196,19 @@ function editorFmt(n, cur) {
     : Number(n).toLocaleString('en-US', { style: 'currency', currency: cur.toUpperCase(), minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
 
-// Mid-market rate, cached for the session. Admin-side reference only: it never
-// touches what is stored or what the client sees, so a failed lookup is cosmetic.
+// Mid-market rate, cached for the session. Routed through our own /api/fx-rate
+// because the site CSP pins connect-src to 'self', which blocks calling a rate
+// provider directly from the page. Reference only, never stored.
 const fxCache = {};
 async function fxToUsd(cur) {
   cur = cur.toLowerCase();
   if (cur === 'usd') return { rate: 1, date: null };
   if (fxCache[cur]) return fxCache[cur];
   try {
-    const r = await fetch(`https://api.frankfurter.dev/v1/latest?base=${cur.toUpperCase()}&symbols=USD`);
+    const r = await fetch(`/api/fx-rate?from=${encodeURIComponent(cur)}`);
+    if (!r.ok) return null;
     const d = await r.json();
-    if (d && d.rates && d.rates.USD) return (fxCache[cur] = { rate: d.rates.USD, date: d.date });
-  } catch (e) { /* fall through to the backup source */ }
-  try {
-    const r = await fetch(`https://open.er-api.com/v6/latest/${cur.toUpperCase()}`);
-    const d = await r.json();
-    if (d && d.rates && d.rates.USD) return (fxCache[cur] = { rate: d.rates.USD, date: null });
+    if (d && typeof d.rate === 'number') return (fxCache[cur] = { rate: d.rate, date: d.date });
   } catch (e) { /* no rate available */ }
   return null;
 }

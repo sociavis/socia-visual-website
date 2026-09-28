@@ -488,6 +488,7 @@ function showError(msg) {
     period: data.period,
     items: data.items || [],
     notes: data.notes,
+    currency: (data.currency || 'usd').toLowerCase(),
     hidePaymentInfo: !!data.hide_payment_info
   };
 
@@ -515,7 +516,13 @@ function showError(msg) {
 })();
 
 function renderInvoice(invoice) {
-  const formatCurrency = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  // USD keeps its original plain-dollar formatting so no existing invoice changes.
+  // Anything else is rendered with its ISO code visible (CAD -> "CA$"), because a
+  // bare $ on a CAD invoice reads as USD to the person paying it.
+  const cur = (invoice.currency || 'usd').toLowerCase();
+  const formatCurrency = cur === 'usd'
+    ? (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })
+    : (n) => Number(n).toLocaleString('en-US', { style: 'currency', currency: cur.toUpperCase(), minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
   let itemsHTML = '';
   let total = 0;
@@ -620,15 +627,37 @@ function renderInvoice(invoice) {
       ${invoice.hidePaymentInfo ? '' : `
       <div class="payment-section">
         <h3>Electronic Payment Info:</h3>
-        <p>
-          <strong>ACH:</strong> Routing – 041215663 / Account – 2079194039345<br>
-          <strong>CashApp:</strong> $sociavisual<br>
-          <strong>Venmo:</strong> @socia739<br>
-          <strong>PayPal:</strong> paypal.me/sociavis
-        </p>
+        <p>${paymentInfoHTML(invoice.companyName)}</p>
       </div>`}
     </div>
   `;
+}
+
+// Payment details per client. Clients who settle by international wire cannot use
+// the domestic ACH/app block, so they get their own. Keyed on a lowercase substring
+// of company_name; anything unmatched falls through to DEFAULT.
+const PAYMENT_INFO = {
+  victory: `
+          <strong>International wire &mdash; send in CAD</strong><br>
+          Account Number: 79168400778<br>
+          BIC / SWIFT Code: DHBKHKHH<br>
+          Bank Name: DBS HONGKONG<br>
+          Bank Address: 99 Queens Road Central, The Center, Floor 11, Hong Kong, Hong Kong<br>
+          Beneficiary Name: Phillip Scott Socia`
+};
+
+const PAYMENT_INFO_DEFAULT = `
+          <strong>ACH:</strong> Routing – 041215663 / Account – 2079194039345<br>
+          <strong>CashApp:</strong> $sociavisual<br>
+          <strong>Venmo:</strong> @socia739<br>
+          <strong>PayPal:</strong> paypal.me/sociavis`;
+
+function paymentInfoHTML(companyName) {
+  const name = (companyName || '').toLowerCase();
+  for (const [key, block] of Object.entries(PAYMENT_INFO)) {
+    if (name.includes(key)) return block;
+  }
+  return PAYMENT_INFO_DEFAULT;
 }
 
 function downloadPDF() {

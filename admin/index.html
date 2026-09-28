@@ -3300,9 +3300,30 @@ async function getCurrentInvoice() {
 }
 
 // ═══ PDF ═══
+// Payment details per client. Clients who settle by international wire cannot use
+// the domestic ACH/app block, so they get their own. Keyed on a lowercase substring
+// of the company name; anything unmatched falls through to the default.
+// Keep in sync with the same map in /invoice.html, which renders the client-facing page.
+const PAYMENT_INFO = {
+  victory: '<strong>International wire &mdash; send in CAD</strong><br>Account Number: 79168400778<br>BIC / SWIFT Code: DHBKHKHH<br>Bank Name: DBS HONGKONG<br>Bank Address: 99 Queens Road Central, The Center, Floor 11, Hong Kong, Hong Kong<br>Beneficiary Name: Phillip Scott Socia'
+};
+
+const PAYMENT_INFO_DEFAULT = '<strong>ACH:</strong> Routing – 041215663 / Account – 2079194039345<br><strong>CashApp:</strong> $sociavisual<br><strong>Venmo:</strong> @socia739<br><strong>PayPal:</strong> paypal.me/sociavis';
+
+function paymentInfoHTML(companyName) {
+  const name = (companyName || '').toLowerCase();
+  for (const [key, block] of Object.entries(PAYMENT_INFO)) {
+    if (name.includes(key)) return block;
+  }
+  return PAYMENT_INFO_DEFAULT;
+}
+
 function buildInvoiceHTML(inv) {
   const total = inv.items.reduce((s, i) => s + i.qty * i.price, 0);
-  const fmt = n => '$' + Number(n).toLocaleString('en-US');
+  const invCur = (inv.currency || 'usd').toLowerCase();
+  const fmt = invCur === 'usd'
+    ? n => '$' + Number(n).toLocaleString('en-US')
+    : n => Number(n).toLocaleString('en-US', { style: 'currency', currency: invCur.toUpperCase(), minimumFractionDigits: 0, maximumFractionDigits: 2 });
   const fmtDate = inv.date ? new Date(inv.date + 'T00:00:00').toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'}) : '';
   let rows = inv.items.map(i => `<tr><td style="padding:12px;border:1px solid #ddd;text-align:center;width:80px;font-size:14px;">${i.qty}</td><td style="padding:12px;border:1px solid #ddd;font-size:14px;">${i.description}</td><td style="padding:12px;border:1px solid #ddd;text-align:right;font-size:14px;">${fmt(i.price)}</td><td style="padding:12px;border:1px solid #ddd;text-align:right;font-size:14px;">${fmt(i.qty*i.price)}</td></tr>`).join('');
   let notes = ''; // Notes block intentionally suppressed — timesheet (if linked) is auto-appended as a separate page.
@@ -3326,7 +3347,7 @@ function buildInvoiceHTML(inv) {
     <div style="font-size:18px;font-weight:700;margin-bottom:24px;">${inv.period || ''}</div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:8px;"><thead><tr><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:left;">Quantity</th><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:left;">Description</th><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:right;">Unit Price</th><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:right;">Line Total</th></tr></thead><tbody>${rows}</tbody></table>
     <div style="display:flex;justify-content:flex-end;margin-bottom:40px;"><table style="border-collapse:collapse;"><tr><td style="padding:8px 12px;font-size:14px;font-weight:700;border:1px solid #ddd;">Total</td><td style="padding:8px 12px;font-size:14px;font-weight:700;border:1px solid #ddd;text-align:right;min-width:100px;">${fmt(total)}</td></tr></table></div>
-    <div><h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">Electronic Payment Info:</h3><p style="font-size:14px;line-height:1.8;color:#333;"><strong>ACH:</strong> Routing – 041215663 / Account – 2079194039345<br><strong>CashApp:</strong> $sociavisual<br><strong>Venmo:</strong> @socia739<br><strong>PayPal:</strong> paypal.me/sociavis</p></div>
+    <div><h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">Electronic Payment Info:</h3><p style="font-size:14px;line-height:1.8;color:#333;">${paymentInfoHTML(inv.companyName)}</p></div>
     ${notes}
   </div>`;
 }

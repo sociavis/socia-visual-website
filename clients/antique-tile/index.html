@@ -218,24 +218,25 @@
 //  status: "done" | "active" | "wait" | "idle"
 // ─────────────────────────────────────────────────────────────────────────
 const DATA = {
-  updated: "2026-09-12",
+  updated: "2026-09-28",
   started: "2026-09-01",
   month: "Month one",
 
   phase: {
     title: "Month one, the foundation",
-    body: "The old site left 184 addresses that Google still sends people to, and every one of them was landing on an error page. Those are fixed and verified. Measurement is now live: Google Analytics is on every page, Search Console is verified and the sitemap is submitted, and a tap on either yard's phone number is recorded as a call. The quote form now asks who is buying, so a contractor order is obvious at a glance. Next is the Google Business Profiles for both yards."
+    body: "Measurement has been running since September 12 and the picture is now clear. The website is healthy and earning traffic on its own: 689 visits in sixteen days, most of it from Google. Thirty four people tapped a phone number straight off the site. The catch is that almost every search bringing people in is someone typing your name. The searches that sell stone to people who do not know you yet are still not landing, and the single biggest reason is sitting on your Google listings rather than on the website."
   },
 
   // Real figures only. Leave value null until tracking is live.
   metrics: {
-    live: false,
-    note: "Tracking went live on September 12, so there is not yet enough history to report. Analytics needs a few days of real visitors before any number here means anything. Your first full set of figures lands with the September report in early October, and from then on this fills with calls, direction requests, visits and quote forms compared month to month.",
+    live: true,
+    note: "",
     items: [
-      { label: "Calls from Google", value: null },
-      { label: "Direction requests", value: null },
-      { label: "Website visits", value: null },
-      { label: "Quote forms", value: null }
+      { label: "Website visits", value: "689", delta: "Sept 12 to 27" },
+      { label: "Phone taps on site", value: "34", delta: "people tapping a yard number" },
+      { label: "Directions tapped", value: "9" },
+      { label: "Clicks from Google", value: "88", delta: "from 2,368 appearances" },
+      { label: "Quote forms", value: "0", delta: "form tested and working" }
     ]
   },
 
@@ -309,7 +310,8 @@ const DATA = {
         { t: "Review request cards with a QR code, designed and ready to print", s: "done" },
         { t: "Review request links for both yards", s: "done",
           n: "Working links captured for Phoenix and Mesa, so the cards can go to print." },
-        { t: "One person at each yard handing out cards at pickup", s: "wait" },
+        { t: "One person at each yard handing out cards at pickup", s: "wait",
+          n: "Mesa has gained no new reviews since we started, and still sits at 18 against Phoenix's 204." },
         { t: "Mobile speed: right sized hero images and non blocking fonts", s: "active" }
       ]
     }
@@ -317,7 +319,7 @@ const DATA = {
 
   needs: [
     { t: "Manager access to both Google Business Profiles",
-      sub: "This is now the one thing holding back calls and direction requests. Both yards are filed under the wrong business category, and we cannot change it from outside. We send the request from Socia Visual; you approve it from the email Google sends." },
+      sub: "Still the one thing holding everything else back, and unchanged since we raised it on September 12. Both yards are still filed as a Home improvement store, which puts you against the big box stores instead of the stone and landscape yards buyers search for. The Phoenix listing still describes clay roof tiles, which is the roofing company's text. We cannot change either from outside. We send the request from Socia Visual and you approve it from the email Google sends." },
     { t: "Opening hours for the Phoenix yard and the Mesa yard",
       sub: "Three different sets of hours are published online right now. We need the correct one." },
     { t: "Admin access to the Facebook page, and the Yelp login if you have one" },
@@ -328,6 +330,19 @@ const DATA = {
   ],
 
   log: [
+    { d: "September 17, 2026", h: "Award badge and email signatures",
+      items: [
+        "Added the BusinessRate Best of 2026 badge to the homepage and to every page footer, with the artwork rebuilt from Daniel's plaque because no digital version exists",
+        "Recorded the award in the site data Google reads",
+        "Built five email signatures, live at antiquetilesupply.com/signatures for anyone to copy and paste"
+      ] },
+    { d: "September 14 to 17, 2026", h: "Nineteen gravels and a new stone added",
+      items: [
+        "Built a Decorative Gravel and Landscape Rock section and a page for each of nineteen gravels, from Nahomy's photos",
+        "Added Crema Paloma limestone",
+        "Every photo processed for fast loading, every size on the site taken word for word from her emails",
+        "The product range on the site roughly doubled, which gives Google far more to rank"
+      ] },
     { d: "September 12, 2026", h: "Put your Google reviews on the website",
       items: [
         "Phoenix holds 4.5 stars from 203 reviews, 165 of them five star, which is a stronger record than almost anyone you compete with, and none of it was visible on your own site",
@@ -402,7 +417,12 @@ $("numbersBody").innerHTML = DATA.metrics.live
   ? `<div class="kpis">${DATA.metrics.items.map(i => `
       <div class="kpi"><div class="l">${esc(i.label)}</div>
       <div class="v">${esc(i.value)}</div>
-      ${i.delta ? `<div class="d up">${esc(i.delta)}</div>` : ""}</div>`).join("")}</div>`
+      ${i.delta ? `<div class="d">${esc(i.delta)}</div>` : ""}</div>`).join("")}</div>
+     <div class="pending"><b>What these say.</b> The site is earning visits and people are
+     calling from it. Nobody has used the quote form yet, and we checked that it works, so the
+     read is simply that buyers would rather phone a yard than fill in a form. Worth watching
+     rather than fixing. The number that matters most, calls placed straight from your Google
+     listing, cannot be counted until we have access to the listings.</div>`
   : `<div class="kpis">${DATA.metrics.items.map(i => `
       <div class="kpi"><div class="l">${esc(i.label)}</div>
       <div class="v v--none">Not yet</div></div>`).join("")}</div>

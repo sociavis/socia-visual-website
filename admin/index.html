@@ -3350,6 +3350,12 @@ async function getCurrentInvoice() {
 }
 
 // ═══ PDF ═══
+const CURRENCY_NAMES = { usd: 'US dollars (USD)', cad: 'Canadian dollars (CAD)', eur: 'euros (EUR)', gbp: 'pounds sterling (GBP)', aud: 'Australian dollars (AUD)' };
+function currencyNote(cur) {
+  cur = (cur || 'usd').toLowerCase();
+  return 'All amounts on this invoice are in ' + (CURRENCY_NAMES[cur] || cur.toUpperCase()) + '.';
+}
+
 // Payment details per client. Clients who settle by international wire cannot use
 // the domestic ACH/app block, so they get their own. Keyed on a lowercase substring
 // of the company name; anything unmatched falls through to the default.
@@ -3396,7 +3402,8 @@ function buildInvoiceHTML(inv) {
     <div style="margin-bottom:28px;"><div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;margin-bottom:4px;border-bottom:1px solid #1a1a1a;padding-bottom:4px;display:inline-block;">Invoice To:</div><p style="font-size:15px;line-height:1.6;">${client}</p>${email}</div>
     <div style="font-size:18px;font-weight:700;margin-bottom:24px;">${inv.period || ''}</div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:8px;"><thead><tr><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:left;">Quantity</th><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:left;">Description</th><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:right;">Unit Price</th><th style="font-size:14px;font-weight:600;padding:10px 12px;border-bottom:2px solid #1a1a1a;text-align:right;">Line Total</th></tr></thead><tbody>${rows}</tbody></table>
-    <div style="display:flex;justify-content:flex-end;margin-bottom:40px;"><table style="border-collapse:collapse;"><tr><td style="padding:8px 12px;font-size:14px;font-weight:700;border:1px solid #ddd;">Total</td><td style="padding:8px 12px;font-size:14px;font-weight:700;border:1px solid #ddd;text-align:right;min-width:100px;">${fmt(total)}</td></tr></table></div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:6px;"><table style="border-collapse:collapse;"><tr><td style="padding:8px 12px;font-size:14px;font-weight:700;border:1px solid #ddd;">Total</td><td style="padding:8px 12px;font-size:14px;font-weight:700;border:1px solid #ddd;text-align:right;min-width:100px;">${fmt(total)}</td></tr></table></div>
+    <div style="text-align:right;font-size:13px;color:#666;margin-bottom:34px;">${currencyNote(inv.currency)}</div>
     <div><h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">Electronic Payment Info:</h3><p style="font-size:14px;line-height:1.8;color:#333;">${paymentInfoHTML(inv.companyName)}</p></div>
     ${notes}
   </div>`;

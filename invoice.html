@@ -619,6 +619,9 @@ function renderInvoice(invoice) {
           <tr><td><strong>Total</strong></td><td><strong>${formatCurrency(total)}</strong></td></tr>
         </table>
       </div>
+      <!-- A bare $ is read as the reader's own dollar. Clients abroad should never
+           have to infer which currency they are being asked to send. -->
+      <div style="text-align:right;font-size:13px;color:#666;margin-top:6px;">${currencyNote(invoice.currency)}</div>
 
       ${timesheetBtnHTML}
 
@@ -631,6 +634,12 @@ function renderInvoice(invoice) {
       </div>`}
     </div>
   `;
+}
+
+const CURRENCY_NAMES = { usd: 'US dollars (USD)', cad: 'Canadian dollars (CAD)', eur: 'euros (EUR)', gbp: 'pounds sterling (GBP)', aud: 'Australian dollars (AUD)' };
+function currencyNote(cur) {
+  cur = (cur || 'usd').toLowerCase();
+  return 'All amounts on this invoice are in ' + (CURRENCY_NAMES[cur] || cur.toUpperCase()) + '.';
 }
 
 // Payment details per client. Clients who settle by international wire cannot use

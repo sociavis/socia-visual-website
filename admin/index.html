@@ -2116,7 +2116,7 @@
                   <select id="fStatus"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="overdue">Overdue</option></select>
                 </div>
                 <div class="form-group"><label>Currency</label>
-                  <select id="fCurrency"><option value="usd">USD</option><option value="cad">CAD (enables ACSS)</option></select>
+                  <select id="fCurrency" onchange="calcTotal()"><option value="usd">USD</option><option value="cad">CAD (enables ACSS)</option></select>
                 </div>
               </div>
               <div class="form-row">
@@ -2136,6 +2136,7 @@
               <div class="inv-total">
                 <span class="total-label">TOTAL</span>
                 <span class="total-amount" id="totalAmount">$0</span>
+                <span id="totalUsdEquiv" style="display:block;font-size:12px;color:#8a8a8a;font-weight:500;margin-top:4px;letter-spacing:.2px;"></span>
               </div>
               <div class="form-row">
                 <div class="form-group"><label>Notes (optional)</label><textarea id="fNotes" placeholder="Payment due within 30 days..."></textarea></div>
@@ -3054,8 +3055,15 @@ function subscribeToChanges() {
 function rowToInv(r) {
   return { id: r.id, number: r.number, date: r.date, status: r.status, companyName: r.company_name, clientName: r.client_name, clientEmail: r.client_email, period: r.period, items: r.items || [], notes: r.notes, currency: r.currency || 'usd' };
 }
+function invoiceTotal(items) {
+  return (items || []).reduce((sum, i) => sum + (Number(i.qty) || 0) * (Number(i.price) || 0), 0);
+}
 function invToRow(inv) {
-  return { id: inv.id, number: inv.number, date: inv.date, status: inv.status, company_name: inv.companyName, client_name: inv.clientName, client_email: inv.clientEmail, period: inv.period, items: inv.items, notes: inv.notes, currency: inv.currency || 'usd', updated_at: new Date().toISOString() };
+  // amount_cents is DERIVED, never typed. It used to be omitted here entirely, so
+  // editing an invoice left the stored total at its previous value while the line
+  // items moved underneath it -- the invoice then billed a figure its own lines did
+  // not add up to. Always recompute on save.
+  return { id: inv.id, number: inv.number, date: inv.date, status: inv.status, company_name: inv.companyName, client_name: inv.clientName, client_email: inv.clientEmail, period: inv.period, items: inv.items, notes: inv.notes, currency: inv.currency || 'usd', amount_cents: Math.round(invoiceTotal(inv.items) * 100), updated_at: new Date().toISOString() };
 }
 
 async function loadInvoices() {
@@ -3182,15 +3190,60 @@ function addLineItem(data) {
   c.appendChild(d); calcTotal();
 }
 
+function editorFmt(n, cur) {
+  return cur === 'usd'
+    ? '$' + Number(n).toLocaleString('en-US')
+    : Number(n).toLocaleString('en-US', { style: 'currency', currency: cur.toUpperCase(), minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+// Mid-market rate, cached for the session. Admin-side reference only: it never
+// touches what is stored or what the client sees, so a failed lookup is cosmetic.
+const fxCache = {};
+async function fxToUsd(cur) {
+  cur = cur.toLowerCase();
+  if (cur === 'usd') return { rate: 1, date: null };
+  if (fxCache[cur]) return fxCache[cur];
+  try {
+    const r = await fetch(`https://api.frankfurter.dev/v1/latest?base=${cur.toUpperCase()}&symbols=USD`);
+    const d = await r.json();
+    if (d && d.rates && d.rates.USD) return (fxCache[cur] = { rate: d.rates.USD, date: d.date });
+  } catch (e) { /* fall through to the backup source */ }
+  try {
+    const r = await fetch(`https://open.er-api.com/v6/latest/${cur.toUpperCase()}`);
+    const d = await r.json();
+    if (d && d.rates && d.rates.USD) return (fxCache[cur] = { rate: d.rates.USD, date: null });
+  } catch (e) { /* no rate available */ }
+  return null;
+}
+
+// A non-USD invoice is quoted in the client's currency, but the number that matters
+// to us is what lands in the account. Editor only -- deliberately not on the
+// client-facing invoice or the exported PDF.
+async function renderUsdEquivalent(total, cur) {
+  const el = document.getElementById('totalUsdEquiv');
+  if (!el) return;
+  if (cur === 'usd' || !total) { el.textContent = ''; return; }
+  el.textContent = 'converting…';
+  const fx = await fxToUsd(cur);
+  // the selector may have moved while we were awaiting the rate
+  const nowCur = (document.getElementById('fCurrency') || {}).value;
+  if ((nowCur || 'usd').toLowerCase() !== cur) return;
+  if (!fx) { el.textContent = 'USD equivalent unavailable'; return; }
+  const usd = (total * fx.rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  el.textContent = `≈ US$${usd}  ·  ${(1 / fx.rate).toFixed(4)} ${cur.toUpperCase()}/USD${fx.date ? '  ·  ' + fx.date : ''}  ·  mid-market, before the bank's spread`;
+}
+
 function calcTotal() {
+  const cur = ((document.getElementById('fCurrency') || {}).value || 'usd').toLowerCase();
   let total = 0;
   document.querySelectorAll('.line-item').forEach(row => {
     const inp = row.querySelectorAll('input');
     const lt = (parseFloat(inp[0].value) || 0) * (parseFloat(inp[2].value) || 0);
     total += lt;
-    row.querySelector('.line-total').textContent = '$' + lt.toLocaleString('en-US');
+    row.querySelector('.line-total').textContent = editorFmt(lt, cur);
   });
-  document.getElementById('totalAmount').textContent = '$' + total.toLocaleString('en-US');
+  document.getElementById('totalAmount').textContent = editorFmt(total, cur);
+  renderUsdEquivalent(total, cur);
 }
 
 async function saveInvoice() {

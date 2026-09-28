@@ -642,16 +642,20 @@ function currencyNote(cur) {
   return 'All amounts on this invoice are in ' + (CURRENCY_NAMES[cur] || cur.toUpperCase()) + '.';
 }
 
+// Relay issues DIFFERENT receiving details per currency: USD lands at DBS
+// Singapore, CAD at DBS Hong Kong, on different account numbers entirely. The
+// block therefore names the currency, and must be changed with the invoice if
+// the billing currency ever changes. Verified against the Relay dashboard.
 // Payment details per client. Clients who settle by international wire cannot use
 // the domestic ACH/app block, so they get their own. Keyed on a lowercase substring
 // of company_name; anything unmatched falls through to DEFAULT.
 const PAYMENT_INFO = {
   victory: `
-          <strong>International wire &mdash; send in CAD</strong><br>
-          Account Number: 79168400778<br>
-          BIC / SWIFT Code: DHBKHKHH<br>
-          Bank Name: DBS HONGKONG<br>
-          Bank Address: 99 Queens Road Central, The Center, Floor 11, Hong Kong, Hong Kong<br>
+          <strong>International wire &mdash; send in USD</strong><br>
+          Account Number: 8855900000522<br>
+          BIC / SWIFT Code: DBSSSGSG<br>
+          Bank Name: DBS SINGAPORE<br>
+          Bank Address: DBS Asia Central MBFC Tower 3, 12 Marina Boulevard, Post Code 018982, Singapore<br>
           Beneficiary Name: Phillip Scott Socia`
 };
 

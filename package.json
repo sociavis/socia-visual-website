@@ -16,7 +16,7 @@
     "three": "0.128.0"
   },
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "homepage": "https://sociavisual.com",
   "repository": {

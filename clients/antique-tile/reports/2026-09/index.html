@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>September 2026 Report · Antique Tile Supply</title>
+<meta name="description" content="Monthly SEO report for Antique Tile Supply, September 2026.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  @font-face { font-family: 'Chakra Petch'; src: url('/fonts/chakra-petch-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('/fonts/chakra-petch-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Chakra Petch'; src: url('/fonts/chakra-petch-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Share Tech Mono'; src: url('/fonts/share-tech-mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+  :root{
+    --black:#050505; --surface:#0d0d0d; --surface-2:#121212; --line:#1f1f1f; --line-2:#2a2a2a;
+    --text:#e8e8e8; --dim:#949494; --dimmer:#5f5f5f;
+    --accent:#a8ff00; --accent-2:#d4ff00; --ink:#050505;
+    --done:#a8ff00; --active:#5bc4d4; --wait:#ffb020; --idle:#5f5f5f;
+    --font:'Chakra Petch', system-ui, sans-serif; --mono:'Share Tech Mono', ui-monospace, Menlo, monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--black);color:var(--text);font:16px/1.6 var(--font);-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(ellipse 900px 420px at 50% -80px, rgba(168,255,0,.07), transparent 60%);}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.045;mix-blend-mode:overlay;z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  h1,h2,h3{line-height:1.15;text-wrap:balance}
+  h1{font-size:clamp(28px,4.4vw,44px);font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+  h2{font-size:clamp(20px,2.6vw,27px);font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+  h3{font-size:16px;font-weight:600}
+  p{max-width:68ch}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(168,255,0,.35)}
+  a:hover{border-bottom-color:var(--accent)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+
+  .top{border-bottom:1px solid var(--line);background:rgba(5,5,5,.7);backdrop-filter:blur(8px)}
+  .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px}
+  .wordmark svg{height:26px;width:auto;display:block;color:var(--text)}
+  .for{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .for img{height:40px;width:auto;display:block}
+  @media (max-width:560px){.for span{display:none}}
+
+  .title{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+  .title .bar{width:64px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-2));margin:18px 0 20px}
+  .title .meta{display:flex;flex-wrap:wrap;gap:8px 30px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--dim)}
+  .title .meta b{color:var(--text);font-weight:400}
+
+  section{padding:46px 0 12px}
+  section+section{border-top:1px solid var(--line)}
+  .lede{font-size:17px;color:#cfcfcf;margin-top:8px}
+
+  /* status banner */
+  .banner{display:flex;gap:20px;align-items:flex-start;border:1px solid var(--accent);
+    background:linear-gradient(180deg,rgba(168,255,0,.07),rgba(168,255,0,.015));padding:22px 24px;margin-top:22px}
+  .banner .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);margin-top:8px;flex:none;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){.banner .dot{animation:none}}
+  .banner h3{font-size:18px;text-transform:uppercase;letter-spacing:.02em}
+  .banner p{margin-top:6px;color:#cfcfcf;font-size:15px;max-width:none}
+
+  /* progress bar */
+  .prog{margin-top:26px}
+  .prog__head{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+  .prog__head b{color:var(--accent);font-weight:400}
+  .prog__track{height:8px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+  .prog__fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+
+  /* task groups */
+  .grp{margin-top:26px;border:1px solid var(--line);background:var(--surface)}
+  .grp__head{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+  .grp__head h3{font-size:15px;text-transform:uppercase;letter-spacing:.03em}
+  .grp__n{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim)}
+  .grp ul{list-style:none}
+  .task{display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:13px 18px;border-bottom:1px solid var(--line);align-items:start}
+  .task:last-child{border-bottom:0}
+  .task__i{width:16px;height:16px;border:1px solid var(--line-2);margin-top:4px;flex:none;position:relative;border-radius:2px}
+  .task--done .task__i{background:var(--done);border-color:var(--done)}
+  .task--done .task__i::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .task--active .task__i{border-color:var(--active);box-shadow:inset 0 0 0 3px var(--active)}
+  .task--wait .task__i{border-color:var(--wait);border-style:dashed}
+  .task__t{font-size:15px}
+  .task--done .task__t{color:var(--dim)}
+  .task__note{display:block;font-size:13px;color:var(--dimmer);margin-top:2px}
+  .chip{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border:1px solid currentColor;white-space:nowrap;margin-top:2px}
+  .chip--done{color:var(--done)} .chip--active{color:var(--active)}
+  .chip--wait{color:var(--wait)} .chip--idle{color:var(--idle)}
+  @media (max-width:600px){.task{grid-template-columns:auto 1fr}.chip{grid-column:2;justify-self:start}}
+
+  /* numbers */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line);margin-top:22px;background:var(--surface)}
+  .kpi{padding:16px 20px;border-right:1px solid var(--line)}
+  .kpi:last-child{border-right:0}
+  .kpi .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .kpi .v{font-size:30px;font-weight:700;line-height:1.1;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+  .kpi .v--none{color:var(--dimmer);font-size:19px;font-weight:400;font-family:var(--mono)}
+  .kpi .d{font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .kpi .d.up{color:var(--accent)}
+  .pending{border:1px dashed var(--line-2);background:var(--surface);padding:20px 22px;margin-top:22px;color:#cfcfcf;font-size:15px}
+  .pending b{color:var(--text)}
+
+  /* blockers */
+  .need{list-style:none;margin-top:20px;display:grid;gap:9px}
+  .need li{display:grid;grid-template-columns:auto 1fr;gap:13px;background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--wait);padding:14px 17px;font-size:15px}
+  .need .n{font-family:var(--mono);font-size:11px;color:var(--wait);margin-top:3px}
+  .need .sub{display:block;font-size:13px;color:var(--dim);margin-top:3px}
+
+  /* log */
+  .log{margin-top:22px;border-left:1px solid var(--line);padding-left:0}
+  .entry{position:relative;padding:0 0 22px 26px;border-left:1px solid var(--line);margin-left:6px}
+  .entry:last-child{border-left-color:transparent;padding-bottom:0}
+  .entry::before{content:"";position:absolute;left:-5px;top:5px;width:9px;height:9px;background:var(--accent);border-radius:50%}
+  .entry .d{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .entry h3{margin:4px 0 4px}
+  .entry ul{padding-left:17px;color:#cfcfcf;font-size:14.5px;margin-top:4px}
+  .entry li{margin:3px 0}
+
+  .reports{display:grid;gap:10px;margin-top:20px}
+  .rep{display:flex;justify-content:space-between;align-items:center;gap:16px;border:1px solid var(--line);background:var(--surface);padding:15px 18px}
+  .rep .m{font-weight:600}
+  .rep .s{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+  footer{border-top:1px solid var(--line);margin-top:50px;padding:24px 0 46px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--dimmer)}
+  footer a{color:var(--dim);border:0}
+  footer p{max-width:none}
+
+  @media print{
+    body{background:#fff;color:#111;background-image:none} body::before{display:none}
+    .grp,.kpi,.kpis,.need li,.rep,.banner,.pending{background:#fff;border-color:#ccc;color:#111}
+    .task__t,.entry ul,.need li,.banner p{color:#222} .wordmark svg{color:#111}
+    a{color:#111;border:0} section{break-inside:avoid-page}
+  }
+
+  .tbl{width:100%;border-collapse:collapse;margin-top:18px;font-size:14.5px;background:var(--surface);border:1px solid var(--line)}
+  .tbl th{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:400;text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+  .tbl td{padding:12px 16px;border-bottom:1px solid var(--line);color:#d6d6d6}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl td.n{font-family:var(--mono);white-space:nowrap}
+  .tbl .p1{color:var(--accent)}
+  .tblwrap{overflow-x:auto}
+  .plain{color:#cfcfcf;font-size:15.5px;margin-top:14px}
+  .plain b{color:var(--text);font-weight:600}
+  ul.plan{list-style:none;margin-top:16px;display:grid;gap:9px}
+  ul.plan li{background:var(--surface);border:1px solid var(--line);border-left:2px solid var(--accent);padding:13px 17px;font-size:15px}
+  .back{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:12px;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="wordmark" href="https://sociavisual.com" aria-label="Socia Visual" style="border:0"><svg role='img' aria-label='Socia Visual' viewBox='0 0 2098.6 515.2' xmlns='http://www.w3.org/2000/svg' fill='currentColor' stroke='none' fill='currentColor'><polygon points='633.2 164 567 236.2 546.5 258.5 480.3 330.8 100.9 330.8 167.1 258.5 452.9 258.5 473.4 236.2 187.6 236.2 253.8 164 633.2 164'/><g><polygon points='1059 69.5 992.8 141.7 907.3 234.9 813.7 234.9 899.2 141.7 274.3 141.7 340.5 69.5 1059 69.5'/><polygon points='735.7 258.5 1190.5 258.5 1124.3 330.8 505.5 330.8 658.4 164 752.1 164 665.4 258.5 735.7 258.5'/><polygon points='1997.7 330.8 1562 330.8 1628.2 258.6 1837.9 258.6 1731.9 143 1707.6 143 1535.4 330.8 1146.8 330.8 1213 258.6 1279.3 258.6 1386.4 141.7 1111.7 141.7 1026.3 234.9 932.6 234.9 1084.3 69.5 1658.7 69.5 1592.4 141.7 1480.1 141.7 1478.9 143 1372.9 258.6 1508 258.6 1681.4 69.5 1758.1 69.5 1997.7 330.8'/></g><g><path d='M100.9,382.6h35.7l1.9,29.1,25.6-29.1h45.7l-61.1,63.8h-40.7l-7.1-63.8Z'/><path d='M495,446.4h-41.2l27-63.8h41.2l-27,63.8Z'/><path d='M767.2,446.4l5.5-12.9h47.7c.3,0,.5-.3.8-.8l.4-1.1c0-.1,0-.3,0-.5l-32.2-21.7c-.8-.6-1.4-1.3-1.7-2.2s-.5-2-.5-3.2c0-2,.3-4.2,1-6.5.7-2.3,1.4-4.3,2.2-5.9l1.7-3.9c.6-1.4,1.5-2.6,2.8-3.5,1.3-1,2.6-1.5,3.9-1.5h94l-5.5,12.9h-54.9c-.7,0-1.2.5-1.6,1.6-.1,1,0,1.6.4,1.6l38.3,26.1c.8.6,1.4,1.3,1.7,2.2s.5,1.9.5,3c0,1.6-.3,3.1-1,4.6l-3.2,7.7c-1.2,2.8-3.2,4.3-5.9,4.3h-94.7Z'/><path d='M1245.9,446.4h-97.3c-1.7,0-3.1-.4-4.1-1.2-1-.8-1.7-1.8-2.1-2.9-.4-1.1-.5-2.4-.4-3.7.1-1.4.4-2.6.9-3.8l22.1-52.1h41.2l-20.6,48.6c-.2.6-.3,1.1-.2,1.6.1.5.5.7,1.1.7h23.3l21.6-50.9h41.3l-27,63.8Z'/><path d='M1626,446.4h-41.3l9.3-21.8h-25.3l-9.3,21.8h-41.2l22-52c.5-1.1,1.3-2.4,2.3-3.7,1-1.4,2.2-2.7,3.6-3.8,1.4-1.2,2.9-2.2,4.6-3,1.7-.8,3.4-1.2,5.1-1.2h97.3l-27,63.8ZM1574,411.7h25.3l6.9-16.2h-23.3c-.7,0-1.2.2-1.7.7-.5.5-.9,1-1.2,1.6l-5.9,13.9Z'/><path d='M1898.1,446.4l27-63.8h41.2l-21.6,50.9h52.9l-5.5,12.9h-94.1Z'/></g><polyline points='642.7 141 368 141 282.6 234.2 187.6 236.2 340.6 68.8 610.3 68.8'/></svg></a>
+    <div class="for"><span>Monthly report for</span><img src="data:image/png;base64,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" alt="Antique Tile Supply"></div>
+  </div>
+</header>
+<div class="wrap">
+  <div class="title">
+    <div class="eyebrow">Monthly SEO report · Agreement No. 051</div>
+    <h1>September 2026</h1>
+    <div class="bar"></div>
+    <div class="meta"><span>Client <b>Antique Tile Supply</b></span><span>Period <b>September 12 to 30</b></span><span>Prepared <b>October 13, 2026</b></span></div>
+    <a class="back" href="/clients/antique-tile/">&larr; Back to the progress page</a>
+  </div>
+</div>
+<main class="wrap">
+<section>
+  <div class="banner"><span class="dot"></span><div>
+    <h3>The short version</h3>
+    <p>The website brought in 859 visits in its first nineteen days of measurement, most of them from Google, and 38 people tapped a phone number straight off the site. Almost every search that found you was someone typing your name, which means people who already know you. The job now is getting found by people who do not, which is why October opened with six buying guides and a faster site on phones.</p>
+  </div></div>
+</section>
+<section>
+  <div class="eyebrow">The numbers</div>
+  <h2>What the site produced</h2>
+  <div class="kpis"><div class="kpi"><div class="l">Website visits</div><div class="v">859</div><div class=d>September 12 to 30</div></div><div class="kpi"><div class="l">From Google search</div><div class="v">489</div><div class=d>visits</div></div><div class="kpi"><div class="l">Phone taps on the site</div><div class="v">38</div><div class=d>people tapping a yard number</div></div><div class="kpi"><div class="l">Directions tapped</div><div class="v">9</div></div><div class="kpi"><div class="l">Clicks from Google</div><div class="v">138</div><div class=d>from 3,074 appearances</div></div><div class="kpi"><div class="l">Quote forms</div><div class="v">0</div><div class=d>form tested and working</div></div></div>
+  <div class="pending"><b>Reading these.</b> Measurement began on September 12, so this is nineteen days, not a full month, and the first day includes a handful of visits from our own setup testing. Calls placed straight from your Google listing are not in here, because we cannot count them until we have access to the listings. Nobody used the quote form; we tested it and it works, so buyers would simply rather phone a yard.</div>
+</section>
+<section>
+  <div class="eyebrow">Search</div>
+  <h2>Who found you on Google</h2>
+  <p class="plain">Google showed the site <b>856 times</b> for searches that did not include your name, across 235 different searches, and <b>2</b> of those turned into a click. Searches for your name brought <b>65</b> clicks. That gap is the whole opportunity.</p>
+  <p class="plain">Below are the buying searches we track. The number is your average spot in Google's results. Spots 1 to 10 are page one, and very few people click past it. Green means page one.</p>
+  <div class="tblwrap"><table class="tbl">
+    <thead><tr><th>Search</th><th>September</th><th>October so far</th></tr></thead>
+    <tbody><tr><td>travertine pavers phoenix</td><td class="n">16.9 &middot; page 2</td><td class="n">20.3 &middot; page 2</td></tr><tr><td>travertine pavers arizona</td><td class="n p1">3.5 &middot; page 1</td><td class="n">16.8 &middot; page 2</td></tr><tr><td>travertine pavers near me</td><td class="n">23.9 &middot; page 3</td><td class="n">25.0 &middot; page 3</td></tr><tr><td>travertine pavers wholesale arizona</td><td class="n">20.4 &middot; page 2</td><td class="n">20.5 &middot; page 3</td></tr><tr><td>travertine suppliers near me</td><td class="n p1">7.4 &middot; page 1</td><td class="n p1">8.3 &middot; page 1</td></tr><tr><td>travertine supplier</td><td class="n">20.3 &middot; page 2</td><td class="n">12.1 &middot; page 2</td></tr><tr><td>tumbled travertine pavers arizona</td><td class="n">14.3 &middot; page 2</td><td class="n">18.4 &middot; page 2</td></tr><tr><td>belgard pavers phoenix</td><td class="n">26.5 &middot; page 3</td><td class="n">26.2 &middot; page 3</td></tr><tr><td>pavers phoenix</td><td class="n">39.8 &middot; page 4</td><td class="n">36.1 &middot; page 4</td></tr><tr><td>shell beige limestone</td><td class="n p1">5.7 &middot; page 1</td><td class="n p1">5.0 &middot; page 1</td></tr></tbody>
+  </table></div>
+  <p class="plain">Google is clearly testing you for these, mostly on page two. Searches with only a handful of appearances jump around from week to week, so "travertine pavers arizona" looks like a fall but rests on very few searches. The trend to watch is the next two months, as Google indexes the new guides.</p>
+</section>
+<section>
+  <div class="eyebrow">Work done</div>
+  <h2>September</h2>
+  <div class="log"><div class="entry"><div class="d">September 1 to 11</div><h3>Fixed what the old site left broken</h3><ul><li>All 184 old page addresses Google still sends people to now land on a live page, each one checked</li><li>www now points at the main address, so Google counts one site instead of two</li><li>A custom error page, so a wrong link still offers a way back</li></ul></div><div class="entry"><div class="d">September 12</div><h3>Measurement switched on, reviews on the site</h3><ul><li>Google Analytics installed and Search Console verified, sitemap submitted</li><li>A tap on either yard's phone number, a tap for directions and a sent quote form are all recorded</li><li>Nine of your five star Google reviews now run on the homepage</li><li>New FAQ page, and the quote form now asks who is buying, the square footage, timing and pickup or delivery</li></ul></div><div class="entry"><div class="d">September 14 to 17</div><h3>The product range roughly doubled</h3><ul><li>A Decorative Gravel and Landscape Rock section with a page for each of nineteen gravels, from Nahomy's photos</li><li>Crema Paloma limestone added</li><li>The BusinessRate Best of 2026 badge added to the homepage and every page footer</li></ul></div></div>
+</section>
+<section>
+  <div class="eyebrow">Since the month closed</div>
+  <h2>October so far</h2>
+  <div class="log"><div class="entry"><div class="d">October 13</div><h3>Catching up on content and speed</h3><ul><li>Six buying guides published at <a href="https://antiquetilesupply.com/guides">antiquetilesupply.com/guides</a>, each aimed at searches Google is already testing the site for</li><li>Six addresses that ranked on the old site as articles now land on the matching guide instead of a general product page</li><li>The travertine and concrete paver pages rewritten with real buying information and sharper page titles</li><li>Mobile speed on the travertine page up from 72 to 87 out of 100, and the main image now appears in 3.5 seconds instead of 6.4</li><li>Sitemap resubmitted to Google so the new pages are picked up quickly</li></ul></div></div>
+</section>
+<section>
+  <div class="eyebrow">Waiting on you</div>
+  <h2>What would move the numbers most</h2>
+  <ul class="need">
+    <li><span class="n">01</span><span>Manager access to both Google Business Profiles<span class="sub">Both yards are still filed as a Home improvement store, which puts you against the big box stores instead of stone and landscape yards, and the Phoenix listing still describes clay roof tiles. Unchanged since September 12. Calls and direction requests come from these listings far more than from the website.</span></span></li>
+    <li><span class="n">02</span><span>Review cards handed out at both counters<span class="sub">Mesa gained no new reviews in September and sits at 18, against 204 for Phoenix. The cards and links are ready.</span></span></li>
+    <li><span class="n">03</span><span>Opening hours for each yard<span class="sub">Three different sets of hours are published online. We need the right one to correct the listings and the website.</span></span></li>
+  </ul>
+</section>
+<section>
+  <div class="eyebrow">Next</div>
+  <h2>October</h2>
+  <ul class="plan">
+    <li>A new buying guide every week, each aimed at a search Google is already showing you for</li>
+    <li>Fix the category and description on both Google listings the day access arrives</li>
+    <li>Watch the tracked searches as Google indexes the guides</li>
+    <li>October report in the first week of November</li>
+  </ul>
+</section>
+</main>
+<footer><div class="wrap"><p>Socia Visual · <a href="https://sociavisual.com">sociavisual.com</a> · Questions any time: <a href="mailto:scott@sociavisual.com">scott@sociavisual.com</a></p><p style="margin-top:6px">Figures from Google Analytics and Google Search Console. This page is private to Antique Tile Supply and is not listed on any search engine.</p></div></footer>
+</body>
+</html>
